@@ -149,7 +149,7 @@ const DialogCreateApp = () => {
         onClose={handleClose}
         onBackdropClick={handleClose}
         TransitionComponent={Transition}
-        sx={{ '& .MuiDialog-paper': { { overflow: 'visible' } } }}
+        sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
       >
         <DialogContent
           sx={{

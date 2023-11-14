@@ -1,5 +1,26 @@
 const navigation = () => {
   return [
+    // {
+    //     icon: 'tabler:layout-grid-add',
+    //     title: 'StaffList',
+
+    //     children: [
+    //       icon: 'tabler:layout-grid-add',
+    //       title: 'Staff-List',
+    //       path: '/apps/StaffList'
+    //     ]
+
+    // },
+    {
+      title: 'Staff-List',
+      icon: 'tabler:user',
+      children: [
+        {
+          title: 'Staff-List',
+          path: '/apps/Staff-List/Staff-List'
+        }
+      ]
+    },
     {
       icon: 'tabler:smart-home',
       title: 'Dashboards',
@@ -128,7 +149,6 @@ const navigation = () => {
           icon: 'tabler:brand-tabler'
         },
         {
-          
           title: 'Cards',
           icon: 'tabler:id',
           children: [
@@ -237,7 +257,7 @@ const navigation = () => {
             {
               title: 'More',
               path: '/components/more'
-            },
+            }
           ]
         }
       ]
@@ -530,7 +550,7 @@ const navigation = () => {
             {
               title: 'Input Mask',
               path: '/forms/form-elements/input-mask'
-            },
+            }
           ]
         },
         {
