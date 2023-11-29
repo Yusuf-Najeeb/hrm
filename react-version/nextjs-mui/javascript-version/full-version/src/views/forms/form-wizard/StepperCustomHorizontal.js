@@ -52,8 +52,8 @@ const steps = [
   },
   {
     icon: 'tabler:link',
-    title: 'Social Links',
-    subtitle: 'Add Social Links'
+    title: 'Next Of Kins',
+    subtitle: 'Add Next of Kin'
   }
 ]
 
@@ -170,29 +170,29 @@ const StepperCustomHorizontal = () => {
       case 0:
         return (
           <Fragment>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={4} sm={6} md={4}>
               <CustomTextField
                 fullWidth
-                label='Username'
+                label='First name'
                 value={username}
-                placeholder='carterLeonard'
+                placeholder='john.doe'
                 onChange={e => setUsername(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} md={4}>
               <CustomTextField
                 fullWidth
                 type='email'
                 label='Email'
                 value={email}
-                placeholder='carterleonard@gmail.com'
+                placeholder='johndoe@email.com'
                 onChange={e => setEmail(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <CustomTextField
                 fullWidth
-                label='Password'
+                label='User name'
                 value={state.password}
                 id='stepper-custom-horizontal-account-password'
                 onChange={handlePasswordChange('password')}
@@ -236,107 +236,365 @@ const StepperCustomHorizontal = () => {
                   )
                 }}
               />
+            </Grid> */}
+            <Grid item xs={4} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label='User name'
+                value={username}
+                placeholder='john.doe'
+                onChange={e => setUsername(e.target.value)}
+              />
             </Grid>
-          </Fragment>
-        )
-      case 1:
-        return (
-          <Fragment key={step}>
             <Grid item xs={12} sm={6}>
               <CustomTextField
                 fullWidth
-                label='First Name'
-                placeholder='Leonard'
+                label='Employee ID'
+                placeholder=''
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <CustomTextField
-                fullWidth
-                label='Last Name'
-                placeholder='Carter'
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <CustomTextField
                 select
                 fullWidth
-                label='Country'
+                label='Department'
                 id='stepper-custom-horizontal-personal-select'
                 SelectProps={{
                   value: country,
                   onChange: e => setCountry(e.target.value)
                 }}
               >
-                <MenuItem value='UK'>UK</MenuItem>
-                <MenuItem value='USA'>USA</MenuItem>
-                <MenuItem value='Australia'>Australia</MenuItem>
-                <MenuItem value='Germany'>Germany</MenuItem>
+                <MenuItem value='MEDICAL DIRECTOR'> MEDICAL DIRECTOR</MenuItem>
+                <MenuItem value='FINANCE/ADMIN DIRECTOR'> FINANCE/ADMIN DIRECTOR</MenuItem>
+                <MenuItem value='EMBRYOLOGIST'>EMBRYOLOGIST</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+                <MenuItem value=' CALL CENTER OFFICER'>CALL CENTER OFFICER</MenuItem>
+                <MenuItem value=' QUALITY ASSURANCE/ISO COORDINATOR'>QUALITY ASSURANCE/ISO COORDINATOR</MenuItem>
+                <MenuItem value=' SUPERVISOR CLINICAL LAB'>SUPERVISOR CLINICAL LAB</MenuItem>
+                <MenuItem value=' HOUSEKEEPER'> HOUSEKEEPER</MenuItem>
+                <MenuItem value='PHARMACY ASSISTANT'>PHARMACY ASSISTANT</MenuItem>
+                <MenuItem value='SUPERVISOR-CASHIER'> SUPERVISOR-CASHIER</MenuItem>
+                <MenuItem value='HMO BILLING OFFICER'>HMO BILLING OFFICER</MenuItem>
+                <MenuItem value='BRAND MANAGER/EA'>BRAND MANAGER/EA</MenuItem>
+                <MenuItem value='PROCUREMENT OFFICER (CATETERIA)'>PROCUREMENT OFFICER (CATETERIA)</MenuItem>
+                <MenuItem value='LOGISTIC OFFICER'>LOGISTIC OFFICER</MenuItem>
+                <MenuItem value='SUPERVISION-PHARMACY'>SUPERVISION-PHARMACY</MenuItem>
+                <MenuItem value='STEWARD'>STEWARD</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
               </CustomTextField>
             </Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={12} sm={6} md={4}>
               <CustomTextField
-                select
                 fullWidth
-                label='Language'
-                SelectProps={{
-                  multiple: true,
-                  value: language,
-                  onChange: e => handleSelectChange(e)
-                }}
-                id='stepper-custom-horizontal-personal-multiple-select'
-              >
-                <MenuItem value='English'>English</MenuItem>
-                <MenuItem value='French'>French</MenuItem>
-                <MenuItem value='Spanish'>Spanish</MenuItem>
-                <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                <MenuItem value='Italian'>Italian</MenuItem>
-                <MenuItem value='German'>German</MenuItem>
-                <MenuItem value='Arabic'>Arabic</MenuItem>
-              </CustomTextField>
+                label='Gross salary'
+                placeholder='023'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label='Bank name'
+                placeholder='GTB'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label='Account number'
+                placeholder='1244134r4r'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
             </Grid>
           </Fragment>
         )
+
+      case 1:
+        return (
+          //   <Fragment key={step}>
+          //     <Grid item xs={12} sm={6}>
+          //       <CustomTextField
+          //         fullWidth
+          //         label='Employee ID'
+          //         placeholder=''
+          //         value={firstName}
+          //         onChange={e => setFirstName(e.target.value)}
+          //       />
+          //     </Grid>
+          //     <Grid item xs={12} sm={6}>
+          //       <CustomTextField
+          //         fullWidth
+          //         label='
+          //         Department'
+          //         id='stepper-custom-horizontal-personal-select'
+          //         SelectProps={{
+          //           value: country,
+          //           onChange: e => setCountry(e.target.value)
+          //         }}
+          //       >
+          //         <MenuItem value='MEDICAL DIRECTOR'> MEDICAL DIRECTOR</MenuItem>
+          //         <MenuItem value='FINANCE/ADMIN DIRECTOR'> FINANCE/ADMIN DIRECTOR</MenuItem>
+          //         <MenuItem value='EMBRYOLOGIST'>EMBRYOLOGIST</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //         <MenuItem value=' CALL CENTER OFFICER'>CALL CENTER OFFICER</MenuItem>
+          //         <MenuItem value=' QUALITY ASSURANCE/ISO COORDINATOR'>QUALITY ASSURANCE/ISO COORDINATOR</MenuItem>
+          //         <MenuItem value=' SUPERVISOR CLINICAL LAB'>SUPERVISOR CLINICAL LAB</MenuItem>
+          //         <MenuItem value=' HOUSEKEEPER'> HOUSEKEEPER</MenuItem>
+          //         <MenuItem value='PHARMACY ASSISTANT'>PHARMACY ASSISTANT</MenuItem>
+          //         <MenuItem value='SUPERVISOR-CASHIER'> SUPERVISOR-CASHIER</MenuItem>
+          //         <MenuItem value='HMO BILLING OFFICER'>HMO BILLING OFFICER</MenuItem>
+          //         <MenuItem value='BRAND MANAGER/EA'>BRAND MANAGER/EA</MenuItem>
+          //         <MenuItem value='PROCUREMENT OFFICER (CATETERIA)'>PROCUREMENT OFFICER (CATETERIA)</MenuItem>
+          //         <MenuItem value='LOGISTIC OFFICER'>LOGISTIC OFFICER</MenuItem>
+          //         <MenuItem value='SUPERVISION-PHARMACY'>SUPERVISION-PHARMACY</MenuItem>
+          //         <MenuItem value='STEWARD'>STEWARD</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //         <MenuItem value='LAUNDRY OFFICER'>LAUNDRY OFFICER</MenuItem>
+          //       </CustomTextField>
+          //     </Grid>
+          //     {/* <Grid item xs={12} sm={6}>
+          //       <CustomTextField
+          //         select
+          //         fullWidth
+          //         label='Country'
+          //         id='stepper-custom-horizontal-personal-select'
+          //         SelectProps={{
+          //           value: country,
+          //           onChange: e => setCountry(e.target.value)
+          //         }}
+          //       >
+          //         <MenuItem value='UK'>UK</MenuItem>
+          //         <MenuItem value='USA'>USA</MenuItem>
+          //         <MenuItem value='Australia'>Australia</MenuItem>
+          //         <MenuItem value='Germany'>Germany</MenuItem>
+          //       </CustomTextField>
+          //     </Grid> */}
+          //     <Grid item xs={12} sm={6} md={3}>
+          //       <CustomTextField
+          //         fullWidth
+          //         label='Gross salary'
+          //         placeholder='0'
+          //         value={firstName}
+          //         onChange={e => setFirstName(e.target.value)}
+          //       />
+          //     </Grid>
+          //     <Grid item xs={12} sm={6} md={3}>
+          //       <CustomTextField
+          //         fullWidth
+          //         label='Bank name'
+          //         placeholder='GTB'
+          //         value={firstName}
+          //         onChange={e => setFirstName(e.target.value)}
+          //       />
+          //     </Grid>
+          //     <Grid item xs={12} sm={6} md={3}>
+          //       <CustomTextField
+          //         fullWidth
+          //         label='Account number'
+          //         placeholder='0157674175'
+          //         value={firstName}
+          //         onChange={e => setFirstName(e.target.value)}
+          //       />
+          //     </Grid>
+          //  /Fragment>
+          <Fragment key={step}>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                select
+                fullWidth
+                label='Relationship Status'
+                id='stepper-custom-horizontal-personal-select'
+                SelectProps={{
+                  value: country,
+                  onChange: e => setCountry(e.target.value)
+                }}
+              >
+                <MenuItem value='MEDICAL DIRECTOR'>Single</MenuItem>
+                <MenuItem value='FINANCE/ADMIN DIRECTOR'>Married</MenuItem>
+                <MenuItem value='EMBRYOLOGIST'>Divorced</MenuItem>
+                <MenuItem value='LAUNDRY OFFICER'>Widowed</MenuItem>
+                <MenuItem value=' CALL CENTER OFFICER'>Prefer not to say</MenuItem>
+              </CustomTextField>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label='Emergency Contact'
+                placeholder='2345'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label='Relationship'
+                placeholder='brother'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                select
+                fullWidth
+                label='
+                Genotype
+          '
+                id='stepper-custom-horizontal-personal-select'
+                SelectProps={{
+                  value: country,
+                  onChange: e => setCountry(e.target.value)
+                }}
+              >
+                <MenuItem value='AA'>AA</MenuItem>
+                <MenuItem value='AC'>AC</MenuItem>
+                <MenuItem value='BS'>AS</MenuItem>
+                <MenuItem value='CC'>CC</MenuItem>
+                <MenuItem value='SC'>SC</MenuItem>
+                <MenuItem value='SS'>SS</MenuItem>
+              </CustomTextField>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                select
+                fullWidth
+                label='
+          Blood Group
+          '
+                id='stepper-custom-horizontal-personal-select'
+                SelectProps={{
+                  value: country,
+                  onChange: e => setCountry(e.target.value)
+                }}
+              >
+                <MenuItem value='A+'>A+</MenuItem>
+                <MenuItem value='A-'>A-</MenuItem>
+                <MenuItem value='B+'>B+</MenuItem>
+                <MenuItem value='B-'>B-</MenuItem>
+                <MenuItem value=' CALL CENTER OFFICER'>Prefer not to say</MenuItem>
+              </CustomTextField>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                select
+                fullWidth
+                label='Allegies'
+                id='stepper-custom-horizontal-personal-select'
+                SelectProps={{
+                  value: country,
+                  onChange: e => setCountry(e.target.value)
+                }}
+              >
+                <MenuItem value='No option'></MenuItem>
+              </CustomTextField>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label=' RSA Comapanys'
+                placeholder='2345'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label=' RSA number'
+                placeholder='2345'
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                label='Password'
+                placeholder=''
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+              />
+            </Grid>
+          </Fragment>
+        )
+
       case 2:
         return (
           <Fragment key={step}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={4} sm={6} md={4}>
               <CustomTextField
                 fullWidth
-                label='Twitter'
-                value={twitter}
-                onChange={e => setTwitter(e.target.value)}
-                placeholder='https://twitter.com/carterLeonard'
+                label='First name'
+                value={username}
+                placeholder='john.doe'
+                onChange={e => setUsername(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={4} sm={6} md={4}>
               <CustomTextField
                 fullWidth
-                label='Facebook'
-                value={facebook}
-                onChange={e => setFacebook(e.target.value)}
-                placeholder='https://facebook.com/carterLeonard'
+                label='Full name'
+                value={username}
+                placeholder='john.doe'
+                onChange={e => setUsername(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} md={4}>
               <CustomTextField
                 fullWidth
-                label='Google+'
-                value={google}
-                onChange={e => setGoogle(e.target.value)}
-                placeholder='https://plus.google.com/carterLeonard'
+                type='email'
+                label='Email'
+                value={email}
+                placeholder='johndoe@email.com'
+                onChange={e => setEmail(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} md={4}>
               <CustomTextField
                 fullWidth
-                label='LinkedIn'
-                value={linkedIn}
-                onChange={e => setLinkedIn(e.target.value)}
-                placeholder='https://linkedin.com/carterLeonard'
+                type='text'
+                label='Occupation'
+                value={email}
+                placeholder=''
+                onChange={e => setEmail(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                type='text'
+                label='Phone'
+                value={email}
+                placeholder=''
+                onChange={e => setEmail(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <CustomTextField
+                fullWidth
+                type='text'
+                label='Relationship'
+                value={email}
+                placeholder=''
+                onChange={e => setEmail(e.target.value)}
               />
             </Grid>
           </Fragment>

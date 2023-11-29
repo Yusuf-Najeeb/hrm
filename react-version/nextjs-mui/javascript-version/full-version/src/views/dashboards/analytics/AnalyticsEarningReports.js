@@ -15,8 +15,11 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
+import paper from 'src/@core/theme/overrides/paper'
+
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import Paper from 'src/@core/theme/overrides/paper'
 
 const series = [{ data: [37, 76, 65, 41, 99, 53, 70] }]
 
@@ -114,21 +117,24 @@ const AnalyticsEarningReports = () => {
   }
 
   return (
-    <Card>
-      <CardHeader
-        sx={{ pb: 0 }}
-        title='Earning Reports'
-        subheader='Weekly Earnings Overview'
-        action={
-          <OptionsMenu
-            options={['Last Week', 'Last Month', 'Last Year']}
-            iconButtonProps={{ size: 'small', sx: { color: 'text.disabled' } }}
-          />
-        }
-      />
-      <CardContent>
-        <Grid container spacing={6}>
-          <StyledGrid
+    <Grid container spacing={3}>
+      <Grid item md={6}>
+        <paper>
+          <Card>
+            <CardHeader
+              sx={{ pb: 0 }}
+              title='Earning Reports'
+              subheader='Weekly Earnings Overview'
+              action={
+                <OptionsMenu
+                  options={['Last Week', 'Last Month', 'Last Year']}
+                  iconButtonProps={{ size: 'small', sx: { color: 'text.disabled' } }}
+                />
+              }
+            />
+            <CardContent>
+              <Grid container spacing={6}>
+                {/* <StyledGrid
             item
             sm={5}
             xs={12}
@@ -139,41 +145,112 @@ const AnalyticsEarningReports = () => {
               <CustomChip rounded size='small' skin='light' color='success' label='+4.2%' />
             </Box>
             <Typography variant='body2'>You informed of this week compared to last week</Typography>
-          </StyledGrid>
-          <StyledGrid item xs={12} sm={7}>
+          </StyledGrid> */}
+                {/* <StyledGrid item xs={12} sm={7}>
             <ReactApexcharts type='bar' height={163} series={series} options={options} />
-          </StyledGrid>
-        </Grid>
-        <Box sx={{ mt: 6, borderRadius: 1, p: theme.spacing(4, 5), border: `1px solid ${theme.palette.divider}` }}>
-          <Grid container spacing={6}>
-            {data.map((item, index) => (
-              <Grid item xs={12} sm={4} key={index}>
-                <Box sx={{ mb: 2.5, display: 'flex', alignItems: 'center' }}>
-                  <CustomAvatar
-                    skin='light'
-                    variant='rounded'
-                    color={item.avatarColor}
-                    sx={{ mr: 2, width: 26, height: 26 }}
-                  >
-                    <Icon fontSize='1.125rem' icon={item.avatarIcon} />
-                  </CustomAvatar>
-                  <Typography variant='h6'>{item.title}</Typography>
-                </Box>
-                <Typography variant='h4' sx={{ mb: 2.5 }}>
-                  {item.stats}
-                </Typography>
-                <LinearProgress
-                  variant='determinate'
-                  value={item.progress}
-                  color={item.progressColor}
-                  sx={{ height: 4 }}
-                />
+          </StyledGrid> */}
               </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </CardContent>
-    </Card>
+              <Box
+                sx={{ mt: 6, borderRadius: 1, p: theme.spacing(4, 5), border: `1px solid ${theme.palette.divider}` }}
+              >
+                <Grid container spacing={6}>
+                  {data.map((item, index) => (
+                    <Grid item xs={12} sm={4} key={index}>
+                      <Box sx={{ mb: 2.5, display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar
+                          skin='light'
+                          variant='rounded'
+                          color={item.avatarColor}
+                          sx={{ mr: 2, width: 26, height: 26 }}
+                        >
+                          <Icon fontSize='1.125rem' icon={item.avatarIcon} />
+                        </CustomAvatar>
+                        <Typography variant='h6'>{item.title}</Typography>
+                      </Box>
+                      <Typography variant='h4' sx={{ mb: 2.5 }}>
+                        {item.stats}
+                      </Typography>
+                      <LinearProgress
+                        variant='determinate'
+                        value={item.progress}
+                        color={item.progressColor}
+                        sx={{ height: 4 }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </CardContent>
+          </Card>
+        </paper>
+      </Grid>
+      <Grid item md={6}>
+        <paper>
+          <Card>
+            <CardHeader
+              sx={{ pb: 0 }}
+              title='Earning Reports'
+              subheader='Weekly Earnings Overview'
+              action={
+                <OptionsMenu
+                  options={['Last Week', 'Last Month', 'Last Year']}
+                  iconButtonProps={{ size: 'small', sx: { color: 'text.disabled' } }}
+                />
+              }
+            />
+            <CardContent>
+              <Grid container spacing={6}>
+                {/* <StyledGrid
+            item
+            sm={5}
+            xs={12}
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-end' }}
+          >
+            <Box sx={{ mb: 3, rowGap: 1, columnGap: 2.5, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+              <Typography variant='h1'>$468</Typography>
+              <CustomChip rounded size='small' skin='light' color='success' label='+4.2%' />
+            </Box>
+            <Typography variant='body2'>You informed of this week compared to last week</Typography>
+          </StyledGrid> */}
+                {/* <StyledGrid item xs={12} sm={7}>
+            <ReactApexcharts type='bar' height={163} series={series} options={options} />
+          </StyledGrid> */}
+              </Grid>
+              <Box
+                sx={{ mt: 6, borderRadius: 1, p: theme.spacing(4, 5), border: `1px solid ${theme.palette.divider}` }}
+              >
+                <Grid container spacing={6}>
+                  {data.map((item, index) => (
+                    <Grid item xs={12} sm={4} key={index}>
+                      <Box sx={{ mb: 2.5, display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar
+                          skin='light'
+                          variant='rounded'
+                          color={item.avatarColor}
+                          sx={{ mr: 2, width: 26, height: 26 }}
+                        >
+                          <Icon fontSize='1.125rem' icon={item.avatarIcon} />
+                        </CustomAvatar>
+                        <Typography variant='h6'>{item.title}</Typography>
+                      </Box>
+                      <Typography variant='h4' sx={{ mb: 2.5 }}>
+                        {item.stats}
+                      </Typography>
+                      <LinearProgress
+                        variant='determinate'
+                        value={item.progress}
+                        color={item.progressColor}
+                        sx={{ height: 4 }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </CardContent>
+          </Card>
+        </paper>
+      </Grid>
+    </Grid>
   )
 }
 

@@ -167,7 +167,7 @@ const StepperLinearWithValidation = () => {
     switch (step) {
       case 0:
         return (
-          <form key={0} onSubmit={handleAccountSubmit(onSubmit)}>
+          <form key={0} onSubmit={handleAccountSubmit}>
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
@@ -285,7 +285,10 @@ const StepperLinearWithValidation = () => {
                 />
               </Grid>
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant='tonal' color='secondary' disabled>
+                {/* <Button variant='tonal' color='secondary'>
+                  Back
+                </Button> */}
+                <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
                 <Button type='submit' variant='contained'>
@@ -297,7 +300,7 @@ const StepperLinearWithValidation = () => {
         )
       case 1:
         return (
-          <form key={1} onSubmit={handlePersonalSubmit(onSubmit)}>
+          <form key={1} onSubmit={handlePersonalSubmit}>
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
@@ -413,7 +416,7 @@ const StepperLinearWithValidation = () => {
         )
       case 2:
         return (
-          <form key={2} onSubmit={handleSocialSubmit(onSubmit)}>
+          <form key={2} onSubmit={handleSocialSubmit}>
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>

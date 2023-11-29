@@ -180,39 +180,39 @@ const AnalyticsWebsiteAnalyticsSlider = () => {
     ]
   )
 
-  return (
-    <Card sx={{ position: 'relative', backgroundColor: 'primary.main' }}>
-      {loaded && instanceRef.current && (
-        <Box className='swiper-dots' sx={{ top: 4, right: 6, position: 'absolute' }}>
-          {[...Array(instanceRef.current.track.details.slides.length).keys()].map(idx => {
-            return (
-              <Badge
-                key={idx}
-                variant='dot'
-                component='div'
-                className={clsx({ active: currentSlide === idx })}
-                onClick={() => instanceRef.current?.moveToIdx(idx)}
-                sx={{
-                  mr: `${theme.spacing(3.5)} !important`,
-                  '& .MuiBadge-dot': {
-                    width: '8px !important',
-                    height: '8px !important',
-                    backgroundColor: `${hexToRGBA(theme.palette.common.white, 0.4)} !important`
-                  },
-                  '&.active .MuiBadge-dot': {
-                    backgroundColor: `${theme.palette.common.white} !important`
-                  }
-                }}
-              />
-            )
-          })}
-        </Box>
-      )}
-      <Box ref={sliderRef} className='keen-slider'>
-        <Slides theme={theme} />
-      </Box>
-    </Card>
-  )
+  // return (
+  //   <Card sx={{ position: 'relative', backgroundColor: 'primary.main' }}>
+  //     {loaded && instanceRef.current && (
+  //       <Box className='swiper-dots' sx={{ top: 4, right: 6, position: 'absolute' }}>
+  //         {[...Array(instanceRef.current.track.details.slides.length).keys()].map(idx => {
+  //           return (
+  //             <Badge
+  //               key={idx}
+  //               variant='dot'
+  //               component='div'
+  //               className={clsx({ active: currentSlide === idx })}
+  //               onClick={() => instanceRef.current?.moveToIdx(idx)}
+  //               sx={{
+  //                 mr: `${theme.spacing(3.5)} !important`,
+  //                 '& .MuiBadge-dot': {
+  //                   width: '8px !important',
+  //                   height: '8px !important',
+  //                   backgroundColor: `${hexToRGBA(theme.palette.common.white, 0.4)} !important`
+  //                 },
+  //                 '&.active .MuiBadge-dot': {
+  //                   backgroundColor: `${theme.palette.common.white} !important`
+  //                 }
+  //               }}
+  //             />
+  //           )
+  //         })}
+  //       </Box>
+  //     )}
+  //     <Box ref={sliderRef} className='keen-slider'>
+  //       <Slides theme={theme} />
+  //     </Box>
+  //   </Card>
+  // )
 }
 
 export default AnalyticsWebsiteAnalyticsSlider

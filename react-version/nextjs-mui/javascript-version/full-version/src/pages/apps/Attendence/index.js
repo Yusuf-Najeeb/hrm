@@ -41,7 +41,6 @@ import axios from 'axios'
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-import AddStaffList from 'src/views/apps/staff/list/AddStaffList'
 
 // ** renders client column
 const userRoleObj = {
@@ -248,7 +247,7 @@ const columns = [
   }
 ]
 
-const UserList = ({ apiData }) => {
+const Attendence = ({ apiData }) => {
   // ** State
   const [role, setRole] = useState('')
   const [plan, setPlan] = useState('')
@@ -294,11 +293,11 @@ const UserList = ({ apiData }) => {
         {apiData && (
           <Grid container spacing={6}>
             {apiData.statsHorizontalWithDetails.map((item, index) => {
-              return (
-                <Grid item xs={12} md={3} sm={6} key={index}>
-                  <CardStatsHorizontalWithDetails {...item} />
-                </Grid>
-              )
+              // return (
+              //   <Grid item xs={12} md={3} sm={6} key={index}>
+              //     <CardStatsHorizontalWithDetails {...item} />
+              //   </Grid>
+              // )
             })}
           </Grid>
         )}
@@ -379,7 +378,8 @@ const UserList = ({ apiData }) => {
         </Card>
       </Grid>
 
-      <AddStaffList open={addUserOpen} toggle={toggleAddUserDrawer} />
+      {/* <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} /> */}
+      {/* <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} /> */}
     </Grid>
   )
 }
@@ -395,4 +395,4 @@ export const getStaticProps = async () => {
   }
 }
 
-export default UserList
+export default Attendence

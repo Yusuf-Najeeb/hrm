@@ -41,7 +41,6 @@ import axios from 'axios'
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-import AddStaffList from 'src/views/apps/staff/list/AddStaffList'
 
 // ** renders client column
 const userRoleObj = {
@@ -379,7 +378,7 @@ const UserList = ({ apiData }) => {
         </Card>
       </Grid>
 
-      <AddStaffList open={addUserOpen} toggle={toggleAddUserDrawer} />
+      <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
     </Grid>
   )
 }

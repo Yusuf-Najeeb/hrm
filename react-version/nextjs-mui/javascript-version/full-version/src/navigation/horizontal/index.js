@@ -14,13 +14,15 @@ const navigation = () => {
     {
       title: 'Staff-List',
       icon: 'tabler:user',
-      children: [
-        {
-          title: 'Staff-List',
-          path: '/apps/Staff-List/Staff-List'
-        }
-      ]
+      path: '/apps/Staff-List/'
     },
+
+    {
+      title: 'Duty Roster',
+      icon: 'tabler:calendar',
+      path: '/apps/duty-roster/'
+    },
+
     {
       icon: 'tabler:smart-home',
       title: 'Dashboards',
@@ -56,11 +58,11 @@ const navigation = () => {
           icon: 'tabler:messages',
           path: '/apps/chat'
         },
-        {
-          title: 'Calendar',
-          icon: 'tabler:calendar',
-          path: '/apps/calendar'
-        },
+        // {
+        //   title: 'Calendar',
+        //   icon: 'tabler:calendar',
+        //   path: '/apps/calendar'
+        // },
         {
           title: 'Invoice',
           icon: 'tabler:file-dollar',

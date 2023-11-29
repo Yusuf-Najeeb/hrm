@@ -50,9 +50,9 @@ const TableHeader = props => {
           placeholder='Search Invoice'
           onChange={e => handleFilter(e.target.value)}
         />
-        <Button sx={{ mb: 2 }} component={Link} variant='contained' href='/apps/invoice/add'>
+        {/* <Button sx={{ mb: 2 }} component={Link} variant='contained' href='/apps/invoice/add'>
           Create Invoice
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   )

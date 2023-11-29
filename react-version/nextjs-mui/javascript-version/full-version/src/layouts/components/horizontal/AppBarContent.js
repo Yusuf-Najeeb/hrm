@@ -59,6 +59,11 @@ const notifications = [
 
 const shortcuts = [
   {
+    title: 'Duty Roster',
+    url: '/apps/duty-roster/',
+    icon: 'tabler:calendar'
+  },
+  {
     title: 'Calendar',
     url: '/apps/calendar',
     icon: 'tabler:calendar',

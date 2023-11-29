@@ -12,7 +12,7 @@ import Box from '@mui/material/Box'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
-import StepperCustomVertical from 'src/views/forms/form-wizard/StepperCustomVertical'
+import StepperCustomHorizontal from 'src/views/forms/form-wizard/StepperCustomHorizontal'
 
 // ** Third Party Imports
 import * as yup from 'yup'
@@ -137,9 +137,10 @@ const SidebarAddUser = props => {
       onClose={handleClose}
       ModalProps={{ keepMounted: true }}
       sx={{ '& .MuiDrawer-paper': { width: { xs: 100, sm: 400 } } }}
+      // sx={{ '& .MuiDrawer-paper': { overflow: 'visible' } }}
     >
       <Header>
-        <Typography variant='h5'>Add User</Typography>
+        <Typography variant='h5'>Add Staff</Typography>
         <IconButton
           size='small'
           onClick={handleClose}
@@ -158,7 +159,8 @@ const SidebarAddUser = props => {
       </Header>
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <StepperCustomVertical />
+          {/* <StepperLinearWithValidation /> */}
+          <StepperCustomHorizontal />
         </form>
       </Box>
     </Dialog>
