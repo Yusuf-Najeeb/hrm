@@ -60,6 +60,11 @@ const navigation = () => {
       icon: 'tabler:air-balloon',
       path: '/apps/user/view/billing-plan'
     },
+    {
+      title: 'Payslip Settings',
+      icon: 'tabler:currency-dollar',
+      path: '/apps/payslips'
+    },
 
     {
       title: 'Icons',
