@@ -15,19 +15,23 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import KeenSliderWrapper from 'src/@core/styles/libs/keen-slider'
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { colorsProgress } from 'src/configs/colorConfigs'
 
 const PayslipSet = [
   {
     id: 1,
     label: 'Food',
-    value: 20,
-    bgc: 'red'
+    value: 20
   },
   {
     id: 2,
     label: 'Transport',
-    value: 50,
-    bgc: '#03a9f4'
+    value: 50
+  },
+  {
+    id: 3,
+    label: 'Water',
+    value: 78
   }
 ]
 
@@ -61,7 +65,7 @@ const PayslipsSettings = () => {
           <Grid item xs={12} md={6} lg={6}>
             <Card>
               <CardContent>
-                {PayslipSet.map(item => (
+                {PayslipSet.map((item, index) => (
                   <Box key={item.id} display='flex' flexDirection='column' sx={{ mb: 4 }}>
                     <Box
                       sx={{
@@ -76,7 +80,7 @@ const PayslipsSettings = () => {
                       <Typography variant='body2' color='textSecondary'>{`${item.value}%`}</Typography>
                     </Box>
                     <Box width='100%' mr={1}>
-                      <BorderLinearProgress variant='determinate' value={item.value} bgc={`${item.bgc}`} />
+                      <BorderLinearProgress variant='determinate' value={item.value} bgc={`${colorsProgress[index]}`} />
                     </Box>
                   </Box>
                 ))}
