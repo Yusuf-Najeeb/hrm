@@ -119,7 +119,7 @@ const RowOptions = ({ id }) => {
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
-          href='/apps/user/view/account'
+          href='/apps/staff/view/account'
           onClick={handleRowOptionsClose}
         >
           <Icon icon='tabler:eye' fontSize={20} />
@@ -154,7 +154,7 @@ const columns = [
             <Typography
               noWrap
               component={Link}
-              href='/apps/user/view/account'
+              href='/apps/staff/view/account'
               sx={{
                 fontWeight: 500,
                 textDecoration: 'none',
