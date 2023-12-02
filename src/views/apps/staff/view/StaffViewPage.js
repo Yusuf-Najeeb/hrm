@@ -2,8 +2,10 @@
 import Grid from '@mui/material/Grid'
 
 // ** Demo Components Imports
-import UserViewRight from 'src/views/apps/user/view/UserViewRight'
+
 import StaffViewLeft from './StaffViewLeft'
+
+import StaffViewRight from './StaffRightView'
 
 const StaffViewPage = ({ tab, invoiceData }) => {
   return (
@@ -12,7 +14,7 @@ const StaffViewPage = ({ tab, invoiceData }) => {
         <StaffViewLeft />
       </Grid>
       <Grid item xs={12} md={7} lg={8}>
-        <UserViewRight tab={tab} invoiceData={invoiceData} />
+        <StaffViewRight tab={tab} invoiceData={invoiceData} />
       </Grid>
     </Grid>
   )
