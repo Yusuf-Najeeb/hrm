@@ -13,7 +13,6 @@ const NokInfo = () => {
           <Box
             sx={{
               display: 'flex',
-              mb: 2,
               alignItems: 'center',
               '& svg': { mr: 2, color: 'text.secondary' },
               justifyContent: 'space-between'
@@ -34,7 +33,6 @@ const NokInfo = () => {
           <Box
             sx={{
               display: 'flex',
-              mb: 2,
               alignItems: 'center',
               '& svg': { mr: 2, color: 'text.secondary' },
               justifyContent: 'space-between'
@@ -55,7 +53,6 @@ const NokInfo = () => {
           <Box
             sx={{
               display: 'flex',
-              mb: 2,
               alignItems: 'center',
               '& svg': { mr: 2, color: 'text.secondary' },
               justifyContent: 'space-between'
@@ -75,7 +72,6 @@ const NokInfo = () => {
           <Box
             sx={{
               display: 'flex',
-              mb: 2,
               alignItems: 'center',
               '& svg': { mr: 2, color: 'text.secondary' },
               justifyContent: 'space-between'
@@ -95,7 +91,7 @@ const NokInfo = () => {
           <Box
             sx={{
               display: 'flex',
-              mb: 2,
+
               alignItems: 'center',
               '& svg': { mr: 2, color: 'text.secondary' },
               justifyContent: 'space-between'
@@ -115,7 +111,6 @@ const NokInfo = () => {
           <Box
             sx={{
               display: 'flex',
-              mb: 2,
               alignItems: 'center',
               '& svg': { mr: 2, color: 'text.secondary' },
               justifyContent: 'space-between'

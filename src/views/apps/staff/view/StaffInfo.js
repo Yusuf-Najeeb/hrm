@@ -40,10 +40,9 @@ const StaffInfo = ({ invoiceData }) => {
       <Grid item xs={12}>
         <Card>
           <CardContent>
-            <Grid item xs={12} md={12} lg={12} sx={{ mb: 4 }}>
+            <Grid item xs={12} md={12} lg={12} sx={{ mb: 6 }}>
               <MedicalInfo />
             </Grid>
-
             <Grid item xs={12} md={12} lg={12}>
               <NokInfo />
             </Grid>

@@ -70,105 +70,107 @@ const StaffViewLeft = () => {
 
   if (data) {
     return (
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <Card sx={{ border: '1px solid #5f58be' }}>
-            <CardContent sx={{ pb: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-              <CustomChip rounded skin='light' size='small' color='primary' label='MEDICAL DIRECTOR' />
-            </CardContent>
+      <Card>
+        <CardContent>
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <Card sx={{ border: '1px solid #5f58be' }}>
+                <CardContent sx={{ pb: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                  <CustomChip rounded skin='light' size='small' color='primary' label='MEDICAL DIRECTOR' />
+                </CardContent>
 
-            <CardContent sx={{ mt: 6 }}>
-              <Stack direction='row' spacing={4}>
-                <CustomAvatar
-                  skin='light'
-                  variant='rounded'
-                  color={data.avatarColor}
-                  sx={{ width: 40, height: 40, mb: 4, fontSize: '1rem', borderRadius: 50 }}
-                >
-                  {getInitials('Deda Hospital')}
-                </CustomAvatar>
-                <Box>
-                  <Typography variant='h6' sx={{ mb: 3, textTransform: 'uppercase' }}>
-                    {'ONUH SUNDAY OMALE'}
-                  </Typography>
-                  <Typography variant='h6' sx={{ mb: 3, color: 'text.disabled', fontSize: 13 }}>
-                    PEN100153116177 | STANBIC IBTC
-                  </Typography>
-                </Box>
-              </Stack>
-
-              <Button fullWidth variant='contained' color='error' onClick={handlePlansClickOpen}>
-                Disable Staff
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Card>
-            <Typography
-              variant='h6'
-              sx={{ mx: 6, my: 4, color: 'text.secondary', textTransform: 'uppercase', fontWeight: 800 }}
-            >
-              Details
-            </Typography>
-
-            <Divider sx={{ my: '0 !important', mx: 6 }} />
-
-            <CardContent sx={{ pb: 4 }}>
-              <Box sx={{ mt: 1.5, mb: 4 }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    mb: 2,
-                    alignItems: 'center',
-                    '& svg': { mr: 2, color: 'text.secondary' },
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Stack direction='row'>
-                    <Icon icon='tabler:progress-check' fontSize='1.125rem' />
-                    <Typography sx={{ color: 'text.secondary' }}>Employee ID :</Typography>
+                <CardContent sx={{ mt: 6 }}>
+                  <Stack direction='row' spacing={4}>
+                    <CustomAvatar
+                      skin='light'
+                      variant='rounded'
+                      color={data.avatarColor}
+                      sx={{ width: 35, height: 35, mb: 4, fontSize: '1rem', borderRadius: 50 }}
+                    >
+                      {getInitials('Deda Hospital')}
+                    </CustomAvatar>
+                    <Box>
+                      <Typography variant='h6' sx={{ mb: 2, textTransform: 'uppercase' }}>
+                        {'ONUH SUNDAY OMALE'}
+                      </Typography>
+                      <Typography variant='h6' sx={{ mb: 2, color: 'text.disabled', fontSize: 10 }}>
+                        PEN100153116177 | STANBIC IBTC
+                      </Typography>
+                    </Box>
                   </Stack>
-                  <Typography sx={{ color: 'text.secondary' }}>DH001</Typography>
-                </Box>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    mb: 2,
-                    alignItems: 'center',
-                    '& svg': { mr: 2, color: 'text.secondary' },
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Stack direction='row'>
-                    <Icon icon='tabler:progress-check' fontSize='1.125rem' />
-                    <Typography sx={{ color: 'text.secondary' }}>Gross Salary :</Typography>
-                  </Stack>
-                  <Typography sx={{ color: 'text.secondary' }}>₦1,200,000.00</Typography>
-                </Box>
+                  <Button fullWidth variant='contained' color='error' onClick={handlePlansClickOpen}>
+                    Disable Staff
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    mb: 2,
-                    alignItems: 'center',
-                    '& svg': { mr: 2, color: 'text.secondary' },
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Stack direction='row'>
-                    <Icon icon='tabler:progress-check' fontSize='1.125rem' />
-                    <Typography sx={{ color: 'text.secondary' }}>Account Number :</Typography>
-                  </Stack>
-                  <Typography sx={{ color: 'text.secondary' }}>1002513534</Typography>
+            <Grid xs={12}>
+              <Typography
+                variant='h6'
+                sx={{ mx: 6, mt: 6, mb: 2, color: 'text.secondary', textTransform: 'uppercase', fontWeight: 800 }}
+              >
+                Details
+              </Typography>
+
+              <Divider sx={{ my: '0 !important', mx: 6 }} />
+
+              <CardContent sx={{ pb: 4 }}>
+                <Box sx={{ mt: 1.5, mb: 4 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      mb: 2,
+                      alignItems: 'center',
+                      '& svg': { mr: 2, color: 'text.secondary' },
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Stack direction='row'>
+                      <Icon icon='tabler:progress-check' fontSize='1.125rem' />
+                      <Typography sx={{ color: 'text.secondary' }}>Employee ID :</Typography>
+                    </Stack>
+                    <Typography sx={{ color: 'text.secondary' }}>DH001</Typography>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      mb: 2,
+                      alignItems: 'center',
+                      '& svg': { mr: 2, color: 'text.secondary' },
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Stack direction='row'>
+                      <Icon icon='tabler:progress-check' fontSize='1.125rem' />
+                      <Typography sx={{ color: 'text.secondary' }}>Gross Salary :</Typography>
+                    </Stack>
+                    <Typography sx={{ color: 'text.secondary' }}>₦1,200,000.00</Typography>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      mb: 2,
+                      alignItems: 'center',
+                      '& svg': { mr: 2, color: 'text.secondary' },
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Stack direction='row'>
+                      <Icon icon='tabler:progress-check' fontSize='1.125rem' />
+                      <Typography sx={{ color: 'text.secondary' }}>Account Number :</Typography>
+                    </Stack>
+                    <Typography sx={{ color: 'text.secondary' }}>1002513534</Typography>
+                  </Box>
                 </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              </CardContent>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
     )
   } else {
     return null
