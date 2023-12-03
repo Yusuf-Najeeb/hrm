@@ -79,8 +79,8 @@ const StaffViewLeft = () => {
                   <CustomChip rounded skin='light' size='small' color='primary' label='MEDICAL DIRECTOR' />
                 </CardContent>
 
-                <CardContent sx={{ mt: 6 }}>
-                  <Stack direction='row' spacing={4}>
+                <CardContent sx={{ mt: 9 }}>
+                  <Stack direction='row' spacing={4} sx={{ mb: 3 }}>
                     <CustomAvatar
                       skin='light'
                       variant='rounded'
