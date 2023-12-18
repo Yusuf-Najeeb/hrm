@@ -86,6 +86,79 @@ const defaultColumns = [
       <Typography component={LinkStyled} href={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Typography>
     )
   },
+  // {
+  //   flex: 0.1,
+  //   minWidth: 80,
+  //   field: 'invoiceStatus',
+  //   renderHeader: () => <Icon icon='tabler:trending-up' />,
+  //   renderCell: ({ row }) => {
+  //     const { dueDate, balance, invoiceStatus } = row
+  //     const color = invoiceStatusObj[invoiceStatus] ? invoiceStatusObj[invoiceStatus].color : 'primary'
+
+  //     return (
+  //       <Tooltip
+  //         title={
+  //           <div>
+  //             <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
+  //               {invoiceStatus}
+  //             </Typography>
+  //             <br />
+  //             <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
+  //               Balance:
+  //             </Typography>{' '}
+  //             {balance}
+  //             <br />
+  //             <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
+  //               Due Date:
+  //             </Typography>{' '}
+  //             {dueDate}
+  //           </div>
+  //         }
+  //       >
+  //         <CustomAvatar skin='light' color={color} sx={{ width: '1.875rem', height: '1.875rem' }}>
+  //           <Icon icon={invoiceStatusObj[invoiceStatus].icon} />
+  //         </CustomAvatar>
+  //       </Tooltip>
+  //     )
+  //   }
+  // },
+  {
+    flex: 0.25,
+    field: 'name',
+    minWidth: 320,
+    headerName: 'full name',
+    renderCell: ({ row }) => {
+      const { name, companyEmail } = row
+
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {renderClient(row)}
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
+              {name}
+            </Typography>
+            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
+              {companyEmail}
+            </Typography>
+          </Box>
+        </Box>
+      )
+    }
+  },
+  {
+    flex: 0.1,
+    minWidth: 100,
+    field: 'total',
+    headerName: 'Total Leave',
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`$${row.total || 0}`}</Typography>
+  },
+  {
+    flex: 0.15,
+    minWidth: 140,
+    field: 'issuedDate',
+    headerName: 'Taken',
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.issuedDate}</Typography>
+  },
   {
     flex: 0.1,
     minWidth: 80,
@@ -121,43 +194,6 @@ const defaultColumns = [
         </Tooltip>
       )
     }
-  },
-  {
-    flex: 0.25,
-    field: 'name',
-    minWidth: 320,
-    headerName: 'Client',
-    renderCell: ({ row }) => {
-      const { name, companyEmail } = row
-
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {renderClient(row)}
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-              {name}
-            </Typography>
-            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
-              {companyEmail}
-            </Typography>
-          </Box>
-        </Box>
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 100,
-    field: 'total',
-    headerName: 'Total',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`$${row.total || 0}`}</Typography>
-  },
-  {
-    flex: 0.15,
-    minWidth: 140,
-    field: 'issuedDate',
-    headerName: 'Issued Date',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.issuedDate}</Typography>
   },
   {
     flex: 0.1,

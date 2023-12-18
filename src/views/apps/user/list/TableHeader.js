@@ -38,7 +38,7 @@ const TableHeader = props => {
 
         <Button onClick={toggle} variant='contained' sx={{ '& svg': { mr: 2 } }}>
           <Icon fontSize='1.125rem' icon='tabler:plus' />
-          Add New User
+          Import
         </Button>
       </Box>
     </Box>

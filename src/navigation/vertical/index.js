@@ -15,6 +15,11 @@ const navigation = () => {
       path: '/apps/staff'
     },
     {
+      title: 'New Staff',
+      icon: 'tabler:mail',
+      path: '/apps/new-staff/list'
+    },
+    {
       title: 'Duty-Roster',
       icon: 'tabler:address-book',
       path: '/apps/Duty-Roster'

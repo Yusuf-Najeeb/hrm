@@ -28,7 +28,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import CardStatsHorizontalWithDetails from 'src/@core/components/card-statistics/card-stats-horizontal-with-details'
-
+import { styled } from '@mui/material/styles'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -42,7 +42,11 @@ import axios from 'axios'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import AddStaffList from 'src/views/apps/staff/list/AddStaffList'
-
+const LinkStyled = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  fontSize: theme.typography.body1.fontSize,
+  color: `${theme.palette.primary.main} !important`
+}))
 // ** renders client column
 const userRoleObj = {
   admin: { icon: 'tabler:device-laptop', color: 'secondary' },
@@ -140,10 +144,19 @@ const RowOptions = ({ id }) => {
 
 const columns = [
   {
+    flex: 0.1,
+    field: 'id',
+    minWidth: 100,
+    headerName: 'ID',
+    renderCell: ({ row }) => (
+      <Typography component={LinkStyled} href={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Typography>
+    )
+  },
+  {
     flex: 0.25,
     minWidth: 280,
     field: 'fullName',
-    headerName: 'User',
+    headerName: 'Full name',
     renderCell: ({ row }) => {
       const { fullName, email } = row
 
@@ -172,32 +185,32 @@ const columns = [
       )
     }
   },
-  {
-    flex: 0.15,
-    field: 'role',
-    minWidth: 170,
-    headerName: 'Role',
-    renderCell: ({ row }) => {
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <CustomAvatar
-            skin='light'
-            sx={{ mr: 4, width: 30, height: 30 }}
-            color={userRoleObj[row.role].color || 'primary'}
-          >
-            <Icon icon={userRoleObj[row.role].icon} />
-          </CustomAvatar>
-          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
-          </Typography>
-        </Box>
-      )
-    }
-  },
+  // {
+  //   flex: 0.15,
+  //   field: 'role',
+  //   minWidth: 170,
+  //   headerName: 'Role',
+  //   renderCell: ({ row }) => {
+  //     return (
+  //       <Box sx={{ display: 'flex', alignItems: 'center' }}>
+  //         <CustomAvatar
+  //           skin='light'
+  //           sx={{ mr: 4, width: 30, height: 30 }}
+  //           color={userRoleObj[row.role].color || 'primary'}
+  //         >
+  //           <Icon icon={userRoleObj[row.role].icon} />
+  //         </CustomAvatar>
+  //         <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+  //           {row.role}
+  //         </Typography>
+  //       </Box>
+  //     )
+  //   }
+  // },
   {
     flex: 0.15,
     minWidth: 120,
-    headerName: 'Plan',
+    headerName: 'Designer',
     field: 'currentPlan',
     renderCell: ({ row }) => {
       return (
@@ -211,7 +224,7 @@ const columns = [
     flex: 0.15,
     minWidth: 190,
     field: 'billing',
-    headerName: 'Billing',
+    headerName: 'Department',
     renderCell: ({ row }) => {
       return (
         <Typography noWrap sx={{ color: 'text.secondary' }}>
@@ -235,6 +248,28 @@ const columns = [
           color={userStatusObj[row.status]}
           sx={{ textTransform: 'capitalize' }}
         />
+      )
+    }
+  },
+  {
+    flex: 0.15,
+    field: 'role',
+    minWidth: 170,
+    headerName: 'Role',
+    renderCell: ({ row }) => {
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <CustomAvatar
+            skin='light'
+            sx={{ mr: 4, width: 30, height: 30 }}
+            color={userRoleObj[row.role].color || 'primary'}
+          >
+            <Icon icon={userRoleObj[row.role].icon} />
+          </CustomAvatar>
+          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+            {row.role}
+          </Typography>
+        </Box>
       )
     }
   },
