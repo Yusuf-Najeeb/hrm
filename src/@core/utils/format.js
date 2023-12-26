@@ -88,3 +88,9 @@ export const formatCVC = (value, cardNumber, Payment) => {
 
   return clearValue.slice(0, maxLength)
 }
+
+export const formatFirstLetter = (letter)=> {
+  const formattedString = letter[0].toUpperCase() + letter.slice(1);
+
+  return formattedString
+}

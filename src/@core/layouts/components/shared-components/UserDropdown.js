@@ -44,7 +44,8 @@ const UserDropdown = props => {
 
   // ** Hooks
   const router = useRouter()
-  const { logout } = useAuth()
+
+  // const { logout } = useAuth()
 
   // ** Vars
   const { direction } = settings
@@ -76,7 +77,8 @@ const UserDropdown = props => {
   }
 
   const handleLogout = () => {
-    logout()
+    // logout()
+    
     handleDropdownClose()
   }
 
