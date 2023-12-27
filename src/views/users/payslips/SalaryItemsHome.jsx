@@ -21,7 +21,7 @@ import { fetchSalaryItems } from '../../../store/apps/salaryItems/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import NoData from '../../../@core/components/emptyData/NoData'
-import CreatePayslipItem from './CreatePayslipItem'
+import CreateSalaryItem from './CreateSalaryItem'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   return {
@@ -36,7 +36,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   }
 })
 
-const PayslipsSettings = () => {
+const SalaryItems = () => {
   const dispatch = useAppDispatch()
   const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
   const [openDialog, setOpenDialog] = useState(false)
@@ -44,6 +44,7 @@ const PayslipsSettings = () => {
 
   const toggleCreateDialog = ()=> setOpenDialog(!openDialog)
   const refetchSalaryItems = ()=> setFetchStatus(!fetchStatus)
+
 
 
   useEffect(()=>{
@@ -71,7 +72,7 @@ const PayslipsSettings = () => {
                 <CustomSpinner />
               ) :
               <CardContent>
-                {SalaryItemsData.map((item, index) => (
+                {SalaryItemsData?.map((item, index) => (
                   <Box key={item?.id} display='flex' flexDirection='column' sx={{ mb: 4 }}>
                     <Box
                       sx={{
@@ -120,7 +121,7 @@ const PayslipsSettings = () => {
                       </TableCell>
                     </TableRow>
                     ) : <Fragment>
-                      {SalaryItemsData.map(item => (
+                      {SalaryItemsData?.map(item => (
                       <TableRow key={item?.id} hover>
                         <TableCell>{formatFirstLetter(item?.name)}</TableCell>
                         <TableCell align='center'>{`${item?.percentage}%`}</TableCell>
@@ -153,9 +154,9 @@ const PayslipsSettings = () => {
         </Grid>
       </KeenSliderWrapper>
 
-      {openDialog && <CreatePayslipItem openDialog={openDialog} closeDialog={toggleCreateDialog} refetchSalaryItems={refetchSalaryItems} />}
+      {openDialog && <CreateSalaryItem openDialog={openDialog} closeDialog={toggleCreateDialog} refetchSalaryItems={refetchSalaryItems} />}
     </div>
   )
 }
 
-export default PayslipsSettings
+export default SalaryItems

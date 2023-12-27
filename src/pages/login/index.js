@@ -4,8 +4,9 @@ import { useState } from 'react'
 // ** Next Imports
 import Link from 'next/link'
 
+import { useRouter } from 'next/router'
+
 // ** MUI Components
-import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Checkbox from '@mui/material/Checkbox'
@@ -29,7 +30,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Hooks
-import { useAuth } from 'src/hooks/useAuth'
 import useBgColor from 'src/@core/hooks/useBgColor'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
@@ -41,6 +41,9 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import { useAppDispatch } from '../../hooks'
+import { LoginUser } from '../../store/apps/auth/asyncthunk'
+import { notifyError } from '../../@core/components/toasts/notifyError'
 
 // ** Styled Components
 const LoginIllustration = styled('img')(({ theme }) => ({
@@ -81,21 +84,24 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
+  username: yup.string().required(),
   password: yup.string().min(5).required()
 })
 
 const defaultValues = {
-  password: 'admin',
-  email: 'admin@vuexy.com'
+  password: 'techtink.admin',
+  username: 'techtink.admin'
 }
 
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
 
+  // Next Js
+  const router = useRouter()
+
   // ** Hooks
-  const auth = useAuth()
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const bgColors = useBgColor()
   const { settings } = useSettings()
@@ -115,14 +121,16 @@ const LoginPage = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = data => {
-    const { email, password } = data
-    auth.login({ email, password, rememberMe }, () => {
-      setError('email', {
-        type: 'manual',
-        message: 'Email or Password is invalid'
-      })
-    })
+  const onSubmit = async (data) => {
+    const { username, password } = data
+    try {
+      const resp = await dispatch(LoginUser({ username, password }))
+      if (resp.payload?.success) {
+        router.replace('/dashboards/analytics')
+      }
+    } catch (error) {
+      notifyError('A network Error occured, please try again')
+    }
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
@@ -192,16 +200,8 @@ const LoginPage = () => {
                 Please sign-in to your account and start the adventure
               </Typography>
             </Box>
-            <Alert icon={false} sx={{ py: 3, mb: 6, ...bgColors.primaryLight, '& .MuiAlert-message': { p: 0 } }}>
-              <Typography variant='body2' sx={{ mb: 2, color: 'primary.main' }}>
-                Admin: <strong>admin@vuexy.com</strong> / Pass: <strong>admin</strong>
-              </Typography>
-              <Typography variant='body2' sx={{ color: 'primary.main' }}>
-                Client: <strong>client@vuexy.com</strong> / Pass: <strong>client</strong>
-              </Typography>
-            </Alert>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-              <Box sx={{ mb: 4 }}>
+              {/* <Box sx={{ mb: 4 }}>
                 <Controller
                   name='email'
                   control={control}
@@ -217,6 +217,26 @@ const LoginPage = () => {
                       placeholder='admin@vuexy.com'
                       error={Boolean(errors.email)}
                       {...(errors.email && { helperText: errors.email.message })}
+                    />
+                  )}
+                />
+              </Box> */}
+               <Box sx={{ mb: 4 }}>
+                <Controller
+                  name='username'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <CustomTextField
+                      fullWidth
+                      autoFocus
+                      label='Username'
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      placeholder='admin'
+                      error={Boolean(errors.username)}
+                      {...(errors.username && { helperText: errors.username.message })}
                     />
                   )}
                 />

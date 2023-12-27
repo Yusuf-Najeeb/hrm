@@ -35,11 +35,6 @@ export const createSalaryItem = createAsyncThunk(
         console.log(response, 'res salary items')
 
         return response
-  
-        // return {
-        //   success: true,
-        //   data: response.data
-        // }
     } catch (error) {
       console.log(error, 'errorrrr')
 

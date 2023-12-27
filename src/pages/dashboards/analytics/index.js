@@ -57,10 +57,10 @@ const AnalyticsDashboard = () => {
             <AnalyticsMonthlyCampaignState />
           </Grid> */}
           <Grid item xs={12} lg={4}>
-            <AnalyticsSourceVisits />
+            {/* <AnalyticsSourceVisits /> */}
           </Grid>
           <Grid item xs={12} lg={8}>
-            <AnalyticsProject />
+            {/* <AnalyticsProject /> */}
           </Grid>
         </Grid>
       </KeenSliderWrapper>

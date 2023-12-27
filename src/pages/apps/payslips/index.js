@@ -1,8 +1,8 @@
-import PayslipsSettings from "../../../views/users/payslips/PaySlipsSettingsHome"
+import SalaryItems from "../../../views/users/payslips/SalaryItemsHome"
 
 
 const PayslipsHome = () => {
-  return <PayslipsSettings />
+  return <SalaryItems />
 }
 
 export default PayslipsHome
