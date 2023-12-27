@@ -83,6 +83,8 @@ const HorizontalLayout = props => {
   const userAppBarProps = Object.assign({}, appBarProps)
   delete userAppBarProps.sx
 
+  console.log(horizontalLayoutProps.navMenu?.navItems, 'nav items')
+
   return (
     <HorizontalLayoutWrapper className='layout-wrapper'>
       <MainContentWrapper className='layout-content-wrapper' sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}>
@@ -144,8 +146,10 @@ const HorizontalLayout = props => {
                 }}
               >
                 {(userNavMenuContent && userNavMenuContent(props)) || (
+
                   <Navigation {...props} horizontalNavItems={horizontalLayoutProps.navMenu?.navItems} />
-                )}
+
+                 )} 
               </Toolbar>
             </Box>
           )}
