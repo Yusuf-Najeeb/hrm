@@ -19,7 +19,7 @@ const initialState = {
         builder.addCase(fetchSalaryItems.fulfilled, (state, action)=> {
             state.loadingSalaryItems = false
             
-            state.SalaryItemsData = action.payload.data.result
+            state.SalaryItemsData = action?.payload?.data?.result
 
         })
         builder.addCase(fetchSalaryItems.rejected, (state)=> {

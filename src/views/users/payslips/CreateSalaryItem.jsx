@@ -17,7 +17,7 @@ const defaultValues = {
     percentage: Number('')
 }
 
-const CreatePayslipItem = ({openDialog, closeDialog, refetchSalaryItems}) => {
+const CreateSalaryItem = ({openDialog, closeDialog, refetchSalaryItems}) => {
     const {
         control,
         reset,
@@ -30,7 +30,7 @@ const CreatePayslipItem = ({openDialog, closeDialog, refetchSalaryItems}) => {
         resolver: yupResolver(SalaryItemSchema)
       })
 
-      const createPayslipItem = async (values)=>{
+      const createSalaryItem = async (values)=>{
         try {
             const createUrl = `salary-items`
 
@@ -55,7 +55,7 @@ const CreatePayslipItem = ({openDialog, closeDialog, refetchSalaryItems}) => {
     sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 450 } }}
     >
 
-        <form onSubmit={handleSubmit(createPayslipItem)}>
+        <form onSubmit={handleSubmit(createSalaryItem)}>
         <DialogContent
           sx={{
             pb: theme => `${theme.spacing(8)} !important`,
@@ -121,4 +121,4 @@ const CreatePayslipItem = ({openDialog, closeDialog, refetchSalaryItems}) => {
   )
 }
 
-export default CreatePayslipItem
+export default CreateSalaryItem
