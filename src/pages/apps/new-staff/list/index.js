@@ -1,18 +1,15 @@
-// ** React Imports
-//import { useState, useEffect, forwardRef } from 'react'
-// import StepperLinearAndValidation from 'src/views/forms/form-wizard/StepperLinearAndValidation'
-//import StepperLinearAndValidation from '../../../../../src/pages/apps/new-staff/list'
+
 import StepperLinearAndValidation from '../../../../../src/views/forms/form-wizard/StepperLinearWithValidation'
 import Grid from '@mui/material/Grid'
+import CreateStaff from '../../../../views/users/staffs/CreateStaff'
 
-import Typography from '@mui/material/Typography'
 
 const InvoiceList = () => {
   return (
     <Grid>
       <Grid item xs={12}></Grid>
       <Grid item xs={12}>
-        <StepperLinearAndValidation />
+        <CreateStaff />
       </Grid>
     </Grid>
   )
