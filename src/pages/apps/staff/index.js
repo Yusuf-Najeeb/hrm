@@ -29,11 +29,12 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import CardStatsHorizontalWithDetails from 'src/@core/components/card-statistics/card-stats-horizontal-with-details'
 import { styled } from '@mui/material/styles'
+
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Actions Imports
-import { fetchData, deleteUser } from 'src/store/apps/user'
+// import { fetchData, deleteUser } from 'src/store/apps/user'
 
 // ** Third Party Components
 import axios from 'axios'
@@ -42,11 +43,13 @@ import axios from 'axios'
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import AddStaffList from 'src/views/apps/staff/list/AddStaffList'
+
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
   fontSize: theme.typography.body1.fontSize,
   color: `${theme.palette.primary.main} !important`
 }))
+
 // ** renders client column
 const userRoleObj = {
   admin: { icon: 'tabler:device-laptop', color: 'secondary' },
@@ -185,6 +188,7 @@ const columns = [
       )
     }
   },
+
   // {
   //   flex: 0.15,
   //   field: 'role',
@@ -283,7 +287,7 @@ const columns = [
   }
 ]
 
-const UserList = ({ apiData }) => {
+const UserList = () => {
   // ** State
   const [role, setRole] = useState('')
   const [plan, setPlan] = useState('')
@@ -295,16 +299,17 @@ const UserList = ({ apiData }) => {
   // ** Hooks
   const dispatch = useDispatch()
   const store = useSelector(state => state.user)
-  useEffect(() => {
-    dispatch(
-      fetchData({
-        role,
-        status,
-        q: value,
-        currentPlan: plan
-      })
-    )
-  }, [dispatch, plan, role, status, value])
+
+  // useEffect(() => {
+  //   dispatch(
+  //     fetchData({
+  //       role,
+  //       status,
+  //       q: value,
+  //       currentPlan: plan
+  //     })
+  //   )
+  // }, [dispatch, plan, role, status, value])
 
   const handleFilter = useCallback(val => {
     setValue(val)
@@ -326,17 +331,19 @@ const UserList = ({ apiData }) => {
   return (
     <Grid container spacing={6.5}>
       <Grid item xs={12}>
-        {apiData && (
+        {/* {apiData && ( */}
           <Grid container spacing={6}>
-            {apiData.statsHorizontalWithDetails.map((item, index) => {
+
+            {/* {apiData.statsHorizontalWithDetails.map((item, index) => {
               return (
                 <Grid item xs={12} md={3} sm={6} key={index}>
                   <CardStatsHorizontalWithDetails {...item} />
                 </Grid>
               )
-            })}
+            })} */}
+            
           </Grid>
-        )}
+        {/* )} */}
       </Grid>
       <Grid item xs={12}>
         <Card>
@@ -419,15 +426,15 @@ const UserList = ({ apiData }) => {
   )
 }
 
-export const getStaticProps = async () => {
-  const res = await axios.get('/cards/statistics')
-  const apiData = res.data
+// export const getStaticProps = async () => {
+//   const res = await axios.get('/users?page=1')
+//   const apiData = res.data.data
 
-  return {
-    props: {
-      apiData
-    }
-  }
-}
+//   return {
+//     props: {
+//       apiData
+//     }
+//   }
+// }
 
 export default UserList

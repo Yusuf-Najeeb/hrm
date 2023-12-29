@@ -10,6 +10,11 @@ const navigation = () => {
       sectionTitle: ' Staff MANAGER'
     },
     {
+      title: 'Departments',
+      icon: "fluent-emoji-high-contrast:department-store",
+      path: '/apps/departments'
+    },
+    {
       title: 'Staff & Payroll',
       icon: 'tabler:user-hexagon',
       path: '/apps/staff'

@@ -34,16 +34,13 @@ axios.interceptors.response.use(
   function (error) {
     // console.log('moved to errored', error)
 
-    if (error?.response?.statusText === 'Unauthorized') {
+    if ( error?.response?.statusText === 'Unauthorized') {
       window.localStorage.removeItem('accessToken')
 
       window.location.href = '/login'
 
-      // console.log('getting res err', error.response?.statusText)
     }
 
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
     return Promise.reject(error)
   }
 )
