@@ -192,17 +192,6 @@ const CreateStaff = () => {
     const formData = new FormData()
 
 
-    formData.append('image', selectedImage)
-    formData.append('username', `${personalValues.username}`)
-    formData.append('firstname', `${personalValues.firstname}`)
-    formData.append('lastname', `${personalValues.lastname}`)
-    formData.append('password', `${personalValues.password}`)
-    formData.append('email', `${personalValues.email}`)
-    formData.append('phone', `${personalValues.phone}`)
-    formData.append('bloodGroup', `${personalValues.bloodGroup}`)
-    formData.append('genotype', `${personalValues.genotype}`)
-
-
     const payload = {}
 
     payload.username = personalValues.username
@@ -244,7 +233,7 @@ const CreateStaff = () => {
   }
 
   useEffect(()=>{
-    dispatch(fetchDepartments())
+    dispatch(fetchDepartments({page: 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[openDepartmentsModal])

@@ -40,7 +40,8 @@ const DepartmentsTable = () => {
 
 //   const [DepartmentsData, loadingDepartments] = useAppSelector(store => store.departments.DepartmentsData)
 
-  const [DepartmentsData, loadingDepartments] = useDepartments()
+  const [DepartmentsData, loadingDepartments, paging] = useDepartments()
+  const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
   const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
@@ -86,7 +87,7 @@ const DepartmentsTable = () => {
     setDepartmentToView(prod)
   }
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = ( newPage) => {
     setPage(newPage)
   }
 
@@ -99,10 +100,10 @@ const DepartmentsTable = () => {
   const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
-    dispatch(fetchDepartments())
+    dispatch(fetchDepartments({page: page + 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch])
+  }, [page, refetch])
 
   return (
     <div>
@@ -163,7 +164,7 @@ const DepartmentsTable = () => {
         </Table>
       </TableContainer>
 
-      {/* <TablePagination
+      <TablePagination
         page={page}
         component='div'
         count={paging?.totalItems}
@@ -171,7 +172,7 @@ const DepartmentsTable = () => {
         onPageChange={handleChangePage}
         rowsPerPageOptions={[5, 10, 20]}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+      />
 
       {/* {openCanvas && <Viewdepartment open={openCanvas} closeCanvas={closeCanvas} department={department} />}
       {openPayModal && (
