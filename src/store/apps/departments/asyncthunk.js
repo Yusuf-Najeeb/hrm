@@ -26,9 +26,14 @@ export const createDepartment = createAsyncThunk(
   )
 
   export const fetchDepartments = createAsyncThunk('departments/fetchItems',
-  async ()=> {
+  async (query)=> {
     try {
-        const response = await axios.get(`/department?page=1&limit=200`)
+        const response = await axios.get(`/department`, {
+          params: {
+            page: query.page,
+            limit: query.limit
+          }
+        })
 
         return response
     } catch (error) {

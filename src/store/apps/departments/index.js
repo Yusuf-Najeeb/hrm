@@ -5,6 +5,12 @@ import { fetchDepartments } from './asyncthunk'
 const initialState = {
     loadingDepartments: false,
     DepartmentsData: [],
+    DepartmentsPaging: {
+        currentPage: 1,
+        totalItems: 0,
+        itemsPerPage: 0,
+        totalPages: 0
+      },
 
   }
 
@@ -19,7 +25,7 @@ const initialState = {
         builder.addCase(fetchDepartments.fulfilled, (state, action)=> {
             state.loadingDepartments = false
             state.DepartmentsData = action?.payload?.data?.data
-
+            state.DepartmentsPaging = action?.payload?.data?.paging
         })
         builder.addCase(fetchDepartments.rejected, (state)=> {
             state.loadingDepartments = false
