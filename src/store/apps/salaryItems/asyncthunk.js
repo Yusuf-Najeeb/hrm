@@ -32,8 +32,6 @@ export const createSalaryItem = createAsyncThunk(
     try {
         const response = await axios.get('/salary-items')
 
-        console.log(response, 'res salary items')
-
         return response
     } catch (error) {
       console.log(error, 'errorrrr')

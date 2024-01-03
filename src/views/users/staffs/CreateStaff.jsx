@@ -44,6 +44,7 @@ import CreateDepartment from '../../users/departments/CreateDepartment'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import axios from 'axios'
+import { uploadImage } from '../../../store/apps/upload'
 
 const steps = [
   {
@@ -77,13 +78,27 @@ const CreateStaff = () => {
   const [openDepartmentsModal, setOpenDepartmentsModal] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('/images/avatars/1.png')
+  const [imageLinkPayload, setImageLinkPayload] = useState(null)
 
-  // ** Hooks
+  // ** Form Hooks
+
+  const {
+    reset: personalReset,
+    control: personalControl,
+    handleSubmit: handlePersonalSubmit,
+    formState: { errors: personalErrors , isValid: personalValuesValid},
+    getValues: getPersonalValues
+  } = useForm({
+    defaultValues: defaultPersonalValues,
+    resolver: yupResolver(personalInfoSchema)
+  })
+
+
   const {
     reset: workInfoReset,
     control: workInfoControl,
     handleSubmit: handleWorkInfoSubmit,
-    formState: { errors: workInfoErrors },
+    formState: { errors: workInfoErrors , isValid: workValuesValid},
     getValues: getWorkInfoValues
   } = useForm({
     defaultValues: defaultWorkInfoValues,
@@ -91,21 +106,10 @@ const CreateStaff = () => {
   })
 
   const {
-    reset: personalReset,
-    control: personalControl,
-    handleSubmit: handlePersonalSubmit,
-    formState: { errors: personalErrors },
-    getValues: getPersonalValues
-  } = useForm({
-    defaultValues: defaultPersonalValues,
-    resolver: yupResolver(personalInfoSchema)
-  })
-
-  const {
     reset: nextofKinReset,
     control: nextOfKinControl,
     handleSubmit: handleNextOfKinSubmit,
-    formState: { errors: nextOfKinErrors },
+    formState: { errors: nextOfKinErrors, isValid: nokValuesValid },
     getValues: getNextOfKinValues
   } = useForm({
     defaultValues: defaultNextOfKinValues,
@@ -125,10 +129,45 @@ const CreateStaff = () => {
     return null
   }
 
-  const handleForward = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
+  // const handleForward = async () => {
+  //   // e.preventDefault()
+  //   console.log('trigerred')
+
+  //   try {
+  //     switch (activeStep) {
+  //       case 0:
+  //         // Check for errors in the first step (Personal Info)
+  //         if (personalValuesValid) {
+  //           console.log("No errors in the first step");
+  //           setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //         }else {
+  //           console.log("errors in the first step");
+  //           console.log(personalErrors, "errrr")
+  //         }
+  //         break;
+  //       case 1:
+  //         if (workValuesValid) {
+  //           console.log("No errors in the second step");
+  //           setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //         }
+  //         break;
+  //       default:
+  //         // For other steps, simply increment the activeStep
+  //         // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //         console.log('eeeee')
+  //         break;
+  //     }
+  //   } catch (error) {
+  //     console.log(error, 'error')
+  //   }
+    
+  // };
+
+  const handleForward = ()=> {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   }
 
+  
   const handleReset = () => {
     setActiveStep(0)
     nextofKinReset({ firstname: '', lastname: '', phone: '', email: '', occupation: '', address: '', title: '', relationship: '', maritalStatus: '',  })
@@ -152,13 +191,19 @@ const CreateStaff = () => {
 
       if (file.type.startsWith('image/')) {
         const fileUrl = URL.createObjectURL(file)
-        console.log(file, "file")
-        console.log(fileInput.files, "fileInput")
-        setPreviewUrl(fileUrl)
-        setSelectedImage(file)
+
+        const formData = new FormData();
+        formData.append("picture", file);
+
+        uploadImage(formData).then((res)=>{
+          if (res) {
+            setPreviewUrl(fileUrl)
+            setSelectedImage(file)
+            setImageLinkPayload(res.url)
+          } 
+        })
       } else {
         notifyWarn('FILE ERROR', 'Selected file is not an image.')
-        console.error('Selected file is not an image.')
         setPreviewUrl(null)
       }
     } else {
@@ -168,38 +213,19 @@ const CreateStaff = () => {
     }
   }
 
-
-  const onSubmitPersonalInfo = ()=> {
-    const personalValues = getPersonalValues();
-    
-    console.log('Personal Values:', personalValues);
-  }
-
-  const onSubmitWorkInfo = ()=> {
-    const workInfoValues = getWorkInfoValues();
-
-    console.log('Work Info Values:', workInfoValues);
-  }
-
   const onSubmitAllInfo = async () => {
 
     try {
-            // Retrieve form values
+    // Retrieve form values
     const workInfoValues = getWorkInfoValues();
     const personalValues = getPersonalValues();
     const nextOfKinValues = getNextOfKinValues();
 
-    const formData = new FormData()
-
-
-    const payload = {}
-
-    payload.username = personalValues.username
-    payload.firstname = personalValues.firstname
-    payload.password = personalValues.password
-    payload.lastname = personalValues.lastname
-    payload.email = personalValues.email
-    payload.image = selectedImage.name
+    const payload = {...personalValues, 
+      ...workInfoValues, 
+      image: imageLinkPayload ? imageLinkPayload : "",
+    }
+    payload.nok = {...nextOfKinValues}
 
     const response = await axios.post('users', payload, {
         
@@ -207,19 +233,14 @@ const CreateStaff = () => {
           'Content-Type': 'application/json;charset=UTF-8'
         }
       })
-      
       if (response.data.success) {
         notifySuccess('created Staff Successfully')
-
-        // workInfoReset()
-        // nextofKinReset()
-        // personalReset()
+        handleReset()
         setActiveStep(0)
       }
 
 
     } catch (error) {
-      console.log(error)
       notifyError('Error creating staff')
     }
 
@@ -291,7 +312,8 @@ const CreateStaff = () => {
            {selectedImage && <img src={`${previewUrl}`} width={120} height={100} style={{objectFit: 'cover', objectPosition: 'center'}} alt='product image' /> }
           </Box>
         </Grid>
-          <form key={1} onSubmit={handlePersonalSubmit(onSubmitPersonalInfo)}>
+        
+          <form key={0}  >
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
@@ -301,6 +323,7 @@ const CreateStaff = () => {
                   {steps[0].subtitle}
                 </Typography>
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <Controller
                   name='firstname'
@@ -312,13 +335,14 @@ const CreateStaff = () => {
                       value={value}
                       label='First Name'
                       onChange={onChange}
-                      error={Boolean(personalErrors['first-name'])}
+                      error={Boolean(personalErrors['firstname'])}
                       aria-describedby='stepper-linear-personal-first-name'
-                      {...(personalErrors['first-name'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['firstname'] && { helperText: personalErrors.firstname.message })}
                     />
                   )}
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <Controller
                   name='lastname'
@@ -332,7 +356,7 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['lastname'])}
                       aria-describedby='stepper-linear-personal-last-name'
-                      {...(personalErrors['lastname'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['lastname'] && { helperText: personalErrors.lastname.message })}
                     />
                   )}
                 />
@@ -352,7 +376,7 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['email'])}
                       aria-describedby='stepper-linear-personal-email'
-                      {...(personalErrors['email'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['email'] && { helperText: personalErrors.email.message})}
                     />
                   )}
                 />
@@ -371,7 +395,7 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['phone'])}
                       aria-describedby='stepper-linear-personal-phone'
-                      {...(personalErrors['phone'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['phone'] && { helperText: personalErrors.phone.message })}
                     />
                   )}
                 />
@@ -390,7 +414,7 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['username'])}
                       aria-describedby='stepper-linear-personal-username'
-                      {...(personalErrors['username'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['username'] && { helperText: personalErrors.username.message })}
                     />
                   )}
                 />
@@ -445,7 +469,7 @@ const CreateStaff = () => {
                       id='stepper-linear-personal-maritalStatus'
                       error={Boolean(personalErrors.maritalStatus)}
                       aria-describedby='stepper-linear-personal-maritalStatus-helper'
-                      {...(personalErrors.maritalStatus && { helperText: 'This field is required' })}
+                      {...(personalErrors.maritalStatus && { helperText: personalErrors.maritalStatus.message })}
                     >
                       <MenuItem value='Single'>Single</MenuItem>
                       <MenuItem value='Married'>Married</MenuItem>
@@ -468,7 +492,7 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['genotype'])}
                       aria-describedby='stepper-linear-personal-genotype'
-                      {...(personalErrors['genotype'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['genotype'] && { helperText: personalErrors.genotype.message })}
                     />
                   )}
                 />
@@ -487,7 +511,7 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['bloodGroup'])}
                       aria-describedby='stepper-linear-personal-bloodGroup'
-                      {...(personalErrors['bloodGroup'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['bloodGroup'] && { helperText: personalErrors.bloodGroup.message })}
                     />
                   )}
                 />
@@ -506,13 +530,13 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['allergies'])}
                       aria-describedby='stepper-linear-personal-allergies'
-                      {...(personalErrors['allergies'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['allergies'] && { helperText: personalErrors.allergies.message })}
                     />
                   )}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <Controller
                   name='additionalInfo'
                   control={personalControl}
@@ -525,17 +549,17 @@ const CreateStaff = () => {
                       onChange={onChange}
                       error={Boolean(personalErrors['additionalInfo'])}
                       aria-describedby='stepper-linear-personal-additionalInfo'
-                      {...(personalErrors['additionalInfo'] && { helperText: 'This field is required' })}
+                      {...(personalErrors['additionalInfo'] && { helperText: personalErrors.additionalInfo.message })}
                     />
                   )}
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
-                <Button type='submit' variant='contained' onClick={handleForward}>
+                <Button type='submit' variant='contained' onClick={handleForward}  >
                   Next
                 </Button>
               </Grid>
@@ -546,7 +570,10 @@ const CreateStaff = () => {
         
       case 1:
         return (
-          <form key={0} onSubmit={handleWorkInfoSubmit(onSubmitWorkInfo)}>
+
+          <form key={1} >
+
+          {/* <form key={1} > */}
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
@@ -708,7 +735,7 @@ const CreateStaff = () => {
                 <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
-                <Button type='submit' variant='contained' onClick={handleForward}>
+                <Button type='button' variant='contained' onClick={handleForward} >
                   Next
                 </Button>
               </Grid>

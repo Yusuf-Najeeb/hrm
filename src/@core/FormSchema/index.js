@@ -1,6 +1,19 @@
 // ** Third Party Imports
 import * as yup from 'yup'
 
+
+const showErrors = (field, valueLen, min) => {
+  if (valueLen === 0) {
+    return `${field} is a required field`
+  } else if (valueLen > 0 && valueLen < min) {
+    return `${field} must be at least ${min} characters`
+  } else {
+    return ''
+  }
+}
+
+
+
 export const SalaryItemSchema = yup.object().shape({
     name: yup
       .string()
@@ -9,21 +22,23 @@ export const SalaryItemSchema = yup.object().shape({
   })
 
   export const personalInfoSchema = yup.object().shape({
-    username: yup.string().required(),
+    username: yup.string()
+    .min(3, obj => showErrors('Username', obj.value.length, obj.min)),
     email: yup.string().email().required(),
     lastname: yup.string().required(),
     firstname: yup.string().required(),
-    password: yup.string().min(6).required(),
+    password: yup.string().min(5).required(),
     phone: yup
   .string()
-  .typeError('Contact Number field is required')
+  .typeError('Phone Number  is required')
   .min(11, obj => showErrors('Phone number', obj.value.length, obj.min)),
   bloodGroup: yup.string().required(),
   genotype: yup.string().required(),
   allergies: yup.string().required(),
   maritalStatus: yup.string().required(),
   image: yup.string().required(),
-  additionalInfo: yup.string()
+  
+  // additionalInfo: yup.string()
   })
 
   export const workInfoSchema = yup.object().shape({
