@@ -21,7 +21,7 @@ const navigation = () => {
     },
     {
       title: 'New Staff',
-      icon: 'tabler:mail',
+      icon: 'wpf:add-user',
       path: '/apps/new-staff/list'
     },
     {

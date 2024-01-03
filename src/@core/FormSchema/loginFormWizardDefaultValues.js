@@ -21,7 +21,8 @@ export const defaultPersonalValues = {
     allergies: '',
     maritalStatus: '',
     image: '',
-    additionalInfo: ''
+    
+    // additionalInfo: ''
   }
 
   export const defaultNextOfKinValues = {
