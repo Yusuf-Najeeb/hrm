@@ -79,18 +79,18 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage }) => {
               <Typography variant='h5' sx={{ mb: 3 }}>
                 {formatFirstLetter(Staff?.firstname) || '--'}
               </Typography>
-              <CustomChip
+              {/* <CustomChip
                 rounded
                 skin='light'
                 size='small'
                 label='Admin'
                 color={roleColors['admin']}
                 sx={{ textTransform: 'capitalize' }}
-              />
+              /> */}
             </Box>
             <Box sx={{ display: 'flex', position: 'relative' }}>
               <Typography variant='h5' sx={{ mt: -1, mb: -1.2, color: 'primary.main', fontSize: '2rem !important' }}>
-                {Staff?.salary }
+                {Staff?.grossSalary?.toLocaleString() }
                 <Sub>/ month</Sub>
               </Typography>
             </Box>

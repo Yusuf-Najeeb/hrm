@@ -15,13 +15,15 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import InputAdornment from '@mui/material/InputAdornment'
+import StepperWrapper from 'src/@core/styles/mui/stepper'
+import { ButtonStyled } from '../../../@core/components/mui/button/ButtonStyledComponent'
 
 // ** Third Party Imports
-import * as yup from 'yup'
-import toast from 'react-hot-toast'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
 
+// React Hook Form Schema
 import { personalInfoSchema , workInfoSchema, nextOfKinSchema} from 'src/@core/Formschema'
 
 // ** Icon Imports
@@ -30,20 +32,22 @@ import Icon from 'src/@core/components/icon'
 // ** Custom Components Imports
 import StepperCustomDot from '../../forms/form-wizard/StepperCustomDot'
 import CustomTextField from 'src/@core/components/mui/text-field'
-
-// ** Styled Components
-import StepperWrapper from 'src/@core/styles/mui/stepper'
-import { defaultNextOfKinValues, defaultPersonalValues, defaultWorkInfoValues } from '../../../@core/FormSchema/loginFormWizardDefaultValues'
-import { ButtonStyled } from '../../../@core/components/mui/button/ButtonStyledComponent'
-import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
-import { useDepartments } from '../../../hooks/useDepartments'
-import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
-import { useAppDispatch } from '../../../hooks'
-import { formatFirstLetter } from '../../../@core/utils/format'
+import FormController from '../components/FormController'
 import CreateDepartment from '../../users/departments/CreateDepartment'
+
+// React Hook Form Utilities
+import { defaultNextOfKinValues, defaultPersonalValues, defaultWorkInfoValues } from '../../../@core/FormSchema/formDefaultvalues'
+
+// Custom Hooks
+import { useDepartments } from '../../../hooks/useDepartments'
+import { useAppDispatch } from '../../../hooks'
+
+// Others
+import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
+import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
-import axios from 'axios'
 import { uploadImage } from '../../../store/apps/upload'
 
 const steps = [
@@ -79,6 +83,7 @@ const CreateStaff = () => {
   const [selectedImage, setSelectedImage] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('/images/avatars/1.png')
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
+  const [refetch, setFetch] = useState(false)
 
   // ** Form Hooks
 
@@ -109,7 +114,7 @@ const CreateStaff = () => {
     reset: nextofKinReset,
     control: nextOfKinControl,
     handleSubmit: handleNextOfKinSubmit,
-    formState: { errors: nextOfKinErrors, isValid: nokValuesValid },
+    formState: { errors: nextOfKinErrors, },
     getValues: getNextOfKinValues
   } = useForm({
     defaultValues: defaultNextOfKinValues,
@@ -129,50 +134,37 @@ const CreateStaff = () => {
     return null
   }
 
-  // const handleForward = async () => {
-  //   // e.preventDefault()
-  //   console.log('trigerred')
+  const handleForward =  () => {
+      switch (activeStep) {
+        case 0:
+          // Check for errors in the first step (Personal Info)
+          if (personalValuesValid) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          }
+          break;
+        case 1:
+          // Check for errors in the second step (Work Info)
+          if (workValuesValid) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          }
+          break;
+        default:
+          // For other steps, simply increment the activeStep
+          // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          console.log('eeeee')
+          break;
+      }
+    } 
+ 
 
-  //   try {
-  //     switch (activeStep) {
-  //       case 0:
-  //         // Check for errors in the first step (Personal Info)
-  //         if (personalValuesValid) {
-  //           console.log("No errors in the first step");
-  //           setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //         }else {
-  //           console.log("errors in the first step");
-  //           console.log(personalErrors, "errrr")
-  //         }
-  //         break;
-  //       case 1:
-  //         if (workValuesValid) {
-  //           console.log("No errors in the second step");
-  //           setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //         }
-  //         break;
-  //       default:
-  //         // For other steps, simply increment the activeStep
-  //         // setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //         console.log('eeeee')
-  //         break;
-  //     }
-  //   } catch (error) {
-  //     console.log(error, 'error')
-  //   }
-    
-  // };
-
-  const handleForward = ()=> {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  }
 
   
   const handleReset = () => {
+    setPreviewUrl(null)
     setActiveStep(0)
     nextofKinReset({ firstname: '', lastname: '', phone: '', email: '', occupation: '', address: '', title: '', relationship: '', maritalStatus: '',  })
     workInfoReset({ designation: '', employeeNumber: '', rsaCompany: '',  rsaNumber: '', accountNumber: '', departmentId: '', grossSalary: '' })
-    personalReset({ username: '', email: '', firstname: '', lastname: '', password: '', phone: '', bloodGroup: '', genotype: '', allergies: '', maritalStatus: '', image: '' })
+    personalReset({ username: '', email: '', firstname: '', lastname: '', password: '', phone: '', bloodGroup: '', genotype: '', allergies: '', maritalStatus: '', address: '' })
   }
 
   const handleInputImageChange = (e) => {
@@ -246,6 +238,8 @@ const CreateStaff = () => {
 
   };
 
+  const updateFetch = () => setFetch(!refetch)
+
 
   // Handle Password
   const handleClickShowPassword = () => {
@@ -256,7 +250,7 @@ const CreateStaff = () => {
     dispatch(fetchDepartments({page: 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[openDepartmentsModal])
+  },[openDepartmentsModal, refetch])
 
 
   const getStepContent = step => {
@@ -312,7 +306,7 @@ const CreateStaff = () => {
           </Box>
         </Grid>
         
-          <form key={0}  >
+          <form key={0} onSubmit={handlePersonalSubmit(handleForward)} >
             <Grid container spacing={5}>
               <Grid item xs={12}>
                 <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
@@ -324,99 +318,24 @@ const CreateStaff = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='firstname'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='First Name'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['firstname'])}
-                      aria-describedby='stepper-linear-personal-first-name'
-                      {...(personalErrors['firstname'] && { helperText: personalErrors.firstname.message })}
-                    />
-                  )}
-                />
+
+                <FormController name='firstname' control={personalControl} requireBoolean={true} label="First Name" error={personalErrors['firstname']} errorMessage={personalErrors.firstname?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='lastname'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Last Name'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['lastname'])}
-                      aria-describedby='stepper-linear-personal-last-name'
-                      {...(personalErrors['lastname'] && { helperText: personalErrors.lastname.message })}
-                    />
-                  )}
-                />
+              <FormController name='lastname' control={personalControl} requireBoolean={true} label="Last Name" error={personalErrors['lastname']} errorMessage={personalErrors.lastname?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='email'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Email'
-                      type='email'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['email'])}
-                      aria-describedby='stepper-linear-personal-email'
-                      {...(personalErrors['email'] && { helperText: personalErrors.email.message})}
-                    />
-                  )}
-                />
+              <FormController name='email' control={personalControl} requireBoolean={true} label="Email" error={personalErrors['email']} errorMessage={personalErrors?.email?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='phone'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Phone Number'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['phone'])}
-                      aria-describedby='stepper-linear-personal-phone'
-                      {...(personalErrors['phone'] && { helperText: personalErrors.phone.message })}
-                    />
-                  )}
-                />
+                <FormController name='phone' control={personalControl} requireBoolean={true} label="Phone" error={personalErrors['phone']} errorMessage={personalErrors.phone?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='username'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Username'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['username'])}
-                      aria-describedby='stepper-linear-personal-username'
-                      {...(personalErrors['username'] && { helperText: personalErrors.username.message })}
-                    />
-                  )}
-                />
+                <FormController name='username' control={personalControl} requireBoolean={true} label="Username" error={personalErrors['username']} errorMessage={personalErrors?.username?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -454,6 +373,10 @@ const CreateStaff = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
+              <FormController name='address' control={personalControl} requireBoolean={true} label="Address" error={personalErrors['address']} errorMessage={personalErrors.address?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
                 <Controller
                   name='maritalStatus'
                   control={personalControl}
@@ -479,60 +402,15 @@ const CreateStaff = () => {
               </Grid>
 
                <Grid item xs={12} sm={6}>
-                <Controller
-                  name='genotype'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Genotype'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['genotype'])}
-                      aria-describedby='stepper-linear-personal-genotype'
-                      {...(personalErrors['genotype'] && { helperText: personalErrors.genotype.message })}
-                    />
-                  )}
-                />
+              <FormController name='genotype' control={personalControl} requireBoolean={true} label="Genotype" error={personalErrors['genotype']} errorMessage={personalErrors.genotype?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='bloodGroup'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Blood Group'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['bloodGroup'])}
-                      aria-describedby='stepper-linear-personal-bloodGroup'
-                      {...(personalErrors['bloodGroup'] && { helperText: personalErrors.bloodGroup.message })}
-                    />
-                  )}
-                />
+                <FormController name='bloodGroup' control={personalControl} requireBoolean={true} label="Blood Group" error={personalErrors['bloodGroup']} errorMessage={personalErrors.bloodGroup?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='allergies'
-                  control={personalControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Allergies'
-                      onChange={onChange}
-                      error={Boolean(personalErrors['allergies'])}
-                      aria-describedby='stepper-linear-personal-allergies'
-                      {...(personalErrors['allergies'] && { helperText: personalErrors.allergies.message })}
-                    />
-                  )}
-                />
+                <FormController name='allergies' control={personalControl} requireBoolean={true} label="Allergies" error={personalErrors['allergies']} errorMessage={personalErrors.allergies?.message} />
               </Grid>
 
               {/* <Grid item xs={12} sm={6}>
@@ -558,7 +436,9 @@ const CreateStaff = () => {
                 <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
-                <Button type='submit' variant='contained' onClick={handleForward}  >
+
+
+                <Button type='submit' variant='contained'   >
                   Next
                 </Button>
               </Grid>
@@ -570,7 +450,7 @@ const CreateStaff = () => {
       case 1:
         return (
 
-          <form key={1} >
+          <form key={1} onSubmit={handleWorkInfoSubmit(handleForward)} >
 
           {/* <form key={1} > */}
             <Grid container spacing={5}>
@@ -583,22 +463,8 @@ const CreateStaff = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='designation'
-                  control={workInfoControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Designation'
-                      onChange={onChange}
-                      error={Boolean(workInfoErrors.designation)}
-                      aria-describedby='stepper-linear-account-designation'
-                      {...(workInfoErrors.designation && { helperText: 'This field is required' })}
-                    />
-                  )}
-                />
+
+              <FormController name='designation' control={workInfoControl} requireBoolean={true} label="Designation" error={workInfoErrors['designation']} errorMessage={workInfoErrors.designation?.message} />
               </Grid>
 
               <Grid item xs={12} sm={5}>
@@ -635,98 +501,23 @@ const CreateStaff = () => {
                 </Grid>
 
               <Grid item xs={12} sm={6}>
-              <Controller
-                name='employeeNo'
-                control={workInfoControl}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    type='text'
-                    label='Employee Number'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(workInfoErrors.employeeNo)}
-                    {...(workInfoErrors.employeeNo && { helperText: workInfoErrors.employeeNo.message })}
-                  />
-                )}
-              />
+              <FormController name='employeeNumber' control={workInfoControl} requireBoolean={true} label="Employee Number" error={workInfoErrors['employeeNumber']} errorMessage={workInfoErrors?.employeeNumber?.message} />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-                <Controller
-                  name='grossSalary'
-                  control={workInfoControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Gross Salary'
-                      onChange={onChange}
-                      error={Boolean(workInfoErrors.grossSalary)}
-                      aria-describedby='stepper-linear-account-grossSalary'
-                      {...(workInfoErrors.grossSalary && { helperText: 'This field is required' })}
-                    />
-                  )}
-                />
+                <FormController name='grossSalary' control={workInfoControl} requireBoolean={true} label="Gross Salary" error={workInfoErrors['grossSalary']} errorMessage={workInfoErrors?.grossSalary?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='accountNumber'
-                  control={workInfoControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Account Number'
-                      onChange={onChange}
-                      error={Boolean(workInfoErrors.accountNumber)}
-                      aria-describedby='stepper-linear-account-accountNumber'
-                      {...(workInfoErrors.accountNumber && { helperText: 'This field is required' })}
-                    />
-                  )}
-                />
+              <FormController name='accountNumber' control={workInfoControl} requireBoolean={true} label="Account Number" error={workInfoErrors['accountNumber']} errorMessage={workInfoErrors?.accountNumber?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='rsaCompany'
-                  control={workInfoControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Retirement Savings Account Company'
-                      onChange={onChange}
-                      error={Boolean(workInfoErrors.rsaCompany)}
-                      aria-describedby='stepper-linear-account-rsaCompany'
-                      {...(workInfoErrors.rsaCompany && { helperText: 'This field is required' })}
-                    />
-                  )}
-                />
+              <FormController name='rsaCompany' control={workInfoControl} requireBoolean={true} label="Retirement Savings Account Company" error={workInfoErrors['rsaCompany']} errorMessage={workInfoErrors?.rsaCompany?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='rsaNumber'
-                  control={workInfoControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Retirement Savings Account Number'
-                      onChange={onChange}
-                      error={Boolean(workInfoErrors.rsaNumber)}
-                      aria-describedby='stepper-linear-account-rsaNumber'
-                      {...(workInfoErrors.rsaNumber && { helperText: 'This field is required' })}
-                    />
-                  )}
-                />
+                <FormController name='rsaNumber' control={workInfoControl} requireBoolean={true} label="Retirement Savings Account Number" error={workInfoErrors['rsaNumber']} errorMessage={workInfoErrors?.rsaNumber?.message} />
               </Grid>
 
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -734,7 +525,7 @@ const CreateStaff = () => {
                 <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
-                <Button type='button' variant='contained' onClick={handleForward} >
+                <Button type='submit' variant='contained' >
                   Next
                 </Button>
               </Grid>
@@ -754,116 +545,26 @@ const CreateStaff = () => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='firstname'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='First Name'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.firstname)}
-                      aria-describedby='stepper-linear-social-firstname'
-                      {...(nextOfKinErrors.firstname && { helperText: nextOfKinErrors.firstname.message })}
-                    />
-                  )}
-                />
+                <FormController name='firstname' control={nextOfKinControl} requireBoolean={true} label="First Name" error={nextOfKinErrors['firstname']} errorMessage={nextOfKinErrors?.firstname?.message} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='lastname'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='lastname'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.lastname)}
-                      aria-describedby='stepper-linear-social-lastname'
-                      {...(nextOfKinErrors.lastname && { helperText: nextOfKinErrors.lastname.message })}
-                    />
-                  )}
-                />
+                <FormController name='lastname' control={nextOfKinControl} requireBoolean={true} label="Last Name" error={nextOfKinErrors['lastname']} errorMessage={nextOfKinErrors?.lastname?.message} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='phone'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Phone Number'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.phone)}
-                      aria-describedby='stepper-linear-social-phone'
-                      {...(nextOfKinErrors.phone && { helperText: nextOfKinErrors.phone.message })}
-                    />
-                  )}
-                />
+              <FormController name='phone' control={nextOfKinControl} requireBoolean={true} label="Phone Number" error={nextOfKinErrors['phone']} errorMessage={nextOfKinErrors?.phone?.message} />
               </Grid>
               
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='email'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Email'
-                      type='email'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.email)}
-                      aria-describedby='stepper-linear-social-email'
-                      {...(nextOfKinErrors.email && { helperText: nextOfKinErrors.email.message })}
-                    />
-                  )}
-                />
+                 <FormController name='email' control={nextOfKinControl} requireBoolean={true} label="Email" error={nextOfKinErrors['email']} errorMessage={nextOfKinErrors?.email?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='occupation'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Occupation'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.occupation)}
-                      aria-describedby='stepper-linear-social-occupation'
-                      {...(nextOfKinErrors.occupation && { helperText: nextOfKinErrors.occupation.message })}
-                    />
-                  )}
-                />
+                <FormController name='occupation' control={nextOfKinControl} requireBoolean={true} label="Occupation" error={nextOfKinErrors['occupation']} errorMessage={nextOfKinErrors?.occupation?.message} />
+
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='address'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Address'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.address)}
-                      aria-describedby='stepper-linear-social-address'
-                      {...(nextOfKinErrors.address && { helperText: nextOfKinErrors.address.message })}
-                    />
-                  )}
-                />
+                <FormController name='address' control={nextOfKinControl} requireBoolean={true} label="Address" error={nextOfKinErrors['address']} errorMessage={nextOfKinErrors?.address?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -893,22 +594,7 @@ const CreateStaff = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Controller
-                  name='relationship'
-                  control={nextOfKinControl}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='relationship'
-                      onChange={onChange}
-                      error={Boolean(nextOfKinErrors.relationship)}
-                      aria-describedby='stepper-linear-social-relationship'
-                      {...(nextOfKinErrors.relationship && { helperText: nextOfKinErrors.relationship.message })}
-                    />
-                  )}
-                />
+                <FormController name='relationship' control={nextOfKinControl} requireBoolean={true} label="Relationship" error={nextOfKinErrors['relationship']} errorMessage={nextOfKinErrors?.relationship?.message} />
               </Grid>
 
               <Grid item xs={12} sm={6}>
@@ -1032,7 +718,7 @@ const CreateStaff = () => {
 
       <CardContent>{renderContent()}</CardContent>
 
-      <CreateDepartment open={openDepartmentsModal} closeModal={toggleDepartmentsModal} refetchDepartments={null} />
+      <CreateDepartment open={openDepartmentsModal} closeModal={toggleDepartmentsModal} refetchDepartments={updateFetch} />
     </Card>
   )
 }
