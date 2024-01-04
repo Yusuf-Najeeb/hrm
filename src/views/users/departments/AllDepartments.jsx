@@ -108,6 +108,7 @@ const DepartmentsTable = () => {
   return (
     <div>
       <DepartmentsTableHeader
+        action='Create Department'
         toggle={toggleDepartmentDrawer}
       />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>

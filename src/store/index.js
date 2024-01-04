@@ -11,6 +11,7 @@ import permissions from 'src/store/apps/permissions'
 import auth from 'src/store/apps/auth'
 import salaryItems from 'src/store/apps/salaryItems'
 import departments from 'src/store/apps/departments'
+import staffs from 'src/store/apps/staffs'
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +23,8 @@ export const store = configureStore({
     permissions,
     auth,
     salaryItems,
-    departments
+    departments, 
+    staffs
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

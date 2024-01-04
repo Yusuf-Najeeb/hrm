@@ -37,7 +37,7 @@ export const SalaryItemSchema = yup.object().shape({
   allergies: yup.string().required(),
   maritalStatus: yup.string().required(),
   image: yup.string().required(),
-  
+
   // additionalInfo: yup.string()
   })
 
@@ -54,6 +54,10 @@ export const SalaryItemSchema = yup.object().shape({
 
   export const requireName = yup.object().shape({
     name: yup.string().required('Department Name is required')
+  })
+
+  export const requireReason = yup.object().shape({
+    reason: yup.string().required('Reason is required')
   })
 
   export const nextOfKinSchema = yup.object().shape({
