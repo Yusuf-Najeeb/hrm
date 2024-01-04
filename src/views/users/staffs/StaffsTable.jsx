@@ -128,11 +128,11 @@ const StaffsTable = () => {
             ) : (
               <Fragment>
                 {StaffsData?.map((staff, i) => (
-                  <TableRow hover role='checkbox' key={staff.id}>
+                  <TableRow hover role='checkbox' key={staff?.id}>
                     <TableCell align='left'>{i + 1}</TableCell>
                     <TableCell align='left'>{`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)}`}</TableCell>
                     <TableCell align='left'>{staff.email}</TableCell>
-                    <TableCell align='left'>{staff.designation}</TableCell>
+                    <TableCell align='left'>{staff?.designation}</TableCell>
 
                     <TableCell align='left' sx={{ display: 'flex' }}>
 
@@ -178,18 +178,9 @@ const StaffsTable = () => {
       
       */}
 
-<DeleteStaff open={deleteModal} handleClose={doCancelDelete} selectedStaff={selectedStaff} refetchStaffs={updateFetch} />
+      <DeleteStaff open={deleteModal} handleClose={doCancelDelete} selectedStaff={selectedStaff} refetchStaffs={updateFetch} />
 
-
-{/* {openViewDrawer && (
-        <CreateDepartment
-          open={addDepartmentOpen}
-          closeModal={toggleDepartmentDrawer}
-          refetchStaffs={updateFetch}
-        />
-      )}  */}
-
-{openViewDrawer && <ViewStaff open={openViewDrawer} closeCanvas={closeCanvas} staffUser={staffToView} hasUploadedImage={hasUploadedImage} setHasUploadedImage={setHasUploadedImage}/>}
+      {openViewDrawer && <ViewStaff open={openViewDrawer} closeCanvas={closeCanvas} staffUser={staffToView} hasUploadedImage={hasUploadedImage} setHasUploadedImage={setHasUploadedImage}/>}
 
     </div>
   )

@@ -57,7 +57,7 @@ const ViewStaff = ({ open, closeCanvas, staffUser, hasUploadedImage, setHasUploa
           <Fragment>
             {staffUser !== null && staffUser !== undefined ? (
               <Grid item xs={12} md={5} lg={4}>
-                <StaffCard Staff={staffUser} hasUploadedImage={hasUploadedImage} setHasUploadedImage={setHasUploadedImage} />
+                <StaffCard Staff={staffUser} hasUploadedImage={hasUploadedImage} setHasUploadedImage={setHasUploadedImage} closeViewStaffCanvas={closeCanvas} />
               </Grid>
             ) : (
               <Grid container spacing={6}>
