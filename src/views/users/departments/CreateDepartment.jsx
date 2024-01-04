@@ -25,7 +25,7 @@ import { createDepartment } from '../../../store/apps/departments/asyncthunk'
 import { useAppDispatch } from '../../../hooks'
 
 
-const CustomCloseButton = styled(IconButton)(({ theme }) => ({
+export const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
   right: 0,
   color: 'grey.500',

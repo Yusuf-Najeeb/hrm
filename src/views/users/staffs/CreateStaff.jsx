@@ -217,7 +217,7 @@ const CreateStaff = () => {
       ...workInfoValues, 
       image: imageLinkPayload ? imageLinkPayload : "",
     }
-    payload.nok = {...nextOfKinValues}
+    payload.userNOK = {...nextOfKinValues}
 
     const response = await axios.post('users', payload, {
         
@@ -226,6 +226,7 @@ const CreateStaff = () => {
         }
       })
       if (response.data.success) {
+        setSelectedImage(null)
         notifySuccess('created Staff Successfully')
         handleReset()
         setActiveStep(0)

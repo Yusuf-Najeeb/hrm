@@ -1,103 +1,176 @@
-import React, { forwardRef, useEffect, useState } from 'react'
+// ** React Imports
+import { Fragment, useEffect, useState } from 'react'
 
-
-import 'react-datepicker/dist/react-datepicker.css'
-
-
-// MUI
-import DatePicker from 'react-datepicker'
+// ** MUI Imports
 import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import Step from '@mui/material/Step'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
-import { styled } from '@mui/material/styles'
-import Dialog from '@mui/material/Dialog'
-import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+import Stepper from '@mui/material/Stepper'
 import MenuItem from '@mui/material/MenuItem'
-import CustomTextField from 'src/@core/components/mui/text-field'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import InputAdornment from '@mui/material/InputAdornment'
-import { CircularProgress } from '@mui/material'
-import DialogContentText from '@mui/material/DialogContentText'
+import StepLabel from '@mui/material/StepLabel'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import CardContent from '@mui/material/CardContent'
+import StepperWrapper from 'src/@core/styles/mui/stepper'
+import { ButtonStyled } from '../../../@core/components/mui/button/ButtonStyledComponent'
+import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
-// React hook form / yup
-import { yupResolver } from '@hookform/resolvers/yup'
+// ** Third Party Imports
 import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+
+// React Hook Form Schema
+import { updatePersonalInfoSchema , workInfoSchema, nextOfKinSchema} from 'src/@core/Formschema'
+
+// ** Icon Imports
+import Icon from 'src/@core/components/icon'
+
+// ** Custom Components Imports
+import StepperCustomDot from '../../forms/form-wizard/StepperCustomDot'
+import CustomTextField from 'src/@core/components/mui/text-field'
+import FormController from '../components/FormController'
+
+// React Hook Form Utilities
+import { defaultNextOfKinValues, defaultPersonalValues, defaultWorkInfoValues } from '../../../@core/FormSchema/formDefaultvalues'
+
+// Custom Hooks
+import { useDepartments } from '../../../hooks/useDepartments'
+import { useAppDispatch } from '../../../hooks'
 
 // Others
-import axios from 'axios'
-import moment from 'moment'
-import Icon from 'src/@core/components/icon'
-import { uploadStaffImage } from 'src/store/apps/staffs/asyncthunk'
 import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
+import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
+import { uploadImage } from '../../../store/apps/upload'
+
+// import { CustomCloseButton } from '../departments/CreateDepartment'
 
 
-const defaultValues = {
-  fullname: '',
-  join_date: null,
-  leave_date: null,
-  roleId: '',
-  username: '',
-  email: '',
-  salary: Number(''),
-  idNo: '',
-  phone: '',
+const steps = [
+  {
+    title: 'Personal Info',
+    subtitle: 'Setup Information'
+  },
+  {
+    title: 'Work Information',
+    subtitle: 'Edit Staff Official Information'
+  },
+  {
+    title: 'Next of Kin Details',
+    subtitle: "Edit Staff's Next of Kin Details"
+  }
+]
 
-  // image: '',
-  designationId: ''
-}
+ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
+  top: 0,
+  right: 0,
+  color: 'grey.500',
+  position: 'absolute',
+  boxShadow: theme.shadows[2],
+  transform: 'translate(-20px, 10px)',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: `${theme.palette.background.paper} !important`,
+}))
 
-const ButtonStyled = styled(Button)(({ theme }) => ({
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-      textAlign: 'center'
-    }
-  }))
+const EditStaff = ({data, openEdit, hasUploadedImage, handleEditClose, profilePictureUrl, setProfilePictureUrl, setHasUploadedImage, closeViewStaffCanvas}) => {
 
-const CustomInput = forwardRef(({ ...props }, ref) => {
-  return <CustomTextField fullWidth inputRef={ref} {...props} sx={{ width: '100%' }} />
-})
+  const dispatch = useAppDispatch()
 
-const EditStaffCard = ({ openEdit, handleEditClose, data, setHasUploadedImage, setProfilePictureUrl }) => {
-  const [allRoles, setAllRoles] = useState([])
-  const [allDesc, setAllDesc] = useState([])
-  const [previewUrl, setPreviewUrl] = useState('')
+  const [DepartmentsData] = useDepartments()
+
+  // ** States
+  const [activeStep, setActiveStep] = useState(0)
   const [selectedImage, setSelectedImage] = useState(null)
+  const [previewUrl, setPreviewUrl] = useState()
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
 
+  // ** Form Hooks
   const {
-    control,
-    reset,
-    setValue,
-    handleSubmit,
-    formState: { errors, isSubmitting }
+    reset: personalReset,
+    setValue: setPersonalValue,
+    control: personalControl,
+    handleSubmit: handlePersonalSubmit,
+    formState: { errors: personalErrors , isValid: personalValuesValid},
+    getValues: getPersonalValues
   } = useForm({
-    defaultValues,
-    mode: 'onChange',
-    resolver: yupResolver()
+    defaultValues: defaultPersonalValues,
+    resolver: yupResolver(updatePersonalInfoSchema)
   })
 
 
-  useEffect(() => {
-    if (data) {
-      setValue('fullname', data.firstname)
-      setValue('username', data.username)
-      setValue('email', data.email)
-      setValue('phone', data.phone)
+  const {
+    reset: workInfoReset,
+    setValue: setWorkInfoValue,
+    control: workInfoControl,
+    handleSubmit: handleWorkInfoSubmit,
+    formState: { errors: workInfoErrors , isValid: workValuesValid},
+    getValues: getWorkInfoValues
+  } = useForm({
+    defaultValues: defaultWorkInfoValues,
+    resolver: yupResolver(workInfoSchema)
+  })
 
-      // setValue('designationId', data.designationId)
-      // setValue('idNo', data.idNo)
-      // setValue('salary', data.salary)
-      // setValue('roleId', data.roleId)
-      // setValue('join_date', new Date(data.joinDate))
-      // setValue('leave_date', new Date(data.leaveDate))
+  const {
+    reset: nextofKinReset,
+    setValue: setNextofKinValue,
+    control: nextOfKinControl,
+    handleSubmit: handleNextOfKinSubmit,
+    formState: { errors: nextOfKinErrors, },
+    getValues: getNextOfKinValues
+  } = useForm({
+    defaultValues: defaultNextOfKinValues,
+    resolver: yupResolver(nextOfKinSchema)
+  })
+
+  const closeEditDrawer = () => {
+    handleEditClose()
+    setPreviewUrl(null)
+  }
+
+  // Handle Stepper
+  const handleBack = () => {
+    if(activeStep !== 0){
+      setActiveStep(prevActiveStep => prevActiveStep - 1)
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return null
+  }
+
+  const handleForward =  () => {
+      switch (activeStep) {
+        case 0:
+          // Check for errors in the first step (Personal Info)
+          if (personalValuesValid) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          }
+          break;
+        case 1:
+          // Check for errors in the second step (Work Info)
+          if (workValuesValid) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          }
+          break;
+        default:
+          // For other steps, simply increment the activeStep
+          // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          console.log('eeeee')
+          break;
+      }
+    } 
+ 
+  
+  const handleReset = () => {
+    setSelectedImage(null)
+    setPreviewUrl(null)
+    setActiveStep(0)
+  }
 
   const handleInputImageChange = (e) => {
     const fileInput = e.target
@@ -115,11 +188,16 @@ const EditStaffCard = ({ openEdit, handleEditClose, data, setHasUploadedImage, s
 
       if (file.type.startsWith('image/')) {
         const fileUrl = URL.createObjectURL(file)
+
         const formData = new FormData();
         formData.append("picture", file);
-        uploadStaffImage(formData).then((res)=> {
-          setImageLinkPayload(res.url)
-          setPreviewUrl(fileUrl)
+
+        uploadImage(formData).then((res)=>{
+          if (res) {
+            setPreviewUrl(fileUrl)
+            setSelectedImage(file)
+            setImageLinkPayload(res.url)
+          } 
         })
       } else {
         notifyWarn('FILE ERROR', 'Selected file is not an image.')
@@ -132,72 +210,99 @@ const EditStaffCard = ({ openEdit, handleEditClose, data, setHasUploadedImage, s
     }
   }
 
-  const onUpdateForm = async (values) => {
+  const onUpdateStaff = async () => {
+
     try {
-      const createUrl = `user/${data.id}`
+    // Retrieve form values
+    const workInfoValues = getWorkInfoValues();
+    const personalValues = getPersonalValues();
+    const nextOfKinValues = getNextOfKinValues();
 
-      const resp = await axios.put(
-        createUrl,
-        {
-          ...values,
-          image: imageLinkPayload ? imageLinkPayload : "",
-          username: undefined,
-          join_date: moment(values.join_date).format('YYYY-MM-DD'),
-          leave_date: values.leave_date ? moment(values.leave_date).format('YYYY-MM-DD') : ''
-        },
-        {
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
-
-      if (resp.data.success) {
-        setHasUploadedImage(true)
-        setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${resp.data.data?.image}`)
-        notifySuccess('Staff updated Successfully')
-        handleEditClose()
-        reset()
-      }
-    } catch (error) {
-      notifyError('error updating Staff')
+    const payload = {...personalValues, 
+      ...workInfoValues, 
+      ...(imageLinkPayload && { image: imageLinkPayload }),
+      id: data?.id,
     }
-  }
+    payload.userNOK = {...nextOfKinValues}
 
-  return (
-    <Dialog
-      open={openEdit}
+    const response = await axios.patch('users/modify', payload, {
+        
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      })
+      if (response?.data.success) {
+        setHasUploadedImage(!hasUploadedImage)
+        closeEditDrawer()
+        closeViewStaffCanvas()
+        notifySuccess('Updated Staff Successfully')
+        handleReset()
+        setActiveStep(0)
+      }
 
-      // onClose={handleEditClose}
-      aria-labelledby='user-view-edit'
-      aria-describedby='user-view-edit-description'
-      sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 850 } }}
-    >
-      <DialogTitle
-        id='user-view-edit'
-        sx={{
-          textAlign: 'center',
-          fontSize: '1.5rem !important',
-          px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-          pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-        }}
-      >
-        Edit User Information
-      </DialogTitle>
-      <form onSubmit={handleSubmit(onUpdateForm)}>
-        <DialogContent
-          sx={{
-            pb: theme => `${theme.spacing(8)} !important`,
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
-          }}
-        >
-          <DialogContentText variant='body2' id='user-view-edit-description' sx={{ textAlign: 'center', mb: 7 }}>
-            Updating user details will not reset password.
-          </DialogContentText>
+      if (response?.data?.data?.image) {
+        setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${response?.data.data?.image}`)
+      }
 
-          <Grid
+
+    } catch (error) {
+      notifyError('Error updating staff')
+    }
+
+  };
+
+  useEffect(()=>{
+    dispatch(fetchDepartments({page: 1, limit: 200 }))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+  useEffect(()=>{
+
+    if (data){
+      setPersonalValue('firstname', data?.firstname)
+      setPersonalValue('lastname', data?.lastname)
+      setPersonalValue('username', data?.username)
+      setPersonalValue('email', data?.email)
+      setPersonalValue('address', data?.address)
+      setPersonalValue('phone', data?.phone)
+      setPersonalValue('bloodGroup', data?.bloodGroup)
+      setPersonalValue('genotype', data?.genotype)
+      setPersonalValue('allergies', data?.allergies)
+      setPersonalValue('maritalStatus', data?.maritalStatus)
+      setWorkInfoValue('designation', data?.designation)
+      setWorkInfoValue('employeeNumber', data?.employeeNumber)
+      setWorkInfoValue('grossSalary', data?.grossSalary)
+      setWorkInfoValue('accountNumber', data?.accountNumber)
+      setWorkInfoValue('rsaNumber', data?.rsaNumber)
+      setWorkInfoValue('rsaCompany', data?.rsaCompany)
+      setWorkInfoValue('departmentId', data?.department.id)
+      setNextofKinValue('firstname', data?.userNOK?.firstname)
+      setNextofKinValue('lastname', data?.userNOK?.lastname)
+      setNextofKinValue('phone', data?.userNOK?.phone)
+      setNextofKinValue('email', data?.userNOK?.email)
+      setNextofKinValue('occupation', data?.userNOK?.occupation)
+      setNextofKinValue('address', data?.userNOK?.address)
+      setNextofKinValue('title', data?.userNOK?.title)
+      setNextofKinValue('maritalStatus', data?.userNOK?.maritalStatus)
+      setNextofKinValue('relationship', data?.userNOK?.relationship)
+      
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+  const getStepContent = step => {
+    switch (step) {
+      case 0:
+        return (
+          <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
+        <Grid
           item
           xs={12}
           sm={6}
-          sx={{ mb: 6, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+          sx={{ mb: 6, display: 'flex', flexDirection: 'row', gap: '2rem' }}
         >
           <Grid item xs={12} sm={6}>
             <Box
@@ -215,14 +320,12 @@ const EditStaffCard = ({ openEdit, handleEditClose, data, setHasUploadedImage, s
                 <input
                   hidden
                   type='file'
-
-                  //   value={inputValue}
                   accept='image/png, image/jpeg'
                   onChange={handleInputImageChange}
                   id='account-settings-upload-image'
                 />
 
-                <Icon icon='tabler:upload' fontSize='1.75rem' />
+                <Icon icon='tabler:upload' fontSize='1.45rem' />
               </ButtonStyled>
               <Typography variant='body2' sx={{ mt: 2 }}>
                 Upload Staff Image
@@ -239,253 +342,414 @@ const EditStaffCard = ({ openEdit, handleEditClose, data, setHasUploadedImage, s
               alignSelf: 'center'
             }}
           >
-            {previewUrl && <img src={`${previewUrl}`} width={100} height={100} style={{objectFit: 'cover', objectPosition: 'center'}} alt='staff image' /> }
+            <img src={previewUrl ? `${previewUrl}` :  `${profilePictureUrl}`} width={120} height={100} style={{objectFit: 'cover', objectPosition: 'center'}} alt='product image' /> 
           </Box>
         </Grid>
+        
+          <form key={0} onSubmit={handlePersonalSubmit(handleForward)} >
+            <Grid container spacing={5}>
+              <Grid item xs={12}>
+                <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                  {steps[0].title}
+                </Typography>
+                <Typography variant='caption' component='p'>
+                  {steps[0].subtitle}
+                </Typography>
+              </Grid>
 
-          <Grid container spacing={6}>
+              <Grid item xs={12} sm={6}>
 
-            <Grid item xs={12} sm={6}>
-              <Controller
-                name='fullname'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    label='Full Name'
-                    placeholder='John Doe'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.fullname)}
-                    {...(errors.fullname && { helperText: errors.fullname.message })}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Controller
-                name='username'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    label='Username'
-                    placeholder='John.Doe'
-                    value={value}
-                    onChange={onChange}
-                    disabled
-                    error={Boolean(errors.username)}
-                    {...(errors.username && { helperText: errors.username.message })}
-                    InputProps={{ startAdornment: <InputAdornment position='start'>@</InputAdornment> }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='email'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    type='email'
-                    label='Email'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.email)}
-                    placeholder='johndoe@email.com'
-                    {...(errors.email && { helperText: errors.email.message })}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='roleId'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    select
-                    fullWidth
-                    label='Role'
-                    value={value}
-                    onChange={e => {
-                      setValue('roleId', e.target.value)
-                    }}
-                    error={Boolean(errors.roleId)}
-                    {...(errors.roleId && { helperText: errors.roleId.message })}
-                  >
-                    <MenuItem value=''>Select role</MenuItem>
-                    {allRoles.map(role => (
-                      <MenuItem key={role.id} value={role.id}>
-                        {role.name}
-                      </MenuItem>
-                    ))}
-                  </CustomTextField>
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='phone'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    type='text'
-                    label='Contact'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.phone)}
-                    placeholder='+234'
-                    {...(errors.phone && { helperText: errors.phone.message })}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='idNo'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    type='text'
-                    label='ID NO'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.idNo)}
-                    placeholder='UID-8894'
-                    {...(errors.idNo && { helperText: errors.idNo.message })}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='designationId'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    select
-                    fullWidth
-                    label='Designation'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.designationId)}
-                    {...(errors.designationId && { helperText: errors.designationId.message })}
-                  >
-                    <MenuItem value=''>Select Designation</MenuItem>
-                    {allDesc.map(item => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </CustomTextField>
-                )}
-              />
-            </Grid>
+                <FormController name='firstname' control={personalControl} requireBoolean={true} label="First Name" error={personalErrors['firstname']} errorMessage={personalErrors.firstname?.message} />
+              </Grid>
 
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='salary'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    type='text'
-                    label='Salary'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.salary)}
-                    placeholder={String(3000)}
-                    {...(errors.salary && { helperText: errors.salary.message })}
-                  />
-                )}
-              />
+              <Grid item xs={12} sm={6}>
+              <FormController name='lastname' control={personalControl} requireBoolean={true} label="Last Name" error={personalErrors['lastname']} errorMessage={personalErrors.lastname?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+              <FormController name='email' control={personalControl} requireBoolean={true} label="Email" error={personalErrors['email']} errorMessage={personalErrors?.email?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='phone' control={personalControl} requireBoolean={true} label="Phone" error={personalErrors['phone']} errorMessage={personalErrors.phone?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='username' control={personalControl} requireBoolean={true} label="Username" error={personalErrors['username']} errorMessage={personalErrors?.username?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+              <FormController name='address' control={personalControl} requireBoolean={true} label="Address" error={personalErrors['address']} errorMessage={personalErrors.address?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='maritalStatus'
+                  control={personalControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Marital Status'
+                      onChange={onChange}
+                      id='stepper-linear-personal-maritalStatus'
+                      error={Boolean(personalErrors.maritalStatus)}
+                      aria-describedby='stepper-linear-personal-maritalStatus-helper'
+                      {...(personalErrors.maritalStatus && { helperText: personalErrors.maritalStatus.message })}
+                    >
+                      <MenuItem value='Single'>Single</MenuItem>
+                      <MenuItem value='Married'>Married</MenuItem>
+                      <MenuItem value='Others'>Others</MenuItem>
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+               <Grid item xs={12} sm={6}>
+              <FormController name='genotype' control={personalControl} requireBoolean={true} label="Genotype" error={personalErrors['genotype']} errorMessage={personalErrors.genotype?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='bloodGroup' control={personalControl} requireBoolean={true} label="Blood Group" error={personalErrors['bloodGroup']} errorMessage={personalErrors.bloodGroup?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='allergies' control={personalControl} requireBoolean={true} label="Allergies" error={personalErrors['allergies']} errorMessage={personalErrors.allergies?.message} />
+              </Grid>
+
+              {/* <Grid item xs={12} sm={6}>
+                <Controller
+                  name='additionalInfo'
+                  control={personalControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      label='Additional Information'
+                      onChange={onChange}
+                      error={Boolean(personalErrors['additionalInfo'])}
+                      aria-describedby='stepper-linear-personal-additionalInfo'
+                      {...(personalErrors['additionalInfo'] && { helperText: personalErrors.additionalInfo.message })}
+                    />
+                  )}
+                />
+              </Grid> */}
+
+              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                  Back
+                </Button>
+
+
+                <Button type='submit' variant='contained'   >
+                  Next
+                </Button>
+              </Grid>
             </Grid>
-            
-            {/* <Grid item xs={12} sm={6}>
-              <Controller
-                name='join_date'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <DatePicker
-                    selected={value}
-                    popperPlacement='bottom-end'
-                    showYearDropdown
-                    showMonthDropdown
-                    onChange={e => onChange(e)}
-                    placeholderText='MM/DD/YYYY'
-                    customInput={
-                      <CustomInput
-                        value={value}
-                        onChange={onChange}
-                        label='Join Date'
-                        error={Boolean(errors.join_date)}
-                        {...(errors.join_date && { helperText: 'Joined Date is required' })}
-                      />
-                    }
-                  />
-                )}
-              />
+          </form>
+          </Box>
+        )
+        
+      case 1:
+        return (
+
+          <form key={1} onSubmit={handleWorkInfoSubmit(handleForward)} >
+
+          {/* <form key={1} > */}
+            <Grid container spacing={5}>
+              <Grid item xs={12}>
+                <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                  {steps[1].title}
+                </Typography>
+                <Typography variant='caption' component='p'>
+                  {steps[1].subtitle}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+
+              <FormController name='designation' control={workInfoControl} requireBoolean={true} label="Designation" error={workInfoErrors['designation']} errorMessage={workInfoErrors.designation?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='departmentId'
+                  control={workInfoControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Department'
+                      onChange={onChange}
+                      error={Boolean(workInfoErrors.departmentId)}
+                      aria-describedby='stepper-linear-account-departmentId'
+                      {...(workInfoErrors.departmentId && { helperText: 'This field is required' })}
+                    >
+                      <MenuItem value=''>Select Department</MenuItem>
+                      { DepartmentsData?.map((department) => (
+                        <MenuItem key={department?.id} value={department?.id}>
+                          {formatFirstLetter(department?.name)}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+              <FormController name='employeeNumber' control={workInfoControl} requireBoolean={true} label="Employee Number" error={workInfoErrors['employeeNumber']} errorMessage={workInfoErrors?.employeeNumber?.message} />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <Controller
-                name='leave_date'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <DatePicker
-                    selected={value}
-                    popperPlacement='bottom-end'
-                    showYearDropdown
-                    showMonthDropdown
-                    onChange={e => onChange(e)}
-                    placeholderText='MM/DD/YYYY'
-                    customInput={
-                      <CustomInput
-                        value={value}
-                        onChange={onChange}
-                        label='Leave Date'
-                        error={Boolean(errors.leave_date)}
-                        {...(errors.leave_date && { helperText: 'Date is required' })}
-                      />
-                    }
-                  />
-                )}
-              />
-            </Grid> */}
-          </Grid>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Button type='submit' variant='contained' sx={{ mr: 2 }}>
-            {isSubmitting && <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />}
-            Submit
-          </Button>
-          <Button type='button' variant='tonal' color='secondary' onClick={handleEditClose}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </form>
+                <FormController name='grossSalary' control={workInfoControl} requireBoolean={true} label="Gross Salary" error={workInfoErrors['grossSalary']} errorMessage={workInfoErrors?.grossSalary?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+              <FormController name='accountNumber' control={workInfoControl} requireBoolean={true} label="Account Number" error={workInfoErrors['accountNumber']} errorMessage={workInfoErrors?.accountNumber?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+              <FormController name='rsaCompany' control={workInfoControl} requireBoolean={true} label="Retirement Savings Account Company" error={workInfoErrors['rsaCompany']} errorMessage={workInfoErrors?.rsaCompany?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='rsaNumber' control={workInfoControl} requireBoolean={true} label="Retirement Savings Account Number" error={workInfoErrors['rsaNumber']} errorMessage={workInfoErrors?.rsaNumber?.message} />
+              </Grid>
+
+              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                
+                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                  Back
+                </Button>
+                <Button type='submit' variant='contained' >
+                  Next
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )
+      case 2:
+        return (
+          <form key={2} onSubmit={handleNextOfKinSubmit(onUpdateStaff)}>
+            <Grid container spacing={5}>
+              <Grid item xs={12}>
+                <Typography variant='body2' sx={{ fontWeight: 600, color: 'text.primary' }}>
+                  {steps[2].title}
+                </Typography>
+                <Typography variant='caption' component='p'>
+                  {steps[2].subtitle}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormController name='firstname' control={nextOfKinControl} requireBoolean={true} label="First Name" error={nextOfKinErrors['firstname']} errorMessage={nextOfKinErrors?.firstname?.message} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormController name='lastname' control={nextOfKinControl} requireBoolean={true} label="Last Name" error={nextOfKinErrors['lastname']} errorMessage={nextOfKinErrors?.lastname?.message} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+              <FormController name='phone' control={nextOfKinControl} requireBoolean={true} label="Phone Number" error={nextOfKinErrors['phone']} errorMessage={nextOfKinErrors?.phone?.message} />
+              </Grid>
+              
+              <Grid item xs={12} sm={6}>
+                 <FormController name='email' control={nextOfKinControl} requireBoolean={true} label="Email" error={nextOfKinErrors['email']} errorMessage={nextOfKinErrors?.email?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='occupation' control={nextOfKinControl} requireBoolean={true} label="Occupation" error={nextOfKinErrors['occupation']} errorMessage={nextOfKinErrors?.occupation?.message} />
+
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='address' control={nextOfKinControl} requireBoolean={true} label="Address" error={nextOfKinErrors['address']} errorMessage={nextOfKinErrors?.address?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='title'
+                  control={nextOfKinControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Title'
+                      onChange={onChange}
+                      id='stepper-linear-personal-title'
+                      error={Boolean(nextOfKinErrors.title)}
+                      aria-describedby='stepper-linear-personal-title-helper'
+                      {...(nextOfKinErrors.title && { helperText: nextOfKinErrors.title.message })}
+                    >
+                      <MenuItem value='Master'>Master</MenuItem>
+                      <MenuItem value='Mr'>Mr</MenuItem>
+                      <MenuItem value='Miss'>Miss</MenuItem>
+                      <MenuItem value='Mrs'>Mrs</MenuItem>
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormController name='relationship' control={nextOfKinControl} requireBoolean={true} label="Relationship" error={nextOfKinErrors['relationship']} errorMessage={nextOfKinErrors?.relationship?.message} />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='maritalStatus'
+                  control={nextOfKinControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Marital Status'
+                      onChange={onChange}
+                      id='stepper-linear-nextOfKin-maritalStatus'
+                      error={Boolean(nextOfKinErrors.maritalStatus)}
+                      aria-describedby='stepper-linear-nextOfKin-maritalStatus-helper'
+                      {...(nextOfKinErrors.maritalStatus && { helperText: nextOfKinErrors.maritalStatus.message })}
+                    >
+                      <MenuItem value='Single'>Single</MenuItem>
+                      <MenuItem value='Married'>Married</MenuItem>
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+
+              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                  Back
+                </Button>
+                <Button type='submit' variant='contained'>
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )
+      default:
+        return null
+    }
+  }
+
+  const renderContent = () => {
+    if (activeStep === steps.length) {
+      return (
+        <Fragment>
+          <Typography>All steps are completed!</Typography>
+          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button variant='contained' onClick={handleReset}>
+              Reset
+            </Button>
+          </Box>
+        </Fragment>
+      )
+    } else {
+      return getStepContent(activeStep)
+    }
+  }
+
+  return (
+    <Dialog
+    open={openEdit}
+    aria-labelledby='user-view-edit'
+    aria-describedby='user-view-edit-description'
+    sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 900 } }}
+  >
+    <DialogTitle
+      id='user-view-edit'
+      sx={{
+        textAlign: 'center',
+        fontSize: '1.5rem !important',
+        px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
+        pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+      }}
+    >
+      Edit Staff Information
+    </DialogTitle>
+
+    <DialogContent
+        sx={{
+          pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+          pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+        }}
+      >
+        <CustomCloseButton onClick={closeEditDrawer}>
+          <Icon icon='tabler:x' fontSize='1.25rem' />
+        </CustomCloseButton>
+    <Card >
+      <CardContent>
+        <StepperWrapper>
+          <Stepper activeStep={activeStep}>
+            {steps.map((step, index) => {
+              const labelProps = {}
+              if (index === activeStep) {
+                labelProps.error = false
+                if (
+                  (personalErrors.email ||
+                    personalErrors.username ||
+                    personalErrors.lastname ||
+                    personalErrors.firstname ||
+                    personalErrors.allergies ||
+                    personalErrors.bloodGroup ||
+                    personalErrors.genotype ||
+                    personalErrors.password  &&
+                  activeStep === 0 )
+                ) {
+                  labelProps.error = true
+                } else if (
+                  (workInfoErrors.designation ||
+                    workInfoErrors.departmentId ||
+                    workInfoErrors.employeeNumber ||
+                    workInfoErrors.rsaCompany ||
+                    workInfoErrors.rsaNumber ||
+                    workInfoErrors.grossSalary &&
+                  activeStep === 1 )
+                ) {
+                  labelProps.error = true
+                } else if (
+                  (nextOfKinErrors.title || nextOfKinErrors.lastname || nextOfKinErrors.phone || nextOfKinErrors.email) &&
+                  activeStep === 2
+                ) {
+                  labelProps.error = true
+                } else {
+                  labelProps.error = false
+                }
+              }
+
+              return (
+                <Step key={index}>
+                  <StepLabel {...labelProps} StepIconComponent={StepperCustomDot}>
+                    <div className='step-label'>
+                      <Typography className='step-number'>{`0${index + 1}`}</Typography>
+                      <div>
+                        <Typography className='step-title'>{step.title}</Typography>
+                        <Typography className='step-subtitle'>{step.subtitle}</Typography>
+                      </div>
+                    </div>
+                  </StepLabel>
+                </Step>
+              )
+            })}
+          </Stepper>
+        </StepperWrapper>
+      </CardContent>
+
+      <Divider sx={{ m: '0 !important' }} />
+
+      <CardContent>{renderContent()}</CardContent>
+
+    </Card>
+
+    </DialogContent>
     </Dialog>
   )
 }
 
-export default EditStaffCard
+export default EditStaff

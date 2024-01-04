@@ -1,5 +1,5 @@
 // ** React Imports
-import {  Fragment, SetStateAction, useEffect, useState } from 'react'
+import {  Fragment, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -15,12 +15,10 @@ import CardActions from '@mui/material/CardActions'
 import Icon from 'src/@core/components/icon'
 
 // ** Custom Components
-import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 
 // ** Utils Import
-import { formatCurrency, formatDate } from 'src/@core/utils/format'
 import EditStaffCard from './EditStaffCard'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import StaffDetailCard from '../components/StaffDetailCard'
@@ -51,15 +49,23 @@ const Sub = styled('sub')(({ theme }) => ({
 }))
 
 
-const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage }) => {
+const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaffCanvas }) => {
   // ** States
   const [openEdit, setOpenEdit] = useState(false)
-  const [profilePictureUrl, setProfilePictureUrl] = useState(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${Staff?.image}`);
+
+  // const [profilePictureUrl, setProfilePictureUrl] = useState(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${Staff?.image}`);
+  const [profilePictureUrl, setProfilePictureUrl] = useState();
 
 
   // Handle Edit dialog
   const handleEditClickOpen = () => setOpenEdit(true)
   const handleEditClose = () => setOpenEdit(false)
+
+  useEffect(()=>{
+    setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${Staff?.image}`)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profilePictureUrl])
 
 
   return (
@@ -156,15 +162,16 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage }) => {
               variant='contained'
               sx={{ mr: 2 }}
               
-              // onClick={handleEditClickOpen}
-              onClick={()=> console.log('view staff')}
+              onClick={handleEditClickOpen}
+
+              // onClick={()=> console.log('view staff')}
               startIcon={<Icon icon='tabler:edit' />}
             >
               Edit
             </Button>
           </CardActions>
 
-          <EditStaffCard openEdit={openEdit} handleEditClose={handleEditClose} data={Staff} setHasUploadedImage={setHasUploadedImage} setProfilePictureUrl={setProfilePictureUrl}  />
+          <EditStaffCard openEdit={openEdit} handleEditClose={handleEditClose} data={Staff} hasUploadedImage={hasUploadedImage} profilePictureUrl={profilePictureUrl} closeViewStaffCanvas={closeViewStaffCanvas} setProfilePictureUrl={setProfilePictureUrl} setHasUploadedImage={setHasUploadedImage} />
         </Fragment>
       </Grid>
     </Grid>
