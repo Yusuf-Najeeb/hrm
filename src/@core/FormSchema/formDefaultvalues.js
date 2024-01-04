@@ -20,7 +20,7 @@ export const defaultPersonalValues = {
     genotype: '',
     allergies: '',
     maritalStatus: '',
-    image: '',
+    address: '',
     
     // additionalInfo: ''
   }

@@ -58,7 +58,6 @@ const CreateDepartment = ({ open, closeModal, refetchDepartments }) => {
   const onSubmit = async (data) => {
     const res = await dispatch(createDepartment(data))
 
-
     reset()
     closeModal()
     refetchDepartments()

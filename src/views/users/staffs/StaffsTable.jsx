@@ -1,5 +1,9 @@
 import React, { useEffect, useState, Fragment } from 'react'
 
+// Next JS
+import {useRouter} from 'next/navigation'
+
+// MUI
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -13,7 +17,7 @@ import Icon from 'src/@core/components/icon'
 
 
 import TablePagination from '@mui/material/TablePagination'
-import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
@@ -25,6 +29,8 @@ import ViewStaff from './ViewStaff'
 
 const StaffsTable = () => {
   const dispatch = useAppDispatch()
+
+  const router = useRouter()
 
   const [StaffsData, loading, paging] = useStaffs()
   const [page, setPage] = useState(0)
@@ -75,6 +81,10 @@ const StaffsTable = () => {
   const togglestaffDrawer = () => setAddstaffOpen(!addstaffOpen)
   const toggleEditDrawer = () => setViewDrawer(!openViewDrawer)
 
+  const navigateToCreateStaffPage = ()=>{
+    router.push('/apps/new-staff/list/')
+  } 
+
   useEffect(() => {
     dispatch(fetchStaffs({page: page + 1 }))
 
@@ -85,7 +95,7 @@ const StaffsTable = () => {
     <div>
       <PageHeader
       action="Add Staff"
-        toggle={togglestaffDrawer}
+        toggle={navigateToCreateStaffPage}
       />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
