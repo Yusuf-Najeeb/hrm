@@ -14,7 +14,7 @@ const initialState = {
 
   }
 
-  export const salaryItemSlice = createSlice({
+  export const departmentsSlice = createSlice({
     name: 'departments',
     initialState,
     reducers: {},
@@ -33,4 +33,4 @@ const initialState = {
     }
   })
 
-  export default salaryItemSlice.reducer
+  export default departmentsSlice.reducer

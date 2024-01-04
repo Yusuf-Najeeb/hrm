@@ -62,8 +62,8 @@ const steps = [
 ]
 
 const CreateStaff = () => {
-  const dispatch = useAppDispatch()
 
+  const dispatch = useAppDispatch()
 
   const [DepartmentsData] = useDepartments()
 
@@ -245,7 +245,6 @@ const CreateStaff = () => {
     }
 
   };
-
 
 
   // Handle Password

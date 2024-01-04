@@ -22,7 +22,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requireName } from 'src/@core/Formschema'
 import axios from 'axios'
-import { createDepartment, editDepartment } from '../../../store/apps/departments/asyncthunk'
 import { useAppDispatch } from '../../../hooks'
 import { useEffect } from 'react'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
@@ -49,7 +48,6 @@ const defaultValues = {
 }
 
 const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartment }) => {
-    console.log(selectedDepartment, 'selected department')
   const dispatch = useAppDispatch()
 
   const {

@@ -21,7 +21,6 @@ import IconButton from '@mui/material/IconButton'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requireName } from 'src/@core/Formschema'
-import axios from 'axios'
 import { createDepartment } from '../../../store/apps/departments/asyncthunk'
 import { useAppDispatch } from '../../../hooks'
 
