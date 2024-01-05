@@ -13,10 +13,6 @@ export const createSalaryItem = createAsyncThunk(
 
         return response
   
-        // return {
-        //   success: true,
-        //   data: data
-        // }
       } catch (error) {
         notifyError('error create category')
   
@@ -40,3 +36,23 @@ export const createSalaryItem = createAsyncThunk(
     }
   }
   )
+
+  export const deleteSalaryItem = createAsyncThunk('salaryItem/deleteSalaryItem', async (id) => {
+    try {
+      const response = await axios.delete(`salary-items?id=${id}`)
+  
+      if (response.data.success) {
+        notifySuccess('Payslip Item Deleted Successfully')
+      }
+  
+      return {
+        status: true
+      }
+    } catch (error) {
+      notifyError('Error deleting payslip item')
+  
+      return {
+        status: false
+      }
+    }
+  })

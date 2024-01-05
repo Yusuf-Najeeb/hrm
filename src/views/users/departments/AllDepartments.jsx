@@ -81,7 +81,8 @@ const DepartmentsTable = () => {
     updateFetch()
     doCancelDelete()
   }
-
+  
+  
   const setDepartmentToEdit = (prod) => {
     setEditDrawer(true)
     setDepartmentToView(prod)
@@ -175,18 +176,11 @@ const DepartmentsTable = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      {/* {openCanvas && <Viewdepartment open={openCanvas} closeCanvas={closeCanvas} department={department} />}
-      {openPayModal && (
-        <GeneraldepartmentPay visible={openPayModal} togglePayModal={closeCanvas} department={department} />
-      )}
-      
-      */}
-
 <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
 
 {openEditDrawer && (
   <EditDepartment 
-  open={EditDepartment} 
+  open={openEditDrawer} 
   closeModal={toggleEditDrawer}
   refetchDepartments={updateFetch}
   selectedDepartment={DepartmentToView}

@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 
@@ -11,21 +13,17 @@ import Box from '@mui/material/Box'
 import Dialog from '@mui/material/Dialog'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
-
-import { CircularProgress, MenuItem } from '@mui/material'
-
+import { CircularProgress } from '@mui/material'
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
+
+// Others
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { editDepartmentSchema } from 'src/@core/Formschema'
-import axios from 'axios'
-import { useAppDispatch } from '../../../hooks'
-import { Fragment, useEffect, useState } from 'react'
+import { editSalaryItemSchema } from 'src/@core/Formschema'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
-import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
-import { formatFirstLetter } from '../../../@core/utils/format'
+import axios from 'axios'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -46,8 +44,7 @@ const defaultValues = {
   name: ''
 }
 
-const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartment }) => {
-  const [staffsInSelectedDepartment, setStaffs] = useState([])
+const EditSalaryItem = ({ open, closeModal, refetchSalaryItems, selectedSalaryItem }) => {
 
   const {
     control,
@@ -55,38 +52,30 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
     reset,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(editDepartmentSchema) })
+  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(editSalaryItemSchema) })
 
-  const onSubmit = async values => {
+  const onUpdate = async (values) => {
     try {
-      const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
+      const { data } = await axios.patch(`salary-items?id=${selectedSalaryItem.id}`, values)
 
       if (data.success) {
-        notifySuccess('Department updated successfully')
+        notifySuccess('Payslip Item updated successfully')
         reset()
         closeModal()
-        refetchDepartments()
+        refetchSalaryItems()
       }
     } catch (error) {
-      notifyError('Error updating department')
+      notifyError('Error updating payslip item')
     }
   }
 
   useEffect(() => {
-    setValue('name', selectedDepartment.name)
-
-    if (selectedDepartment.hodId) {
-      setValue('hodId', selectedDepartment.hodId)
-    }
+    setValue('name', selectedSalaryItem.name)
+    setValue('percentage', selectedSalaryItem.percentage)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDepartment.hodId])
+  }, [])
 
-  useEffect(() => {
-    getAllStaffsInOneDepartment(selectedDepartment.id).then(res => {
-      setStaffs(res.data)
-    })
-  }, [selectedDepartment])
 
   return (
     <Dialog
@@ -108,7 +97,7 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onUpdate)}>
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`
@@ -123,7 +112,7 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
                       fullWidth
-                      label='Department Name'
+                      label='Payslip Item'
                       value={value}
                       onChange={onChange}
                       error={Boolean(errors.name)}
@@ -136,29 +125,19 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='hodId'
+                  name='percentage'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
-                      select
                       fullWidth
+                      label='Percentage'
                       value={value}
-                      label='Head of Department'
                       onChange={onChange}
-                      error={Boolean(errors.hodId)}
-                      aria-describedby='stepper-linear-account-hodId'
+                      error={Boolean(errors.percentage)}
 
-                      // {...(errors.departmentId && { helperText: 'This field is required' })}
-                    >
-                      <MenuItem value=''> {staffsInSelectedDepartment?.length ? "Select Head of Department" : 'No Staff in Selected Department'} </MenuItem>
-                       {staffsInSelectedDepartment?.map((staff) =>  (
-                          <MenuItem key={staff?.id} value={staff.id}>
-                            {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
-                          </MenuItem>
-                        )
-                      )} 
-                    </CustomTextField>
+                      // {...(errors.name && { helperText: errors.name.message })}
+                    />
                   )}
                 />
               </Grid>
@@ -176,4 +155,4 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
   )
 }
 
-export default EditDepartment
+export default EditSalaryItem

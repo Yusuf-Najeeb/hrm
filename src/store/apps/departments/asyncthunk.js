@@ -65,22 +65,5 @@ export const createDepartment = createAsyncThunk(
     }
   })
 
-  export const editDepartment = createAsyncThunk(
-    'department/edit',
-    async (vals, id) => {
-      try {
-        const response = await axios.patch(`department?id=${id}`, vals)
-
-  
-        notifySuccess('Department updated successfully')
-
-        return response
-  
-      } catch (error) {
-        console.log(error, 'error')
-        notifyError('Error updating department')
-      }
-    }
-  )
 
   

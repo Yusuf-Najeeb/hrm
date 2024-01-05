@@ -17,11 +17,13 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { colorsProgress } from 'src/configs/colorConfigs'
 import { useSalaryItems } from '../../../hooks/useSalaryItems'
 import { useAppDispatch } from '../../../hooks'
-import { fetchSalaryItems } from '../../../store/apps/salaryItems/asyncthunk'
+import { deleteSalaryItem, fetchSalaryItems } from '../../../store/apps/salaryItems/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CreateSalaryItem from './CreateSalaryItem'
+import DeleteDialog from '../../../@core/components/delete-dialog'
+import EditSalaryItem from './EditSalaryItem'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   return {
@@ -41,11 +43,39 @@ const SalaryItems = () => {
   const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
   const [openDialog, setOpenDialog] = useState(false)
   const [fetchStatus, setFetchStatus] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [selectedSalaryItem, setSelectedSalaryItem] = useState(null)
+  const [openEditDrawer, setEditDrawer] = useState(false)
+  const [SalaryItemToView, setSalaryItemToView] = useState(null)
 
   const toggleCreateDialog = ()=> setOpenDialog(!openDialog)
   const refetchSalaryItems = ()=> setFetchStatus(!fetchStatus)
 
+  const doDelete = (value) => {
+    setDeleteModal(true)
+    setSelectedSalaryItem(value?.id)
+  }
 
+  const doCancelDelete = () => {
+    setDeleteModal(false)
+    setSelectedSalaryItem(null)
+  }
+
+  const updateFetch = ()=> setFetchStatus(!fetchStatus)
+
+  const ondeleteClick = () => {
+    dispatch(deleteSalaryItem(selectedSalaryItem))
+    updateFetch()
+    doCancelDelete()
+  }
+
+  const setSalaryItemToEdit = (prod) => {
+    setEditDrawer(true)
+    setSalaryItemToView(prod)
+  }
+
+  const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
+  
 
   useEffect(()=>{
     dispatch(fetchSalaryItems())
@@ -126,10 +156,10 @@ const SalaryItems = () => {
                         <TableCell>{formatFirstLetter(item?.name)}</TableCell>
                         <TableCell align='center'>{`${item?.percentage}%`}</TableCell>
                         <TableCell align='right'>
-                          <IconButton size='small'>
+                          <IconButton size='small' onClick={()=> setSalaryItemToEdit(item)}>
                             <Icon icon='tabler:edit' />
                           </IconButton>
-                          <IconButton size='small'>
+                          <IconButton size='small' onClick={() => doDelete(item)}>
                             <Icon icon='tabler:trash' />
                           </IconButton>
                         </TableCell>
@@ -154,7 +184,18 @@ const SalaryItems = () => {
         </Grid>
       </KeenSliderWrapper>
 
+      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+
       {openDialog && <CreateSalaryItem openDialog={openDialog} closeDialog={toggleCreateDialog} refetchSalaryItems={refetchSalaryItems} />}
+
+      {openEditDrawer && (
+  <EditSalaryItem 
+  open={openEditDrawer} 
+  closeModal={toggleEditDrawer}
+  refetchSalaryItems={updateFetch}
+  selectedSalaryItem={SalaryItemToView}
+  />
+)}
     </div>
   )
 }
