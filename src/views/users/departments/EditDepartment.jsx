@@ -1,5 +1,3 @@
-
-
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 
@@ -14,19 +12,20 @@ import Dialog from '@mui/material/Dialog'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, MenuItem } from '@mui/material'
 
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { requireName } from 'src/@core/Formschema'
+import { editDepartmentSchema } from 'src/@core/Formschema'
 import axios from 'axios'
 import { useAppDispatch } from '../../../hooks'
-import { useEffect } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
-
+import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
+import { formatFirstLetter } from '../../../@core/utils/format'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -48,7 +47,7 @@ const defaultValues = {
 }
 
 const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartment }) => {
-  const dispatch = useAppDispatch()
+  const [staffsInSelectedDepartment, setStaffs] = useState([])
 
   const {
     control,
@@ -56,33 +55,38 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
     reset,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requireName) })
+  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(editDepartmentSchema) })
 
-  const onSubmit = async (values) => {
-
+  const onSubmit = async values => {
     try {
-        const {data} = await axios.patch(`department?id=${selectedDepartment.id}`, values)
+      const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
 
-        if (data.success) {
-
-            notifySuccess('Department updated successfully')
-            reset()
-            closeModal()
-            refetchDepartments()
-          }
-  
-      } catch (error) {
-        notifyError('Error updating department')
+      if (data.success) {
+        notifySuccess('Department updated successfully')
+        reset()
+        closeModal()
+        refetchDepartments()
       }
-
+    } catch (error) {
+      notifyError('Error updating department')
+    }
   }
 
   useEffect(() => {
-      setValue('name', selectedDepartment.name)
+    setValue('name', selectedDepartment.name)
+
+    if (selectedDepartment.hodId) {
+      setValue('hodId', selectedDepartment.hodId)
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  
+  }, [selectedDepartment.hodId])
+
+  useEffect(() => {
+    getAllStaffsInOneDepartment(selectedDepartment.id).then(res => {
+      setStaffs(res.data)
+    })
+  }, [selectedDepartment])
 
   return (
     <Dialog
@@ -91,8 +95,8 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
       maxWidth='md'
       scroll='body'
 
-    //   TransitionComponent={Transition}
-      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
+      //   TransitionComponent={Transition}
+      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 390 } }}
     >
       <DialogContent
         sx={{
@@ -124,8 +128,45 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
                       value={value}
                       onChange={onChange}
                       error={Boolean(errors.name)}
-                      {...(errors.name && { helperText: errors.name.message })}
+
+                      // {...(errors.name && { helperText: errors.name.message })}
                     />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='hodId'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Head of Department'
+                      onChange={onChange}
+                      error={Boolean(errors.hodId)}
+                      aria-describedby='stepper-linear-account-hodId'
+
+                      // {...(errors.departmentId && { helperText: 'This field is required' })}
+                    >
+                      {staffsInSelectedDepartment?.length ?
+                      <Fragment>
+                      <MenuItem value=''>Select Head of Department</MenuItem>
+                       {staffsInSelectedDepartment?.map((staff) =>  (
+                          <MenuItem key={staff?.id} value={staff.id}>
+                            {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
+                          </MenuItem>
+                        )
+                      )} 
+                      </Fragment> : 
+                      <MenuItem value=''>
+                            No staff in selected department
+                          </MenuItem>
+                      }
+                    </CustomTextField>
                   )}
                 />
               </Grid>
@@ -134,8 +175,7 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button type='submit' variant='contained'>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : "Update"}
-              
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Update'}
             </Button>
           </Box>
         </form>
