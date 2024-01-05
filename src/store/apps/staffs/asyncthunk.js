@@ -24,20 +24,18 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 
 
 
-  export const editDepartment = createAsyncThunk(
-    'department/edit',
-    async (vals, id) => {
+  export const getAllStaffsInOneDepartment = 
+    async (id) => {
       try {
-        const response = await axios.patch(`department?id=${id}`, vals)
+        const {data} = await axios.get(`users?departmentId=${id}`)
 
   
-        notifySuccess('Department updated successfully')
+        // notifySuccess('Department updated successfully')
 
-        return response
+        return data
   
       } catch (error) {
-        console.log(error, 'error')
-        notifyError('Error updating department')
+        notifyError('Error fetching staffs in department')
       }
     }
-  )
+  

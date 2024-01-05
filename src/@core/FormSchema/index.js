@@ -88,6 +88,12 @@ export const SalaryItemSchema = yup.object().shape({
     name: yup.string().required('Department Name is required')
   })
 
+  export const editDepartmentSchema = yup.object().shape({
+    name: yup.string(),
+    hodId: yup.number()
+  })
+
+
   export const requireReason = yup.object().shape({
     reason: yup.string().required('Reason is required')
   })
