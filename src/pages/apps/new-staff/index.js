@@ -1,7 +1,6 @@
 
-import StepperLinearAndValidation from '../../../../../src/views/forms/form-wizard/StepperLinearWithValidation'
 import Grid from '@mui/material/Grid'
-import CreateStaff from '../../../../views/users/staffs/CreateStaff'
+import CreateStaff from '../../../views/users/staffs/CreateStaff'
 
 
 const InvoiceList = () => {

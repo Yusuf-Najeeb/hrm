@@ -22,7 +22,7 @@ const navigation = () => {
     {
       title: 'New Staff',
       icon: 'wpf:add-user',
-      path: '/apps/new-staff/list'
+      path: '/apps/new-staff'
     },
     {
       title: 'Duty-Roster',
@@ -36,11 +36,11 @@ const navigation = () => {
       path: '/apps/Leave-Manager'
     },
 
-    {
-      title: 'Attendence',
-      icon: 'tabler:alarm-plus',
-      path: '/apps/Attendence'
-    },
+    // {
+    //   title: 'Attendence',
+    //   icon: 'tabler:alarm-plus',
+    //   path: '/apps/Attendence'
+    // },
 
     {
       sectionTitle: 'Settings'
@@ -55,32 +55,29 @@ const navigation = () => {
       icon: 'tabler:arrow-left-right',
       path: '/apps/permissions'
     },
-    {
-      title: 'Payments history',
-      icon: 'tabler:accessible',
-      path: '/apps/user/view/account'
-    },
-    {
-      title: 'Security',
-      icon: 'tabler:air-conditioning-disabled',
-      path: '/apps/user/view/security'
-    },
-    {
-      title: 'Billing & Plans',
-      icon: 'tabler:air-balloon',
-      path: '/apps/user/view/billing-plan'
-    },
+
+    // {
+    //   title: 'Payments history',
+    //   icon: 'tabler:accessible',
+    //   path: '/apps/user/view/account'
+    // },
+    
+    // {
+    //   title: 'Security',
+    //   icon: 'tabler:air-conditioning-disabled',
+    //   path: '/apps/user/view/security'
+    // },
+
+    // {
+    //   title: 'Billing & Plans',
+    //   icon: 'tabler:air-balloon',
+    //   path: '/apps/user/view/billing-plan'
+    // },
     {
       title: 'Payslip Settings',
       icon: 'tabler:currency-dollar',
       path: '/apps/payslips'
     },
-
-    {
-      title: 'Icons',
-      path: '/ui/icons',
-      icon: 'tabler:brand-tabler'
-    }
   ]
 }
 
