@@ -66,6 +66,7 @@ const CreateRole = ({ open, closeModal, refetchRoles }) => {
       open={open}
       maxWidth='md'
       scroll='body'
+
       //   TransitionComponent={Transition}
       sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
     >
@@ -109,7 +110,7 @@ const CreateRole = ({ open, closeModal, refetchRoles }) => {
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button type='submit' variant='contained'>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Role'}
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Create'}
             </Button>
           </Box>
         </form>

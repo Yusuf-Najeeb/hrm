@@ -17,8 +17,6 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteRole, fetchRoles } from '../../../store/apps/roles/asyncthunk'
-//import DepartmentsTableHeader from './DepartmentsHeader'
-//import CreateDepartment from './CreateDepartment'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
@@ -47,6 +45,7 @@ const RolesTable = () => {
     setRole(value)
     setOpenCanvas(true)
   }
+  
   // are you sure ou want to delete funtion
   const doDelete = value => {
     setDeleteModal(true)

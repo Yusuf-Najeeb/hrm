@@ -17,7 +17,6 @@ import 'src/configs/i18n'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Fake-DB Import
-// import 'src/@fake-db'
 
 // ** Third Party Import
 import { Toaster } from 'react-hot-toast'
