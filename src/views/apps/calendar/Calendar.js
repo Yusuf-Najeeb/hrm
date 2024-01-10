@@ -1,5 +1,5 @@
 // ** React Import
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // ** Full Calendar & it's Plugins
 import FullCalendar from '@fullcalendar/react'
@@ -32,7 +32,8 @@ const Calendar = props => {
     store,
     dispatch,
     direction,
-    updateEvent,
+
+    // updateEvent,
     calendarApi,
     calendarsColor,
     setCalendarApi,
@@ -41,18 +42,22 @@ const Calendar = props => {
     handleAddEventSidebarToggle
   } = props
 
+  const [showCalendar, setShowCalendar] = useState(true)
+
   // ** Refs
   const calendarRef = useRef()
+
   useEffect(() => {
     if (calendarApi === null) {
       // @ts-ignore
       setCalendarApi(calendarRef.current?.getApi())
     }
   }, [calendarApi, setCalendarApi])
-  if (store) {
+
+  if (showCalendar) {
     // ** calendarOptions(Props)
     const calendarOptions = {
-      events: store.events.length ? store.events : [],
+      // events: store.events.length ? store.events : [],
       plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
       initialView: 'dayGridMonth',
       headerToolbar: {
@@ -136,17 +141,17 @@ const Calendar = props => {
               ? Docs: https://fullcalendar.io/docs/eventDrop
               ? We can use `eventDragStop` but it doesn't return updated event so we have to use `eventDrop` which returns updated event
             */
-      eventDrop({ event: droppedEvent }) {
-        dispatch(updateEvent(droppedEvent))
-      },
+      // eventDrop({ event: droppedEvent }) {
+      //   dispatch(updateEvent(droppedEvent))
+      // },
 
       /*
               Handle event resize
               ? Docs: https://fullcalendar.io/docs/eventResize
             */
-      eventResize({ event: resizedEvent }) {
-        dispatch(updateEvent(resizedEvent))
-      },
+      // eventResize({ event: resizedEvent }) {
+      //   dispatch(updateEvent(resizedEvent))
+      // },
       ref: calendarRef,
 
       // Get direction from app state (store)

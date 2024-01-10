@@ -103,3 +103,7 @@ export const SalaryItemSchema = yup.object().shape({
     reason: yup.string().required('Reason is required')
   })
 
+  export const downloadRosterSchema = yup.object().shape({
+    departmentId: yup.number().required('Department Name is required'),
+    rosterDate: yup.string().required('Date is required'),
+  })
