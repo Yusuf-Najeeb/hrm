@@ -19,20 +19,17 @@ import { useAppDispatch, useAppSelector } from '../../../hooks'
 
 // const { RangePicker } = DatePicker
 
-
-
 const PageHeader = ({ toggle, action }) => {
   const dispatch = useAppDispatch()
 
+  //   const onCalendarChange = (dates) => {
+  //     const startdate = (dates?.[0]).format('YYYY-MM-DD')
+  //     const enddate = (dates?.[1]).format('YYYY-MM-DD')
 
-//   const onCalendarChange = (dates) => {
-//     const startdate = (dates?.[0]).format('YYYY-MM-DD')
-//     const enddate = (dates?.[1]).format('YYYY-MM-DD')
-
-//     // console.log(startdate, enddate);
-//     setStartDate(startdate)
-//     setEndDate(enddate)
-//   }
+  //     // console.log(startdate, enddate);
+  //     setStartDate(startdate)
+  //     setEndDate(enddate)
+  //   }
 
   return (
     <Box
@@ -43,8 +40,8 @@ const PageHeader = ({ toggle, action }) => {
         columnGap: 4,
         display: 'flex',
         flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+        alignItems: 'center'
+        // justifyContent: 'flex-end',
       }}
     >
       {/* <Stack direction='row' justifyContent='space-between' spacing={4}>
@@ -64,10 +61,10 @@ const PageHeader = ({ toggle, action }) => {
         onChange={e => handleFilter(e.target.value)}
       /> */}
 
- <Button onClick={toggle} variant='contained' sx={{ '& svg': { mr: 2 } }}>
-          <Icon fontSize='1.125rem' icon='tabler:plus' />
-          {action}
-        </Button>
+      <Button onClick={toggle} variant='contained' sx={{ '& svg': { mr: 2 } }}>
+        <Icon fontSize='1.125rem' icon='tabler:plus' />
+        {action}
+      </Button>
     </Box>
   )
 }

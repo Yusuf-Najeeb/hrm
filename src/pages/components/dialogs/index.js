@@ -31,13 +31,13 @@ const Dialog = () => {
             jsx: source.DialogSimpleJSXCode
           }}
         >
-          <Typography sx={{ mb: 4 }}>
+          {/* <Typography sx={{ mb: 4 }}>
             Manage <code>open</code> prop with the help of a state.
-          </Typography>
+          </Typography> */}
           <DialogSimple />
         </CardSnippet>
       </Grid>
-      <Grid item xs={12} md={6}>
+      {/* <Grid item xs={12} md={6}>
         <CardSnippet
           title='Alerts'
           code={{
@@ -165,7 +165,7 @@ const Dialog = () => {
           </Typography>
           <DialogsScroll />
         </CardSnippet>
-      </Grid>
+      </Grid> */}
     </Grid>
   )
 }

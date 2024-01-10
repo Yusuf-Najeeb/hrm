@@ -17,13 +17,20 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
-import DepartmentsTableHeader from './DepartmentsHeader'
-import CreateDepartment from './CreateDepartment'
+
+//mport DepartmentsTable from '../../users/departments/AllDepartments'
+//import DepartmentsTable from '../../../views/apps/payroll/PageHeader'
+//import CreateDepartment from './CreateDepartment'
+//import DepartmentsHeader from '../../users/departments/DepartmentsHeader'
+import DepartmentsTableHeader from '../../../views/users/departments/DepartmentsHeader'
+//import CreateDepartment from '../../users/departments/CreateDepartment'
+import CreateDeduction from '../../../views/apps/payroll/CreateDeduction'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-import EditDepartment from './EditDepartment'
+//import EditDepartment from './EditDepartment'
+import EditDepartment from '../../users/departments/EditDepartment'
 
 const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
@@ -106,7 +113,7 @@ const DepartmentsTable = () => {
 
   return (
     <div>
-      <DepartmentsTableHeader action='Create Department' toggle={toggleDepartmentDrawer} />
+      <DepartmentsTableHeader action='Create Deduction' toggle={toggleDepartmentDrawer} />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -115,8 +122,9 @@ const DepartmentsTable = () => {
                 S/N
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                NAME
+                Deduction
               </TableCell>
+
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTIONS
               </TableCell>
@@ -182,7 +190,7 @@ const DepartmentsTable = () => {
       )}
 
       {addDepartmentOpen && (
-        <CreateDepartment
+        <CreateDeduction
           open={addDepartmentOpen}
           closeModal={toggleDepartmentDrawer}
           refetchDepartments={updateFetch}
