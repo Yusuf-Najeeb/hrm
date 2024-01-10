@@ -63,7 +63,7 @@ const DepartmentsTableHeader = ({ toggle }) => {
 
       <Button onClick={toggle} variant='contained' sx={{ '& svg': { mr: 2 } }}>
         <Icon fontSize='1.125rem' icon='tabler:plus' />
-        Create Deduction
+        Create Department
       </Button>
     </Box>
   )

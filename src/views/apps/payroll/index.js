@@ -1,9 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react'
 
-// Next JS
-import { useRouter } from 'next/navigation'
-
-// MUI
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -16,59 +12,85 @@ import IconButton from '@mui/material/IconButton'
 import Icon from 'src/@core/components/icon'
 
 import TablePagination from '@mui/material/TablePagination'
-import { useAppDispatch } from '../../../hooks'
+
+import CustomChip from 'src/@core/components/mui/chip'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
+import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+
+//mport DepartmentsTable from '../../users/departments/AllDepartments'
+//import DepartmentsTable from '../../../views/apps/payroll/PageHeader'
+//import CreateDepartment from './CreateDepartment'
+//import DepartmentsHeader from '../../users/departments/DepartmentsHeader'
+import DepartmentsTableHeader from '../../../views/users/departments/DepartmentsHeader'
+//import CreateDepartment from '../../users/departments/CreateDepartment'
+import CreateDeduction from '../../../views/apps/payroll/CreateDeduction'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import { useStaffs } from '../../../hooks/useStaffs'
-import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
-//import PageHeader from '../components/PageHeader'
-import PageHeader from '../../users/components/PageHeader'
-//import DeleteStaff from './DeleteStaff'
-import DeleteStaff from '../../users/staffs/DeleteStaff'
-//import ViewStaff from './ViewStaff'
-import ViewStaff from '../../users/staffs/ViewStaff'
+import { useDepartments } from '../../../hooks/useDepartments'
+import DeleteDialog from '../../../@core/components/delete-dialog'
+//import EditDepartment from './EditDepartment'
+import EditDepartment from '../../users/departments/EditDepartment'
 
-const PayrollTable = () => {
+const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
 
-  const router = useRouter()
+  //   const paging = useAppSelector(store => store.expenditure.expenditurePaging)
+  //   const [page, setPage] = useState(0)
+  // const [openCanvas, setOpenCanvas] = useState(false)
+  // const [openPayModal, setOpenPayModal] = useState(false)
+  // const [searchVal, setSearchVal] = useState('')
+  // const [startDate, setStartDate] = useState<string>(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
+  // const [endDate, setEndDate] = useState<string>(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
+  // const [showcreateBtn, setShowCreateBtn] = useState<boolean>(false)
 
-  const [StaffsData, loading, paging] = useStaffs()
+  //   const [DepartmentsData, loadingDepartments] = useAppSelector(store => store.departments.DepartmentsData)
+
+  const [DepartmentsData, loadingDepartments, paging] = useDepartments()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [staff, setStaff] = useState(null)
-  const [addStaffOpen, setAddstaffOpen] = useState(false)
+  const [department, setDepartment] = useState(null)
+  const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
 
-  const [openViewDrawer, setViewDrawer] = useState(false)
+  const [openEditDrawer, setEditDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [selectedStaff, setSelectedStaff] = useState(null)
+  const [selectedDepartment, setSelectedDepartment] = useState(null)
 
-  const [staffToView, setStaffToView] = useState(null)
+  const [DepartmentToView, setDepartmentToView] = useState(null)
 
-  const [hasUploadedImage, setHasUploadedImage] = useState(false)
+  const setActiveDepartment = value => {
+    setDepartment(value)
+    setOpenCanvas(true)
+  }
 
   const closeCanvas = () => {
-    setViewDrawer(false)
-    setStaffToView(null)
+    setOpenCanvas(false)
+    setOpenPayModal(false)
+    setDepartment(null)
   }
 
   const doDelete = value => {
     setDeleteModal(true)
-    setSelectedStaff(value?.id)
+    setSelectedDepartment(value?.id)
   }
 
   const doCancelDelete = () => {
     setDeleteModal(false)
-    setSelectedStaff(null)
+    setSelectedDepartment(null)
   }
 
   const updateFetch = () => setFetch(!refetch)
 
-  const setActiveStaff = staff => {
-    setViewDrawer(true)
-    setStaffToView(staff)
+  const ondeleteClick = () => {
+    dispatch(deleteDepartment(selectedDepartment))
+    updateFetch()
+    doCancelDelete()
+  }
+
+  const setDepartmentToEdit = prod => {
+    setEditDrawer(true)
+    setDepartmentToView(prod)
   }
 
   const handleChangePage = newPage => {
@@ -80,22 +102,18 @@ const PayrollTable = () => {
     setPage(0)
   }
 
-  const togglestaffDrawer = () => setAddstaffOpen(!addstaffOpen)
-  const toggleEditDrawer = () => setViewDrawer(!openViewDrawer)
-
-  const navigateToCreateStaffPage = () => {
-    //router.push('/apps/new-staff/list/')
-  }
+  const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
+  const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
-    dispatch(fetchStaffs({ page: page + 1 }))
+    dispatch(fetchDepartments({ page: page + 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch, hasUploadedImage])
+  }, [page, refetch])
 
   return (
     <div>
-      <PageHeader action='Create Deduction' />
+      <DepartmentsTableHeader action='Create Deduction' toggle={toggleDepartmentDrawer} />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -106,19 +124,14 @@ const PayrollTable = () => {
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 Deduction
               </TableCell>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
-                Staff Name
-              </TableCell>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
-                DESIGNATION
-              </TableCell>
+
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTIONS
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading ? (
+            {loadingDepartments ? (
               <TableRow className='text-center'>
                 <TableCell colSpan={6}>
                   <CustomSpinner />
@@ -126,27 +139,23 @@ const PayrollTable = () => {
               </TableRow>
             ) : (
               <Fragment>
-                {StaffsData?.map((staff, i) => (
-                  <TableRow hover role='checkbox' key={staff?.id}>
+                {DepartmentsData?.map((department, i) => (
+                  <TableRow hover role='checkbox' key={department.id}>
                     <TableCell align='left'>{i + 1}</TableCell>
-                    <TableCell align='left'>{`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(
-                      staff?.lastname
-                    )}`}</TableCell>
-                    <TableCell align='left'>{staff.email}</TableCell>
-                    <TableCell align='left'>{staff?.designation}</TableCell>
+                    <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
 
                     <TableCell align='left' sx={{ display: 'flex' }}>
-                      <IconButton size='small' onClick={() => setActiveStaff(staff)}>
-                        <Icon icon='tabler:eye' />
+                      <IconButton size='small' onClick={() => setDepartmentToEdit(department)}>
+                        <Icon icon='tabler:edit' />
                       </IconButton>
-                      <IconButton size='small' onClick={() => doDelete(staff)}>
+                      <IconButton size='small' onClick={() => doDelete(department)}>
                         <Icon icon='tabler:trash' />
                       </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
 
-                {StaffsData?.length === 0 && (
+                {DepartmentsData?.length === 0 && (
                   <tr className='text-center'>
                     <td colSpan={6}>
                       <NoData />
@@ -169,31 +178,26 @@ const PayrollTable = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      {/* {openCanvas && <Viewstaff open={openCanvas} closeCanvas={closeCanvas} staff={staff} />}
-      {openPayModal && (
-        <GeneralstaffPay visible={openPayModal} togglePayModal={closeCanvas} staff={staff} />
+      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+
+      {openEditDrawer && (
+        <EditDepartment
+          open={openEditDrawer}
+          closeModal={toggleEditDrawer}
+          refetchDepartments={updateFetch}
+          selectedDepartment={DepartmentToView}
+        />
       )}
-      
-      */}
 
-      <DeleteStaff
-        open={deleteModal}
-        handleClose={doCancelDelete}
-        selectedStaff={selectedStaff}
-        refetchStaffs={updateFetch}
-      />
-
-      {openViewDrawer && (
-        <ViewStaff
-          open={openViewDrawer}
-          closeCanvas={closeCanvas}
-          staffUser={staffToView}
-          hasUploadedImage={hasUploadedImage}
-          setHasUploadedImage={setHasUploadedImage}
+      {addDepartmentOpen && (
+        <CreateDeduction
+          open={addDepartmentOpen}
+          closeModal={toggleDepartmentDrawer}
+          refetchDepartments={updateFetch}
         />
       )}
     </div>
   )
 }
 
-export default PayrollTable
+export default DepartmentsTable

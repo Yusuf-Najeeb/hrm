@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton'
 
 import Icon from 'src/@core/components/icon'
 
-
 import TablePagination from '@mui/material/TablePagination'
 
 import CustomChip from 'src/@core/components/mui/chip'
@@ -30,15 +29,15 @@ const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
 
   //   const paging = useAppSelector(store => store.expenditure.expenditurePaging)
-//   const [page, setPage] = useState(0)
-// const [openCanvas, setOpenCanvas] = useState(false)
-// const [openPayModal, setOpenPayModal] = useState(false)
-// const [searchVal, setSearchVal] = useState('')
-// const [startDate, setStartDate] = useState<string>(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
-// const [endDate, setEndDate] = useState<string>(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
-// const [showcreateBtn, setShowCreateBtn] = useState<boolean>(false)
+  //   const [page, setPage] = useState(0)
+  // const [openCanvas, setOpenCanvas] = useState(false)
+  // const [openPayModal, setOpenPayModal] = useState(false)
+  // const [searchVal, setSearchVal] = useState('')
+  // const [startDate, setStartDate] = useState<string>(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
+  // const [endDate, setEndDate] = useState<string>(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
+  // const [showcreateBtn, setShowCreateBtn] = useState<boolean>(false)
 
-//   const [DepartmentsData, loadingDepartments] = useAppSelector(store => store.departments.DepartmentsData)
+  //   const [DepartmentsData, loadingDepartments] = useAppSelector(store => store.departments.DepartmentsData)
 
   const [DepartmentsData, loadingDepartments, paging] = useDepartments()
   const [page, setPage] = useState(0)
@@ -50,10 +49,10 @@ const DepartmentsTable = () => {
   const [openEditDrawer, setEditDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
-  
+
   const [DepartmentToView, setDepartmentToView] = useState(null)
 
-  const setActiveDepartment = (value) => {
+  const setActiveDepartment = value => {
     setDepartment(value)
     setOpenCanvas(true)
   }
@@ -64,7 +63,7 @@ const DepartmentsTable = () => {
     setDepartment(null)
   }
 
-  const doDelete = (value) => {
+  const doDelete = value => {
     setDeleteModal(true)
     setSelectedDepartment(value?.id)
   }
@@ -81,18 +80,17 @@ const DepartmentsTable = () => {
     updateFetch()
     doCancelDelete()
   }
-  
-  
-  const setDepartmentToEdit = (prod) => {
+
+  const setDepartmentToEdit = prod => {
     setEditDrawer(true)
     setDepartmentToView(prod)
   }
 
-  const handleChangePage = ( newPage) => {
+  const handleChangePage = newPage => {
     setPage(newPage)
   }
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
@@ -101,17 +99,14 @@ const DepartmentsTable = () => {
   const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
-    dispatch(fetchDepartments({page: page + 1, limit: 10 }))
+    dispatch(fetchDepartments({ page: page + 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, refetch])
 
   return (
     <div>
-      <DepartmentsTableHeader
-        action='Create Department'
-        toggle={toggleDepartmentDrawer}
-      />
+      <DepartmentsTableHeader action='Create Department' toggle={toggleDepartmentDrawer} />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -142,7 +137,6 @@ const DepartmentsTable = () => {
                     <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
 
                     <TableCell align='left' sx={{ display: 'flex' }}>
-
                       <IconButton size='small' onClick={() => setDepartmentToEdit(department)}>
                         <Icon icon='tabler:edit' />
                       </IconButton>
@@ -176,25 +170,24 @@ const DepartmentsTable = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-<DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
 
-{openEditDrawer && (
-  <EditDepartment 
-  open={openEditDrawer} 
-  closeModal={toggleEditDrawer}
-  refetchDepartments={updateFetch}
-  selectedDepartment={DepartmentToView}
-  />
-)}
+      {openEditDrawer && (
+        <EditDepartment
+          open={openEditDrawer}
+          closeModal={toggleEditDrawer}
+          refetchDepartments={updateFetch}
+          selectedDepartment={DepartmentToView}
+        />
+      )}
 
-{addDepartmentOpen && (
+      {addDepartmentOpen && (
         <CreateDepartment
           open={addDepartmentOpen}
           closeModal={toggleDepartmentDrawer}
           refetchDepartments={updateFetch}
         />
-      )} 
-
+      )}
     </div>
   )
 }
