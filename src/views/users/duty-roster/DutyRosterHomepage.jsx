@@ -32,6 +32,9 @@ import {
 import PageHeader from './PageHeader'
 import DownloadTemplateDialog from './DownloadTemplateDialog'
 import UploadRosterDialog from './UploadRosterDialog'
+import { useRoster } from '../../../hooks/useRoster'
+import { fetchRosterDetails } from '../../../store/apps/roster/asyncthunk'
+import { formatDateToYYYYMM } from '../../../@core/utils/format'
 
 // ** CalendarColors
 const calendarsColor = {
@@ -50,6 +53,7 @@ const DutyRosterHomepage = () => {
   const [searchVal, setSearchVal] = useState('')
   const [startDate, setStartDate] = useState(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
   const [endDate, setEndDate] = useState(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
+  const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
   const [openDownloadDialog, setOpenDialog] = useState(false)
   const [openUploadDialog, setDialog] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
@@ -59,6 +63,7 @@ const DutyRosterHomepage = () => {
   const { settings } = useSettings()
   const dispatch = useDispatch()
   const store = useSelector(state => state.calendar)
+  const [RosterData, loading] = useRoster()
 
   // ** Vars
   const leftSidebarWidth = 300
@@ -85,6 +90,12 @@ const closeUploadDialog = ()=> setDialog(!openUploadDialog)
   // useEffect(() => {
   //   dispatch(fetchEvents(store.selectedCalendars))
   // }, [dispatch, store.selectedCalendars])
+
+  useEffect(()=>{
+    dispatch(fetchRosterDetails({departmentId: 5, period: period}))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[period])
 
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen)
   const handleAddEventSidebarToggle = () => setAddEventSidebarOpen(!addEventSidebarOpen)

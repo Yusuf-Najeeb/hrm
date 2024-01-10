@@ -13,6 +13,7 @@ import salaryItems from 'src/store/apps/salaryItems'
 import departments from 'src/store/apps/departments'
 import staffs from 'src/store/apps/staffs'
 import roles from 'src/store/apps/roles'
+import roster from 'src/store/apps/roster'
 
 export const store = configureStore({
   reducer: {
@@ -26,7 +27,8 @@ export const store = configureStore({
     salaryItems,
     departments,
     staffs,
-    roles
+    roles,
+    roster
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
