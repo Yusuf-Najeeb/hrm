@@ -11,7 +11,7 @@ const navigation = () => {
     },
     {
       title: 'Departments',
-      icon: "fluent-emoji-high-contrast:department-store",
+      icon: 'fluent-emoji-high-contrast:department-store',
       path: '/apps/departments'
     },
     {
@@ -23,6 +23,11 @@ const navigation = () => {
       title: 'New Staff',
       icon: 'wpf:add-user',
       path: '/apps/new-staff'
+    },
+    {
+      title: 'Payroll',
+      icon: 'wpf:add-user',
+      path: '/apps/payroll'
     },
     {
       title: 'Duty-Roster',
@@ -61,7 +66,7 @@ const navigation = () => {
     //   icon: 'tabler:accessible',
     //   path: '/apps/user/view/account'
     // },
-    
+
     // {
     //   title: 'Security',
     //   icon: 'tabler:air-conditioning-disabled',
@@ -77,7 +82,7 @@ const navigation = () => {
       title: 'Payslip Settings',
       icon: 'tabler:currency-dollar',
       path: '/apps/payslips'
-    },
+    }
   ]
 }
 
