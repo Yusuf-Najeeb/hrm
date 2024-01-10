@@ -5,15 +5,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // ** Fetch Events
-export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async calendars => {
-  const response = await axios.get('/apps/calendar/events', {
-    params: {
-      calendars
-    }
-  })
+// export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async calendars => {
+//   const response = await axios.get('/apps/calendar/events', {
+//     params: {
+//       calendars
+//     }
+//   })
 
-  return response.data
-})
+//   return response.data
+// })
 
 // ** Add Event
 export const addEvent = createAsyncThunk('appCalendar/addEvent', async (event, { dispatch }) => {
@@ -80,11 +80,12 @@ export const appCalendarSlice = createSlice({
       }
     }
   },
-  extraReducers: builder => {
-    builder.addCase(fetchEvents.fulfilled, (state, action) => {
-      state.events = action.payload
-    })
-  }
+  
+  // extraReducers: builder => {
+  //   builder.addCase(fetchEvents.fulfilled, (state, action) => {
+  //     state.events = action.payload
+  //   })
+  // }
 })
 
 export const { handleSelectEvent, handleCalendarsUpdate, handleAllCalendars } = appCalendarSlice.actions

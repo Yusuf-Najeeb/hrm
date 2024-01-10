@@ -21,9 +21,9 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 
 const emails = ['username@gmail.com', 'user02@gmail.com']
 
-const DialogSimple = () => {
+const DialogSimple = ({open}) => {
   // ** States
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   const [selectedValue, setSelectedValue] = useState(emails[1])
   const handleClickOpen = () => setOpen(true)
   const handleDialogClose = () => setOpen(false)

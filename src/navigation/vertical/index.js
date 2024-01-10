@@ -27,7 +27,7 @@ const navigation = () => {
     {
       title: 'Duty-Roster',
       icon: 'tabler:address-book',
-      path: '/apps/Duty-Roster'
+      path: '/apps/duty-roster'
     },
 
     {
