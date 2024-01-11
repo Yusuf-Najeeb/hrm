@@ -24,9 +24,9 @@ code[class*='language-'] {
 }
 
 
-.MuiPopover-paper {
+/* .MuiPopover-paper {
   transform: translate(-45px, 5px)  !important;
-}
+} */
 
 /* .css-jl9vzj-MuiPaper-root-MuiPopover-paper {
   transform: translate(45px, 5px)  !important;

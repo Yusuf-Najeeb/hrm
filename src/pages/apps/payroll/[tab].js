@@ -1,11 +1,28 @@
-import { useState, useEffect, ReactElement, SyntheticEvent } from 'react'
-import { useRouter } from 'next/router'
-import Tab from '@mui/material/Tab'
-import Box from '@mui/material/Tab'
-import Grid from '@mui/material/Grid'
-import TabPanel from '@mui/material/TabPanel'
-import TabContext from '@mui/material/TabContext'
+import React from 'react'
+import PayrollTab from '../../../views/users/payroll/PayrollTab'
 
-import { styled, Theme } from '@mui/material/styled'
-import { useMediaQuery } from '@mui/material/useMediaQuery'
-import MuiTableList,  
+
+const UsersProducts = ({ tab }) => {
+  return <PayrollTab tab={tab} />
+}
+
+export const getStaticPaths = () => {
+  return {
+    paths: [
+      { params: { tab: 'payroll' } },
+      { params: { tab: 'deductions' } },
+      { params: { tab: 'deductionCategories' } }
+    ],
+    fallback: false
+  }
+}
+
+export const getStaticProps = async ({ params }) => {
+  return {
+    props: {
+      tab: params?.tab
+    }
+  }
+}
+
+export default UsersProducts
