@@ -66,6 +66,7 @@ const CreateDeduction = ({ open, closeModal, refetchDepartments }) => {
       open={open}
       maxWidth='md'
       scroll='body'
+      
       //   TransitionComponent={Transition}
       sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
     >

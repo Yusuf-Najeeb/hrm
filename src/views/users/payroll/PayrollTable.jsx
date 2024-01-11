@@ -22,29 +22,19 @@ import { deleteDepartment, fetchDepartments } from '../../../store/apps/departme
 //import DepartmentsTable from '../../../views/apps/payroll/PageHeader'
 //import CreateDepartment from './CreateDepartment'
 //import DepartmentsHeader from '../../users/departments/DepartmentsHeader'
-import DepartmentsTableHeader from '../../../views/users/departments/DepartmentsHeader'
-//import CreateDepartment from '../../users/departments/CreateDepartment'
-import CreateDeduction from '../../../views/apps/payroll/CreateDeduction'
+import DepartmentsTableHeader from '../departments/DepartmentsHeader'
+
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-//import EditDepartment from './EditDepartment'
-import EditDepartment from '../../users/departments/EditDepartment'
 
-const DepartmentsTable = () => {
+import EditDepartment from '../departments/EditDepartment'
+import CreateDeduction from './CreateDeduction'
+import PageHeader from '../components/PageHeader'
+
+const PayrollTable = () => {
   const dispatch = useAppDispatch()
-
-  //   const paging = useAppSelector(store => store.expenditure.expenditurePaging)
-  //   const [page, setPage] = useState(0)
-  // const [openCanvas, setOpenCanvas] = useState(false)
-  // const [openPayModal, setOpenPayModal] = useState(false)
-  // const [searchVal, setSearchVal] = useState('')
-  // const [startDate, setStartDate] = useState<string>(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
-  // const [endDate, setEndDate] = useState<string>(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
-  // const [showcreateBtn, setShowCreateBtn] = useState<boolean>(false)
-
-  //   const [DepartmentsData, loadingDepartments] = useAppSelector(store => store.departments.DepartmentsData)
 
   const [DepartmentsData, loadingDepartments, paging] = useDepartments()
   const [page, setPage] = useState(0)
@@ -113,7 +103,7 @@ const DepartmentsTable = () => {
 
   return (
     <div>
-      <DepartmentsTableHeader action='Create Deduction' toggle={toggleDepartmentDrawer} />
+      <PageHeader action='Generate Payslip' toggle={toggleDepartmentDrawer} />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -200,4 +190,4 @@ const DepartmentsTable = () => {
   )
 }
 
-export default DepartmentsTable
+export default PayrollTable

@@ -1,7 +1,8 @@
-import PayrollTable from '../../../views/apps/payroll'
+import React from 'react'
+import PayrollTab from '../../../views/users/payroll/PayrollTab'
 
-const StaffsHome = () => {
-  return <PayrollTable />
+const ExpenditureHome = () => {
+  return <PayrollTab tab='payroll' />
 }
 
-export default StaffsHome
+export default ExpenditureHome
