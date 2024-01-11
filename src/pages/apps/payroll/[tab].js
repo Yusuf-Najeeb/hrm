@@ -2,7 +2,7 @@ import React from 'react'
 import PayrollTab from '../../../views/users/payroll/PayrollTab'
 
 
-const UsersProducts = ({ tab }) => {
+const Payroll = ({ tab }) => {
   return <PayrollTab tab={tab} />
 }
 
@@ -25,4 +25,4 @@ export const getStaticProps = async ({ params }) => {
   }
 }
 
-export default UsersProducts
+export default Payroll

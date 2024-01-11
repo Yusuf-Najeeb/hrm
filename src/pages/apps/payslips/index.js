@@ -1,4 +1,5 @@
-import SalaryItems from "../../../views/users/payslips/SalaryItemsHome"
+import SalaryItems from "../../../views/users/salaryItems/SalaryItemsHome"
+
 
 
 const PayslipsHome = () => {
