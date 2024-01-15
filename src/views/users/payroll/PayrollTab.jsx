@@ -18,6 +18,7 @@ import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import PayrollTable from './PayrollTable'
+import Deduction from './DeductionCategory'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -54,15 +55,14 @@ const PayrollTab = ({ tab }) => {
 
   // ** Hooks
   const router = useRouter()
-  const hideText = useMediaQuery((theme) => theme.breakpoints.down('sm'))
+  const hideText = useMediaQuery(theme => theme.breakpoints.down('sm'))
 
   const handleChange = (e, value) => {
     setActiveTab(value)
-    
+
     // router.push({
     //   pathname: `/users/products/finishedProducts/${value.toLowerCase()}`
     // })
-    
   }
 
   useEffect(() => {
@@ -73,10 +73,10 @@ const PayrollTab = ({ tab }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab])
 
-  const tabContentList  = {
-    payroll: <PayrollTable/>,
-    deductions: <PayrollTable/>,
-    deductionCategories: <PayrollTable/>
+  const tabContentList = {
+    payroll: <PayrollTable />,
+    deductions: <PayrollTable />,
+    deductionCategories: <Deduction />
   }
 
   return (
@@ -86,17 +86,12 @@ const PayrollTab = ({ tab }) => {
           <TabContext value={activeTab}>
             <Grid container spacing={6}>
               <Grid item xs={12}>
-                <TabList
-                  variant='scrollable'
-                  scrollButtons='auto'
-                  onChange={handleChange}
-                  aria-label='payroll tabs'
-                >
+                <TabList variant='scrollable' scrollButtons='auto' onChange={handleChange} aria-label='payroll tabs'>
                   <Tab
                     value='payroll'
                     label={
                       <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                        <Icon fontSize='1.125rem' icon='tabler:layout-grid' />
+                        <Icon fontSize='1.125rem' icon='tabler:ok-payment' />
                         {!hideText && 'Payroll'}
                       </Box>
                     }

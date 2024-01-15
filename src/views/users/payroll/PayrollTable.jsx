@@ -103,7 +103,7 @@ const PayrollTable = () => {
 
   return (
     <div>
-      <PageHeader action='Generate Payslip' toggle={toggleDepartmentDrawer} />
+      <PageHeader action='Create Deduction ' toggle={toggleDepartmentDrawer} />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
