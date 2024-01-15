@@ -91,7 +91,7 @@ const PayrollTab = ({ tab }) => {
                     value='payroll'
                     label={
                       <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                        <Icon fontSize='1.125rem' icon='tabler:ok-payment' />
+                        <Icon fontSize='1.125rem' icon='fluent:payment-16-regular' />
                         {!hideText && 'Payroll'}
                       </Box>
                     }
@@ -100,7 +100,7 @@ const PayrollTab = ({ tab }) => {
                     value='deductions'
                     label={
                       <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                        <Icon fontSize='1.125rem' icon='tabler:layout-grid' />
+                        <Icon fontSize='1.125rem' icon='ic:twotone-minus' />
                         {!hideText && 'Deductions'}
                       </Box>
                     }
@@ -109,7 +109,7 @@ const PayrollTab = ({ tab }) => {
                     value='deductionCategories'
                     label={
                       <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                        <Icon fontSize='1.125rem' icon='tabler:layout-grid' />
+                        <Icon fontSize='1.125rem' icon='dashicons:category' />
                         {!hideText && 'Deductions Categories'}
                       </Box>
                     }
