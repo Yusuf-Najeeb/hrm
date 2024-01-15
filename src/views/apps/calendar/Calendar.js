@@ -11,6 +11,8 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 // ** Third Party Style Import
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import { useRoster } from '../../../hooks/useRoster'
+import { parseRoster } from '../../../@core/utils/format'
 
 const blankEvent = {
   title: '',
@@ -32,8 +34,7 @@ const Calendar = props => {
     store,
     dispatch,
     direction,
-
-    // updateEvent,
+    rosterSchedule,
     calendarApi,
     calendarsColor,
     setCalendarApi,
@@ -42,11 +43,27 @@ const Calendar = props => {
     handleAddEventSidebarToggle
   } = props
 
+
+  const [RosterData, loading, paging] = useRoster()
+
+  const [calendarEvents, setCalendarEvents] = useState([])
+
   const [showCalendar, setShowCalendar] = useState(true)
 
   // ** Refs
   const calendarRef = useRef()
 
+  
+useEffect(()=>{
+  if(store){
+    const parsedEvents = parseRoster(store)
+
+    setCalendarEvents([...parsedEvents])
+  }
+
+},[store])
+
+  
   useEffect(() => {
     if (calendarApi === null) {
       // @ts-ignore
@@ -55,9 +72,10 @@ const Calendar = props => {
   }, [calendarApi, setCalendarApi])
 
   if (showCalendar) {
-    // ** calendarOptions(Props)
     const calendarOptions = {
-      // events: store.events.length ? store.events : [],
+      
+       events: calendarEvents,
+
       plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
       initialView: 'dayGridMonth',
       headerToolbar: {

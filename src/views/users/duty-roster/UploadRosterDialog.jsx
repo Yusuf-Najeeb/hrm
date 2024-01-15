@@ -29,7 +29,7 @@ import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { notifyWarn } from 'src/@core/components/toasts/notifyWarn'
 
-const CustomInput = forwardRef(({ ...props }, ref) => {
+export const CustomInput = forwardRef(({ ...props }, ref) => {
   return <CustomTextField fullWidth inputRef={ref} {...props} sx={{ width: '100%' }} />
 })
 
