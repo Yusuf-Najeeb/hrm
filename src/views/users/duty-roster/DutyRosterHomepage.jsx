@@ -1,40 +1,48 @@
 // ** React Imports
-import { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-// ** Redux Imports
-import { useDispatch, useSelector } from 'react-redux'
+
+// ** Custom Component Import
+import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Hooks
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { useRoster } from '../../../hooks/useRoster'
 
 // ** FullCalendar & App Components Imports
 import Calendar from 'src/views/apps/calendar/Calendar'
-import SidebarLeft from 'src/views/apps/calendar/SidebarLeft'
 import CalendarWrapper from 'src/@core/styles/libs/fullcalendar'
-import AddEventSidebar from 'src/views/apps/calendar/AddEventSidebar'
 
-import moment from 'moment'
+// Third party libraries
+import DatePicker from 'react-datepicker'
 
 // ** Actions
 import {
-  addEvent,
-  fetchEvents,
-  deleteEvent,
-  updateEvent,
   handleSelectEvent,
-  handleAllCalendars,
-  handleCalendarsUpdate
 } from 'src/store/apps/calendar'
 import PageHeader from './PageHeader'
 import DownloadTemplateDialog from './DownloadTemplateDialog'
 import UploadRosterDialog from './UploadRosterDialog'
-import { useRoster } from '../../../hooks/useRoster'
+
 import { fetchRosterDetails } from '../../../store/apps/roster/asyncthunk'
-import { formatDateToYYYYMM } from '../../../@core/utils/format'
+import { formatDateToYYYYMM, formatFirstLetter, formatMonthYear, getFirstId } from '../../../@core/utils/format'
+import { Card, CardContent, CardHeader, Grid, MenuItem } from '@mui/material'
+import { useAppDispatch } from '../../../hooks'
+import { useDepartments } from '../../../hooks/useDepartments'
+import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+
+const CustomInput = forwardRef((props, ref) => {
+  const rosterPeriod = props.period !== null ? formatMonthYear(props.period) : ''
+
+  const value = rosterPeriod
+  const updatedProps = { ...props }
+
+  return <CustomTextField fullWidth inputRef={ref} {...updatedProps} label={props.label || ''} value={value} />
+})
 
 // ** CalendarColors
 const calendarsColor = {
@@ -46,24 +54,33 @@ const calendarsColor = {
 }
 
 const DutyRosterHomepage = () => {
+
+  // ** Hooks
+  const { settings } = useSettings()
+  const [RosterData, loading] = useRoster()
+
+  const dispatch = useAppDispatch()
+
+  const [DepartmentsData] = useDepartments()
+
+  const defaultId = getFirstId(DepartmentsData)
+
   // ** States
   const [calendarApi, setCalendarApi] = useState(null)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false)
-  const [searchVal, setSearchVal] = useState('')
-  const [startDate, setStartDate] = useState(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
-  const [endDate, setEndDate] = useState(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
   const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
   const [openDownloadDialog, setOpenDialog] = useState(false)
   const [openUploadDialog, setDialog] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorElement, setAnchorElement] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorElement, setAnchorElement] = useState(null)
+  const [departmentId, setDepartmentId] = useState()
+  const [selectedId, setSelectedId] = useState()
+  const [departmentName, setDepartmentName] = useState('')
 
-  // ** Hooks
-  const { settings } = useSettings()
-  const dispatch = useDispatch()
-  const store = useSelector(state => state.calendar)
-  const [RosterData, loading] = useRoster()
+  const defaultPeriod = formatDateToYYYYMM(new Date())
+
+  
 
   // ** Vars
   const leftSidebarWidth = 300
@@ -71,106 +88,158 @@ const DutyRosterHomepage = () => {
   const { skin, direction } = settings
   const mdAbove = useMediaQuery(theme => theme.breakpoints.up('md'))
 
+ 
+
+  const handlechangeDepartment = (e) => {
+    setDepartmentId(e.target.value)
+  }
+
+  const handleChangePeriod = (e) => {
+    const year = e.getFullYear()
+    const month = String(e.getMonth() + 1).padStart(2, '0') // Adding 1 as months are zero-based
+
+    const periodValue = new Date(year, month - 1, 1)
+
+    const newPeriodYear = periodValue.getFullYear()
+    const newPeriodMonth = String(e.getMonth() + 1).padStart(2, '0')
+
+    const newPeriodValue = `${newPeriodYear}${newPeriodMonth}`
+
+    setPeriod(newPeriodValue)
+    setSelectedId(departmentId)
+
+    const deptName =  DepartmentsData[selectedId]?.name
+
+    setDepartmentName(deptName)
+  }
+
   const toggleDownloadDialog = (e) => {
     setAnchorEl(e.currentTarget)
     setOpenDialog(!openDownloadDialog)
-}
+  }
 
-const toggleUploadDialog = (e)=>{
-  setAnchorElement(e.currentTarget)
-  setDialog(!openUploadDialog)
-}
+  const toggleUploadDialog = (e) => {
+    setAnchorElement(e.currentTarget)
+    setDialog(!openUploadDialog)
+  }
 
-const closeDownloadDialog = ()=> setOpenDialog(!openDownloadDialog)
-const closeUploadDialog = ()=> setDialog(!openUploadDialog)
-
-  const handleFilter = () => console.log('toggled')
-
-
-  // useEffect(() => {
-  //   dispatch(fetchEvents(store.selectedCalendars))
-  // }, [dispatch, store.selectedCalendars])
-
-  useEffect(()=>{
-    dispatch(fetchRosterDetails({departmentId: 5, period: period}))
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[period])
+  const closeDownloadDialog = () => setOpenDialog(!openDownloadDialog)
+  const closeUploadDialog = () => setDialog(!openUploadDialog)
 
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen)
   const handleAddEventSidebarToggle = () => setAddEventSidebarOpen(!addEventSidebarOpen)
 
+  useEffect(() => {
+    if (DepartmentsData.length > 0 ) {
+      const initialDepartmentId = getFirstId(DepartmentsData);
+      const initialDepartmentName = DepartmentsData[initialDepartmentId]?.name || '';
+      setDepartmentName(initialDepartmentName);
+    }
+  }, [DepartmentsData]);
+
+  useEffect(() => {
+    dispatch(fetchDepartments({ page: 1, limit: 200 }))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    dispatch(
+      fetchRosterDetails({ departmentId: selectedId ? selectedId : defaultId, period: period ? period : defaultPeriod })
+    )
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [period, defaultId])
+
   return (
-
     <div>
-        <PageHeader  
-        toggle={toggleDownloadDialog}
-        toggleUpload={toggleUploadDialog}
-        />
+      <Card>
+        <CardHeader title='Filters' />
+        <CardContent>
+          <Grid container spacing={12}>
+            <Grid item xs={12} sm={4}>
+              <CustomTextField
+                select
+                fullWidth
+                label='Department'
+                placeholderText='he'
 
-    <CalendarWrapper
-      className='app-calendar'
-      sx={{
-        boxShadow: skin === 'bordered' ? 0 : 6,
-        ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
-      }}
-    >
-      {/* <SidebarLeft
-        store={store}
-        mdAbove={mdAbove}
-        dispatch={dispatch}
-        calendarApi={calendarApi}
-        calendarsColor={calendarsColor}
-        leftSidebarOpen={leftSidebarOpen}
-        leftSidebarWidth={leftSidebarWidth}
-        handleSelectEvent={handleSelectEvent}
-        handleAllCalendars={handleAllCalendars}
-        handleCalendarsUpdate={handleCalendarsUpdate}
-        handleLeftSidebarToggle={handleLeftSidebarToggle}
-        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
-      /> */}
-      <Box
+                // placeholderText={`${DepartmentsData[defaultId]?.name}`}
+                SelectProps={{ value: departmentId, onChange: (e) => handlechangeDepartment(e) }}
+              >
+                <MenuItem value=''>Select Department</MenuItem>
+                {DepartmentsData?.map(department => (
+                  <MenuItem key={department?.id} value={department?.id}>
+                    {formatFirstLetter(department?.name)}
+                  </MenuItem>
+                ))}
+              </CustomTextField>
+            </Grid>
+
+            <Grid item xs={12} sm={4}>
+              <DatePicker
+
+                // selected={period}
+                dateFormat='MMM y'
+                popperPlacement='bottom-end'
+                showMonthYearPicker
+                minDate={new Date()}
+                onChange={e => {
+                  handleChangePeriod(e)
+                }}
+                placeholderText='MM/YYYY'
+                customInput={
+                  <CustomInput
+                    period={period}
+                    autoComplete='off'
+                    label='Period'
+                  />
+                }
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      <PageHeader toggle={toggleDownloadDialog} toggleUpload={toggleUploadDialog} />
+
+      <CalendarWrapper
+        className='app-calendar'
         sx={{
-          p: 6,
-          pb: 0,
-          flexGrow: 1,
-          borderRadius: 1,
-          boxShadow: 'none',
-          backgroundColor: 'background.paper',
-          ...(mdAbove ? { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } : {})
+          boxShadow: skin === 'bordered' ? 0 : 6,
+          ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
         }}
       >
-        <Calendar
+        
+        <Box
+          sx={{
+            p: 6,
+            pb: 0,
+            flexGrow: 1,
+            borderRadius: 1,
+            boxShadow: 'none',
+            backgroundColor: 'background.paper',
+            ...(mdAbove ? { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 } : {})
+          }}
+        >
+          <Calendar
+            store={RosterData}
+            dispatch={dispatch}
+            direction={direction}
 
-          // store={store}
-          dispatch={dispatch}
-          direction={direction}
+            // updateEvent={updateEvent}
+            calendarApi={calendarApi}
+            calendarsColor={calendarsColor}
+            setCalendarApi={setCalendarApi}
+            handleSelectEvent={handleSelectEvent}
+            handleLeftSidebarToggle={handleLeftSidebarToggle}
+            handleAddEventSidebarToggle={handleAddEventSidebarToggle}
+          />
+        </Box>
+      </CalendarWrapper>
 
-          // updateEvent={updateEvent}
-          calendarApi={calendarApi}
-          calendarsColor={calendarsColor}
-          setCalendarApi={setCalendarApi}
-          handleSelectEvent={handleSelectEvent}
-          handleLeftSidebarToggle={handleLeftSidebarToggle}
-          handleAddEventSidebarToggle={handleAddEventSidebarToggle}
-        />
-      </Box>
-      {/* <AddEventSidebar
-        store={store}
-        dispatch={dispatch}
-        addEvent={addEvent}
-        updateEvent={updateEvent}
-        deleteEvent={deleteEvent}
-        calendarApi={calendarApi}
-        drawerWidth={addEventSidebarWidth}
-        handleSelectEvent={handleSelectEvent}
-        addEventSidebarOpen={addEventSidebarOpen}
-        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
-      /> */}
-    </CalendarWrapper>
-
-      <DownloadTemplateDialog open={openDownloadDialog} anchorEl={anchorEl} handleClose={closeDownloadDialog}/>
-      <UploadRosterDialog open={openUploadDialog} anchorEl={anchorElement} handleClose={closeUploadDialog}/>
+      <DownloadTemplateDialog open={openDownloadDialog} anchorEl={anchorEl} handleClose={closeDownloadDialog} />
+      <UploadRosterDialog open={openUploadDialog} anchorEl={anchorElement} handleClose={closeUploadDialog} />
     </div>
   )
 }

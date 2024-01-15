@@ -32,6 +32,22 @@ code[class*='language-'] {
   transform: translate(45px, 5px)  !important;
 } */
 
+.bg-secondary{
+color: rgb(128, 128, 244);
+}
+
+.bg-primary {
+  color: blue;
+}
+
+.bg-danger {
+  color: red;
+}
+
+.bg-info {
+  color: rgb(241, 241, 117);
+}
+
 .react-datepicker-popper {
   z-index: 5 !important;
 }
