@@ -15,15 +15,17 @@ import Grid from '@mui/material/Grid'
 import KeenSliderWrapper from 'src/@core/styles/libs/keen-slider'
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { colorsProgress } from 'src/configs/colorConfigs'
-import { useSalaryItems } from '../../../hooks/useSalaryItems'
+
 import { useAppDispatch } from '../../../hooks'
-import { deleteSalaryItem, fetchSalaryItems } from '../../../store/apps/salaryItems/asyncthunk'
+
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import NoData from '../../../@core/components/emptyData/NoData'
-import CreateSalaryItem from './CreateSalaryItem'
+
+import CreateDeductionItem from './CreateDeduction'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-import EditSalaryItem from './EditSalaryItem'
+import { deleteDeduction, fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
+import { usedDeductionCategory } from '../../../hooks/usePayroll'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   return {
@@ -38,46 +40,45 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   }
 })
 
-const SalaryItems = () => {
+const Deduction = () => {
   const dispatch = useAppDispatch()
-  const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
+  const [deductioncategoryData, loading] = usedDeductionCategory()
   const [openDialog, setOpenDialog] = useState(false)
   const [fetchStatus, setFetchStatus] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [selectedSalaryItem, setSelectedSalaryItem] = useState(null)
   const [openEditDrawer, setEditDrawer] = useState(false)
-  const [SalaryItemToView, setSalaryItemToView] = useState(null)
+
+  const [selectedDeductionCategory, setSelectedDeductionCategory] = useState(null)
 
   const toggleCreateDialog = () => setOpenDialog(!openDialog)
-  const refetchSalaryItems = () => setFetchStatus(!fetchStatus)
 
   const doDelete = value => {
     setDeleteModal(true)
-    setSelectedSalaryItem(value?.id)
+    setSelectedDeductionCategory(value?.id)
   }
 
   const doCancelDelete = () => {
     setDeleteModal(false)
-    setSelectedSalaryItem(null)
+    setSelectedDeductionCategory(null)
   }
 
   const updateFetch = () => setFetchStatus(!fetchStatus)
 
   const ondeleteClick = () => {
-    dispatch(deleteSalaryItem(selectedSalaryItem))
+    dispatch(deleteDeduction(selectedDeductionCategory))
     updateFetch()
     doCancelDelete()
   }
 
-  const setSalaryItemToEdit = prod => {
-    setEditDrawer(true)
-    setSalaryItemToView(prod)
-  }
+  //   const setSalaryItemToEdit = prod => {
+  //     setEditDrawer(true)
+  //     setSalaryItemToView(prod)
+  //   }
 
-  const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
+  //const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
-    dispatch(fetchSalaryItems())
+    dispatch(fetchDeductionCategory())
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchStatus])
@@ -85,23 +86,21 @@ const SalaryItems = () => {
   return (
     <div>
       <Stack direction='row' justifyContent='space-between'>
-        <Typography variant='h5' color='textSecondary'>
-          Payslips Settings
-        </Typography>
+        <Typography variant='h5' color='textSecondary'></Typography>
 
         <Button onClick={toggleCreateDialog} variant='contained' startIcon={<Icon icon='tabler:square-rounded-plus' />}>
-          Create
+          Create Deductions
         </Button>
       </Stack>
       <KeenSliderWrapper sx={{ mx: 8, my: 6 }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={6} lg={6}>
             <Card>
-              {loadingSalaryItems ? (
+              {loading ? (
                 <CustomSpinner />
               ) : (
                 <CardContent>
-                  {SalaryItemsData?.map((item, index) => (
+                  {deductioncategoryData?.map((item, index) => (
                     <Box key={item?.id} display='flex' flexDirection='column' sx={{ mb: 4 }}>
                       <Box
                         sx={{
@@ -125,7 +124,7 @@ const SalaryItems = () => {
                     </Box>
                   ))}
 
-                  {SalaryItemsData?.length === 0 && (
+                  {deductioncategoryData?.length === 0 && (
                     <Box display='flex' flexDirection='column' sx={{ mb: 4 }}>
                       <NoData />
                     </Box>
@@ -147,7 +146,7 @@ const SalaryItems = () => {
                   </TableHead>
 
                   <TableBody>
-                    {loadingSalaryItems ? (
+                    {loading ? (
                       <TableRow className='text-center'>
                         <TableCell colSpan={6}>
                           <CustomSpinner />
@@ -155,14 +154,14 @@ const SalaryItems = () => {
                       </TableRow>
                     ) : (
                       <Fragment>
-                        {SalaryItemsData?.map(item => (
+                        {deductioncategoryData?.map(item => (
                           <TableRow key={item?.id} hover>
                             <TableCell>{formatFirstLetter(item?.name)}</TableCell>
                             <TableCell align='center'>{`${item?.percentage}%`}</TableCell>
                             <TableCell align='right'>
-                              <IconButton size='small' onClick={() => setSalaryItemToEdit(item)}>
+                              {/* <IconButton size='small' onClick={() => setSalaryItemToEdit(item)}>
                                 <Icon icon='tabler:edit' />
-                              </IconButton>
+                              </IconButton> */}
                               <IconButton size='small' onClick={() => doDelete(item)}>
                                 <Icon icon='tabler:trash' />
                               </IconButton>
@@ -170,7 +169,7 @@ const SalaryItems = () => {
                           </TableRow>
                         ))}
 
-                        {SalaryItemsData?.length === 0 && (
+                        {deductioncategoryData?.length === 0 && (
                           <tr className='text-center'>
                             <td colSpan={6}>
                               <NoData />
@@ -190,23 +189,14 @@ const SalaryItems = () => {
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
 
       {openDialog && (
-        <CreateSalaryItem
+        <CreateDeductionItem
           openDialog={openDialog}
           closeDialog={toggleCreateDialog}
-          refetchSalaryItems={refetchSalaryItems}
-        />
-      )}
-
-      {openEditDrawer && (
-        <EditSalaryItem
-          open={openEditDrawer}
-          closeModal={toggleEditDrawer}
-          refetchSalaryItems={updateFetch}
-          selectedSalaryItem={SalaryItemToView}
+          refetchDeductionCategory={updateFetch}
         />
       )}
     </div>
   )
 }
 
-export default SalaryItems
+export default Deduction
