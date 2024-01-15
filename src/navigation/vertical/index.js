@@ -26,7 +26,7 @@ const navigation = () => {
     },
     {
       title: 'Payroll',
-      icon: 'wpf:add-user',
+      icon: 'fluent:payment-16-regular',
       path: '/apps/payroll'
     },
     {

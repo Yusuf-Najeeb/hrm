@@ -83,7 +83,7 @@ const Deduction = () => {
         <Typography variant='h5' color='textSecondary'></Typography>
 
         <Button onClick={toggleCreateDialog} variant='contained' startIcon={<Icon icon='tabler:square-rounded-plus' />}>
-          Create Deductions
+          Create Deductions Category
         </Button>
       </Stack>
       <KeenSliderWrapper sx={{ mx: 8, my: 6 }}>
