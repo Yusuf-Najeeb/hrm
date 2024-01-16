@@ -107,3 +107,10 @@ export const SalaryItemSchema = yup.object().shape({
     departmentId: yup.number().required('Department Name is required'),
     rosterDate: yup.string().required('Date is required'),
   })
+
+
+  export const deductionsSchema = yup.object().shape({
+    categoryId: yup.number().required('Deduction Category is required'),
+    userId: yup.number().required('Staff is required'),
+    period: yup.string().required('Period is required'),
+  })

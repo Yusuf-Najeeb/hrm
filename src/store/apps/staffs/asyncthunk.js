@@ -9,15 +9,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
     try {
         const response = await axios.get(`/users`, {
           params: {
-            page: query.page,
+            page: query ? query.page : ''
           }
         })
 
+        // console.log(response, 'staffs')
+
         return response
     } catch (error) {
-      console.log(error, 'errorrrr')
 
-        // notifyError('Error Fetching Salary Items')
+        notifyError('Error Fetching Staffs')
     }
   }
   )

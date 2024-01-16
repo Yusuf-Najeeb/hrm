@@ -14,8 +14,8 @@ import departments from 'src/store/apps/departments'
 import staffs from 'src/store/apps/staffs'
 import roles from 'src/store/apps/roles'
 import roster from 'src/store/apps/roster'
-//import deductioncategory from 'src/store/apps/deductioncategory'
 import deductioncategory from '../../src/store/apps/deductionCatergory'
+import deductions from './apps/deductions'
 
 export const store = configureStore({
   reducer: {
@@ -31,7 +31,8 @@ export const store = configureStore({
     staffs,
     roles,
     roster,
-    deductioncategory
+    deductioncategory, 
+    deductions,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

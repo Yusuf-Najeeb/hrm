@@ -13,23 +13,8 @@ import Icon from 'src/@core/components/icon'
 
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 
-// import dayjs from 'dayjs'
-
-// import { DatePicker } from 'antd'
-
-// const { RangePicker } = DatePicker
 
 const PageHeader = ({ toggle, action }) => {
-  const dispatch = useAppDispatch()
-
-  //   const onCalendarChange = (dates) => {
-  //     const startdate = (dates?.[0]).format('YYYY-MM-DD')
-  //     const enddate = (dates?.[1]).format('YYYY-MM-DD')
-
-  //     // console.log(startdate, enddate);
-  //     setStartDate(startdate)
-  //     setEndDate(enddate)
-  //   }
 
   return (
     <Box

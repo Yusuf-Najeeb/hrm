@@ -7,11 +7,11 @@ export const CreateDeductionItem = createAsyncThunk('deductioncategory/createIte
   try {
     const response = await axios.post('/deductions/category', vals)
 
-    notifySuccess('Added deduction')
+    notifySuccess('Created Deduction Category successfully')
 
     return response
   } catch (error) {
-    notifyError('error add deduction')
+    notifyError('Error creating deduction category')
 
     return {
       success: false
@@ -31,19 +31,19 @@ export const fetchDeductionCategory = createAsyncThunk('Deduction/DeductionCateg
   }
 })
 
-export const deleteDeduction = createAsyncThunk('deductioncategory/deleteDeduction', async id => {
+export const deleteDeductionCategory = createAsyncThunk('deductioncategory/deleteDeduction', async id => {
   try {
     const response = await axios.delete(`/deductions/category?id=${id}`)
 
     if (response.data.success) {
-      notifySuccess('Deduction  Deleted Successfully')
+      notifySuccess('Deduction Category Deleted Successfully')
     }
 
     return {
       status: true
     }
   } catch (error) {
-    notifyError('Error deleting Deduction')
+    notifyError('Error Deleting Deduction Category')
 
     return {
       status: false
