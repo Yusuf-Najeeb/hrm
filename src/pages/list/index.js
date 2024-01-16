@@ -1,6 +1,6 @@
 // ** React Imports
 //import { useState, useEffect, forwardRef } from 'react'
-import StepperLinearAndValidation from 'src/views/forms/form-wizard/StepperLinearAndValidation'
+// import StepperLinearAndValidation from 'src/views/forms/form-wizard/StepperLinearAndValidation'
 
 import Grid from '@mui/material/Grid'
 
@@ -13,7 +13,7 @@ const InvoiceList = () => {
         <Typography variant='h6'>Linear Stepper with Validation</Typography>
       </Grid>
       <Grid item xs={12}>
-        <StepperLinearAndValidation />
+        {/* <StepperLinearAndValidation /> */}
       </Grid>
     </Grid>
   )

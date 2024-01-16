@@ -27,7 +27,8 @@ import { EditorState } from 'draft-js'
 // ** Custom Components Imports
 import OptionsMenu from 'src/@core/components/option-menu'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
+
+// import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 
 // ** Styled Component Imports
 import { EditorWrapper } from 'src/@core/styles/libs/react-draft-wysiwyg'
@@ -347,7 +348,8 @@ const ComposePopup = props => {
           '& .rdw-editor-wrapper, & .rdw-option-wrapper': { border: 0 }
         }}
       >
-        <ReactDraftWysiwyg
+
+        {/* <ReactDraftWysiwyg
           editorState={messageValue}
           onEditorStateChange={editorState => setMessageValue(editorState)}
           placeholder='Write your message...'
@@ -366,7 +368,8 @@ const ComposePopup = props => {
               options: ['link']
             }
           }}
-        />
+        /> */}
+        
       </EditorWrapper>
       <Box
         sx={{
