@@ -9,9 +9,9 @@ import Icon from 'src/@core/components/icon'
 
 // ** Custom Components Imports
 import CustomTextField from 'src/@core/components/mui/text-field'
-import CustomAvatar from 'src/@core/components/mui/avatar'
 import { Box, Button, CircularProgress, Grid, MenuItem, Popover, Typography } from '@mui/material'
 import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 // Custom Hooks
 import { useDepartments } from '../../../hooks/useDepartments'
@@ -21,10 +21,12 @@ import { useAppDispatch } from '../../../hooks'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { downloadRosterSchema } from 'src/@core/Formschema'
+import axios from 'axios'
 
+// Custom Functions
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
-import axios from 'axios'
+
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { notifyWarn } from 'src/@core/components/toasts/notifyWarn'

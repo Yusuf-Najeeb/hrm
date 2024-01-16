@@ -28,17 +28,6 @@ import EditDepartment from './EditDepartment'
 const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
 
-  //   const paging = useAppSelector(store => store.expenditure.expenditurePaging)
-  //   const [page, setPage] = useState(0)
-  // const [openCanvas, setOpenCanvas] = useState(false)
-  // const [openPayModal, setOpenPayModal] = useState(false)
-  // const [searchVal, setSearchVal] = useState('')
-  // const [startDate, setStartDate] = useState<string>(moment(new Date()).startOf('year').format('YYYY-MM-DD'))
-  // const [endDate, setEndDate] = useState<string>(moment(new Date()).endOf('year').format('YYYY-MM-DD'))
-  // const [showcreateBtn, setShowCreateBtn] = useState<boolean>(false)
-
-  //   const [DepartmentsData, loadingDepartments] = useAppSelector(store => store.departments.DepartmentsData)
-
   const [DepartmentsData, loadingDepartments, paging] = useDepartments()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)

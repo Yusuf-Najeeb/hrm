@@ -19,6 +19,7 @@ import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 import Icon from 'src/@core/components/icon'
 import PayrollTable from './PayrollTable'
 import Deduction from './DeductionCategory'
+import DeductionsTable from './Deductions'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -75,7 +76,7 @@ const PayrollTab = ({ tab }) => {
 
   const tabContentList = {
     payroll: <PayrollTable />,
-    deductions: <PayrollTable />,
+    deductions: <DeductionsTable />,
     deductionCategories: <Deduction />
   }
 

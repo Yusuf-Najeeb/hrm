@@ -22,10 +22,11 @@ import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import NoData from '../../../@core/components/emptyData/NoData'
 
-import CreateDeductionItem from './CreateDeduction'
+import CreateDeductionItem from './CreateDeductionCategory'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-import { deleteDeduction, fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
-import { usedDeductionCategory } from '../../../hooks/usePayroll'
+import { deleteDeductionCategory, fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
+import { useDeductionCategory } from '../../../hooks/useDeductionCategory'
+import CreateDeductionCategory from './CreateDeductionCategory'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   return {
@@ -42,7 +43,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
 
 const Deduction = () => {
   const dispatch = useAppDispatch()
-  const [deductioncategoryData, loading] = usedDeductionCategory()
+  const [deductioncategoryData, loading] = useDeductionCategory()
   const [openDialog, setOpenDialog] = useState(false)
   const [fetchStatus, setFetchStatus] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -65,17 +66,10 @@ const Deduction = () => {
   const updateFetch = () => setFetchStatus(!fetchStatus)
 
   const ondeleteClick = () => {
-    dispatch(deleteDeduction(selectedDeductionCategory))
+    dispatch(deleteDeductionCategory(selectedDeductionCategory))
     updateFetch()
     doCancelDelete()
   }
-
-  //   const setSalaryItemToEdit = prod => {
-  //     setEditDrawer(true)
-  //     setSalaryItemToView(prod)
-  //   }
-
-  //const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
     dispatch(fetchDeductionCategory())
@@ -189,7 +183,7 @@ const Deduction = () => {
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
 
       {openDialog && (
-        <CreateDeductionItem
+        <CreateDeductionCategory
           openDialog={openDialog}
           closeDialog={toggleCreateDialog}
           refetchDeductionCategory={updateFetch}

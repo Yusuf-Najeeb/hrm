@@ -15,7 +15,7 @@ const navigation = () => {
       path: '/apps/departments'
     },
     {
-      title: 'Staff & Payroll',
+      title: 'Staff',
       icon: 'tabler:user-hexagon',
       path: '/apps/staff'
     },

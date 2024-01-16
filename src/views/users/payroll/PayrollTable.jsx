@@ -30,7 +30,7 @@ import { useDepartments } from '../../../hooks/useDepartments'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 
 import EditDepartment from '../departments/EditDepartment'
-import CreateDeduction from './CreateDeduction'
+import CreateDeduction from './CreateDeductionCategory'
 import PageHeader from '../components/PageHeader'
 
 const PayrollTable = () => {
