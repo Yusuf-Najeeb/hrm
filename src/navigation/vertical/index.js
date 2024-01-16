@@ -15,7 +15,7 @@ const navigation = () => {
       path: '/apps/departments'
     },
     {
-      title: 'Staff',
+      title: 'Staffs',
       icon: 'tabler:user-hexagon',
       path: '/apps/staffs'
     },
