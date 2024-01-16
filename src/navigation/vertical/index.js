@@ -15,9 +15,9 @@ const navigation = () => {
       path: '/apps/departments'
     },
     {
-      title: 'Staff',
+      title: 'Staffs',
       icon: 'tabler:user-hexagon',
-      path: '/apps/staff'
+      path: '/apps/staffs'
     },
     {
       title: 'New Staff',
@@ -35,11 +35,11 @@ const navigation = () => {
       path: '/apps/duty-roster'
     },
 
-    {
-      title: 'Leave Manager',
-      icon: 'tabler:file',
-      path: '/apps/Leave-Manager'
-    },
+    // {
+    //   title: 'Leave Manager',
+    //   icon: 'tabler:file',
+    //   path: '/apps/Leave-Manager'
+    // },
 
     // {
     //   title: 'Attendence',
