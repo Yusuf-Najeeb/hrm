@@ -32,6 +32,17 @@ export const fetchDeductions = createAsyncThunk('deductions/fetch ', async (peri
   }
 })
 
+export const fetchDeductionsForOneUser = async (id, period) => {
+    try {
+      const response = await axios.get(`/deductions?period=${period}&userId=${id}`)
+  
+      return response?.data.data
+    } catch (error) {
+  
+      notifyError('Error Fetching Deductions')
+    }
+  }
+
 export const deleteDeduction = createAsyncThunk('/delete-deduction', async (id) => {
   try {
     const response = await axios.delete(`/deductions?id=${id}`)

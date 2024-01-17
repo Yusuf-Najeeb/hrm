@@ -26,6 +26,7 @@ export const authSlice = createSlice({
     })
     builder.addCase(LoginUser.fulfilled, (state, action) => {
       const { token, ...restofData } = action.payload.data
+      const userRoleObject = restofData?.role
       state.loading = false
       state.user = restofData
 

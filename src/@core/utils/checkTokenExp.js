@@ -8,10 +8,9 @@ const checkTokenExp = (token) => {
     const decodedToken = jwtDecode.jwtDecode(token)
 
     if (decodedToken.exp * 1000 < Date.now()) {
-      console.log('Time Expired')
 
       if (typeof window !== 'undefined') {
-        window.localStorage.removeItem('access-token')
+        window.localStorage.removeItem('accessToken')
 
         return (window.location.href = '/login')
       }
@@ -20,7 +19,7 @@ const checkTokenExp = (token) => {
     }
   } catch (error) {
     console.log(error, 'error')
-    window.localStorage.removeItem('access-token')
+    window.localStorage.removeItem('accessToken')
 
     return (window.location.href = '/login')
   }

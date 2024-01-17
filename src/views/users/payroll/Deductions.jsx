@@ -23,28 +23,26 @@ import { useDeductions } from '../../../hooks/useDeductions'
 import PageHeader from '../components/PageHeader'
 import { deleteDeduction, fetchDeductions } from '../../../store/apps/deductions/asyncthunk'
 import CreateDeduction from './CreateDeduction'
+import { getUserRole } from '../../../@core/utils/checkUserRole'
 
 const DeductionsTable = () => {
 
   // Hooks  
   const dispatch = useAppDispatch()
+  const [deductionsData, loading, ] = useDeductions()
 
   // States
-  const [deductionsData, loading, ] = useDeductions()
+ 
   const [deduction, setDeduction] = useState(null)
   const [addDeductionOpen, setDeductionOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDeduction, setSelectedDeduction] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
-
-  const closeCanvas = () => {
-    setOpenCanvas(false)
-    setOpenPayModal(false)
-    setDeduction(null)
-  }
+  const activeUser = getUserRole()
 
   const doDelete = (value) => {
     setDeleteModal(true)
@@ -64,8 +62,15 @@ const DeductionsTable = () => {
     doCancelDelete()
   }
 
-
   const toggleDeductionDrawer = () => setDeductionOpen(!addDeductionOpen)
+
+
+  useEffect(()=>{
+    if(activeUser?.role?.name == 'admin'){
+        setIsAdmin(true)
+    }
+   
+  },[activeUser])
 
   useEffect(() => {
     dispatch(fetchDeductions(defaultPeriod))
@@ -75,7 +80,7 @@ const DeductionsTable = () => {
 
   return (
     <div>
-      <PageHeader action='Create Deduction' toggle={toggleDeductionDrawer} />
+      <PageHeader action='Create Deduction' toggle={toggleDeductionDrawer} /> 
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -91,7 +96,7 @@ const DeductionsTable = () => {
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTIONS
-              </TableCell>
+              </TableCell> 
             </TableRow>
           </TableHead>
           <TableBody>
@@ -102,8 +107,9 @@ const DeductionsTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
+
               <Fragment>
-                {deductionsData?.map((deduction, i) => (
+                {  deductionsData?.map((deduction, i) => (
                   <TableRow hover role='checkbox' key={deduction.id}>
                     <TableCell align='left'>{i + 1}</TableCell>
                     {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
@@ -114,9 +120,10 @@ const DeductionsTable = () => {
                       <IconButton size='small' onClick={() => doDelete(deduction)}>
                         <Icon icon='tabler:trash' />
                       </IconButton>
-                    </TableCell>
+                    </TableCell> 
                   </TableRow>
-                ))}
+                )) 
+                }
 
                 {deductionsData?.length === 0 && (
                   <tr className='text-center'>
@@ -159,3 +166,5 @@ const DeductionsTable = () => {
 }
 
 export default DeductionsTable
+
+

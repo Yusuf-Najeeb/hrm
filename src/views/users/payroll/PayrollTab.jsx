@@ -13,13 +13,13 @@ import TabContext from '@mui/lab/TabContext'
 
 import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import MuiTabList, { TabListProps } from '@mui/lab/TabList'
+import MuiTabList from '@mui/lab/TabList'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import PayrollTable from './PayrollTable'
 import Deduction from './DeductionCategory'
-import DeductionsTable from './Deductions'
+import DeductionsHome from './DeductionsHome'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -76,7 +76,7 @@ const PayrollTab = ({ tab }) => {
 
   const tabContentList = {
     payroll: <PayrollTable />,
-    deductions: <DeductionsTable />,
+    deductions: <DeductionsHome />,
     deductionCategories: <Deduction />
   }
 

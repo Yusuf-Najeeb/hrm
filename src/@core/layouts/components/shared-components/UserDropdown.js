@@ -2,7 +2,7 @@
 import { useState, Fragment } from 'react'
 
 // ** Next Import
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -18,7 +18,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Icon from 'src/@core/components/icon'
 
 // ** Context
-import { useAuth } from 'src/hooks/useAuth'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -77,15 +76,9 @@ const UserDropdown = props => {
   }
 
   const handleLogout = () => {
-    const handleLogout = () => {
-      window.localStorage.removeItem()
+    window.localStorage.removeItem('accessToken')
 
-      router.push('/login')
-    }
-    
-    // logout()
-
-    handleDropdownClose()
+    handleDropdownClose('/login')
   }
 
   return (
