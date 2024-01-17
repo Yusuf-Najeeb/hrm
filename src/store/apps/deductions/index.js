@@ -8,7 +8,7 @@ const initialState = {
  
 }
 
-export const deductioncategory = createSlice({
+export const deduction = createSlice({
   name: 'deductions',
   initialState,
   reducers: {},
@@ -20,7 +20,7 @@ export const deductioncategory = createSlice({
       state.loading = false
 
       state.deductionsData = action?.payload?.data?.data
-      
+
     //   state.Paging = action?.payload?.data?.paging
     })
     builder.addCase(fetchDeductions.rejected, state => {
@@ -29,4 +29,4 @@ export const deductioncategory = createSlice({
   }
 })
 
-export default deductioncategory.reducer
+export default deduction.reducer

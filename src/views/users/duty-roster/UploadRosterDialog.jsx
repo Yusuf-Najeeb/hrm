@@ -166,7 +166,7 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
                       value={value}
                       onChange={onChange}
                       autoComplete='off'
-                      label='Date'
+                      label='Period'
                       error={Boolean(errors.rosterDate)}
                       {...(errors.rosterDate && { helperText: 'Date is required' })}
                     />

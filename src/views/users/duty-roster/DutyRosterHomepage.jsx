@@ -90,7 +90,7 @@ const DutyRosterHomepage = () => {
 
  
 
-  const handlechangeDepartment = (e) => {
+  const handleChangeDepartment = (e) => {
     setDepartmentId(e.target.value)
   }
 
@@ -165,7 +165,7 @@ const DutyRosterHomepage = () => {
                 placeholderText='he'
 
                 // placeholderText={`${DepartmentsData[defaultId]?.name}`}
-                SelectProps={{ value: departmentId, onChange: (e) => handlechangeDepartment(e) }}
+                SelectProps={{ value: departmentId, onChange: (e) => handleChangeDepartment(e) }}
               >
                 <MenuItem value=''>Select Department</MenuItem>
                 {DepartmentsData?.map(department => (
