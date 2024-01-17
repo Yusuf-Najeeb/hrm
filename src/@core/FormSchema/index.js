@@ -114,3 +114,7 @@ export const SalaryItemSchema = yup.object().shape({
     userId: yup.number().required('Staff is required'),
     period: yup.string().required('Period is required'),
   })
+
+  export const requirePeriod = yup.object().shape({
+    period: yup.string().required('Period is required')
+  })

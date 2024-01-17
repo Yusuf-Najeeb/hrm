@@ -141,6 +141,7 @@ export const  formatMonthYear = (date)=> {
 
 }
 
+
 export const parseClass = item => {
 	if (item === 'off' || !item || item === '') {
 		return 'bg-info';

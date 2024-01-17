@@ -17,6 +17,8 @@ import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
 import {  fetchDeductionsForOneUser } from '../../../store/apps/deductions/asyncthunk'
+import { findDeductionCategory } from '../../../@core/utils/utils'
+import { getUserRole } from '../../../@core/utils/checkUserRole'
 
 
 const DeductionsTableForNonAdminStaff = () => {
@@ -27,6 +29,7 @@ const DeductionsTableForNonAdminStaff = () => {
   const [loading, setLoading] = useState(true)
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
+  const activeUser = getUserRole()
 
   useEffect(()=>{
     fetchDeductionsForOneUser(activeUser?.id, defaultPeriod).then((res)=>{
@@ -38,7 +41,7 @@ const DeductionsTableForNonAdminStaff = () => {
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[activeUser])
 
   return (
     <div>
@@ -68,14 +71,20 @@ const DeductionsTableForNonAdminStaff = () => {
             ) : (
 
               <Fragment>
-               {activeUserDeductions?.map((deduction, i) => (
+               {activeUserDeductions?.map((deduction, i) => {
+                const deductionCategoryId = deduction?.categoryId
+                const matchingDeductionCategory = findDeductionCategory(deductioncategoryData, deductionCategoryId);
+                const deductionCategoryName = formatFirstLetter(matchingDeductionCategory?.name)
+
+                return (
+
                   <TableRow hover role='checkbox' key={deduction.id}>
                     <TableCell align='left'>{i + 1}</TableCell>
                     {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
-                    <TableCell align='left'>Lateness</TableCell>
+                    <TableCell align='left'>{deductionCategoryName ? deductionCategoryName : ''}</TableCell>
                     <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
                   </TableRow>
-                )) }
+                )}) }
 
                 {activeUserDeductions?.length === 0 && (
                   <tr className='text-center'>

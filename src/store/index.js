@@ -15,8 +15,9 @@ import departments from 'src/store/apps/departments'
 import staffs from 'src/store/apps/staffs'
 import roles from 'src/store/apps/roles'
 import roster from 'src/store/apps/roster'
-import deductioncategory from '../../src/store/apps/deductionCatergory'
-import deductions from './apps/deductions'
+import deductioncategory from '/src/store/apps/deductionCatergory'
+import deductions from 'src/store/apps/deductions'
+import payslip from 'src/store/apps/payslip'
 
 export const store = configureStore({
   reducer: {
@@ -24,8 +25,6 @@ export const store = configureStore({
     chat,
     email,
     invoice,
-
-    // calendar,
     permissions,
     auth,
     salaryItems,
@@ -35,6 +34,7 @@ export const store = configureStore({
     roster,
     deductioncategory, 
     deductions,
+    payslip
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

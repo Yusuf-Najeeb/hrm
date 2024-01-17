@@ -14,7 +14,7 @@ import Icon from 'src/@core/components/icon'
 import TablePagination from '@mui/material/TablePagination'
 
 import CustomChip from 'src/@core/components/mui/chip'
-import { useAppDispatch,  } from '../../../hooks'
+import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
@@ -23,28 +23,29 @@ import { useDeductions } from '../../../hooks/useDeductions'
 import PageHeader from '../components/PageHeader'
 import { deleteDeduction, fetchDeductions } from '../../../store/apps/deductions/asyncthunk'
 import CreateDeduction from './CreateDeduction'
-import { getUserRole } from '../../../@core/utils/checkUserRole'
+import { useDeductionCategory } from '../../../hooks/useDeductionCategory'
+import { findDeductionCategory } from '../../../@core/utils/utils'
 
 const DeductionsTable = () => {
-
-  // Hooks  
+  // Hooks
   const dispatch = useAppDispatch()
-  const [deductionsData, loading, ] = useDeductions()
+  const [deductionsData, loading] = useDeductions()
+  const [deductioncategoryData] = useDeductionCategory()
+
+  console.log(deductionsData, 'deductions data')
+  console.log(deductioncategoryData, 'deductions category data')
 
   // States
- 
+
   const [deduction, setDeduction] = useState(null)
   const [addDeductionOpen, setDeductionOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDeduction, setSelectedDeduction] = useState(null)
-  const [isAdmin, setIsAdmin] = useState(false)
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
-  const activeUser = getUserRole()
-
-  const doDelete = (value) => {
+  const doDelete = value => {
     setDeleteModal(true)
     setSelectedDeduction(value?.id)
   }
@@ -64,14 +65,6 @@ const DeductionsTable = () => {
 
   const toggleDeductionDrawer = () => setDeductionOpen(!addDeductionOpen)
 
-
-  useEffect(()=>{
-    if(activeUser?.role?.name == 'admin'){
-        setIsAdmin(true)
-    }
-   
-  },[activeUser])
-
   useEffect(() => {
     dispatch(fetchDeductions(defaultPeriod))
 
@@ -80,7 +73,7 @@ const DeductionsTable = () => {
 
   return (
     <div>
-      <PageHeader action='Create Deduction' toggle={toggleDeductionDrawer} /> 
+      <PageHeader action='Create Deduction' toggle={toggleDeductionDrawer} />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -96,7 +89,7 @@ const DeductionsTable = () => {
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTIONS
-              </TableCell> 
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -107,23 +100,27 @@ const DeductionsTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-
               <Fragment>
-                {  deductionsData?.map((deduction, i) => (
-                  <TableRow hover role='checkbox' key={deduction.id}>
-                    <TableCell align='left'>{i + 1}</TableCell>
-                    {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
-                    <TableCell align='left'>Lateness</TableCell>
-                    <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
+                {deductionsData?.map((deduction, i) => {
+                  const deductionCategoryId = deduction?.categoryId
+                  const matchingDeductionCategory = findDeductionCategory(deductioncategoryData, deductionCategoryId)
+                  const deductionCategoryName = formatFirstLetter(matchingDeductionCategory?.name)
 
-                    <TableCell align='left' sx={{ display: 'flex' }}>
-                      <IconButton size='small' onClick={() => doDelete(deduction)}>
-                        <Icon icon='tabler:trash' />
-                      </IconButton>
-                    </TableCell> 
-                  </TableRow>
-                )) 
-                }
+                  return (
+                    <TableRow hover role='checkbox' key={deduction.id}>
+                      <TableCell align='left'>{i + 1}</TableCell>
+                      {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
+                      <TableCell align='left'>{deductionCategoryName}</TableCell>
+                      <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
+
+                      <TableCell align='left' sx={{ display: 'flex' }}>
+                        <IconButton size='small' onClick={() => doDelete(deduction)}>
+                          <Icon icon='tabler:trash' />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
 
                 {deductionsData?.length === 0 && (
                   <tr className='text-center'>
@@ -138,23 +135,9 @@ const DeductionsTable = () => {
         </Table>
       </TableContainer>
 
-      {/* <TablePagination
-        page={page}
-        component='div'
-        count={Paging?.totalItems}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handleChangePage}
-        rowsPerPageOptions={[5, 10, 20]}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
 
-      {/* 
-
-       */}
-
-    <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
-
-        {addDeductionOpen && (
+      {addDeductionOpen && (
         <CreateDeduction
           openDialog={addDeductionOpen}
           closeDialog={toggleDeductionDrawer}
@@ -166,5 +149,3 @@ const DeductionsTable = () => {
 }
 
 export default DeductionsTable
-
-
