@@ -31,20 +31,17 @@ const StaffsTable = () => {
   const dispatch = useAppDispatch()
 
   const router = useRouter()
-
   const [StaffsData, loading, paging] = useStaffs()
+
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [staff, setStaff] = useState(null)
   const [addStaffOpen, setAddstaffOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
-
   const [openViewDrawer, setViewDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedStaff, setSelectedStaff] = useState(null)
-  
   const [staffToView, setStaffToView] = useState(null)
-
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
 
   const closeCanvas = () => {
@@ -82,7 +79,7 @@ const StaffsTable = () => {
   const toggleEditDrawer = () => setViewDrawer(!openViewDrawer)
 
   const navigateToCreateStaffPage = ()=>{
-    router.push('/apps/new-staff/list/')
+    router.push('/apps/new-staff/')
   } 
 
   useEffect(() => {

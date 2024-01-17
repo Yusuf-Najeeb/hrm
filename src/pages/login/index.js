@@ -126,6 +126,7 @@ const LoginPage = () => {
     try {
       const resp = await dispatch(LoginUser({ username, password }))
       if (resp.payload?.success) {
+        console.log(resp, 'login response')
         router.replace('/dashboards/analytics')
       }
     } catch (error) {
