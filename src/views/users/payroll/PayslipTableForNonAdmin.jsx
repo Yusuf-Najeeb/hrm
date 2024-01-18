@@ -21,7 +21,7 @@ import CustomSpinner from '../../../@core/components/custom-spinner'
 import {  formatFirstLetter, formatMonthYear,  } from '../../../@core/utils/format'
 import { fetchPayslipForOneStaff, printPayslip } from '../../../store/apps/payslip/asyncthunk'
 import { useDepartments } from '../../../hooks/useDepartments'
-import {  Tooltip } from '@mui/material'
+import {  CircularProgress, Tooltip } from '@mui/material'
 import { findDepartment } from '../../../@core/utils/utils'
 import { getUserRole } from '../../../@core/utils/checkUserRole'
 
@@ -33,12 +33,22 @@ const PayslipTableForNonAdmin = () => {
   const [activeUserPayslips, setActiveUserPayslips] = useState([])
   const [loading, setLoading] = useState(true)
   const [refetch, setFetch] = useState(false)
+  const [isPrinting, setIsPrinting] = useState(false)
+  const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
+  const [payslipDownloadLink, setPayslipDownloadLink] = useState()
+  const [printingPayslipId, setPrintingPayslipId] = useState(null);
 
   const activeUser = getUserRole()
 
   const printPayslipItem = (selectedId, period) => {
+    setIsPrinting(true)
+    setPrintingPayslipId(selectedId)
     printPayslip(selectedId, period).then(res => {
-      console.log(res, 'print res')
+        setIsPayslipAvailable(true)
+        setPayslipDownloadLink(res.data.url)
+      setIsPrinting(false)
+    }).catch(()=>{
+        setIsPrinting(false)
     })
   }
 
@@ -113,17 +123,15 @@ const PayslipTableForNonAdmin = () => {
                       {/* <TableCell align='left'>{payslip?.totalAllowance?.toLocaleString() || '--'}</TableCell> */}
                       <TableCell align='center'>{payslip?.totalDeduction?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='left'>{payslip?.amount?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='center' sx={{ display: 'flex' }}>
-                        <Tooltip title='View more details' placement='top'>
-                          <IconButton size='small'>
-                            <Icon icon='tabler:eye' />
-                          </IconButton>
-                        </Tooltip>
+                      <TableCell align='center' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        
+
+                        {printingPayslipId === payslip?.user?.id && isPrinting  ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 
                         <Tooltip title='Print Payslip' placement='top'>
                           <IconButton size='small' onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}>
                             <Icon icon='material-symbols:print-outline' />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip>}
                       </TableCell>
                     </TableRow>
                   )

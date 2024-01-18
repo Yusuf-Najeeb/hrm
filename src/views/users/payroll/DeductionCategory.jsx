@@ -27,6 +27,7 @@ import DeleteDialog from '../../../@core/components/delete-dialog'
 import { deleteDeductionCategory, fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
 import { useDeductionCategory } from '../../../hooks/useDeductionCategory'
 import CreateDeductionCategory from './CreateDeductionCategory'
+import { getUserRole } from '../../../@core/utils/checkUserRole'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme, bgc }) => {
   return {
@@ -48,8 +49,10 @@ const Deduction = () => {
   const [fetchStatus, setFetchStatus] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [openEditDrawer, setEditDrawer] = useState(false)
-
   const [selectedDeductionCategory, setSelectedDeductionCategory] = useState(null)
+
+  const activeUser = getUserRole()
+
 
   const toggleCreateDialog = () => setOpenDialog(!openDialog)
 
@@ -82,9 +85,9 @@ const Deduction = () => {
       <Stack direction='row' justifyContent='space-between'>
         <Typography variant='h5' color='textSecondary'></Typography>
 
-        <Button onClick={toggleCreateDialog} variant='contained' startIcon={<Icon icon='tabler:square-rounded-plus' />}>
+       {activeUser?.role?.name == 'admin' ?  <Button onClick={toggleCreateDialog} variant='contained' startIcon={<Icon icon='tabler:square-rounded-plus' />}>
           Create Deductions Category
-        </Button>
+        </Button> : null}
       </Stack>
       <KeenSliderWrapper sx={{ mx: 8, my: 6 }}>
         <Grid container spacing={4}>

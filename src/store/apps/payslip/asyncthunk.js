@@ -39,15 +39,8 @@ export const sendPayslip = async (vals) => {
     try {
         const {data} = await axios.patch(`/payslip?id=${id}&period=${period}`)
     
-        if (data?.success) {
-            console.log('success')
-
-        //   notifySuccess('Deduction  Deleted Successfully')
-        }
     
-        return {
-          status: true
-        }
+       return data
       } catch (error) {
         notifyError('Error printing payslip')
       }
