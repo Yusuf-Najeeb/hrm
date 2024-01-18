@@ -55,11 +55,12 @@ const navigation = () => {
       icon: 'tabler:arrow-fork',
       path: '/apps/roles'
     },
-    {
-      title: 'Permissions',
-      icon: 'tabler:arrow-left-right',
-      path: '/apps/permissions'
-    },
+    
+    // {
+    //   title: 'Permissions',
+    //   icon: 'tabler:arrow-left-right',
+    //   path: '/apps/permissions'
+    // },
 
     // {
     //   title: 'Payments history',
