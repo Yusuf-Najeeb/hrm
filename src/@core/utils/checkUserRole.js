@@ -2,7 +2,7 @@ export const getUserRole = ()=>{
     let activeUser 
   
     if (typeof window !== 'undefined') {
-      activeUser = JSON.parse(localStorage.getItem('loggedInUser') || {})
+      activeUser = JSON.parse(localStorage.getItem('loggedInUser')) || {}
     }
 
   

@@ -26,7 +26,7 @@ import { fetchPayslips, printPayslip } from '../../../store/apps/payslip/asyncth
 import { useDepartments } from '../../../hooks/useDepartments'
 import GeneratePayslip from './GeneratePayslip'
 import PageHeader from './PayslipPageHeader'
-import { Card, CardContent, CardHeader, Grid, MenuItem, Tooltip } from '@mui/material'
+import { Card, CardContent, CardHeader, CircularProgress, Grid, MenuItem, Tooltip } from '@mui/material'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
 
@@ -45,8 +45,10 @@ const PayslipTable = () => {
   const [selectedpayslip, setSelectedpayslip] = useState(null)
   const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
   const [departmentId, setDepartmentId] = useState()
-
-  const [departmentName, setDepartmentName] = useState('')
+  const [isPrinting, setIsPrinting] = useState(false)
+  const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
+  const [payslipDownloadLink, setPayslipDownloadLink] = useState()
+  const [printingPayslipId, setPrintingPayslipId] = useState(null);
 
   const defaultId = getFirstId(DepartmentsData)
 
@@ -59,8 +61,14 @@ const PayslipTable = () => {
   }
 
   const printPayslipItem = (selectedId, period) => {
+    setIsPrinting(true)
+    setPrintingPayslipId(selectedId)
     printPayslip(selectedId, period).then(res => {
-      console.log(res, 'print res')
+        setIsPayslipAvailable(true)
+        setPayslipDownloadLink(res.data.url)
+      setIsPrinting(false)
+    }).catch(()=>{
+        setIsPrinting(false)
     })
   }
 
@@ -75,6 +83,14 @@ const PayslipTable = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch, defaultId, departmentId])
+
+  useEffect(()=>{
+    if ( isPayslipDownloadLinkAvailable) {
+    //   window.location.href = payslipDownloadLink  
+    window.open(payslipDownloadLink, '_blank');
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPayslipDownloadLinkAvailable])
 
   return (
     <div>
@@ -164,17 +180,15 @@ const PayslipTable = () => {
                       {/* <TableCell align='left'>{payslip?.totalAllowance?.toLocaleString() || '--'}</TableCell> */}
                       <TableCell align='center'>{payslip?.totalDeduction?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='left'>{payslip?.amount?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='center' sx={{ display: 'flex' }}>
-                        <Tooltip title='View more details' placement='top'>
-                          <IconButton size='small'>
-                            <Icon icon='tabler:eye' />
-                          </IconButton>
-                        </Tooltip>
+                      <TableCell align='center' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        
+
+                        {printingPayslipId === payslip?.user?.id && isPrinting  ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 
                         <Tooltip title='Print Payslip' placement='top'>
                           <IconButton size='small' onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}>
                             <Icon icon='material-symbols:print-outline' />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip>}
                       </TableCell>
                     </TableRow>
                   )
