@@ -13,8 +13,7 @@ import Icon from 'src/@core/components/icon'
 
 import TablePagination from '@mui/material/TablePagination'
 
-import CustomChip from 'src/@core/components/mui/chip'
-import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteRole, fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'

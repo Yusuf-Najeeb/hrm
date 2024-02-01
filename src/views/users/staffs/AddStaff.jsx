@@ -1,11 +1,11 @@
 // ** React Imports
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Step from '@mui/material/Step'
 import Grid from '@mui/material/Grid'
+import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Stepper from '@mui/material/Stepper'
@@ -14,9 +14,35 @@ import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
+import { styled } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import MuiStep from '@mui/material/Step'
 import InputAdornment from '@mui/material/InputAdornment'
-import StepperWrapper from 'src/@core/styles/mui/stepper'
+
 import { ButtonStyled } from '../../../@core/components/mui/button/ButtonStyledComponent'
+
+
+// ** Icon Imports
+import Icon from 'src/@core/components/icon'
+
+// ** Custom Components Imports
+
+import StepperCustomDot from '../../forms/form-wizard/StepperCustomDot'
+import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomTextField from 'src/@core/components/mui/text-field'
+
+// ** Hook Import
+import { useSettings } from 'src/@core/hooks/useSettings'
+
+// ** Util Import
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+
+// ** Styled Component
+import StepperWrapper from 'src/@core/styles/mui/stepper'
+import { Dialog, DialogContent } from '@mui/material'
+import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { useDepartments } from '../../../hooks/useDepartments'
+import { useAppDispatch } from '../../../hooks'
 
 // ** Third Party Imports
 import { useForm, Controller } from 'react-hook-form'
@@ -26,68 +52,100 @@ import axios from 'axios'
 // React Hook Form Schema
 import { personalInfoSchema , workInfoSchema, nextOfKinSchema} from 'src/@core/Formschema'
 
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
 
 // ** Custom Components Imports
-import StepperCustomDot from '../../forms/form-wizard/StepperCustomDot'
-import CustomTextField from 'src/@core/components/mui/text-field'
+
 import FormController from '../components/FormController'
-import CreateDepartment from '../../users/departments/CreateDepartment'
 
 // React Hook Form Utilities
 import { defaultNextOfKinValues, defaultPersonalValues, defaultWorkInfoValues } from '../../../@core/FormSchema/formDefaultvalues'
 
-// Custom Hooks
-import { useDepartments } from '../../../hooks/useDepartments'
-import { useAppDispatch } from '../../../hooks'
+
 
 // Others
 import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
-import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { uploadImage } from '../../../store/apps/upload'
+import { steps } from '../../../@core/FormSchema/utils'
 
-const steps = [
-  {
-    title: 'Personal Info',
-    subtitle: 'Setup Information'
+
+const CustomCloseButton = styled(IconButton)(({ theme }) => ({
+    top: 0,
+    right: 0,
+    color: 'grey.500',
+    position: 'absolute',
+    boxShadow: theme.shadows[2],
+    transform: 'translate(10px, -10px)',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: `${theme.palette.background.paper} !important`,
+    transition: 'transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out',
+    '&:hover': {
+      transform: 'translate(7px, -5px)'
+    }
+  }))
+
+const Step = styled(MuiStep)(({ theme }) => ({
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(4),
+  '&:first-of-type': {
+    paddingLeft: 0
   },
-  {
-    title: 'Work Information',
-    subtitle: 'Add Staff Official Information'
+  '&:last-of-type': {
+    paddingRight: 0
   },
-  {
-    title: 'Next of Kin Details',
-    subtitle: "Add Staff's Next of Kin Details"
+  '& .MuiStepLabel-iconContainer': {
+    display: 'none'
+  },
+  '& .step-subtitle': {
+    color: `${theme.palette.text.disabled} !important`
+  },
+  '& + svg': {
+    color: theme.palette.text.disabled
+  },
+  '&.Mui-completed .step-title': {
+    color: theme.palette.text.disabled
+  },
+  '&.Mui-completed + svg': {
+    color: theme.palette.primary.main
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: 0,
+    ':not(:last-of-type)': {
+      marginBottom: theme.spacing(6)
+    }
   }
-]
+}))
 
-const CreateStaff = () => {
+const AddStaff = ({open, closeModal, refetchStaffs}) => {
 
-  const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
 
-  const [DepartmentsData] = useDepartments()
+    const [DepartmentsData] = useDepartments()
 
   // ** States
   const [activeStep, setActiveStep] = useState(0)
-
-  const [state, setState] = useState({
-    password: '',
-    showPassword: false
-  })
-
   const [openDepartmentsModal, setOpenDepartmentsModal] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('/images/avatars/1.png')
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
   const [refetch, setFetch] = useState(false)
 
-  // ** Form Hooks
 
-  const {
+  const [state, setState] = useState({
+    password: '',
+    showPassword: false,
+  })
+
+  // ** Hooks & Var
+  const { settings } = useSettings()
+  const smallScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
+  const { direction } = settings
+
+   // ** Form Hooks
+
+   const {
     reset: personalReset,
     control: personalControl,
     handleSubmit: handlePersonalSubmit,
@@ -121,12 +179,8 @@ const CreateStaff = () => {
     resolver: yupResolver(nextOfKinSchema)
   })
 
-  const toggleDepartmentsModal = ()=> {
-    setOpenDepartmentsModal(!openDepartmentsModal)
-  }
-
-  // Handle Stepper
-  const handleBack = () => {
+   // Handle Stepper
+   const handleBack = () => {
     if(activeStep !== 0){
       setActiveStep(prevActiveStep => prevActiveStep - 1)
     }
@@ -155,104 +209,103 @@ const CreateStaff = () => {
           break;
       }
     } 
- 
 
-
-  
-  const handleReset = () => {
-    setPreviewUrl(null)
-    setActiveStep(0)
-    nextofKinReset({ firstname: '', lastname: '', phone: '', email: '', occupation: '', address: '', title: '', relationship: '', maritalStatus: '',  })
-    workInfoReset({ designation: '', employeeNumber: '', rsaCompany: '',  rsaNumber: '', accountNumber: '', departmentId: '', grossSalary: '' })
-    personalReset({ username: '', email: '', firstname: '', lastname: '', password: '', phone: '', bloodGroup: '', genotype: '', allergies: '', maritalStatus: '', address: '' })
-  }
-
-  const handleInputImageChange = (e) => {
-    const fileInput = e.target
-
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0]
-
-      const fileSize = file.size / 1024 / 1024 // in MB
-
-      if (fileSize > 5) {
-        notifyWarn('FILE ERROR', 'file size cannot exceed 5Mb')
-
-        return
-      }
-
-      if (file.type.startsWith('image/')) {
-        const fileUrl = URL.createObjectURL(file)
-
-        const formData = new FormData();
-        formData.append("picture", file);
-
-        uploadImage(formData).then((res)=>{
-          if (res) {
-            setPreviewUrl(fileUrl)
-            setSelectedImage(file)
-            setImageLinkPayload(res.url)
-          } 
-        })
-      } else {
-        notifyWarn('FILE ERROR', 'Selected file is not an image.')
+    const handleReset = () => {
         setPreviewUrl(null)
-      }
-    } else {
-      notifyWarn('FILE ERROR', 'No file selected.')
-      setSelectedImage(null)
-      setPreviewUrl(null)
-    }
-  }
-
-  const onSubmitAllInfo = async () => {
-
-    try {
-    // Retrieve form values
-    const workInfoValues = getWorkInfoValues();
-    const personalValues = getPersonalValues();
-    const nextOfKinValues = getNextOfKinValues();
-
-    const payload = {...personalValues, 
-      ...workInfoValues, 
-      image: imageLinkPayload ? imageLinkPayload : "",
-    }
-    payload.userNOK = {...nextOfKinValues}
-
-    const response = await axios.post('users', payload, {
-        
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-        }
-      })
-      if (response.data.success) {
-        setSelectedImage(null)
-        notifySuccess('created Staff Successfully')
-        handleReset()
         setActiveStep(0)
+        nextofKinReset({ firstname: '', lastname: '', phone: '', email: '', occupation: '', address: '', title: '', relationship: '', maritalStatus: '',  })
+        workInfoReset({ designation: '', employeeNumber: '', rsaCompany: '',  rsaNumber: '', accountNumber: '', departmentId: '', grossSalary: '' })
+        personalReset({ username: '', email: '', firstname: '', lastname: '', password: '', phone: '', bloodGroup: '', genotype: '', allergies: '', maritalStatus: '', address: '' })
       }
-
-
-    } catch (error) {
-      notifyError('Error creating staff')
-    }
-
-  };
-
-  const updateFetch = () => setFetch(!refetch)
-
+    
+      const handleInputImageChange = (e) => {
+        const fileInput = e.target
+    
+        if (fileInput.files && fileInput.files.length > 0) {
+          const file = fileInput.files[0]
+    
+          const fileSize = file.size / 1024 / 1024 // in MB
+    
+          if (fileSize > 5) {
+            notifyWarn('FILE ERROR', 'file size cannot exceed 5Mb')
+    
+            return
+          }
+    
+          if (file.type.startsWith('image/')) {
+            const fileUrl = URL.createObjectURL(file)
+    
+            const formData = new FormData();
+            formData.append("picture", file);
+    
+            uploadImage(formData).then((res)=>{
+              if (res) {
+                setPreviewUrl(fileUrl)
+                setSelectedImage(file)
+                setImageLinkPayload(res.url)
+              } 
+            })
+          } else {
+            notifyWarn('FILE ERROR', 'Selected file is not an image.')
+            setPreviewUrl(null)
+          }
+        } else {
+          notifyWarn('FILE ERROR', 'No file selected.')
+          setSelectedImage(null)
+          setPreviewUrl(null)
+        }
+      }
+    
+      const onSubmitAllInfo = async () => {
+    
+        try {
+        // Retrieve form values
+        const workInfoValues = getWorkInfoValues();
+        const personalValues = getPersonalValues();
+        const nextOfKinValues = getNextOfKinValues();
+    
+        const payload = {...personalValues, 
+          ...workInfoValues, 
+          image: imageLinkPayload ? imageLinkPayload : "",
+        }
+        payload.userNOK = {...nextOfKinValues}
+    
+        const response = await axios.post('users', payload, {
+            
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
+            }
+          })
+          if (response.data.success) {
+            setSelectedImage(null)
+            notifySuccess('created Staff Successfully')
+            handleReset()
+            setActiveStep(0)
+            closeModal()
+            refetchStaffs()
+          }
+    
+    
+        } catch (error) {
+          notifyError('Error creating staff')
+        }
+    
+      };
 
   // Handle Password
   const handleClickShowPassword = () => {
     setState({ ...state, showPassword: !state.showPassword })
   }
 
+
+  const updateFetch = () => setFetch(!refetch)
+
+
   useEffect(()=>{
     dispatch(fetchDepartments({page: 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[openDepartmentsModal, refetch])
-
 
   const getStepContent = step => {
     switch (step) {
@@ -318,16 +371,16 @@ const CreateStaff = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
 
                 <FormController name='firstname' control={personalControl} requireBoolean={true} label="First Name" error={personalErrors['firstname']} errorMessage={personalErrors.firstname?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
               <FormController name='lastname' control={personalControl} requireBoolean={true} label="Last Name" error={personalErrors['lastname']} errorMessage={personalErrors.lastname?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
               <FormController name='email' control={personalControl} requireBoolean={true} label="Email" error={personalErrors['email']} errorMessage={personalErrors?.email?.message} />
               </Grid>
 
@@ -339,7 +392,7 @@ const CreateStaff = () => {
                 <FormController name='username' control={personalControl} requireBoolean={true} label="Username" error={personalErrors['username']} errorMessage={personalErrors?.username?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='password'
                   control={personalControl}
@@ -373,11 +426,11 @@ const CreateStaff = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
               <FormController name='address' control={personalControl} requireBoolean={true} label="Address" error={personalErrors['address']} errorMessage={personalErrors.address?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='maritalStatus'
                   control={personalControl}
@@ -402,15 +455,15 @@ const CreateStaff = () => {
                 />
               </Grid>
 
-               <Grid item xs={12} sm={6}>
+               <Grid item xs={12} sm={4}>
               <FormController name='genotype' control={personalControl} requireBoolean={true} label="Genotype" error={personalErrors['genotype']} errorMessage={personalErrors.genotype?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='bloodGroup' control={personalControl} requireBoolean={true} label="Blood Group" error={personalErrors['bloodGroup']} errorMessage={personalErrors.bloodGroup?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='allergies' control={personalControl} requireBoolean={true} label="Allergies" error={personalErrors['allergies']} errorMessage={personalErrors.allergies?.message} />
               </Grid>
 
@@ -657,11 +710,40 @@ const CreateStaff = () => {
   }
 
   return (
-    <Card >
+    <Dialog
+    fullWidth
+    open={open}
+    maxWidth='md'
+    scroll='body'
+    onClose={closeModal}
+
+    // TransitionComponent={Transition}
+
+    // onBackdropClick={() => setShow(false)}
+    // sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
+
+    sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 980 } }}
+  >
+      <DialogContent
+        sx={{
+          pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+          pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+        }}
+      >
+        <CustomCloseButton onClick={closeModal}>
+          <Icon icon='tabler:x' fontSize='1.25rem' />
+        </CustomCloseButton>
+    <Card>
       <CardContent>
         <StepperWrapper>
-          <Stepper activeStep={activeStep}>
+          <Stepper
+            activeStep={activeStep}
+            connector={
+              !smallScreen ? <Icon icon={direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'} /> : null
+            }
+          >
             {steps.map((step, index) => {
+              const RenderAvatar = activeStep >= index ? CustomAvatar : Avatar
               const labelProps = {}
               if (index === activeStep) {
                 labelProps.error = false
@@ -701,7 +783,18 @@ const CreateStaff = () => {
                 <Step key={index}>
                   <StepLabel {...labelProps} StepIconComponent={StepperCustomDot}>
                     <div className='step-label'>
-                      <Typography className='step-number'>{`0${index + 1}`}</Typography>
+                      <RenderAvatar
+                        variant='rounded'
+                        {...(activeStep >= index && { skin: 'light' })}
+                        {...(activeStep === index && { skin: 'filled' })}
+                        {...(activeStep >= index && { color: 'primary' })}
+                        sx={{
+                          ...(activeStep === index && { boxShadow: theme => theme.shadows[3] }),
+                          ...(activeStep > index && { color: theme => hexToRGBA(theme.palette.primary.main, 0.4) })
+                        }}
+                      >
+                        <Icon icon={step.icon} />
+                      </RenderAvatar>
                       <div>
                         <Typography className='step-title'>{step.title}</Typography>
                         <Typography className='step-subtitle'>{step.subtitle}</Typography>
@@ -714,14 +807,12 @@ const CreateStaff = () => {
           </Stepper>
         </StepperWrapper>
       </CardContent>
-
       <Divider sx={{ m: '0 !important' }} />
-
       <CardContent>{renderContent()}</CardContent>
-
-      <CreateDepartment open={openDepartmentsModal} closeModal={toggleDepartmentsModal} refetchDepartments={updateFetch} />
     </Card>
+    </DialogContent>
+    </Dialog>
   )
 }
 
-export default CreateStaff
+export default AddStaff

@@ -7,6 +7,7 @@ import Card from '@mui/material/Card'
 import Step from '@mui/material/Step'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+import Avatar from '@mui/material/Avatar'
 import Divider from '@mui/material/Divider'
 import Stepper from '@mui/material/Stepper'
 import MenuItem from '@mui/material/MenuItem'
@@ -18,6 +19,7 @@ import StepperWrapper from 'src/@core/styles/mui/stepper'
 import { ButtonStyled } from '../../../@core/components/mui/button/ButtonStyledComponent'
 import { Dialog, DialogContent, DialogTitle } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 // ** Third Party Imports
 import { useForm, Controller } from 'react-hook-form'
@@ -34,6 +36,7 @@ import Icon from 'src/@core/components/icon'
 import StepperCustomDot from '../../forms/form-wizard/StepperCustomDot'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import FormController from '../components/FormController'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // React Hook Form Utilities
 import {
@@ -45,6 +48,7 @@ import {
 // Custom Hooks
 import { useDepartments } from '../../../hooks/useDepartments'
 import { useAppDispatch } from '../../../hooks'
+import { useSettings } from 'src/@core/hooks/useSettings'
 
 // Others
 import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
@@ -53,23 +57,13 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { uploadImage } from '../../../store/apps/upload'
+import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { steps } from '../../../@core/FormSchema/utils'
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 // import { CustomCloseButton } from '../departments/CreateDepartment'
 
-const steps = [
-  {
-    title: 'Personal Info',
-    subtitle: 'Setup Information'
-  },
-  {
-    title: 'Work Information',
-    subtitle: 'Edit Staff Official Information'
-  },
-  {
-    title: 'Next of Kin Details',
-    subtitle: "Edit Staff's Next of Kin Details"
-  }
-]
+
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -85,12 +79,7 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 const EditStaff = ({
   data,
   openEdit,
-  hasUploadedImage,
-  handleEditClose,
-  profilePictureUrl,
-  setProfilePictureUrl,
-  setHasUploadedImage,
-  closeViewStaffCanvas
+  closeModal,
 }) => {
   const dispatch = useAppDispatch()
 
@@ -101,6 +90,13 @@ const EditStaff = ({
   const [selectedImage, setSelectedImage] = useState(null)
   const [previewUrl, setPreviewUrl] = useState()
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
+
+  const [profilePictureUrl, setProfilePictureUrl] = useState();
+
+  // ** Hooks & Var
+  const { settings } = useSettings()
+  const smallScreen = useMediaQuery(theme => theme.breakpoints.down('md'))
+  const { direction } = settings
 
   // ** Form Hooks
   const {
@@ -140,7 +136,7 @@ const EditStaff = ({
   })
 
   const closeEditDrawer = () => {
-    handleEditClose()
+    closeModal()
     setPreviewUrl(null)
   }
 
@@ -240,21 +236,29 @@ const EditStaff = ({
         }
       })
       if (response?.data.success) {
-        setHasUploadedImage(!hasUploadedImage)
-        closeEditDrawer()
-        closeViewStaffCanvas()
-        notifySuccess('Updated Staff Successfully')
+        notifySuccess('Updated Staff')
         handleReset()
         setActiveStep(0)
+        closeEditDrawer()
+        dispatch(fetchStaffs({page: 1 }))
       }
 
-      if (response?.data?.data?.image) {
-        setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${response?.data.data?.image}`)
-      }
+      // if (response?.data?.data?.image) {
+      //   setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${response?.data.data?.image}`)
+      // }
     } catch (error) {
       notifyError('Error updating staff')
     }
   }
+
+
+  useEffect(()=>{
+    if (data){
+      setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${data?.image}`)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profilePictureUrl, data])
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: 1, limit: 200 }))
@@ -293,7 +297,7 @@ const EditStaff = ({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [data])
 
   const getStepContent = step => {
     switch (step) {
@@ -809,7 +813,7 @@ const EditStaff = ({
       open={openEdit}
       aria-labelledby='user-view-edit'
       aria-describedby='user-view-edit-description'
-      sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 900 } }}
+      sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 980 } }}
     >
       <DialogTitle
         id='user-view-edit'
@@ -835,8 +839,14 @@ const EditStaff = ({
         <Card>
           <CardContent>
             <StepperWrapper>
-              <Stepper activeStep={activeStep}>
+              <Stepper 
+               activeStep={activeStep}
+               connector={
+                 !smallScreen ? <Icon icon={direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'} /> : null
+               }
+              >
                 {steps.map((step, index) => {
+              const RenderAvatar = activeStep >= index ? CustomAvatar : Avatar
                   const labelProps = {}
                   if (index === activeStep) {
                     labelProps.error = false
@@ -877,7 +887,18 @@ const EditStaff = ({
                     <Step key={index}>
                       <StepLabel {...labelProps} StepIconComponent={StepperCustomDot}>
                         <div className='step-label'>
-                          <Typography className='step-number'>{`0${index + 1}`}</Typography>
+                          <RenderAvatar
+                            variant='rounded'
+                            {...(activeStep >= index && { skin: 'light' })}
+                            {...(activeStep === index && { skin: 'filled' })}
+                            {...(activeStep >= index && { color: 'primary' })}
+                            sx={{
+                              ...(activeStep === index && { boxShadow: theme => theme.shadows[3] }),
+                              ...(activeStep > index && { color: theme => hexToRGBA(theme.palette.primary.main, 0.4) })
+                            }}
+                          >
+                            <Icon icon={step.icon} />
+                          </RenderAvatar>
                           <div>
                             <Typography className='step-title'>{step.title}</Typography>
                             <Typography className='step-subtitle'>{step.subtitle}</Typography>
