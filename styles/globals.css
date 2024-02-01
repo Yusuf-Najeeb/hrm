@@ -33,7 +33,7 @@ code[class*='language-'] {
 } */
 
 .bg-secondary{
-color: rgb(128, 128, 244);
+color: #8080f4;
 }
 
 .bg-primary {
@@ -45,7 +45,7 @@ color: rgb(128, 128, 244);
 }
 
 .bg-info {
-  color: rgb(241, 241, 117);
+  color: #f1f175;
 }
 
 .react-datepicker-popper {

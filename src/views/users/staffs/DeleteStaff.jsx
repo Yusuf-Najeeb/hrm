@@ -9,9 +9,8 @@ import Dialog from '@mui/material/Dialog'
 import { styled } from '@mui/material/styles'
 import CustomTextField from 'src/@core/components/mui/text-field'
 
-import Fade, { FadeProps } from '@mui/material/Fade'
+import Fade from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
 
 import IconButton from '@mui/material/IconButton'
 
@@ -26,7 +25,6 @@ import { CircularProgress } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requireReason } from 'src/@core/Formschema'
-import { useAppDispatch } from '../../../hooks'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import axios from 'axios'
@@ -64,7 +62,7 @@ const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
         formState: { errors, isSubmitting }
       } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requireReason)})
 
-      const ondeleteClick = async (payload) => {
+      const onDeleteClick = async (payload) => {
         try {
             const { data } = await axios({
                 method: 'delete',
@@ -106,7 +104,7 @@ const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
 
-       <form onSubmit={handleSubmit(ondeleteClick)}>
+       <form onSubmit={handleSubmit(onDeleteClick)}>
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`
