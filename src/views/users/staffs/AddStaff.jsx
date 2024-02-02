@@ -39,7 +39,7 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 // ** Styled Component
 import StepperWrapper from 'src/@core/styles/mui/stepper'
-import { Dialog, DialogContent } from '@mui/material'
+import { CircularProgress, Dialog, DialogContent } from '@mui/material'
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import { useDepartments } from '../../../hooks/useDepartments'
 import { useAppDispatch } from '../../../hooks'
@@ -69,6 +69,8 @@ import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { uploadImage } from '../../../store/apps/upload'
 import { steps } from '../../../@core/FormSchema/utils'
+import CreateDepartment from '../departments/CreateDepartment'
+import SubmitSpinnerMessage from '../components/SubmitSpinnerMessage'
 
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
@@ -172,7 +174,7 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
     reset: nextofKinReset,
     control: nextOfKinControl,
     handleSubmit: handleNextOfKinSubmit,
-    formState: { errors: nextOfKinErrors, },
+    formState: { errors: nextOfKinErrors, isSubmitting},
     getValues: getNextOfKinValues
   } = useForm({
     defaultValues: defaultNextOfKinValues,
@@ -299,6 +301,10 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
 
 
   const updateFetch = () => setFetch(!refetch)
+
+  const toggleDepartmentsModal = ()=> {
+    setOpenDepartmentsModal(!openDepartmentsModal)
+  }
 
 
   useEffect(()=>{
@@ -521,7 +527,7 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
               <FormController name='designation' control={workInfoControl} requireBoolean={true} label="Designation" error={workInfoErrors['designation']} errorMessage={workInfoErrors.designation?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={5}>
+              <Grid item xs={10} sm={5}>
                 <Controller
                   name='departmentId'
                   control={workInfoControl}
@@ -548,21 +554,21 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={1} sx={{ mt: 5.4 }}>
+              <Grid item xs={2} sm={1} sx={{ mt: 5.4 }}>
                   <Button size='small' variant='contained' onClick={()=>toggleDepartmentsModal()}>
                     <Icon fontSize='1.125rem' icon='tabler:plus' />
                   </Button>
                 </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
               <FormController name='employeeNumber' control={workInfoControl} requireBoolean={true} label="Employee Number" error={workInfoErrors['employeeNumber']} errorMessage={workInfoErrors?.employeeNumber?.message} />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
                 <FormController name='grossSalary' control={workInfoControl} requireBoolean={true} label="Gross Salary" error={workInfoErrors['grossSalary']} errorMessage={workInfoErrors?.grossSalary?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
               <FormController name='accountNumber' control={workInfoControl} requireBoolean={true} label="Account Number" error={workInfoErrors['accountNumber']} errorMessage={workInfoErrors?.accountNumber?.message} />
               </Grid>
 
@@ -598,30 +604,30 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
                   {steps[2].subtitle}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='firstname' control={nextOfKinControl} requireBoolean={true} label="First Name" error={nextOfKinErrors['firstname']} errorMessage={nextOfKinErrors?.firstname?.message} />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='lastname' control={nextOfKinControl} requireBoolean={true} label="Last Name" error={nextOfKinErrors['lastname']} errorMessage={nextOfKinErrors?.lastname?.message} />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
               <FormController name='phone' control={nextOfKinControl} requireBoolean={true} label="Phone Number" error={nextOfKinErrors['phone']} errorMessage={nextOfKinErrors?.phone?.message} />
               </Grid>
               
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                  <FormController name='email' control={nextOfKinControl} requireBoolean={true} label="Email" error={nextOfKinErrors['email']} errorMessage={nextOfKinErrors?.email?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='occupation' control={nextOfKinControl} requireBoolean={true} label="Occupation" error={nextOfKinErrors['occupation']} errorMessage={nextOfKinErrors?.occupation?.message} />
 
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='address' control={nextOfKinControl} requireBoolean={true} label="Address" error={nextOfKinErrors['address']} errorMessage={nextOfKinErrors?.address?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='title'
                   control={nextOfKinControl}
@@ -647,11 +653,11 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController name='relationship' control={nextOfKinControl} requireBoolean={true} label="Relationship" error={nextOfKinErrors['relationship']} errorMessage={nextOfKinErrors?.relationship?.message} />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='maritalStatus'
                   control={nextOfKinControl}
@@ -680,8 +686,8 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
                 <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
-                <Button type='submit' variant='contained'>
-                  Submit
+                <Button type='submit' variant='contained' disabled={isSubmitting}>
+                {isSubmitting ? <SubmitSpinnerMessage /> : 'Submit'}
                 </Button>
               </Grid>
             </Grid>
@@ -710,6 +716,7 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
   }
 
   return (
+    <Fragment>
     <Dialog
     fullWidth
     open={open}
@@ -812,6 +819,10 @@ const AddStaff = ({open, closeModal, refetchStaffs}) => {
     </Card>
     </DialogContent>
     </Dialog>
+
+
+    <CreateDepartment open={openDepartmentsModal} closeModal={toggleDepartmentsModal} refetchDepartments={updateFetch}/>
+    </Fragment>
   )
 }
 

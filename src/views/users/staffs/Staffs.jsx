@@ -151,7 +151,7 @@ const defaultColumns = [
 
   {
     flex: 0.25,
-    field: 'name',
+    field: 'firstname',
     minWidth: 320,
     headerName: 'Staff',
     renderCell: ({ row }) => {
@@ -176,14 +176,16 @@ const defaultColumns = [
   {
     flex: 0.15,
     minWidth: 140,
-    field: 'department',
+    field: 'department.name',
+    filterable: false,
     headerName: 'Department',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row?.department.name}</Typography>
   },
   {
     flex: 0.1,
     minWidth: 140,
-    field: 'role',
+    field: 'role.name',
+    filterable: false,
     headerName: 'Role',
     renderCell: ({ row }) => { 
         return (
@@ -199,10 +201,12 @@ const defaultColumns = [
     flex: 0.1,
     minWidth: 100,
     field: 'grossSalary',
+    filterable: false,
     headerName: 'Gross Salary',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`#${row?.grossSalary.toLocaleString() || 0}`}</Typography>
   },
 ]
+
 /* eslint-disable */
 const CustomInput = forwardRef((props, ref) => {
   const startDate = props.start !== null ? format(props.start, 'MM/dd/yyyy') : ''
@@ -249,15 +253,11 @@ const StaffsList = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: 1, limit: 200 }))
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch])
-
-  useEffect(() => {
     dispatch(fetchStaffs({page: page + 1 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, refetch])
+
 
   const toggleAddStaffModal = ()=> {
     setShowAddStaffModal(!showAddStaffModal)
@@ -311,6 +311,7 @@ const StaffsList = () => {
       flex: 0.1,
       minWidth: 140,
       sortable: false,
+      filterable: false,
       field: 'actions',
       headerName: 'Actions',
       renderCell: ({ row }) => (
