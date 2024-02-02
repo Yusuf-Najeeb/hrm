@@ -60,6 +60,7 @@ import { uploadImage } from '../../../store/apps/upload'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { steps } from '../../../@core/FormSchema/utils'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import SubmitSpinnerMessage from '../components/SubmitSpinnerMessage'
 
 // import { CustomCloseButton } from '../departments/CreateDepartment'
 
@@ -128,7 +129,7 @@ const EditStaff = ({
     setValue: setNextofKinValue,
     control: nextOfKinControl,
     handleSubmit: handleNextOfKinSubmit,
-    formState: { errors: nextOfKinErrors },
+    formState: { errors: nextOfKinErrors , isSubmitting},
     getValues: getNextOfKinValues
   } = useForm({
     defaultValues: defaultNextOfKinValues,
@@ -779,8 +780,8 @@ const EditStaff = ({
                 <Button variant='tonal' color='secondary' onClick={handleBack}>
                   Back
                 </Button>
-                <Button type='submit' variant='contained'>
-                  Submit
+                <Button type='submit' variant='contained' disabled={isSubmitting}>
+                {isSubmitting ? <SubmitSpinnerMessage /> : 'Submit'}
                 </Button>
               </Grid>
             </Grid>
