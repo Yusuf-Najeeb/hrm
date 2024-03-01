@@ -9,6 +9,10 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
 
+import CustomAvatar from 'src/@core/components/mui/avatar'
+
+import { styled } from '@mui/material/styles'
+
 import Icon from 'src/@core/components/icon'
 
 import TablePagination from '@mui/material/TablePagination'
@@ -17,12 +21,27 @@ import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteRole, fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
-import { formatFirstLetter } from '../../../@core/utils/format'
+import { formatDate, formatFirstLetter } from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditRole from './EditRole'
 import { useRoles } from '../../../hooks/useRoles'
 import PageHeader from '../components/PageHeader'
 import CreateRole from './CreateRole'
+import { Box, Typography } from '@mui/material'
+
+const userRoleObj = {
+  'super-admin': { icon: 'grommet-icons:user-admin', color: 'info' },
+  admin: { icon: 'tabler:device-laptop', color: 'secondary' },
+  staff: { icon: 'tabler:circle-check', color: 'success' },
+  librarian: { icon: 'tabler:edit', color: 'info' },
+  accountant: { icon: 'tabler:chart-pie-2', color: 'primary' },
+  'house-master': { icon: 'tabler:user', color: 'warning' }
+}
+
+const TypographyStyled = styled(Typography)(({theme})=> ({
+  fontSize: theme.typography.body1.fontSize,
+  color: `${theme.palette.primary.main} !important` 
+}))
 
 const RolesTable = () => {
   const dispatch = useAppDispatch()
@@ -98,7 +117,10 @@ const RolesTable = () => {
                 S/N
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                NAME
+                ROLE TITLE
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
+                DATE CREATED
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTIONS
@@ -116,8 +138,23 @@ const RolesTable = () => {
               <Fragment>
                 {RolesDate?.map((role, i) => (
                   <TableRow hover role='checkbox' key={role.id}>
-                    <TableCell align='left'>{i + 1}</TableCell>
-                    <TableCell align='left'>{formatFirstLetter(role?.name)}</TableCell>
+                    <TableCell align='left' >  {i + 1}</TableCell>
+                    <TableCell align='left' sx={{textTransform: 'uppercase', display: 'flex'}}>
+                      
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <CustomAvatar
+                                skin='light'
+                                sx={{ mr: 4, width: 30, height: 30 }}
+                                color={userRoleObj[role?.name].color || 'primary'}
+                              >
+                                <Icon icon={userRoleObj[role?.name].icon} />
+                              </CustomAvatar>
+                              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                                {formatFirstLetter(role?.name)}
+                              </Typography>
+                            </Box>
+                            </TableCell>
+                    <TableCell align='left'>{formatDate(role?.createdAt)}</TableCell>
 
                     <TableCell align='left' sx={{ display: 'flex' }}>
                       <IconButton size='small' onClick={() => setRoleToEdit(role)}>

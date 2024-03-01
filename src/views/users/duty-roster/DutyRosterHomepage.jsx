@@ -20,13 +20,14 @@ import CalendarWrapper from 'src/@core/styles/libs/fullcalendar'
 // Third party libraries
 import DatePicker from 'react-datepicker'
 
-// ** Actions
-import {
-  handleSelectEvent,
-} from 'src/store/apps/calendar'
+// ** Redux Imports
+import {  useSelector } from 'react-redux'
+
 import PageHeader from './PageHeader'
 import DownloadTemplateDialog from './DownloadTemplateDialog'
 import UploadRosterDialog from './UploadRosterDialog'
+import AddEventSidebar from 'src/views/apps/calendar/AddEventSidebar'
+import SidebarLeft from 'src/views/apps/calendar/SidebarLeft'
 
 import { fetchRosterDetails } from '../../../store/apps/roster/asyncthunk'
 import { formatDateToYYYYMM, formatFirstLetter, formatMonthYear, getFirstId } from '../../../@core/utils/format'
@@ -34,6 +35,17 @@ import { Card, CardContent, CardHeader, Grid, MenuItem } from '@mui/material'
 import { useAppDispatch } from '../../../hooks'
 import { useDepartments } from '../../../hooks/useDepartments'
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+
+// ** Actions
+import {
+  addEvent,
+  fetchEvents,
+  deleteEvent,
+  updateEvent,
+  handleSelectEvent,
+  handleAllCalendars,
+  handleCalendarsUpdate
+} from 'src/store/apps/calendar'
 
 const CustomInput = forwardRef((props, ref) => {
   const rosterPeriod = props.period !== null ? formatMonthYear(props.period) : ''
@@ -53,11 +65,14 @@ const calendarsColor = {
   ETC: 'info'
 }
 
+
+
 const DutyRosterHomepage = () => {
 
   // ** Hooks
   const { settings } = useSettings()
   const [RosterData, loading] = useRoster()
+  const store = useSelector((store) => store.calendar)
 
   const dispatch = useAppDispatch()
 
@@ -77,6 +92,7 @@ const DutyRosterHomepage = () => {
   const [departmentId, setDepartmentId] = useState()
   const [selectedId, setSelectedId] = useState()
   const [departmentName, setDepartmentName] = useState('')
+  const [defaultDepartmentName, setDefaultDepartmentName] = useState('')
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
@@ -108,9 +124,9 @@ const DutyRosterHomepage = () => {
     setPeriod(newPeriodValue)
     setSelectedId(departmentId)
 
-    const deptName =  DepartmentsData[selectedId]?.name
+    const selectedDept = DepartmentsData?.find((dept)=> dept?.id == departmentId)
 
-    setDepartmentName(deptName)
+    selectedDept &&  setDepartmentName(selectedDept?.name) 
   }
 
   const toggleDownloadDialog = (e) => {
@@ -128,6 +144,20 @@ const DutyRosterHomepage = () => {
 
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen)
   const handleAddEventSidebarToggle = () => setAddEventSidebarOpen(!addEventSidebarOpen)
+
+  console.log(defaultDepartmentName, "default department")
+
+  useEffect(()=>{
+    if(defaultId){
+
+      const Dept = DepartmentsData?.find((dept)=> dept?.id == defaultId)
+
+      setDefaultDepartmentName(Dept?.name)
+
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultId, DepartmentsData])
 
   useEffect(() => {
     if (DepartmentsData.length > 0 ) {
@@ -210,10 +240,29 @@ const DutyRosterHomepage = () => {
           ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
         }}
       >
+
+<SidebarLeft
+        store={store}
+        mdAbove={mdAbove}
+        dispatch={dispatch}
+        calendarApi={calendarApi}
+        calendarsColor={calendarsColor}
+        leftSidebarOpen={leftSidebarOpen}
+        leftSidebarWidth={leftSidebarWidth}
+        handleSelectEvent={handleSelectEvent}
+        handleAllCalendars={handleAllCalendars}
+        handleCalendarsUpdate={handleCalendarsUpdate}
+        handleLeftSidebarToggle={handleLeftSidebarToggle}
+        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
+        departmentName={departmentName}
+        defaultDepartmentName={defaultDepartmentName}
+      />
         
         <Box
           sx={{
             p: 6,
+
+            // height: '90vh',
             pb: 0,
             flexGrow: 1,
             borderRadius: 1,
@@ -236,6 +285,19 @@ const DutyRosterHomepage = () => {
             handleAddEventSidebarToggle={handleAddEventSidebarToggle}
           />
         </Box>
+
+        {/* <AddEventSidebar
+        store={RosterData}
+        dispatch={dispatch}
+        addEvent={addEvent}
+        updateEvent={updateEvent}
+        deleteEvent={deleteEvent}
+        calendarApi={calendarApi}
+        drawerWidth={addEventSidebarWidth}
+        handleSelectEvent={handleSelectEvent}
+        addEventSidebarOpen={addEventSidebarOpen}
+        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
+      /> */}
       </CalendarWrapper>
 
       <DownloadTemplateDialog open={openDownloadDialog} anchorEl={anchorEl} handleClose={closeDownloadDialog} />

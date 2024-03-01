@@ -110,33 +110,33 @@ const AddEventSidebar = props => {
   }
 
   const resetToStoredValues = useCallback(() => {
-    if (store.selectedEvent !== null) {
-      const event = store.selectedEvent
-      setValue('title', event.title || '')
+    if (store?.selectedEvent !== null) {
+      const event = store?.selectedEvent
+      setValue('title', event?.title || '')
       setValues({
-        url: event.url || '',
-        title: event.title || '',
-        allDay: event.allDay,
-        guests: event.extendedProps.guests || [],
-        description: event.extendedProps.description || '',
-        calendar: event.extendedProps.calendar || 'Business',
-        endDate: event.end !== null ? event.end : event.start,
-        startDate: event.start !== null ? event.start : new Date()
+        url: event?.url || '',
+        title: event?.title || '',
+        allDay: event?.allDay,
+        guests: event?.extendedProps.guests || [],
+        description: event?.extendedProps.description || '',
+        calendar: event?.extendedProps.calendar || 'Business',
+        endDate: event?.end !== null ? event?.end : event?.start,
+        startDate: event?.start !== null ? event?.start : new Date()
       })
     }
-  }, [setValue, store.selectedEvent])
+  }, [setValue, store?.selectedEvent])
 
   const resetToEmptyValues = useCallback(() => {
     setValue('title', '')
     setValues(defaultState)
   }, [setValue])
   useEffect(() => {
-    if (store.selectedEvent !== null) {
+    if (store?.selectedEvent !== null) {
       resetToStoredValues()
     } else {
       resetToEmptyValues()
     }
-  }, [addEventSidebarOpen, resetToStoredValues, resetToEmptyValues, store.selectedEvent])
+  }, [addEventSidebarOpen, resetToStoredValues, resetToEmptyValues, store?.selectedEvent])
 
   const PickersComponent = forwardRef(({ ...props }, ref) => {
     return (
@@ -152,7 +152,7 @@ const AddEventSidebar = props => {
   })
 
   const RenderSidebarFooter = () => {
-    if (store.selectedEvent === null || (store.selectedEvent !== null && !store.selectedEvent.title.length)) {
+    // if (store?.selectedEvent === null || (store?.selectedEvent !== null && !store?.selectedEvent.title.length)) {
       return (
         <Fragment>
           <Button type='submit' variant='contained' sx={{ mr: 4 }}>
@@ -163,18 +163,21 @@ const AddEventSidebar = props => {
           </Button>
         </Fragment>
       )
-    } else {
-      return (
-        <Fragment>
-          <Button type='submit' variant='contained' sx={{ mr: 4 }}>
-            Update
-          </Button>
-          <Button variant='tonal' color='secondary' onClick={resetToStoredValues}>
-            Reset
-          </Button>
-        </Fragment>
-      )
-    }
+      
+    // } 
+    
+    // else {
+    //   return (
+    //     <Fragment>
+    //       <Button type='submit' variant='contained' sx={{ mr: 4 }}>
+    //         Update
+    //       </Button>
+    //       <Button variant='tonal' color='secondary' onClick={resetToStoredValues}>
+    //         Reset
+    //       </Button>
+    //     </Fragment>
+    //   )
+    // }
   }
 
   return (
@@ -194,14 +197,14 @@ const AddEventSidebar = props => {
         }}
       >
         <Typography variant='h5'>
-          {store.selectedEvent !== null && store.selectedEvent.title.length ? 'Update Event' : 'Add Event'}
+          {store?.selectedEvent !== null && store?.selectedEvent?.title.length ? 'Update Event' : 'Add Event'}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {store.selectedEvent !== null && store.selectedEvent.title.length ? (
+          {store?.selectedEvent !== null && store?.selectedEvent?.title.length ? (
             <IconButton
               size='small'
               onClick={handleDeleteEvent}
-              sx={{ color: 'text.primary', mr: store.selectedEvent !== null ? 1 : 0 }}
+              sx={{ color: 'text.primary', mr: store?.selectedEvent !== null ? 1 : 0 }}
             >
               <Icon icon='tabler:trash' fontSize='1.25rem' />
             </IconButton>
@@ -263,11 +266,11 @@ const AddEventSidebar = props => {
               <DatePicker
                 selectsStart
                 id='event-start-date'
-                endDate={values.endDate}
-                selected={values.startDate}
-                startDate={values.startDate}
-                showTimeSelect={!values.allDay}
-                dateFormat={!values.allDay ? 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd'}
+                endDate={values?.endDate}
+                selected={values?.startDate}
+                startDate={values?.startDate}
+                showTimeSelect={!values?.allDay}
+                dateFormat={!values?.allDay ? 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd'}
                 customInput={<PickersComponent label='Start Date' registername='startDate' />}
                 onChange={date => setValues({ ...values, startDate: new Date(date) })}
                 onSelect={handleStartDate}
@@ -277,12 +280,12 @@ const AddEventSidebar = props => {
               <DatePicker
                 selectsEnd
                 id='event-end-date'
-                endDate={values.endDate}
-                selected={values.endDate}
-                minDate={values.startDate}
-                startDate={values.startDate}
-                showTimeSelect={!values.allDay}
-                dateFormat={!values.allDay ? 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd'}
+                endDate={values?.endDate}
+                selected={values?.endDate}
+                minDate={values?.startDate}
+                startDate={values?.startDate}
+                showTimeSelect={!values?.allDay}
+                dateFormat={!values?.allDay ? 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd'}
                 customInput={<PickersComponent label='End Date' registername='endDate' />}
                 onChange={date => setValues({ ...values, endDate: new Date(date) })}
               />
@@ -291,7 +294,7 @@ const AddEventSidebar = props => {
               <FormControlLabel
                 label='All Day'
                 control={
-                  <Switch checked={values.allDay} onChange={e => setValues({ ...values, allDay: e.target.checked })} />
+                  <Switch checked={values?.allDay} onChange={e => setValues({ ...values, allDay: e.target.checked })} />
                 }
               />
             </FormControl>
@@ -301,7 +304,7 @@ const AddEventSidebar = props => {
               id='event-url'
               sx={{ mb: 4 }}
               label='Event URL'
-              value={values.url}
+              value={values?.url}
               placeholder='https://www.google.com'
               onChange={e => setValues({ ...values, url: e.target.value })}
             />
@@ -330,7 +333,7 @@ const AddEventSidebar = props => {
               sx={{ mb: 6.5 }}
               label='Description'
               id='event-description'
-              value={values.description}
+              value={values?.description}
               onChange={e => setValues({ ...values, description: e.target.value })}
             />
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
