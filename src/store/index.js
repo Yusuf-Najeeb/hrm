@@ -7,7 +7,7 @@ import user from 'src/store/apps/user'
 import email from 'src/store/apps/email'
 import invoice from 'src/store/apps/invoice'
 
-// import calendar from 'src/store/apps/calendar'
+import calendar from 'src/store/apps/calendar'
 import permissions from 'src/store/apps/permissions'
 import auth from 'src/store/apps/auth'
 import salaryItems from 'src/store/apps/salaryItems'
@@ -24,6 +24,7 @@ export const store = configureStore({
     user,
     chat,
     email,
+    calendar,
     invoice,
     permissions,
     auth,

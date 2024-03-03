@@ -29,6 +29,8 @@ const SidebarLeft = props => {
     handleAllCalendars,
     handleCalendarsUpdate,
     handleLeftSidebarToggle,
+    departmentName,
+    defaultDepartmentName,
     handleAddEventSidebarToggle
   } = props
   const colorsArr = calendarsColor ? Object.entries(calendarsColor) : []
@@ -43,7 +45,7 @@ const SidebarLeft = props => {
             control={
               <Checkbox
                 color={value}
-                checked={store.selectedCalendars.includes(key)}
+                checked={store?.selectedCalendars.includes(key)}
                 onChange={() => dispatch(handleCalendarsUpdate(key))}
               />
             }
@@ -89,10 +91,17 @@ const SidebarLeft = props => {
         }}
       >
         <Box sx={{ p: 6, width: '100%' }}>
-          <Button fullWidth variant='contained' sx={{ '& svg': { mr: 2 } }} onClick={handleSidebarToggleSidebar}>
+          {/* <Button fullWidth variant='contained' sx={{ '& svg': { mr: 2 } }} onClick={handleSidebarToggleSidebar}>
             <Icon icon='tabler:plus' fontSize='1.125rem' />
             Add Event
-          </Button>
+          </Button> */}
+
+         {departmentName == '' ?  <Typography sx={{textTransform: 'uppercase'}}>{`${defaultDepartmentName} Department `}</Typography>
+         :
+
+          <Typography sx={{textTransform: 'uppercase'}}>{ departmentName ? `${departmentName} Department` : 'No Department'}</Typography>
+
+        }
         </Box>
 
         <Divider sx={{ width: '100%', m: '0 !important' }} />
@@ -104,10 +113,11 @@ const SidebarLeft = props => {
             '& .react-datepicker': { boxShadow: 'none !important', border: 'none !important' }
           }}
         >
-          <DatePicker inline onChange={date => calendarApi.gotoDate(date)} />
+          <DatePicker inline onChange={date => calendarApi?.gotoDate(date)} />
         </DatePickerWrapper>
         <Divider sx={{ width: '100%', m: '0 !important' }} />
-        <Box sx={{ p: 6, width: '100%', display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+
+        {/* <Box sx={{ p: 6, width: '100%', display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
           <Typography variant='body2' sx={{ mb: 2, color: 'text.disabled', textTransform: 'uppercase' }}>
             Filters
           </Typography>
@@ -116,13 +126,13 @@ const SidebarLeft = props => {
             sx={{ '& .MuiFormControlLabel-label': { color: 'text.secondary' } }}
             control={
               <Checkbox
-                checked={store.selectedCalendars.length === colorsArr.length}
+                checked={store?.selectedCalendars.length === colorsArr.length}
                 onChange={e => dispatch(handleAllCalendars(e.target.checked))}
               />
             }
           />
           {renderFilters}
-        </Box>
+        </Box> */}
       </Drawer>
     )
   } else {
