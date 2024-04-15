@@ -8,6 +8,8 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
+import Stack from '@mui/material/Stack'
+import Item from '@mui/material/ListItem'
 
 import Icon from 'src/@core/components/icon'
 
@@ -24,11 +26,14 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditDepartment from './EditDepartment'
+import CreateDepartmentStatic from './CreateDepartmentStatic'
+import { display } from '@mui/system'
 
 const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
 
   const [DepartmentsData, loadingDepartments, paging] = useDepartments()
+  console.log(DepartmentsData)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
@@ -95,59 +100,83 @@ const DepartmentsTable = () => {
 
   return (
     <div>
-      <DepartmentsTableHeader action='Create Department' toggle={toggleDepartmentDrawer} />
-      <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
-        <Table stickyHeader aria-label='sticky table'>
-          <TableHead>
-            <TableRow>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
-                S/N
-              </TableCell>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
-                NAME
-              </TableCell>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
-                ACTIONS
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loadingDepartments ? (
-              <TableRow className='text-center'>
-                <TableCell colSpan={6}>
-                  <CustomSpinner />
-                </TableCell>
-              </TableRow>
-            ) : (
-              <Fragment>
-                {DepartmentsData?.map((department, i) => (
-                  <TableRow hover role='checkbox' key={department.id}>
-                    <TableCell align='left'>{i + 1}</TableCell>
-                    <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
+      {/* <DepartmentsTableHeader
+        action='Create Department'
+        toggle={toggleDepartmentDrawer}
+        sx={{ display: { xs: 'block', md: 'none' } }}
+      /> */}
 
-                    <TableCell align='left' sx={{ display: 'flex' }}>
-                      <IconButton size='small' onClick={() => setDepartmentToEdit(department)}>
-                        <Icon icon='tabler:edit' />
-                      </IconButton>
-                      <IconButton size='small' onClick={() => doDelete(department)}>
-                        <Icon icon='tabler:trash' />
-                      </IconButton>
+      <Stack spacing={1} direction={'row'}>
+        <Item sx={{ xs: '100%', md: '60%' }}>
+          <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
+            <Table stickyHeader aria-label='sticky table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell align='left' sx={{ minWidth: 50 }}>
+                    NAME
+                  </TableCell>
+
+                  <TableCell align='center' sx={{ minWidth: 80 }}>
+                    MODIFIED BY
+                  </TableCell>
+
+                  <TableCell align='center' sx={{ minWidth: 80 }}>
+                    HOD
+                  </TableCell>
+
+                  <TableCell align='right' sx={{ minWidth: 50 }}>
+                    ACTIONS
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {loadingDepartments ? (
+                  <TableRow className='text-center'>
+                    <TableCell colSpan={6}>
+                      <CustomSpinner />
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  <Fragment>
+                    {DepartmentsData?.map((department, i) => (
+                      <TableRow hover role='checkbox' key={department.id}>
+                        <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
+                        <TableCell align='center'>{`${
+                          department?.lastChangedBy !== null ? department?.lastChangedBy : department?.createdBy
+                        }`}</TableCell>
 
-                {DepartmentsData?.length === 0 && (
-                  <tr className='text-center'>
-                    <td colSpan={6}>
-                      <NoData />
-                    </td>
-                  </tr>
+                        <TableCell align='center' sx={{ minWidth: 80 }}>
+                          {department?.hodId}
+                        </TableCell>
+
+                        <TableCell align='right' sx={{ display: 'flex' }}>
+                          <IconButton size='small' onClick={() => setDepartmentToEdit(department)}>
+                            <Icon icon='tabler:edit' />
+                          </IconButton>
+                          <IconButton size='small' onClick={() => doDelete(department)}>
+                            <Icon icon='tabler:trash' />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+
+                    {DepartmentsData?.length === 0 && (
+                      <tr className='text-center'>
+                        <td colSpan={6}>
+                          <NoData />
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
                 )}
-              </Fragment>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Item>
+        <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
+          <CreateDepartmentStatic refetchDepartments={updateFetch} />
+        </Item>
+      </Stack>
 
       <TablePagination
         page={page}
