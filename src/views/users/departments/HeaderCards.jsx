@@ -58,66 +58,66 @@ const DepartmentInfo = () => {
   // ** Hook
   const theme = useTheme()
 
-  const options = {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: { show: false }
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 6,
-        distributed: true,
-        columnWidth: '42%',
-        endingShape: 'rounded',
-        startingShape: 'rounded'
-      }
-    },
-    legend: { show: false },
-    tooltip: { enabled: false },
-    dataLabels: { enabled: false },
-    colors: [
-      hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 1),
-      hexToRGBA(theme.palette.primary.main, 0.16),
-      hexToRGBA(theme.palette.primary.main, 0.16)
-    ],
-    states: {
-      hover: {
-        filter: { type: 'none' }
-      },
-      active: {
-        filter: { type: 'none' }
-      }
-    },
-    grid: {
-      show: false,
-      padding: {
-        top: -28,
-        left: -9,
-        right: -10,
-        bottom: -12
-      }
-    },
-    xaxis: {
-      axisTicks: { show: false },
-      axisBorder: { show: false },
-      categories: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-      labels: {
-        style: {
-          colors: theme.palette.text.disabled,
-          fontFamily: theme.typography.fontFamily,
-          fontSize: theme.typography.body2.fontSize
-        }
-      }
-    },
-    yaxis: { show: false }
-  }
+  // const options = {
+  //   chart: {
+  //     parentHeightOffset: 0,
+  //     toolbar: { show: false }
+  //   },
+  //   plotOptions: {
+  //     bar: {
+  //       borderRadius: 6,
+  //       distributed: true,
+  //       columnWidth: '42%',
+  //       endingShape: 'rounded',
+  //       startingShape: 'rounded'
+  //     }
+  //   },
+  //   legend: { show: false },
+  //   tooltip: { enabled: false },
+  //   dataLabels: { enabled: false },
+  //   colors: [
+  //     hexToRGBA(theme.palette.primary.main, 0.16),
+  //     hexToRGBA(theme.palette.primary.main, 0.16),
+  //     hexToRGBA(theme.palette.primary.main, 0.16),
+  //     hexToRGBA(theme.palette.primary.main, 0.16),
+  //     hexToRGBA(theme.palette.primary.main, 1),
+  //     hexToRGBA(theme.palette.primary.main, 0.16),
+  //     hexToRGBA(theme.palette.primary.main, 0.16)
+  //   ],
+  //   states: {
+  //     hover: {
+  //       filter: { type: 'none' }
+  //     },
+  //     active: {
+  //       filter: { type: 'none' }
+  //     }
+  //   },
+  //   grid: {
+  //     show: false,
+  //     padding: {
+  //       top: -28,
+  //       left: -9,
+  //       right: -10,
+  //       bottom: -12
+  //     }
+  //   },
+  //   xaxis: {
+  //     axisTicks: { show: false },
+  //     axisBorder: { show: false },
+  //     categories: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+  //     labels: {
+  //       style: {
+  //         colors: theme.palette.text.disabled,
+  //         fontFamily: theme.typography.fontFamily,
+  //         fontSize: theme.typography.body2.fontSize
+  //       }
+  //     }
+  //   },
+  //   yaxis: { show: false }
+  // }
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} sx={{ display: { xs: 'none', lg: 'flex' } }}>
       <Grid item md={4}>
         <paper>
           <Card>
@@ -132,8 +132,8 @@ const DepartmentInfo = () => {
               </CustomAvatar>
             </Box>
             {/* <Box sx={{ mb: 2.5 }}> */}
-            <Typography variant='h6' sx={{ ml: 6, fontSize: '2rem', display: 'flex', justifyContent: 'start' }}>
-              4
+            <Typography variant='h6' sx={{ ml: 6, fontSize: '1.5rem', display: 'flex', justifyContent: 'start' }}>
+              0
             </Typography>
             {/* </Box> */}
           </Card>
@@ -143,18 +143,18 @@ const DepartmentInfo = () => {
         <paper>
           <Card>
             <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
-              <CardHeader sx={{ pb: 0 }} title='Active' subheader='Active Departments' />
+              <CardHeader sx={{ pb: 0 }} title='Active' />
               <CustomAvatar
                 skin='light'
                 variant='rounded'
                 sx={{ mr: 2, mt: 5, width: 46, height: 46, selfAlign: 'center' }}
               >
-                <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
+                <Icon fontSize='2.125rem' icon='codicon:vm-active' />
               </CustomAvatar>
             </Box>
             {/* <Box sx={{ mb: 2.5 }}> */}
-            <Typography variant='h6' sx={{ ml: 6, fontSize: '2rem', display: 'flex', justifyContent: 'start' }}>
-              4
+            <Typography variant='h6' sx={{ ml: 6, fontSize: '1.5rem', display: 'flex', justifyContent: 'start' }}>
+              0
             </Typography>
             {/* </Box> */}
           </Card>
@@ -170,12 +170,12 @@ const DepartmentInfo = () => {
                 variant='rounded'
                 sx={{ mr: 2, mt: 5, width: 46, height: 46, selfAlign: 'center' }}
               >
-                <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
+                <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
               </CustomAvatar>
             </Box>
             {/* <Box sx={{ mb: 2.5 }}> */}
-            <Typography variant='h6' sx={{ ml: 6, fontSize: '2rem', display: 'flex', justifyContent: 'start' }}>
-              4
+            <Typography variant='h6' sx={{ ml: 6, fontSize: '1.5rem', display: 'flex', justifyContent: 'start' }}>
+              0
             </Typography>
             {/* </Box> */}
           </Card>
