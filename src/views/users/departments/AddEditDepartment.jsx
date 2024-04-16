@@ -30,6 +30,7 @@ import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { createDepartment } from '../../../store/apps/departments/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
+import { theme } from 'antd'
 
 // const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 //   top: 0,
@@ -123,7 +124,11 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) =>
     <Box
       sx={{
         pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
-        pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+        pt: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(5)} !important`],
+        px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(3)} !important`],
+        border: theme => [`1px solid ${theme.palette.divider}`],
+        borderRadius: 2,
+        mt: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(5)} !important`]
       }}
     >
       {/* <CustomCloseButton onClick={closeModal}>

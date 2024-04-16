@@ -20,15 +20,13 @@ import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 
-import DepartmentsTableHeader from './DepartmentsHeader'
-import CreateDepartment from './CreateDepartment'
+// import DepartmentsTableHeader from './DepartmentsHeader'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
-import { useStaffs } from '../../../hooks/useStaffs'
-
+import DepartmentInfo from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-import EditDepartment from './EditDepartment'
+import EditDepartment from './AddEditDepartment'
 import { display } from '@mui/system'
 
 const DepartmentsTable = () => {
@@ -111,7 +109,7 @@ const DepartmentsTable = () => {
         toggle={toggleDepartmentDrawer}
         sx={{ display: { xs: 'block', md: 'none' } }}
       /> */}
-
+      <DepartmentInfo />
       <Stack spacing={1} direction={'row'}>
         <Item sx={{ xs: '100%', md: '60%' }}>
           <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
@@ -126,7 +124,7 @@ const DepartmentsTable = () => {
                     MODIFIED BY
                   </TableCell>
 
-                  <TableCell align='center' sx={{ minWidth: 80 }}>
+                  <TableCell align='left' sx={{ minWidth: 80 }}>
                     HOD
                   </TableCell>
 
@@ -151,7 +149,7 @@ const DepartmentsTable = () => {
                           department?.lastChangedBy !== null ? department?.lastChangedBy : department?.createdBy
                         }`}</TableCell>
 
-                        <TableCell align='center' sx={{ minWidth: 80 }}>
+                        <TableCell align='left' sx={{ minWidth: 80 }}>
                           {`${
                             department?.hod
                               ? `${formatFirstLetter(department?.hod.firstname)}  ${formatFirstLetter(
