@@ -104,14 +104,9 @@ const DepartmentsTable = () => {
 
   return (
     <div>
-      {/* <DepartmentsTableHeader
-        action='Create Department'
-        toggle={toggleDepartmentDrawer}
-        sx={{ display: { xs: 'block', md: 'none' } }}
-      /> */}
       <DepartmentInfo />
-      <Stack spacing={1} direction={'row'}>
-        <Item sx={{ xs: '100%', md: '60%' }}>
+      <Stack spacing={1} direction={'row'} sx={{ mt: 10 }}>
+        <Item sx={{ xs: '100%', md: '60%', px: 0 }}>
           <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
@@ -199,23 +194,6 @@ const DepartmentsTable = () => {
       />
 
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
-
-      {/* {openEditDrawer && (
-        <EditDepartment
-          open={openEditDrawer}
-          closeModal={toggleEditDrawer}
-          refetchDepartments={updateFetch}
-          selectedDepartment={DepartmentToView}
-        />
-      )} */}
-
-      {/* {addDepartmentOpen && (
-        <CreateDepartment
-          open={addDepartmentOpen}
-          closeModal={toggleDepartmentDrawer}
-          refetchDepartments={updateFetch}
-        />
-      )} */}
     </div>
   )
 }

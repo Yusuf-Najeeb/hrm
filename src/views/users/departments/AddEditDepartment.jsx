@@ -127,8 +127,7 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) =>
         pt: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(5)} !important`],
         px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(3)} !important`],
         border: theme => [`1px solid ${theme.palette.divider}`],
-        borderRadius: 2,
-        mt: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(5)} !important`]
+        borderRadius: 2
       }}
     >
       {/* <CustomCloseButton onClick={closeModal}>
