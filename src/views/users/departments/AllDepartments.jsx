@@ -29,14 +29,13 @@ import { useStaffs } from '../../../hooks/useStaffs'
 
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditDepartment from './EditDepartment'
-import CreateDepartmentStatic from './CreateDepartmentStatic'
 import { display } from '@mui/system'
 
 const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
-
   const [DepartmentsData, loadingDepartments, paging] = useDepartments()
-  const [StaffsData, loading] = useStaffs()
+
+  // const [StaffsData, loading] = useStaffs()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
@@ -153,7 +152,13 @@ const DepartmentsTable = () => {
                         }`}</TableCell>
 
                         <TableCell align='center' sx={{ minWidth: 80 }}>
-                          {`${department?.hod ? department?.hod : department?.id}`}
+                          {`${
+                            department?.hod
+                              ? `${formatFirstLetter(department?.hod.firstname)}  ${formatFirstLetter(
+                                  department?.hod.lastname
+                                )}`
+                              : department?.id
+                          }`}
                         </TableCell>
 
                         <TableCell align='right' sx={{ display: 'flex' }}>

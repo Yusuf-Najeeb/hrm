@@ -4,18 +4,17 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 import Grid from '@mui/material/Grid'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+// import Icon from 'src/@core/components/icon'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Dialog from '@mui/material/Dialog'
 import Button from '@mui/material/Button'
-import { styled } from '@mui/material/styles'
+
+// import Dialog from '@mui/material/Dialog'
+// import { styled } from '@mui/material/styles'
 
 import { CircularProgress, MenuItem } from '@mui/material'
 
-import DialogContent from '@mui/material/DialogContent'
-import IconButton from '@mui/material/IconButton'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { editDepartmentSchema } from 'src/@core/Formschema'
@@ -24,41 +23,44 @@ import { useAppDispatch } from '../../../hooks'
 import { Fragment, useEffect, useState } from 'react'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
-import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
 
-//Debugging starts here...
+// import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
+
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
-
 import { createDepartment } from '../../../store/apps/departments/asyncthunk'
-
 import { formatFirstLetter } from '../../../@core/utils/format'
 
-const CustomCloseButton = styled(IconButton)(({ theme }) => ({
-  top: 0,
-  right: 0,
-  color: 'grey.500',
-  position: 'absolute',
-  boxShadow: theme.shadows[2],
-  transform: 'translate(10px, -10px)',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: `${theme.palette.background.paper} !important`,
-  transition: 'transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out',
-  '&:hover': {
-    transform: 'translate(7px, -5px)'
-  }
-}))
+// const CustomCloseButton = styled(IconButton)(({ theme }) => ({
+//   top: 0,
+//   right: 0,
+//   color: 'grey.500',
+//   position: 'absolute',
+//   boxShadow: theme.shadows[2],
+//   transform: 'translate(10px, -10px)',
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: `${theme.palette.background.paper} !important`,
+//   transition: 'transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out',
+//   '&:hover': {
+//     transform: 'translate(7px, -5px)'
+//   }
+// }))
 
 const defaultValues = {
-  name: ''
+  name: '',
+  hodId: 0
 }
 
 const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) => {
+  const [StaffsData] = useStaffs()
   const [staffsInSelectedDepartment, setStaffs] = useState([])
   const dispatch = useAppDispatch()
 
-  //Utils
-  const [StaffsData, loading, paging] = useStaffs()
+  useEffect(() => {
+    dispatch(fetchStaffs())
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const {
     control,
@@ -69,29 +71,23 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) =>
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(editDepartmentSchema) })
 
   const updateDepartment = async values => {
-    // try {
-    //   const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
+    try {
+      const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
 
-    //   if (data.success) {
-    //     notifySuccess('Department updated successfully')
-    //     reset()
-    //     refetchDepartments()
-
-    //     // closeModal()
-    //   }
-    // } catch (error) {
-    //   notifyError('Error updating department')
-    // }
-
-    console.log('Attempted Edit', values)
+      if (data.success) {
+        notifySuccess('Department updated successfully')
+        reset()
+        refetchDepartments()
+      }
+    } catch (error) {
+      notifyError('Error updating department')
+    }
   }
 
   const newDepartment = async data => {
-    // const res = dispatch(createDepartment(data))
-    // reset()
-    // refetchDepartments()
-
-    console.log('Attempted Create', data)
+    const res = dispatch(createDepartment(data))
+    reset()
+    refetchDepartments()
   }
 
   // Editing Department
@@ -109,8 +105,6 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) =>
     const departmentStaff = StaffsData.filter(staff => staff?.department?.id === selectedDepartment?.id)
 
     setStaffs(departmentStaff)
-    console.log(departmentStaff, 'departmentStaff')
-    console.log(StaffsData, 'StaffsData')
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDepartment])
