@@ -19,11 +19,14 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+
 import DepartmentsTableHeader from './DepartmentsHeader'
 import CreateDepartment from './CreateDepartment'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
+import { useStaffs } from '../../../hooks/useStaffs'
+
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditDepartment from './EditDepartment'
 import CreateDepartmentStatic from './CreateDepartmentStatic'
@@ -33,23 +36,24 @@ const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
 
   const [DepartmentsData, loadingDepartments, paging] = useDepartments()
-  console.log(DepartmentsData)
+  const [StaffsData, loading] = useStaffs()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
   const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
 
+  const [editMode, setEditMode] = useState(false)
   const [openEditDrawer, setEditDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
 
   const [DepartmentToView, setDepartmentToView] = useState(null)
 
-  const setActiveDepartment = value => {
-    setDepartment(value)
-    setOpenCanvas(true)
-  }
+  // const setActiveDepartment = value => {
+  //   setDepartment(value)
+  //   setOpenCanvas(true)
+  // }
 
   const closeCanvas = () => {
     setOpenCanvas(false)
@@ -75,9 +79,11 @@ const DepartmentsTable = () => {
     doCancelDelete()
   }
 
-  const setDepartmentToEdit = prod => {
+  const setDepartmentToEdit = dept => {
     setEditDrawer(true)
-    setDepartmentToView(prod)
+    setDepartmentToView(dept)
+
+    setEditMode(true)
   }
 
   const handleChangePage = newPage => {
@@ -90,7 +96,8 @@ const DepartmentsTable = () => {
   }
 
   const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
-  const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
+
+  // const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: page + 1, limit: 10 }))
@@ -146,7 +153,7 @@ const DepartmentsTable = () => {
                         }`}</TableCell>
 
                         <TableCell align='center' sx={{ minWidth: 80 }}>
-                          {department?.hodId}
+                          {`${department?.hod ? department?.hod : department?.id}`}
                         </TableCell>
 
                         <TableCell align='right' sx={{ display: 'flex' }}>
@@ -174,7 +181,7 @@ const DepartmentsTable = () => {
           </TableContainer>
         </Item>
         <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
-          <CreateDepartmentStatic refetchDepartments={updateFetch} />
+          <EditDepartment refetchDepartments={updateFetch} selectedDepartment={DepartmentToView} editMode={editMode} />
         </Item>
       </Stack>
 
@@ -190,22 +197,22 @@ const DepartmentsTable = () => {
 
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
 
-      {openEditDrawer && (
+      {/* {openEditDrawer && (
         <EditDepartment
           open={openEditDrawer}
           closeModal={toggleEditDrawer}
           refetchDepartments={updateFetch}
           selectedDepartment={DepartmentToView}
         />
-      )}
+      )} */}
 
-      {addDepartmentOpen && (
+      {/* {addDepartmentOpen && (
         <CreateDepartment
           open={addDepartmentOpen}
           closeModal={toggleDepartmentDrawer}
           refetchDepartments={updateFetch}
         />
-      )}
+      )} */}
     </div>
   )
 }

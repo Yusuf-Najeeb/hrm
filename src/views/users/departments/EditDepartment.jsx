@@ -25,6 +25,13 @@ import { Fragment, useEffect, useState } from 'react'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
+
+//Debugging starts here...
+import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { useStaffs } from '../../../hooks/useStaffs'
+
+import { createDepartment } from '../../../store/apps/departments/asyncthunk'
+
 import { formatFirstLetter } from '../../../@core/utils/format'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
@@ -46,8 +53,12 @@ const defaultValues = {
   name: ''
 }
 
-const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartment }) => {
+const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) => {
   const [staffsInSelectedDepartment, setStaffs] = useState([])
+  const dispatch = useAppDispatch()
+
+  //Utils
+  const [StaffsData, loading, paging] = useStaffs()
 
   const {
     control,
@@ -57,122 +68,158 @@ const EditDepartment = ({ open, closeModal, refetchDepartments, selectedDepartme
     formState: { errors, isSubmitting }
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(editDepartmentSchema) })
 
-  const onSubmit = async values => {
-    try {
-      const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
+  const updateDepartment = async values => {
+    // try {
+    //   const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
 
-      if (data.success) {
-        notifySuccess('Department updated successfully')
-        reset()
-        closeModal()
-        refetchDepartments()
-      }
-    } catch (error) {
-      notifyError('Error updating department')
-    }
+    //   if (data.success) {
+    //     notifySuccess('Department updated successfully')
+    //     reset()
+    //     refetchDepartments()
+
+    //     // closeModal()
+    //   }
+    // } catch (error) {
+    //   notifyError('Error updating department')
+    // }
+
+    console.log('Attempted Edit', values)
   }
 
-  useEffect(() => {
-    setValue('name', selectedDepartment.name)
+  const newDepartment = async data => {
+    // const res = dispatch(createDepartment(data))
+    // reset()
+    // refetchDepartments()
 
-    if (selectedDepartment.hodId) {
-      setValue('hodId', selectedDepartment.hodId)
+    console.log('Attempted Create', data)
+  }
+
+  // Editing Department
+  useEffect(() => {
+    setValue('name', selectedDepartment?.name)
+
+    if (selectedDepartment) {
+      setValue('hodId', selectedDepartment?.hodId)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDepartment.hodId])
+  }, [selectedDepartment])
 
   useEffect(() => {
-    getAllStaffsInOneDepartment(selectedDepartment.id).then(res => {
-      setStaffs(res.data)
-    })
+    const departmentStaff = StaffsData.filter(staff => staff?.department?.id === selectedDepartment?.id)
+
+    setStaffs(departmentStaff)
+    console.log(departmentStaff, 'departmentStaff')
+    console.log(StaffsData, 'StaffsData')
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDepartment])
 
   return (
-    <Dialog
-      fullWidth
-      open={open}
-      maxWidth='md'
-      scroll='body'
+    //eslint-disable-next-line
+    // <Dialog
+    //   fullWidth
+    //   open={open}
+    //   maxWidth='md'
+    //   scroll='body'
 
-      //   TransitionComponent={Transition}
-      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 390 } }}
+    //   //   TransitionComponent={Transition}
+    //   sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 390 } }}
+    // >
+    <Box
+      sx={{
+        pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+        pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+      }}
     >
-      <DialogContent
-        sx={{
-          pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
-          pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-        }}
-      >
-        <CustomCloseButton onClick={closeModal}>
+      {/* <CustomCloseButton onClick={closeModal}>
           <Icon icon='tabler:x' fontSize='1.25rem' />
-        </CustomCloseButton>
+        </CustomCloseButton> */}
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogContent
-            sx={{
-              pb: theme => `${theme.spacing(8)} !important`
-            }}
-          >
-            <Grid container spacing={6}>
-              <Grid item xs={12} sm={12}>
-                <Controller
-                  name='name'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      label='Department Name'
-                      value={value}
-                      onChange={onChange}
-                      error={Boolean(errors.name)}
+      <form
+        onSubmit={handleSubmit(data => {
+          if (editMode) {
+            updateDepartment(data)
+          } else {
+            newDepartment(data)
+          }
+        })}
+      >
+        <Box
+          sx={{
+            pb: theme => `${theme.spacing(8)} !important`
+          }}
+        >
+          <Grid container spacing={6}>
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name='name'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <CustomTextField
+                    fullWidth
+                    label='Department Name'
+                    value={value}
+                    onChange={onChange}
+                    error={Boolean(errors.name)}
 
-                      // {...(errors.name && { helperText: errors.name.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Controller
-                  name='hodId'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      select
-                      fullWidth
-                      value={value}
-                      label='Head of Department'
-                      onChange={onChange}
-                      error={Boolean(errors.hodId)}
-                      aria-describedby='stepper-linear-account-hodId'
-
-                      // {...(errors.departmentId && { helperText: 'This field is required' })}
-                    >
-                      <MenuItem value=''> {staffsInSelectedDepartment?.length ? "Select Head of Department" : 'No Staff in Selected Department'} </MenuItem>
-                       {staffsInSelectedDepartment?.map((staff) =>  (
-                          <MenuItem key={staff?.id} value={staff.id}>
-                            {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
-                          </MenuItem>
-                        )
-                      )} 
-                    </CustomTextField>
-                  )}
-                />
-              </Grid>
+                    // {...(errors.name && { helperText: errors.name.message })}
+                  />
+                )}
+              />
             </Grid>
-          </DialogContent>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button type='submit' variant='contained'>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Update'}
-            </Button>
-          </Box>
-        </form>
-      </DialogContent>
-    </Dialog>
+            <Grid item xs={12} sm={12}>
+              <Controller
+                name='hodId'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <CustomTextField
+                    select
+                    fullWidth
+                    value={value}
+                    label='Head of Department'
+                    onChange={onChange}
+                    error={Boolean(errors.hodId)}
+                    aria-describedby='stepper-linear-account-hodId'
+
+                    // {...(errors.departmentId && { helperText: 'This field is required' })}
+                  >
+                    <MenuItem value=''>
+                      {' '}
+                      {staffsInSelectedDepartment?.length
+                        ? 'Select Head of Department'
+                        : 'No Staff in Selected Department'}{' '}
+                    </MenuItem>
+                    {staffsInSelectedDepartment?.map(staff => (
+                      <MenuItem key={staff?.id} value={staff.id}>
+                        {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
+                      </MenuItem>
+                    ))}
+                  </CustomTextField>
+                )}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button type='submit' variant='contained'>
+            {isSubmitting ? (
+              <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
+            ) : editMode ? (
+              'Update'
+            ) : (
+              'Create'
+            )}
+          </Button>
+        </Box>
+      </form>
+    </Box>
+
+    // </Dialog>
   )
 }
 

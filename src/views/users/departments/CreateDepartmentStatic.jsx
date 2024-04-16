@@ -56,8 +56,6 @@ const CreateDepartmentStatic = ({ refetchDepartments }) => {
     const res = await dispatch(createDepartment(data))
 
     reset()
-
-    // closeModal()
     refetchDepartments()
   }
 
