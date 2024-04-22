@@ -63,17 +63,28 @@ const DepartmentInfo = () => {
       <Grid item md={4}>
         <paper>
           <Card>
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
-              <CardHeader sx={{ pb: 0 }} title='Departments' subheader='All Departments' />
+            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'start', justifyContent: 'space-between', p: 3 }}>
+              <CardHeader sx={{ pb: 0 }} title='Departments' />
               <CustomAvatar
                 skin='light'
                 variant='rounded'
-                sx={{ mr: 2, mt: 5, width: 46, height: 46, selfAlign: 'center' }}
+                sx={{ mr: 2, mt: 5, width: 46, height: 46, selfAlign: 'end' }}
               >
                 <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
               </CustomAvatar>
             </Box>
-            <Typography variant='h6' sx={{ mr: 10, mb: 2, fontSize: '1.5rem', display: 'flex', justifyContent: 'end' }}>
+            <Typography
+              variant='h6'
+              sx={{
+                ml: 10,
+                mb: 2,
+                mt: -5,
+                fontSize: '1.6rem',
+                display: 'flex',
+                justifyContent: 'start',
+                width: 'fit-content'
+              }}
+            >
               0
             </Typography>
           </Card>
@@ -82,24 +93,33 @@ const DepartmentInfo = () => {
       <Grid item md={4}>
         <paper>
           <Card>
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'start', justifyContent: 'space-between', p: 3 }}>
               <CardHeader sx={{ pb: 0 }} title='Active' />
               <CustomAvatar skin='light' variant='rounded' sx={{ mt: 5, width: 46, height: 46, selfAlign: 'center' }}>
                 <Icon fontSize='2.125rem' icon='codicon:vm-active' />
               </CustomAvatar>
             </Box>
-            {/* <Box sx={{ mb: 2.5 }}> */}
-            <Typography variant='h6' sx={{ mr: 10, mb: 2, fontSize: '1.5rem', display: 'flex', justifyContent: 'end' }}>
+            <Typography
+              variant='h6'
+              sx={{
+                ml: 10,
+                mb: 2,
+                mt: -5,
+                fontSize: '1.6rem',
+                display: 'flex',
+                justifyContent: 'start',
+                width: 'fit-content'
+              }}
+            >
               0
             </Typography>
-            {/* </Box> */}
           </Card>
         </paper>
       </Grid>
       <Grid item md={4}>
         <paper>
           <Card>
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'start', justifyContent: 'space-between', p: 3 }}>
               <CardHeader sx={{ pb: 0 }} title='Inactive' />
               <CustomAvatar
                 skin='light'
@@ -109,11 +129,20 @@ const DepartmentInfo = () => {
                 <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
               </CustomAvatar>
             </Box>
-            {/* <Box sx={{ mb: 2.5 }}> */}
-            <Typography variant='h6' sx={{ mr: 10, mb: 2, fontSize: '1.5rem', display: 'flex', justifyContent: 'end' }}>
+            <Typography
+              variant='h6'
+              sx={{
+                ml: 10,
+                mb: 2,
+                mt: -5,
+                fontSize: '1.6rem',
+                display: 'flex',
+                justifyContent: 'start',
+                width: 'fit-content'
+              }}
+            >
               0
             </Typography>
-            {/* </Box> */}
           </Card>
         </paper>
       </Grid>

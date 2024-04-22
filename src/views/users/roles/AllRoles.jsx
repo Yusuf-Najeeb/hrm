@@ -38,9 +38,9 @@ const userRoleObj = {
   'house-master': { icon: 'tabler:user', color: 'warning' }
 }
 
-const TypographyStyled = styled(Typography)(({theme})=> ({
+const TypographyStyled = styled(Typography)(({ theme }) => ({
   fontSize: theme.typography.body1.fontSize,
-  color: `${theme.palette.primary.main} !important` 
+  color: `${theme.palette.primary.main} !important`
 }))
 
 const RolesTable = () => {
@@ -63,7 +63,7 @@ const RolesTable = () => {
     setRole(value)
     setOpenCanvas(true)
   }
-  
+
   // are you sure ou want to delete funtion
   const doDelete = value => {
     setDeleteModal(true)
@@ -138,22 +138,21 @@ const RolesTable = () => {
               <Fragment>
                 {RolesDate?.map((role, i) => (
                   <TableRow hover role='checkbox' key={role.id}>
-                    <TableCell align='left' >  {i + 1}</TableCell>
-                    <TableCell align='left' sx={{textTransform: 'uppercase', display: 'flex'}}>
-                      
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <CustomAvatar
-                                skin='light'
-                                sx={{ mr: 4, width: 30, height: 30 }}
-                                color={userRoleObj[role?.name].color || 'primary'}
-                              >
-                                <Icon icon={userRoleObj[role?.name].icon} />
-                              </CustomAvatar>
-                              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                                {formatFirstLetter(role?.name)}
-                              </Typography>
-                            </Box>
-                            </TableCell>
+                    <TableCell align='left'> {i + 1}</TableCell>
+                    <TableCell align='left' sx={{ textTransform: 'uppercase', display: 'flex' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar
+                          skin='light'
+                          sx={{ mr: 4, width: 30, height: 30 }}
+                          color={userRoleObj[role?.name]?.color || 'primary'}
+                        >
+                          <Icon icon={userRoleObj[role?.name]?.icon} />
+                        </CustomAvatar>
+                        <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                          {formatFirstLetter(role?.name)}
+                        </Typography>
+                      </Box>
+                    </TableCell>
                     <TableCell align='left'>{formatDate(role?.createdAt)}</TableCell>
 
                     <TableCell align='left' sx={{ display: 'flex' }}>

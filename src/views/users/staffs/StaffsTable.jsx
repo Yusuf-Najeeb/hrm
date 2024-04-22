@@ -34,7 +34,8 @@ import { useStaffs } from '../../../hooks/useStaffs'
 
 // import PageHeader from '../components/PageHeader'
 import DeleteStaff from './DeleteStaff'
-import ViewStaff from './ViewStaff'
+
+// import ViewStaff from './ViewStaff'
 import { styled } from '@mui/material/styles'
 import AddStaff from './AddStaff'
 import { Stack } from '@mui/system'
@@ -42,7 +43,7 @@ import { Stack } from '@mui/system'
 const StaffsTable = () => {
   const dispatch = useAppDispatch()
 
-  const router = useRouter()
+  // const router = useRouter()
   const [StaffsData, loading, paging] = useStaffs()
   const [DepartmentsData] = useDepartments()
   const [RolesData] = useRoles()
@@ -59,8 +60,6 @@ const StaffsTable = () => {
   const [selectedStaff, setSelectedStaff] = useState(null)
   const [staffToView, setStaffToView] = useState(null)
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
-
-  console.log(StaffsData, 'staffs data')
 
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
@@ -196,7 +195,7 @@ const StaffsTable = () => {
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   DEPARTMENT
                 </TableCell>
-                <TableCell align='left' sx={{ minWidth: 100 }}>
+                <TableCell align='center' sx={{ minWidth: 100 }}>
                   ROLE
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
@@ -234,13 +233,15 @@ const StaffsTable = () => {
                         </Box>
                       </TableCell>
                       <TableCell align='left'>{staff?.department?.name.toUpperCase()}</TableCell>
-                      <TableCell align='left'>
+                      <TableCell align='center'>
                         <IconButton component={IconButtonStyled}>
                           <Icon
                             icon={
                               staff?.role?.name == 'Admin' || staff?.role?.name == 'admin'
                                 ? 'grommet-icons:user-admin'
-                                : 'tabler/user-pentagon'
+                                : staff?.role?.name == null
+                                ? 'tabler/user-pentagon'
+                                : 'tabler/user'
                             }
                           />
                         </IconButton>
