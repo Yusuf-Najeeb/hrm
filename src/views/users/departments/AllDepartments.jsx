@@ -119,7 +119,7 @@ const DepartmentsTable = () => {
                     MODIFIED BY
                   </TableCell>
 
-                  <TableCell align='left' sx={{ minWidth: 80 }}>
+                  <TableCell align='center' sx={{ minWidth: 80 }}>
                     HOD
                   </TableCell>
 
@@ -141,10 +141,12 @@ const DepartmentsTable = () => {
                       <TableRow hover role='checkbox' key={department.id}>
                         <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
                         <TableCell align='center'>{`${
-                          department?.lastChangedBy !== null ? department?.lastChangedBy : department?.createdBy
+                          department?.lastChangedBy !== null
+                            ? department?.lastChangedBy.toUpperCase()
+                            : department?.createdBy.toUpperCase()
                         }`}</TableCell>
 
-                        <TableCell align='left' sx={{ minWidth: 80 }}>
+                        <TableCell align='center' sx={{ minWidth: 80 }}>
                           {`${
                             department?.hod
                               ? `${formatFirstLetter(department?.hod.firstname)}  ${formatFirstLetter(
