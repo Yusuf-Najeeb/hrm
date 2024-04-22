@@ -69,7 +69,6 @@ import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { uploadImage } from '../../../store/apps/upload'
 import { steps } from '../../../@core/FormSchema/utils'
-import CreateDepartment from '../departments/HeaderCards'
 import SubmitSpinnerMessage from '../components/SubmitSpinnerMessage'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
@@ -888,6 +887,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
         maxWidth='md'
         scroll='body'
         onClose={closeModal}
+        //eslint-disable-next-line
         // TransitionComponent={Transition}
 
         // onBackdropClick={() => setShow(false)}
@@ -988,12 +988,6 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
           </Card>
         </DialogContent>
       </Dialog>
-
-      <CreateDepartment
-        open={openDepartmentsModal}
-        closeModal={toggleDepartmentsModal}
-        refetchDepartments={updateFetch}
-      />
     </Fragment>
   )
 }

@@ -40,7 +40,8 @@ import TableHeader from './TableHeader'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import AddStaff from './AddStaff'
+
+// import AddStaff from './AddStaff'
 import DeleteStaff from './DeleteStaff'
 import EditStaffCard from './EditStaffCard'
 import { useDepartments } from '../../../hooks/useDepartments'
@@ -435,7 +436,8 @@ const StaffsList = () => {
         </Grid>
       </DatePickerWrapper>
 
-      <AddStaff open={showAddStaffModal} closeModal={toggleAddStaffModal} refetchStaffs={updateFetch} />
+      {/* <AddStaff open={showAddStaffModal} closeModal={toggleAddStaffModal} refetchStaffs={updateFetch} /> */}
+
       <DeleteStaff
         open={deleteModal}
         handleClose={doCancelDelete}

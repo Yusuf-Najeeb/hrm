@@ -73,11 +73,9 @@ const DepartmentInfo = () => {
                 <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
               </CustomAvatar>
             </Box>
-            {/* <Box sx={{ mb: 2.5 }}> */}
             <Typography variant='h6' sx={{ mr: 10, mb: 2, fontSize: '1.5rem', display: 'flex', justifyContent: 'end' }}>
               0
             </Typography>
-            {/* </Box> */}
           </Card>
         </paper>
       </Grid>
