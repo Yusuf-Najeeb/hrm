@@ -237,7 +237,7 @@ const CustomInput = forwardRef((props, ref) => {
 const StaffsList = () => {
   const [StaffsData, loading, paging] = useStaffs()
   const [DepartmentsData] = useDepartments()
-  const [RolesDate] = useRoles()
+  const [RolesData] = useRoles()
 
   // ** State
   const [page, setPage] = useState(0)
@@ -405,7 +405,7 @@ const StaffsList = () => {
                       SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
                     >
                       <MenuItem value=''>Select Role</MenuItem>
-                      {RolesDate?.map(role => (
+                      {RolesData?.map(role => (
                         <MenuItem key={role?.id} value={role?.id}>
                           {formatFirstLetter(role?.name)}
                         </MenuItem>
