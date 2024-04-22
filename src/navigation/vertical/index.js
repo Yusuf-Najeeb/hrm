@@ -19,11 +19,12 @@ const navigation = () => {
       icon: 'tabler:user-hexagon',
       path: '/apps/staffs'
     },
-    {
-      title: 'New Staff',
-      icon: 'wpf:add-user',
-      path: '/apps/new-staff'
-    },
+
+    // {
+    //   title: 'New Staff',
+    //   icon: 'wpf:add-user',
+    //   path: '/apps/new-staff'
+    // },
     {
       title: 'Payroll',
       icon: 'fluent:payment-16-regular',
@@ -55,7 +56,7 @@ const navigation = () => {
       icon: 'tabler:arrow-fork',
       path: '/apps/roles'
     },
-    
+
     // {
     //   title: 'Permissions',
     //   icon: 'tabler:arrow-left-right',

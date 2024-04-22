@@ -40,7 +40,8 @@ import TableHeader from './TableHeader'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import AddStaff from './AddStaff'
+
+// import AddStaff from './AddStaff'
 import DeleteStaff from './DeleteStaff'
 import EditStaffCard from './EditStaffCard'
 import { useDepartments } from '../../../hooks/useDepartments'
@@ -55,99 +56,111 @@ const LinkStyled = styled(Link)(({ theme }) => ({
   color: `${theme.palette.primary.main} !important`
 }))
 
-const TypographyStyled = styled(Typography)(({theme})=> ({
-    fontSize: theme.typography.body1.fontSize,
-    color: `${theme.palette.primary.main} !important` 
+const TypographyStyled = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.body1.fontSize,
+  color: `${theme.palette.primary.main} !important`
 }))
 
-const IconButtonStyled = styled(IconButton)(({theme})=> ({
-    fontSize: theme.typography.body1.fontSize,
-    color: `${theme.palette.primary.main} !important` 
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  fontSize: theme.typography.body1.fontSize,
+  color: `${theme.palette.primary.main} !important`
 }))
-
 
 // ** renders client column
 const renderClient = row => {
-    const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
+  const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
 
   if (row?.image?.length) {
-    return <CustomAvatar src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${row?.image}`} sx={{ mr: 2.5, width: 38, height: 38 }} />
+    return (
+      <CustomAvatar
+        src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${row?.image}`}
+        sx={{ mr: 2.5, width: 38, height: 38 }}
+      />
+    )
   } else {
-
     return (
       <CustomAvatar
         skin='light'
-        color={row.id % 2 === 0 ?  'primary' : 'secondary'}
+        color={row.id % 2 === 0 ? 'primary' : 'secondary'}
         sx={{ mr: 2.5, width: 38, height: 38, fontWeight: 500, fontSize: theme => theme.typography.body1.fontSize }}
       >
         {getInitials(initials || 'John Doe')}
       </CustomAvatar>
     )
-
   }
 }
 
 const renderRoleRow = row => {
-
-    return (
-        <IconButton component={IconButtonStyled} >
-        <Icon icon= {row?.role?.name == "Admin" || row?.role?.name == "admin" ?  'grommet-icons:user-admin' : 'dashicons/admin-users'} />
-      </IconButton>
-    )
+  return (
+    <IconButton component={IconButtonStyled}>
+      <Icon
+        icon={
+          row?.role?.name == 'Admin' || row?.role?.name == 'admin'
+            ? 'grommet-icons:user-admin'
+            : 'dashicons/admin-users'
+        }
+      />
+    </IconButton>
+  )
 }
 
 const defaultColumns = [
-//   {
-//     flex: 0.1,
-//     field: 'id',
-//     minWidth: 100,
-//     headerName: 'ID',
-//     renderCell: ({ row }) => (
-//       <Typography component={LinkStyled} href={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Typography>
-//     )
-//   },
-//   {
-//     flex: 0.1,
-//     minWidth: 80,
-//     field: 'invoiceStatus',
-//     renderHeader: () => <Icon icon='tabler:trending-up' />,
-//     renderCell: ({ row }) => {
-//       const { dueDate, balance, invoiceStatus } = row
-//       const color = invoiceStatusObj[invoiceStatus] ? invoiceStatusObj[invoiceStatus].color : 'primary'
+  //   {
+  //     flex: 0.1,
+  //     field: 'id',
+  //     minWidth: 100,
+  //     headerName: 'ID',
+  //     renderCell: ({ row }) => (
+  //       <Typography component={LinkStyled} href={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Typography>
+  //     )
+  //   },
+  //   {
+  //     flex: 0.1,
+  //     minWidth: 80,
+  //     field: 'invoiceStatus',
+  //     renderHeader: () => <Icon icon='tabler:trending-up' />,
+  //     renderCell: ({ row }) => {
+  //       const { dueDate, balance, invoiceStatus } = row
+  //       const color = invoiceStatusObj[invoiceStatus] ? invoiceStatusObj[invoiceStatus].color : 'primary'
 
-//       return (
-//         <Tooltip
-//           title={
-//             <div>
-//               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//                 {invoiceStatus}
-//               </Typography>
-//               <br />
-//               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//                 Balance:
-//               </Typography>{' '}
-//               {balance}
-//               <br />
-//               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//                 Due Date:
-//               </Typography>{' '}
-//               {dueDate}
-//             </div>
-//           }
-//         >
-//           <CustomAvatar skin='light' color={color} sx={{ width: '1.875rem', height: '1.875rem' }}>
-//             <Icon icon={invoiceStatusObj[invoiceStatus].icon} />
-//           </CustomAvatar>
-//         </Tooltip>
-//       )
-//     }
-//   },
-{
-    field: 'id' , 
-    headerName: 'S/N', 
+  //       return (
+  //         <Tooltip
+  //           title={
+  //             <div>
+  //               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
+  //                 {invoiceStatus}
+  //               </Typography>
+  //               <br />
+  //               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
+  //                 Balance:
+  //               </Typography>{' '}
+  //               {balance}
+  //               <br />
+  //               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
+  //                 Due Date:
+  //               </Typography>{' '}
+  //               {dueDate}
+  //             </div>
+  //           }
+  //         >
+  //           <CustomAvatar skin='light' color={color} sx={{ width: '1.875rem', height: '1.875rem' }}>
+  //             <Icon icon={invoiceStatusObj[invoiceStatus].icon} />
+  //           </CustomAvatar>
+  //         </Tooltip>
+  //       )
+  //     }
+  //   },
+  {
+    field: 'id',
+    headerName: 'S/N',
     filterable: false,
-    renderCell:(index) => <Typography component={TypographyStyled}> {index.api.getRowIndexRelativeToVisibleRows(index.row.id) + 1} </Typography>
-},
+    renderCell: index => (
+      <Typography component={TypographyStyled}>
+        {' '}
+        {index.api.getRowIndexRelativeToVisibleRows(index.row.id) + 1}{' '}
+      </Typography>
+    )
+  },
 
   {
     flex: 0.25,
@@ -187,24 +200,26 @@ const defaultColumns = [
     field: 'role.name',
     filterable: false,
     headerName: 'Role',
-    renderCell: ({ row }) => { 
-        return (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {renderRoleRow(row)}
-              <Typography sx={{ color: 'text.secondary' }}>{formatFirstLetter(row?.role?.name)|| '--'}</Typography>
-            </Box>
-          )
+    renderCell: ({ row }) => {
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {renderRoleRow(row)}
+          <Typography sx={{ color: 'text.secondary' }}>{formatFirstLetter(row?.role?.name) || '--'}</Typography>
+        </Box>
+      )
     }
   },
 
-    {
+  {
     flex: 0.1,
     minWidth: 100,
     field: 'grossSalary',
     filterable: false,
     headerName: 'Gross Salary',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`#${row?.grossSalary.toLocaleString() || 0}`}</Typography>
-  },
+    renderCell: ({ row }) => (
+      <Typography sx={{ color: 'text.secondary' }}>{`#${row?.grossSalary.toLocaleString() || 0}`}</Typography>
+    )
+  }
 ]
 
 /* eslint-disable */
@@ -220,10 +235,9 @@ const CustomInput = forwardRef((props, ref) => {
 
 /* eslint-enable */
 const StaffsList = () => {
-
-    const [StaffsData, loading, paging] = useStaffs()
-    const [DepartmentsData] = useDepartments()
-    const [RolesDate] = useRoles()
+  const [StaffsData, loading, paging] = useStaffs()
+  const [DepartmentsData] = useDepartments()
+  const [RolesData] = useRoles()
 
   // ** State
   const [page, setPage] = useState(0)
@@ -253,13 +267,12 @@ const StaffsList = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: 1, limit: 200 }))
-    dispatch(fetchStaffs({page: page + 1 }))
+    dispatch(fetchStaffs({ page: page + 1 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, refetch])
 
-
-  const toggleAddStaffModal = ()=> {
+  const toggleAddStaffModal = () => {
     setShowAddStaffModal(!showAddStaffModal)
   }
 
@@ -271,7 +284,7 @@ const StaffsList = () => {
     setStatusValue(e.target.value)
   }
 
-  const doDelete = (value) => {
+  const doDelete = value => {
     setDeleteModal(true)
     setSelectedStaff(value?.id)
   }
@@ -281,7 +294,7 @@ const StaffsList = () => {
     setSelectedStaff(null)
   }
 
-  const updateFetch = ()=> setFetch(!refetch)
+  const updateFetch = () => setFetch(!refetch)
 
   const handleOnChangeRange = dates => {
     const [start, end] = dates
@@ -293,17 +306,15 @@ const StaffsList = () => {
   }
 
   // Handle Edit dialog
-  const setStaffToUpdate = (value) => {
-
+  const setStaffToUpdate = value => {
     setEditDrawer(true)
     setStaffToEdit(value)
-    }
+  }
 
   const handleEditClose = () => {
-
     setStaffToEdit(null)
     setEditDrawer(false)
-}
+  }
 
   const columns = [
     ...defaultColumns,
@@ -316,11 +327,11 @@ const StaffsList = () => {
       headerName: 'Actions',
       renderCell: ({ row }) => (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-             <Tooltip title='Edit Staff'>
-             <IconButton size='small' onClick={() => setStaffToUpdate(row)}>
-            <Icon icon='tabler:edit' />
+          <Tooltip title='Edit Staff'>
+            <IconButton size='small' onClick={() => setStaffToUpdate(row)}>
+              <Icon icon='tabler:edit' />
             </IconButton>
-            </Tooltip>
+          </Tooltip>
           <Tooltip title='Delete Staff'>
             <IconButton size='small' sx={{ color: 'text.secondary' }} onClick={() => doDelete(row)}>
               <Icon icon='tabler:trash' />
@@ -363,72 +374,77 @@ const StaffsList = () => {
   ]
 
   return (
-    <Fragment >
-    <DatePickerWrapper>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader title='Filters' />
-            <CardContent>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sm={6}>
-                  <CustomTextField
-                    select
-                    fullWidth
-                    label='Department'
-                    SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
-                  >
-                     <MenuItem value=''>Select Department</MenuItem>
+    <Fragment>
+      <DatePickerWrapper>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <Card>
+              <CardHeader title='Filters' />
+              <CardContent>
+                <Grid container spacing={6}>
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField
+                      select
+                      fullWidth
+                      label='Department'
+                      SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
+                    >
+                      <MenuItem value=''>Select Department</MenuItem>
                       {DepartmentsData?.map(department => (
                         <MenuItem key={department?.id} value={department?.id}>
                           {formatFirstLetter(department?.name)}
                         </MenuItem>
                       ))}
-                  </CustomTextField>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                <CustomTextField
-                    select
-                    fullWidth
-                    label='Role'
-                    SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
-                  >
-                     <MenuItem value=''>Select Role</MenuItem>
-                      {RolesDate?.map(role => (
+                    </CustomTextField>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField
+                      select
+                      fullWidth
+                      label='Role'
+                      SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
+                    >
+                      <MenuItem value=''>Select Role</MenuItem>
+                      {RolesData?.map(role => (
                         <MenuItem key={role?.id} value={role?.id}>
                           {formatFirstLetter(role?.name)}
                         </MenuItem>
                       ))}
-                  </CustomTextField>
+                    </CustomTextField>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card>
+              <TableHeader value={value} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
+              <DataGrid
+                autoHeight
+                pagination
+                rowHeight={62}
+                rows={StaffsData?.length ? StaffsData : []}
+                columns={columns}
+                disableRowSelectionOnClick
+                pageSizeOptions={[10, 25, 50]}
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                onRowSelectionModelChange={rows => setSelectedRows(rows)}
+              />
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <TableHeader value={value}  handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
-            <DataGrid
-              autoHeight
-              pagination
-              rowHeight={62}
-              rows={StaffsData?.length ? StaffsData : []}
-              columns={columns}
-              disableRowSelectionOnClick
-              pageSizeOptions={[10, 25, 50]}
-              paginationModel={paginationModel}
-              onPaginationModelChange={setPaginationModel}
-              onRowSelectionModelChange={rows => setSelectedRows(rows)}
+      </DatePickerWrapper>
 
-            />
-          </Card>
-        </Grid>
-      </Grid>
-    </DatePickerWrapper>
+      {/* <AddStaff open={showAddStaffModal} closeModal={toggleAddStaffModal} refetchStaffs={updateFetch} /> */}
 
-    <AddStaff open={showAddStaffModal} closeModal={toggleAddStaffModal} refetchStaffs={updateFetch}/>
-    <DeleteStaff open={deleteModal} handleClose={doCancelDelete} selectedStaff={selectedStaff} refetchStaffs={updateFetch} />
-    <EditStaffCard openEdit={openEditDrawer} closeModal={handleEditClose} data={staffToEdit} />
+      <DeleteStaff
+        open={deleteModal}
+        handleClose={doCancelDelete}
+        selectedStaff={selectedStaff}
+        refetchStaffs={updateFetch}
+      />
+      <EditStaffCard openEdit={openEditDrawer} closeModal={handleEditClose} data={staffToEdit} />
     </Fragment>
   )
 }
