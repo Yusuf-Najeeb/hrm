@@ -141,8 +141,8 @@ const StaffsTable = () => {
         <Card>
           <CardHeader title='Search Filters' />
           <CardContent>
-            <Grid container spacing={6}>
-              <Grid item xs={12} sm={3}>
+            <Grid container spacing={6} sx={{ display: 'flex', justifyContent: 'start' }}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextField
                   select
                   fullWidth
@@ -178,7 +178,6 @@ const StaffsTable = () => {
 
                 // clickAddBtn={toggleAddStaffModal}
               />
-              {/* <PageHeader action='Add Staff' toggle={handleNewStaff} /> */}
             </Grid>
           </CardContent>
         </Card>
