@@ -246,9 +246,9 @@ const StaffsTable = () => {
                             icon={
                               staff?.role?.name == 'Admin' || staff?.role?.name == 'admin'
                                 ? 'grommet-icons:user-admin'
-                                : staff?.role?.name == null
-                                ? 'tabler/user-pentagon'
-                                : 'tabler/user'
+                                : staff?.role == null
+                                ? 'ph:user'
+                                : null
                             }
                           />
                         </IconButton>
