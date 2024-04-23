@@ -1,4 +1,4 @@
-import React, {  Fragment, } from 'react'
+import React, { Fragment } from 'react'
 import Drawer from '@mui/material/Drawer'
 
 import IconButton from '@mui/material/IconButton'
@@ -14,7 +14,6 @@ import { Alert } from '@mui/material'
 import StaffCard from './StaffCard'
 import { formatFirstLetter } from '../../../@core/utils/format'
 
-
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -23,9 +22,7 @@ const Header = styled(Box)(({ theme }) => ({
 }))
 
 const ViewStaff = ({ open, closeCanvas, staffUser, hasUploadedImage, setHasUploadedImage }) => {
-
   const theme = useTheme()
-
 
   return (
     <Drawer
@@ -36,7 +33,9 @@ const ViewStaff = ({ open, closeCanvas, staffUser, hasUploadedImage, setHasUploa
       sx={{ '& .MuiDrawer-paper': { width: { xs: 800, sm: 800 } } }}
     >
       <Header>
-        <Typography variant='h5'>Viewing {`${formatFirstLetter(staffUser?.firstname)} ${formatFirstLetter(staffUser?.lastname)}` || '--'}</Typography>
+        <Typography variant='h5'>
+          Viewing {`${formatFirstLetter(staffUser?.firstname)} ${formatFirstLetter(staffUser?.lastname)}` || '--'}
+        </Typography>
         <IconButton
           size='small'
           onClick={closeCanvas}
@@ -53,20 +52,24 @@ const ViewStaff = ({ open, closeCanvas, staffUser, hasUploadedImage, setHasUploa
         </IconButton>
       </Header>
       <Box sx={{ p: theme => theme.spacing(0, 3, 3) }}>
-     
-          <Fragment>
-            {staffUser !== null && staffUser !== undefined ? (
-              <Grid item xs={12} md={5} lg={4}>
-                <StaffCard Staff={staffUser} hasUploadedImage={hasUploadedImage} setHasUploadedImage={setHasUploadedImage} closeViewStaffCanvas={closeCanvas} />
+        <Fragment>
+          {staffUser !== null && staffUser !== undefined ? (
+            <Grid item xs={12} md={5} lg={4}>
+              <StaffCard
+                Staff={staffUser}
+                hasUploadedImage={hasUploadedImage}
+                setHasUploadedImage={setHasUploadedImage}
+                closeViewStaffCanvas={closeCanvas}
+              />
+            </Grid>
+          ) : (
+            <Grid container spacing={6}>
+              <Grid item xs={12}>
+                <Alert severity='error'>Staff does not exist. Please check the list of Staffs: </Alert>
               </Grid>
-            ) : (
-              <Grid container spacing={6}>
-                <Grid item xs={12}>
-                  <Alert severity='error'>Staff does not exist. Please check the list of Staffs: </Alert>
-                </Grid>
-              </Grid>
-            )}
-          </Fragment>
+            </Grid>
+          )}
+        </Fragment>
       </Box>
     </Drawer>
   )

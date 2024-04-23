@@ -35,7 +35,7 @@ import { useStaffs } from '../../../hooks/useStaffs'
 import DeleteStaff from './DeleteStaff'
 import EditStaffCard from './EditStaffCard'
 
-// import ViewStaff from './ViewStaff'
+import ViewStaff from './ViewStaff'
 import { styled } from '@mui/material/styles'
 import AddStaff from './AddStaff'
 import { Stack } from '@mui/system'
@@ -262,6 +262,15 @@ const StaffsTable = () => {
                               <Icon icon='tabler:edit' />
                             </IconButton>
                           </Tooltip>
+                          <Tooltip title='View Staff'>
+                            <IconButton
+                              size='small'
+                              sx={{ color: 'text.secondary' }}
+                              onClick={() => setActiveStaff(staff)}
+                            >
+                              <Icon icon='tabler:eye' />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title='Delete Staff'>
                             <IconButton size='small' sx={{ color: 'text.secondary' }} onClick={() => doDelete(staff)}>
                               <Icon icon='tabler:trash' />
@@ -305,7 +314,7 @@ const StaffsTable = () => {
         <AddStaff open={toggleAddStaffModal} closeModal={toggleAddStaffModal} refetchStaffs={updateFetch} />
       )}
       {editModal && <EditStaffCard data={staffToUpdate} openEdit={toggleEditModal} closeModal={closeEditModal} />}
-      {/* {openViewDrawer && (
+      {openViewDrawer && (
         <ViewStaff
           open={openViewDrawer}
           closeCanvas={closeCanvas}
@@ -313,7 +322,7 @@ const StaffsTable = () => {
           hasUploadedImage={hasUploadedImage}
           setHasUploadedImage={setHasUploadedImage}
         />
-      )} */}
+      )}
     </Stack>
   )
 }
