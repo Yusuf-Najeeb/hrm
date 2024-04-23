@@ -32,8 +32,8 @@ import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { useRoles } from '../../../hooks/useRoles'
 import { useStaffs } from '../../../hooks/useStaffs'
 
-// import PageHeader from '../components/PageHeader'
 import DeleteStaff from './DeleteStaff'
+import EditStaffCard from './EditStaffCard'
 
 // import ViewStaff from './ViewStaff'
 import { styled } from '@mui/material/styles'
@@ -59,7 +59,9 @@ const StaffsTable = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedStaff, setSelectedStaff] = useState(null)
   const [staffToView, setStaffToView] = useState(null)
+  const [staffToUpdate, setStaffToUpdate] = useState(null)
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
+  const [editModal, setEditModal] = useState(false)
 
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
@@ -86,6 +88,16 @@ const StaffsTable = () => {
         </CustomAvatar>
       )
     }
+  }
+
+  const toggleEditModal = val => {
+    setStaffToUpdate(val)
+    setEditModal(true)
+  }
+
+  const closeEditModal = () => {
+    setStaffToUpdate(null)
+    setEditModal(false)
   }
 
   const closeCanvas = () => {
@@ -123,7 +135,7 @@ const StaffsTable = () => {
     setValue(val)
   }
 
-  const handleNewStaff = () => {
+  const toggleAddStaffModal = () => {
     setAddStaffModal(!addStaffModal)
   }
 
@@ -171,12 +183,7 @@ const StaffsTable = () => {
                   ))}
                 </CustomTextField>
               </Grid>
-              <TableHeader
-                value={value}
-                handleFilter={handleFilter}
-
-                // clickAddBtn={toggleAddStaffModal}
-              />
+              <TableHeader value={value} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
             </Grid>
           </CardContent>
         </Card>
@@ -251,7 +258,7 @@ const StaffsTable = () => {
                       <TableCell align='left' sx={{ display: 'flex', minHeight: 72 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Tooltip title='Edit Staff'>
-                            <IconButton size='small' onClick={() => setStaffToUpdate(staff)}>
+                            <IconButton size='small' onClick={() => toggleEditModal(staff)}>
                               <Icon icon='tabler:edit' />
                             </IconButton>
                           </Tooltip>
@@ -294,7 +301,10 @@ const StaffsTable = () => {
         selectedStaff={selectedStaff}
         refetchStaffs={updateFetch}
       />
-      {addStaffModal && <AddStaff open={handleNewStaff} closeModal={handleNewStaff} refetchStaffs={updateFetch} />}
+      {addStaffModal && (
+        <AddStaff open={toggleAddStaffModal} closeModal={toggleAddStaffModal} refetchStaffs={updateFetch} />
+      )}
+      {editModal && <EditStaffCard data={staffToUpdate} openEdit={toggleEditModal} closeModal={closeEditModal} />}
       {/* {openViewDrawer && (
         <ViewStaff
           open={openViewDrawer}

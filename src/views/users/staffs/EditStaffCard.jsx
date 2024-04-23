@@ -64,8 +64,6 @@ import SubmitSpinnerMessage from '../components/SubmitSpinnerMessage'
 
 // import { CustomCloseButton } from '../departments/CreateDepartment'
 
-
-
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
   right: 0,
@@ -77,11 +75,7 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: `${theme.palette.background.paper} !important`
 }))
 
-const EditStaff = ({
-  data,
-  openEdit,
-  closeModal,
-}) => {
+const EditStaff = ({ data, openEdit, closeModal }) => {
   const dispatch = useAppDispatch()
 
   const [DepartmentsData] = useDepartments()
@@ -92,7 +86,7 @@ const EditStaff = ({
   const [previewUrl, setPreviewUrl] = useState()
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
 
-  const [profilePictureUrl, setProfilePictureUrl] = useState();
+  const [profilePictureUrl, setProfilePictureUrl] = useState()
 
   // ** Hooks & Var
   const { settings } = useSettings()
@@ -129,7 +123,7 @@ const EditStaff = ({
     setValue: setNextofKinValue,
     control: nextOfKinControl,
     handleSubmit: handleNextOfKinSubmit,
-    formState: { errors: nextOfKinErrors , isSubmitting},
+    formState: { errors: nextOfKinErrors, isSubmitting },
     getValues: getNextOfKinValues
   } = useForm({
     defaultValues: defaultNextOfKinValues,
@@ -241,7 +235,7 @@ const EditStaff = ({
         handleReset()
         setActiveStep(0)
         closeEditDrawer()
-        dispatch(fetchStaffs({page: 1 }))
+        dispatch(fetchStaffs({ page: 1 }))
       }
 
       // if (response?.data?.data?.image) {
@@ -252,9 +246,8 @@ const EditStaff = ({
     }
   }
 
-
-  useEffect(()=>{
-    if (data){
+  useEffect(() => {
+    if (data) {
       setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${data?.image}`)
     }
 
@@ -781,7 +774,7 @@ const EditStaff = ({
                   Back
                 </Button>
                 <Button type='submit' variant='contained' disabled={isSubmitting}>
-                {isSubmitting ? <SubmitSpinnerMessage /> : 'Submit'}
+                  {isSubmitting ? <SubmitSpinnerMessage /> : 'Submit'}
                 </Button>
               </Grid>
             </Grid>
@@ -840,14 +833,16 @@ const EditStaff = ({
         <Card>
           <CardContent>
             <StepperWrapper>
-              <Stepper 
-               activeStep={activeStep}
-               connector={
-                 !smallScreen ? <Icon icon={direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'} /> : null
-               }
+              <Stepper
+                activeStep={activeStep}
+                connector={
+                  !smallScreen ? (
+                    <Icon icon={direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'} />
+                  ) : null
+                }
               >
                 {steps.map((step, index) => {
-              const RenderAvatar = activeStep >= index ? CustomAvatar : Avatar
+                  const RenderAvatar = activeStep >= index ? CustomAvatar : Avatar
                   const labelProps = {}
                   if (index === activeStep) {
                     labelProps.error = false

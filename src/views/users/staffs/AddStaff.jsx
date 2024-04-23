@@ -378,7 +378,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                     width={120}
                     height={100}
                     style={{ objectFit: 'cover', objectPosition: 'center' }}
-                    alt='product image'
+                    alt='user image'
                   />
                 )}
               </Box>
