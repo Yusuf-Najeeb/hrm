@@ -1,38 +1,38 @@
 export const defaultWorkInfoValues = {
-    designation: '',
-    employeeNumber: '',
-    grossSalary: Number(''),
-    accountNumber: '',
-    rsaCompany: '',
-    rsaNumber: '',
-    departmentId: ''
-  }
+  designation: '',
+  employeeNumber: '',
+  grossSalary: Number(''),
+  accountNumber: '',
+  rsaCompany: '',
+  rsaNumber: '',
+  departmentId: '',
+  roleId: ''
+}
 
-  
 export const defaultPersonalValues = {
-    username: '',
-    email: '',
-    password: '',
-    lastname: '',
-    firstname: '',
-    phone: '',
-    bloodGroup: '',
-    genotype: '',
-    allergies: '',
-    maritalStatus: '',
-    address: '',
-    
-    // additionalInfo: ''
-  }
+  username: '',
+  email: '',
+  password: '',
+  lastname: '',
+  firstname: '',
+  phone: '',
+  bloodGroup: '',
+  genotype: '',
+  allergies: '',
+  maritalStatus: '',
+  address: ''
 
-  export const defaultNextOfKinValues = {
-    firstname: '',
-    lastname: '',
-    phone: '',
-    email: '',
-    occupation: '',
-    address: '',
-    title: '',
-    relationship: '',
-    maritalStatus: ''
-  }
+  // additionalInfo: ''
+}
+
+export const defaultNextOfKinValues = {
+  firstname: '',
+  lastname: '',
+  phone: '',
+  email: '',
+  occupation: '',
+  address: '',
+  title: '',
+  relationship: '',
+  maritalStatus: ''
+}

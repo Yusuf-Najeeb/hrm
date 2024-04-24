@@ -40,6 +40,8 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import StepperWrapper from 'src/@core/styles/mui/stepper'
 import { CircularProgress, Dialog, DialogContent } from '@mui/material'
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
+import { useRoles } from '../../../hooks/useRoles'
 import { useDepartments } from '../../../hooks/useDepartments'
 import { useAppDispatch } from '../../../hooks'
 
@@ -122,6 +124,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   const dispatch = useAppDispatch()
 
   const [DepartmentsData] = useDepartments()
+  const [RolesData] = useRoles()
 
   // ** States
   const [activeStep, setActiveStep] = useState(0)
@@ -228,7 +231,8 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
       rsaNumber: '',
       accountNumber: '',
       departmentId: '',
-      grossSalary: ''
+      grossSalary: '',
+      roleId: ''
     })
     personalReset({
       username: '',
@@ -324,6 +328,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: 1, limit: 200 }))
+    dispatch(fetchRoles({ page: 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openDepartmentsModal, refetch])
@@ -642,8 +647,34 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   <Icon fontSize='1.125rem' icon='tabler:plus' />
                 </Button>
               </Grid>
+              <Grid item xs={10} sm={6}>
+                <Controller
+                  name='roleId'
+                  control={workInfoControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Role'
+                      onChange={onChange}
+                      error={Boolean(workInfoErrors.roleId)}
+                      aria-describedby='stepper-linear-account-roleId'
+                      {...(workInfoErrors.roleId && { helperText: 'This field is required' })}
+                    >
+                      <MenuItem value=''>Select Role</MenuItem>
+                      {RolesData?.map(role => (
+                        <MenuItem key={role?.id} value={role?.id}>
+                          {formatFirstLetter(role?.name)}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
 
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={5}>
                 <FormController
                   name='employeeNumber'
                   control={workInfoControl}

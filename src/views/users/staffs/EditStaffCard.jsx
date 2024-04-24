@@ -47,12 +47,14 @@ import {
 
 // Custom Hooks
 import { useDepartments } from '../../../hooks/useDepartments'
+import { useRoles } from '../../../hooks/useRoles'
 import { useAppDispatch } from '../../../hooks'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // Others
 import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
@@ -79,6 +81,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
   const dispatch = useAppDispatch()
 
   const [DepartmentsData] = useDepartments()
+  const [RolesData] = useRoles()
 
   // ** States
   const [activeStep, setActiveStep] = useState(0)
@@ -224,6 +227,11 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
         id: data?.id
       }
       payload.userNOK = { ...nextOfKinValues }
+      const { grossSalary } = payload
+      const formatSalary = +grossSalary
+      payload.grossSalary = formatSalary
+
+      console.log('Payload data after edits', payload)
 
       const response = await axios.patch('users/modify', payload, {
         headers: {
@@ -256,6 +264,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: 1, limit: 200 }))
+    dispatch(fetchRoles({ page: 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -273,6 +282,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
       setPersonalValue('allergies', data?.allergies)
       setPersonalValue('maritalStatus', data?.maritalStatus)
       setWorkInfoValue('designation', data?.designation)
+      setWorkInfoValue('roleId', data?.role?.id)
       setWorkInfoValue('employeeNumber', data?.employeeNumber)
       setWorkInfoValue('grossSalary', data?.grossSalary)
       setWorkInfoValue('accountNumber', data?.accountNumber)
@@ -559,6 +569,32 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
                       {DepartmentsData?.map(department => (
                         <MenuItem key={department?.id} value={department?.id}>
                           {formatFirstLetter(department?.name)}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='roleId'
+                  control={workInfoControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Role'
+                      onChange={onChange}
+                      error={Boolean(workInfoErrors.roleId)}
+                      aria-describedby='stepper-linear-account-roleId'
+                      {...(workInfoErrors.roleId && { helperText: 'This field is required' })}
+                    >
+                      <MenuItem value=''>Select Role</MenuItem>
+                      {RolesData?.map(role => (
+                        <MenuItem key={role?.id} value={role?.id}>
+                          {formatFirstLetter(role?.name)}
                         </MenuItem>
                       ))}
                     </CustomTextField>
@@ -859,6 +895,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
                       labelProps.error = true
                     } else if (
                       workInfoErrors.designation ||
+                      workInfoErrors.roleId ||
                       workInfoErrors.departmentId ||
                       workInfoErrors.employeeNumber ||
                       workInfoErrors.rsaCompany ||
