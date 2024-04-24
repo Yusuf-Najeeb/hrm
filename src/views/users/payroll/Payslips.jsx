@@ -48,7 +48,7 @@ const PayslipTable = () => {
   const [isPrinting, setIsPrinting] = useState(false)
   const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
   const [payslipDownloadLink, setPayslipDownloadLink] = useState()
-  const [printingPayslipId, setPrintingPayslipId] = useState(null);
+  const [printingPayslipId, setPrintingPayslipId] = useState(null)
 
   const defaultId = getFirstId(DepartmentsData)
 
@@ -63,17 +63,18 @@ const PayslipTable = () => {
   const printPayslipItem = (selectedId, period) => {
     setIsPrinting(true)
     setPrintingPayslipId(selectedId)
-    printPayslip(selectedId, period).then(res => {
+    printPayslip(selectedId, period)
+      .then(res => {
         setIsPayslipAvailable(true)
         setPayslipDownloadLink(res.data.url)
-      setIsPrinting(false)
-    }).catch(()=>{
         setIsPrinting(false)
-    })
+      })
+      .catch(() => {
+        setIsPrinting(false)
+      })
   }
 
   const updateFetch = () => setFetch(!refetch)
-
 
   const toggleGeneratePayslipDrawer = () => setPayslipOpen(!generateModalOpen)
   const toggleSendPayslipModal = () => setSendModalOpen(!sendModalOpen)
@@ -84,12 +85,12 @@ const PayslipTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch, defaultId, departmentId])
 
-  useEffect(()=>{
-    if ( isPayslipDownloadLinkAvailable) {
-    //   window.location.href = payslipDownloadLink  
-    window.open(payslipDownloadLink, '_blank');
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (isPayslipDownloadLinkAvailable) {
+      //   window.location.href = payslipDownloadLink
+      window.open(payslipDownloadLink, '_blank')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPayslipDownloadLinkAvailable])
 
   return (
@@ -104,7 +105,7 @@ const PayslipTable = () => {
                 fullWidth
                 label='Department'
                 placeholderText='he'
-
+                // eslint-disable-next-line
                 // placeholderText={`${DepartmentsData[defaultId]?.name}`}
                 SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
               >
@@ -118,15 +119,15 @@ const PayslipTable = () => {
             </Grid>
           </Grid>
         </CardContent>
+        <PageHeader
+          action1='Send Payslips to Staffs Email'
+          toggleSend={toggleSendPayslipModal}
+          month={month}
+          action2='Create Payslip'
+          toggle={toggleGeneratePayslipDrawer}
+        />
       </Card>
 
-      <PageHeader
-        action1='Send Payslips to Staffs Email'
-        toggleSend={toggleSendPayslipModal}
-        month={month}
-        action2='Generate Payslip'
-        toggle={toggleGeneratePayslipDrawer}
-      />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -174,21 +175,30 @@ const PayslipTable = () => {
                   return (
                     <TableRow hover role='checkbox' key={payslip?.id}>
                       <TableCell align='left'>{i + 1}</TableCell>
-                      <TableCell align='left'>{`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(payslip?.user?.lastname)}`}</TableCell>
+                      <TableCell align='left'>{`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
+                        payslip?.user?.lastname
+                      )}`}</TableCell>
                       <TableCell align='left'>{departmentName ? formatFirstLetter(departmentName) : ''}</TableCell>
                       <TableCell align='left'>{payslip?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
                       {/* <TableCell align='left'>{payslip?.totalAllowance?.toLocaleString() || '--'}</TableCell> */}
                       <TableCell align='center'>{payslip?.totalDeduction?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='left'>{payslip?.amount?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='center' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        
-
-                        {printingPayslipId === payslip?.user?.id && isPrinting  ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 
-                        <Tooltip title='Print Payslip' placement='top'>
-                          <IconButton size='small' onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}>
-                            <Icon icon='material-symbols:print-outline' />
-                          </IconButton>
-                        </Tooltip>}
+                      <TableCell
+                        align='center'
+                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        {printingPayslipId === payslip?.user?.id && isPrinting ? (
+                          <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
+                        ) : (
+                          <Tooltip title='Print Payslip' placement='top'>
+                            <IconButton
+                              size='small'
+                              onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}
+                            >
+                              <Icon icon='material-symbols:print-outline' />
+                            </IconButton>
+                          </Tooltip>
+                        )}
                       </TableCell>
                     </TableRow>
                   )
@@ -217,7 +227,7 @@ const PayslipTable = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
 
-      {/* 
+      {/*
 
        */}
 

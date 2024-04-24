@@ -8,7 +8,6 @@ import Icon from 'src/@core/components/icon'
 import { useStaffs } from '../../../hooks/useStaffs'
 
 const PageHeader = ({ month, toggle, toggleSend, action1, action2 }) => {
-
   const [StaffsData] = useStaffs()
 
   return (
@@ -29,10 +28,10 @@ const PageHeader = ({ month, toggle, toggleSend, action1, action2 }) => {
       </Box>
 
       <Stack direction='row' justifyContent='space-between' spacing={4}>
-        <Button onClick={toggleSend} variant='outlined' disabled={StaffsData?.length == 0} sx={{ '& svg': { mr: 2 } }}>
+        {/* <Button onClick={toggleSend} variant='outlined' disabled={StaffsData?.length == 0} sx={{ '& svg': { mr: 2 } }}>
           <Icon fontSize='1.125rem' icon='prime:send' />
           {action1}
-        </Button>
+        </Button> */}
 
         <Button onClick={toggle} variant='contained' disabled={StaffsData?.length == 0} sx={{ '& svg': { mr: 2 } }}>
           <Icon fontSize='1.125rem' icon='tabler:plus' />

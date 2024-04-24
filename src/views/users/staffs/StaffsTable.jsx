@@ -46,15 +46,11 @@ const StaffsTable = () => {
 
   // const router = useRouter()
   const [StaffsData, loading, paging] = useStaffs()
-
-  // console.log(StaffsData, 'current Data')
   const [DepartmentsData] = useDepartments()
   const [RolesData] = useRoles()
-
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [staffId, setStaffId] = useState('')
-  const [staff, setStaff] = useState(null)
   const [addStaffModal, setAddStaffModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [openViewDrawer, setViewDrawer] = useState(false)
@@ -65,6 +61,8 @@ const StaffsTable = () => {
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [selectedDept, setSelectedDept] = useState('')
+
+  const StaffDataToRender = StaffsData?.length > 0 && Array.isArray(StaffsData) ? StaffsData : [StaffsData]
 
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
@@ -84,7 +82,7 @@ const StaffsTable = () => {
       return (
         <CustomAvatar
           skin='light'
-          color={row.id % 2 === 0 ? 'primary' : 'secondary'}
+          color={row?.id % 2 === 0 ? 'primary' : 'secondary'}
           sx={{ mr: 2.5, width: 38, height: 38, fontWeight: 500, fontSize: theme => theme.typography.body1.fontSize }}
         >
           {getInitials(initials || 'John Doe')}
@@ -230,7 +228,7 @@ const StaffsTable = () => {
                 </TableRow>
               ) : (
                 <Fragment>
-                  {StaffsData?.map((staff, i) => (
+                  {StaffDataToRender?.map((staff, i) => (
                     <TableRow hover role='checkbox' key={staff?.id}>
                       <TableCell align='left'>{i + 1}</TableCell>
 
@@ -289,7 +287,7 @@ const StaffsTable = () => {
                     </TableRow>
                   ))}
 
-                  {StaffsData?.length === 0 && (
+                  {StaffDataToRender?.length === 0 && (
                     <tr className='text-center'>
                       <td colSpan={6}>
                         <NoData />
