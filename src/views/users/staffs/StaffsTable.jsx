@@ -46,6 +46,8 @@ const StaffsTable = () => {
 
   // const router = useRouter()
   const [StaffsData, loading, paging] = useStaffs()
+
+  // console.log(StaffsData, 'current Data')
   const [DepartmentsData] = useDepartments()
   const [RolesData] = useRoles()
 
@@ -63,8 +65,6 @@ const StaffsTable = () => {
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [selectedDept, setSelectedDept] = useState('')
-
-  // const [selectedRole, setSelectedRole] = useState('')
 
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
@@ -142,17 +142,13 @@ const StaffsTable = () => {
     setSelectedDept(e.target.value)
   }
 
-  const handleRoleChange = e => {
-    setSelectedRole(e.target.value)
-  }
-
   const toggleAddStaffModal = () => {
     setAddStaffModal(!addStaffModal)
   }
 
   useEffect(() => {
     dispatch(fetchRoles({ page: 1, limit: 200 }))
-    dispatch(fetchStaffs({ page: page + 1, departmentId: selectedDept, q: staffId }))
+    dispatch(fetchStaffs({ page: page + 1, departmentId: selectedDept, qId: staffId }))
     dispatch(fetchDepartments({ page: 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -258,9 +254,9 @@ const StaffsTable = () => {
                             icon={
                               staff?.role?.name == 'Admin' || staff?.role?.name == 'admin'
                                 ? 'grommet-icons:user-admin'
-                                : staff?.role == null
-                                ? 'ph:user'
-                                : null
+                                : staff?.role == 'staff'
+                                ? 'wpf:administrator'
+                                : 'ph:user'
                             }
                           />
                         </IconButton>

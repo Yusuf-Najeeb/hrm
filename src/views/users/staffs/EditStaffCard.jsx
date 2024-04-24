@@ -231,8 +231,6 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
       const formatSalary = +grossSalary
       payload.grossSalary = formatSalary
 
-      console.log('Payload data after edits', payload)
-
       const response = await axios.patch('users/modify', payload, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'

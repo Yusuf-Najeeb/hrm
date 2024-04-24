@@ -9,7 +9,7 @@ export const fetchStaffs = createAsyncThunk('staffs/fetchStaffs', async query =>
       params: {
         page: query ? query.page : '',
         departmentId: query ? query.departmentId : '',
-        q: query ? query.staffId : ''
+        id: query ? query.qId : ''
       }
     })
 
