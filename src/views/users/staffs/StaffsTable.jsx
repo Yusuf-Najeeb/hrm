@@ -28,6 +28,7 @@ import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { useRoles } from '../../../hooks/useRoles'
 import { useStaffs } from '../../../hooks/useStaffs'
@@ -50,8 +51,7 @@ const StaffsTable = () => {
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [statusValue, setStatusValue] = useState('')
-  const [value, setValue] = useState('')
+  const [staffId, setStaffId] = useState('')
   const [staff, setStaff] = useState(null)
   const [addStaffModal, setAddStaffModal] = useState(false)
   const [refetch, setFetch] = useState(false)
@@ -62,6 +62,9 @@ const StaffsTable = () => {
   const [staffToUpdate, setStaffToUpdate] = useState(null)
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const [selectedDept, setSelectedDept] = useState('')
+
+  // const [selectedRole, setSelectedRole] = useState('')
 
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
@@ -132,7 +135,15 @@ const StaffsTable = () => {
   }
 
   const handleFilter = val => {
-    setValue(val)
+    setStaffId(val)
+  }
+
+  const handleDepartmentChange = e => {
+    setSelectedDept(e.target.value)
+  }
+
+  const handleRoleChange = e => {
+    setSelectedRole(e.target.value)
   }
 
   const toggleAddStaffModal = () => {
@@ -141,10 +152,11 @@ const StaffsTable = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: 1, limit: 200 }))
-    dispatch(fetchStaffs({ page: page + 1 }))
+    dispatch(fetchStaffs({ page: page + 1, departmentId: selectedDept, q: staffId }))
+    dispatch(fetchDepartments({ page: 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch, hasUploadedImage])
+  }, [page, refetch, hasUploadedImage, selectedDept, staffId])
 
   return (
     <Stack>
@@ -153,12 +165,12 @@ const StaffsTable = () => {
           <CardHeader title='Search Filters' />
           <CardContent>
             <Grid container spacing={6} sx={{ display: 'flex', justifyContent: 'start' }}>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={12} sm={6}>
                 <CustomTextField
                   select
                   fullWidth
                   label='Department'
-                  SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
+                  SelectProps={{ value: selectedDept, onChange: e => handleDepartmentChange(e) }}
                 >
                   <MenuItem value=''>Select Department</MenuItem>
                   {DepartmentsData?.map(department => (
@@ -168,12 +180,12 @@ const StaffsTable = () => {
                   ))}
                 </CustomTextField>
               </Grid>
-              <Grid item xs={12} sm={3}>
+              {/* <Grid item xs={12} sm={3}>
                 <CustomTextField
                   select
                   fullWidth
                   label='Role'
-                  SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
+                  SelectProps={{ value: selectedRole, onChange: e => handleRoleChange(e) }}
                 >
                   <MenuItem value=''>Select Role</MenuItem>
                   {RolesData?.map(role => (
@@ -182,8 +194,8 @@ const StaffsTable = () => {
                     </MenuItem>
                   ))}
                 </CustomTextField>
-              </Grid>
-              <TableHeader value={value} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
+              </Grid> */}
+              <TableHeader value={staffId} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
             </Grid>
           </CardContent>
         </Card>

@@ -18,22 +18,26 @@ const TableHeader = props => {
   return (
     <Box
       sx={{
-        ml: 16.5,
+        ml: 'auto',
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'end',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        gap: 4
       }}
     >
-      <div></div>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'end',
+          justifyContent: { xs: 'flex-start', lg: 'end' },
+          gap: 6,
+          mt: { xs: 4, lg: 0 }
+        }}
+      >
+        <CustomTextField value={value} placeholder='Search Staffs' onChange={e => handleFilter(e.target.value)} />
 
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-        <CustomTextField
-          value={value}
-          sx={{ mr: 4, mb: 0 }}
-          placeholder='Search Staffs'
-          onChange={e => handleFilter(e.target.value)}
-        />
         <Button sx={{ mb: 0 }} onClick={clickAddBtn} variant='contained'>
           <Icon icon='mdi:plus' fontSize={20} />
           Add Staff
