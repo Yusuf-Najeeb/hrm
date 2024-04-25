@@ -32,3 +32,41 @@ export const getAllStaffsInOneDepartment = async id => {
     notifyError('Error fetching staffs in department')
   }
 }
+
+// export const updateStaff = async payload => {
+//   try {
+//     const response = await axios.patch(`/staffs/modify`, payload)
+
+//     return response
+//   } catch (error) {
+//     notifyError('Error Updating Staff, Try again')
+//   }
+// }
+
+// export const deleteStaff = async id => {
+//   try {
+//     const response = await axios.delete(`/?users/${id}`)
+
+//     if (response.data.success) {
+//       notifySuccess('Staff Deleted')
+//     }
+
+//     return response
+//   } catch (error) {
+//     notifyError('Error Deleting Staff')
+//   }
+// }
+
+export const undoDeleteStaff = async id => {
+  try {
+    const response = await axios.delete(`/users/undo/?id=${id}`)
+
+    if (response.data.success) {
+      notifySuccess('Staff Reactivated')
+    }
+
+    return response
+  } catch (error) {
+    notifyError('Error Deleting Staff')
+  }
+}

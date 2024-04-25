@@ -17,6 +17,7 @@ import {
   FormControlLabel,
   Switch
 } from '@mui/material'
+import CustomChip from 'src/@core/components/mui/chip'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -38,8 +39,8 @@ import { useDepartments } from '../../../hooks/useDepartments'
 
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
-import { formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
-import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { formatFirstLetter, formatCurrency, formatDateToYYYYMM } from '../../../@core/utils/format'
+import { fetchStaffs, deleteStaff, undoDeleteStaff } from '../../../store/apps/staffs/asyncthunk'
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { useRoles } from '../../../hooks/useRoles'
@@ -118,27 +119,30 @@ const StaffsTable = () => {
     setStaffToView(null)
   }
 
-  const doDelete = value => {
-    setDeleteModal(true)
-    setSelectedStaff(value?.id)
-  }
+  // const doDelete = value => {
+  //   setDeleteModal(true)
+  //   setSelectedStaff(value?.id)
+  // }
 
   const handleToggle = value => {
-    console.log(value, 'This value represent the blah blah blah')
     let payload
-    if (value.status) {
-      payload = {
-        status: false
-      }
+
+    if (value?.deletedAt) {
+      undoDeleteStaff(value?.id).then(res => {
+        if (res?.data?.success) {
+          dispatch(fetchStaffs({ page: 1, limit: 10 }))
+
+          // notifySuccess('Staff Reactivated')
+        }
+      })
     } else {
-      payload = {
-        status: true
-      }
+      setDeleteModal(true)
+      setSelectedStaff(value?.id)
     }
 
-    // updateStaff(value?.email, payload).then(res => {
+    // updateStaff(payload).then(res => {
     //   if (res.data.success) {
-    //     dispatch(fetchStaffs({ page: 1, limit: 10, key: '' }))
+    //     dispatch(fetchStaffs({ page: 1, limit: 10 }))
     //     notifySuccess('Updated Staff')
     //   }
     // })
@@ -207,21 +211,7 @@ const StaffsTable = () => {
                   ))}
                 </CustomTextField>
               </Grid>
-              {/* <Grid item xs={12} sm={3}>
-                <CustomTextField
-                  select
-                  fullWidth
-                  label='Role'
-                  SelectProps={{ value: selectedRole, onChange: e => handleRoleChange(e) }}
-                >
-                  <MenuItem value=''>Select Role</MenuItem>
-                  {RolesData?.map(role => (
-                    <MenuItem key={role?.id} value={role?.id}>
-                      {formatFirstLetter(role?.name)}
-                    </MenuItem>
-                  ))}
-                </CustomTextField>
-              </Grid> */}
+
               <TableHeader value={search} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
             </Grid>
           </CardContent>
@@ -232,9 +222,6 @@ const StaffsTable = () => {
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
-                {/* <TableCell align='left' sx={{ maxWidth: 50 }}>
-                  S/N
-                </TableCell> */}
                 <TableCell align='center' sx={{ minWidth: 100 }}>
                   STAFF
                 </TableCell>
@@ -243,6 +230,9 @@ const StaffsTable = () => {
                 </TableCell>
                 <TableCell align='center' sx={{ minWidth: 100 }}>
                   ROLE
+                </TableCell>
+                <TableCell align='center' sx={{ minWidth: 100 }}>
+                  STATUS
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   GROSS SALARY
@@ -292,6 +282,27 @@ const StaffsTable = () => {
                           />
                         </IconButton>
                       </TableCell>
+                      <TableCell align='center'>
+                        {staff?.deletedAt === null ? (
+                          <CustomChip
+                            rounded
+                            skin='light'
+                            size='small'
+                            label={'Active'}
+                            color='success'
+                            sx={{ textTransform: 'capitalize' }}
+                          />
+                        ) : (
+                          <CustomChip
+                            rounded
+                            skin='light'
+                            size='small'
+                            label={'Inactive'}
+                            color='error'
+                            sx={{ textTransform: 'capitalize' }}
+                          />
+                        )}
+                      </TableCell>
                       <TableCell align='left'>{formatCurrency(staff?.grossSalary, true)}</TableCell>
 
                       <TableCell align='left' sx={{ display: 'flex', minHeight: 72 }}>
@@ -315,14 +326,16 @@ const StaffsTable = () => {
                               value='start'
                               label=''
                               labelPlacement='start'
-                              control={<Switch checked={staff.status} onChange={() => handleToggle(staff)} />}
+                              control={
+                                <Switch checked={staff.deletedAt === null} onChange={() => handleToggle(staff)} />
+                              }
                             />
                           </FormGroup>
-                          <Tooltip title='Delete Staff'>
+                          {/* <Tooltip title='Delete Staff'>
                             <IconButton size='small' sx={{ color: 'text.secondary' }} onClick={() => doDelete(staff)}>
                               <Icon icon='tabler:trash' />
                             </IconButton>
-                          </Tooltip>
+                          </Tooltip> */}
                         </Box>
                       </TableCell>
                     </TableRow>
