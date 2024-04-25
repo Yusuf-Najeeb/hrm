@@ -32,7 +32,6 @@ import Icon from 'src/@core/components/icon'
 import { getInitials } from 'src/@core/utils/get-initials'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import TableHeader from './TableHeader'
-
 import TablePagination from '@mui/material/TablePagination'
 import { useAppDispatch } from '../../../hooks'
 import { useDepartments } from '../../../hooks/useDepartments'

@@ -8,14 +8,13 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
-
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
-
 import TablePagination from '@mui/material/TablePagination'
-
+import { getInitials } from 'src/@core/utils/get-initials'
 import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
@@ -26,7 +25,17 @@ import { fetchPayslips, printPayslip } from '../../../store/apps/payslip/asyncth
 import { useDepartments } from '../../../hooks/useDepartments'
 import GeneratePayslip from './GeneratePayslip'
 import PageHeader from './PayslipPageHeader'
-import { Card, CardContent, CardHeader, CircularProgress, Grid, MenuItem, Tooltip } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  Grid,
+  MenuItem,
+  Tooltip
+} from '@mui/material'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
 
@@ -74,6 +83,27 @@ const PayslipTable = () => {
       })
   }
 
+  const renderClient = row => {
+    const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
+    if (row?.image?.length) {
+      return (
+        <CustomAvatar
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${row?.image}`}
+          sx={{ mr: 2.5, width: 38, height: 38 }}
+        />
+      )
+    } else {
+      return (
+        <CustomAvatar
+          skin='light'
+          color={row?.id % 2 === 0 ? 'primary' : 'secondary'}
+          sx={{ mr: 2.5, width: 38, height: 38, fontWeight: 500, fontSize: theme => theme.typography.body1.fontSize }}
+        >
+          {getInitials(initials || 'John Doe')}
+        </CustomAvatar>
+      )
+    }
+  }
   const updateFetch = () => setFetch(!refetch)
 
   const toggleGeneratePayslipDrawer = () => setPayslipOpen(!generateModalOpen)
@@ -137,9 +167,6 @@ const PayslipTable = () => {
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                S/N
-              </TableCell>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
                 STAFF NAME
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
@@ -175,10 +202,24 @@ const PayslipTable = () => {
 
                   return (
                     <TableRow hover role='checkbox' key={payslip?.id}>
-                      <TableCell align='left'>{i + 1}</TableCell>
-                      <TableCell align='left'>{`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
+                      <TableCell align='left'>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {renderClient(payslip)}
+                          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                              {`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
+                                payslip?.user?.lastname
+                              )}`}
+                            </Typography>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
+                              {payslip?.user?.email}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        {/* {`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
                         payslip?.user?.lastname
-                      )}`}</TableCell>
+                      )}`} */}
+                      </TableCell>
                       <TableCell align='left'>{departmentName ? formatFirstLetter(departmentName) : ''}</TableCell>
                       <TableCell align='left'>{payslip?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
                       {/* <TableCell align='left'>{payslip?.totalAllowance?.toLocaleString() || '--'}</TableCell> */}
