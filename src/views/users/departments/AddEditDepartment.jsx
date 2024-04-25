@@ -52,7 +52,7 @@ const defaultValues = {
   hodId: 0
 }
 
-const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) => {
+const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode, closeEdit }) => {
   const [StaffsData] = useStaffs()
   const [staffsInSelectedDepartment, setStaffs] = useState([])
   const dispatch = useAppDispatch()
@@ -203,7 +203,7 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) =>
           </Grid>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
           <Button type='submit' variant='contained'>
             {isSubmitting ? (
               <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
@@ -213,6 +213,8 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode }) =>
               'Create'
             )}
           </Button>
+
+          {editMode && <Button onClick={closeEdit}>Cancel</Button>}
         </Box>
       </form>
     </Box>

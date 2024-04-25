@@ -83,6 +83,12 @@ const DepartmentsTable = () => {
     setEditMode(true)
   }
 
+  const cancelEditMode = () => {
+    setEditDrawer(false)
+    setDepartmentToEdit(null)
+    setEditMode(false)
+  }
+
   const handleChangePage = newPage => {
     setPage(newPage)
   }
@@ -181,7 +187,12 @@ const DepartmentsTable = () => {
           </TableContainer>
         </Item>
         <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
-          <EditDepartment refetchDepartments={updateFetch} selectedDepartment={DepartmentToView} editMode={editMode} />
+          <EditDepartment
+            refetchDepartments={updateFetch}
+            selectedDepartment={DepartmentToView}
+            editMode={editMode}
+            closeEdit={cancelEditMode}
+          />
         </Item>
       </Stack>
 
