@@ -19,8 +19,6 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
-
-// import DepartmentsTableHeader from './DepartmentsHeader'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
@@ -97,7 +95,6 @@ const DepartmentsTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
   const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
 
   // const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)

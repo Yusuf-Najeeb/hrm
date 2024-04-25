@@ -4,7 +4,19 @@ import React, { useEffect, useState, Fragment } from 'react'
 import { useRouter } from 'next/navigation'
 
 // MUI
-import { Box, Typography, Tooltip, Grid, Card, CardHeader, CardContent, MenuItem } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Tooltip,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  MenuItem,
+  FormGroup,
+  FormControlLabel,
+  Switch
+} from '@mui/material'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -50,7 +62,7 @@ const StaffsTable = () => {
   const [RolesData] = useRoles()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [staffId, setStaffId] = useState('')
+  const [search, setSearch] = useState('')
   const [addStaffModal, setAddStaffModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [openViewDrawer, setViewDrawer] = useState(false)
@@ -111,6 +123,27 @@ const StaffsTable = () => {
     setSelectedStaff(value?.id)
   }
 
+  const handleToggle = value => {
+    console.log(value, 'This value represent the blah blah blah')
+    let payload
+    if (value.status) {
+      payload = {
+        status: false
+      }
+    } else {
+      payload = {
+        status: true
+      }
+    }
+
+    // updateStaff(value?.email, payload).then(res => {
+    //   if (res.data.success) {
+    //     dispatch(fetchStaffs({ page: 1, limit: 10, key: '' }))
+    //     notifySuccess('Updated Staff')
+    //   }
+    // })
+  }
+
   const doCancelDelete = () => {
     setDeleteModal(false)
     setSelectedStaff(null)
@@ -133,7 +166,7 @@ const StaffsTable = () => {
   }
 
   const handleFilter = val => {
-    setStaffId(val)
+    setSearch(val)
   }
 
   const handleDepartmentChange = e => {
@@ -146,11 +179,11 @@ const StaffsTable = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: 1, limit: 200 }))
-    dispatch(fetchStaffs({ page: page + 1, departmentId: selectedDept, qId: staffId }))
+    dispatch(fetchStaffs({ page: page + 1, departmentId: selectedDept, q: search }))
     dispatch(fetchDepartments({ page: 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch, hasUploadedImage, selectedDept, staffId])
+  }, [page, refetch, hasUploadedImage, selectedDept, search])
 
   return (
     <Stack>
@@ -189,7 +222,7 @@ const StaffsTable = () => {
                   ))}
                 </CustomTextField>
               </Grid> */}
-              <TableHeader value={staffId} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
+              <TableHeader value={search} handleFilter={handleFilter} clickAddBtn={toggleAddStaffModal} />
             </Grid>
           </CardContent>
         </Card>
@@ -199,9 +232,9 @@ const StaffsTable = () => {
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
-                <TableCell align='left' sx={{ maxWidth: 50 }}>
+                {/* <TableCell align='left' sx={{ maxWidth: 50 }}>
                   S/N
-                </TableCell>
+                </TableCell> */}
                 <TableCell align='center' sx={{ minWidth: 100 }}>
                   STAFF
                 </TableCell>
@@ -230,7 +263,7 @@ const StaffsTable = () => {
                 <Fragment>
                   {StaffDataToRender?.map((staff, i) => (
                     <TableRow hover role='checkbox' key={staff?.id}>
-                      <TableCell align='left'>{i + 1}</TableCell>
+                      {/* <TableCell align='left'>{i + 1}</TableCell> */}
 
                       <TableCell align='left'>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -277,6 +310,14 @@ const StaffsTable = () => {
                               <Icon icon='tabler:eye' />
                             </IconButton>
                           </Tooltip>
+                          <FormGroup row sx={{ transform: 'translateX(-44%)' }}>
+                            <FormControlLabel
+                              value='start'
+                              label=''
+                              labelPlacement='start'
+                              control={<Switch checked={staff.status} onChange={() => handleToggle(staff)} />}
+                            />
+                          </FormGroup>
                           <Tooltip title='Delete Staff'>
                             <IconButton size='small' sx={{ color: 'text.secondary' }} onClick={() => doDelete(staff)}>
                               <Icon icon='tabler:trash' />
