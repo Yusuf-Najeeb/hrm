@@ -96,15 +96,19 @@ const PayslipTable = () => {
   return (
     <div>
       <Card>
-        <CardHeader title='Filter' />
+        {/* <CardHeader title='Filter' /> */}
         <CardContent>
-          <Grid container spacing={12}>
+          <Grid
+            container
+            spacing={12}
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 4 }}
+          >
             <Grid item xs={12} sm={4}>
               <CustomTextField
                 select
                 fullWidth
                 label='Department'
-                placeholderText='he'
+                placeholder='Department'
                 // eslint-disable-next-line
                 // placeholderText={`${DepartmentsData[defaultId]?.name}`}
                 SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
@@ -117,15 +121,15 @@ const PayslipTable = () => {
                 ))}
               </CustomTextField>
             </Grid>
+            <PageHeader
+              action1='Send Payslips to Staffs Email'
+              toggleSend={toggleSendPayslipModal}
+              month={month}
+              action2='Create Payslip'
+              toggle={toggleGeneratePayslipDrawer}
+            />
           </Grid>
         </CardContent>
-        <PageHeader
-          action1='Send Payslips to Staffs Email'
-          toggleSend={toggleSendPayslipModal}
-          month={month}
-          action2='Create Payslip'
-          toggle={toggleGeneratePayslipDrawer}
-        />
       </Card>
 
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
@@ -144,9 +148,6 @@ const PayslipTable = () => {
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 GROSS SALARY
               </TableCell>
-              {/* <TableCell align='left' sx={{ minWidth: 100 }}>
-                TOTAL ALLOWANCE
-              </TableCell>  */}
               <TableCell align='center' sx={{ minWidth: 100 }}>
                 TOTAL DEDUCTION
               </TableCell>
