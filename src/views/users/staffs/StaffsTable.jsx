@@ -119,11 +119,6 @@ const StaffsTable = () => {
     setStaffToView(null)
   }
 
-  // const doDelete = value => {
-  //   setDeleteModal(true)
-  //   setSelectedStaff(value?.id)
-  // }
-
   const handleToggle = value => {
     let payload
 
@@ -131,21 +126,12 @@ const StaffsTable = () => {
       undoDeleteStaff(value?.id).then(res => {
         if (res?.data?.success) {
           dispatch(fetchStaffs({ page: 1, limit: 10 }))
-
-          // notifySuccess('Staff Reactivated')
         }
       })
     } else {
       setDeleteModal(true)
       setSelectedStaff(value?.id)
     }
-
-    // updateStaff(payload).then(res => {
-    //   if (res.data.success) {
-    //     dispatch(fetchStaffs({ page: 1, limit: 10 }))
-    //     notifySuccess('Updated Staff')
-    //   }
-    // })
   }
 
   const doCancelDelete = () => {
@@ -253,8 +239,6 @@ const StaffsTable = () => {
                 <Fragment>
                   {StaffDataToRender?.map((staff, i) => (
                     <TableRow hover role='checkbox' key={staff?.id}>
-                      {/* <TableCell align='left'>{i + 1}</TableCell> */}
-
                       <TableCell align='left'>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           {renderClient(staff)}
@@ -331,11 +315,6 @@ const StaffsTable = () => {
                               }
                             />
                           </FormGroup>
-                          {/* <Tooltip title='Delete Staff'>
-                            <IconButton size='small' sx={{ color: 'text.secondary' }} onClick={() => doDelete(staff)}>
-                              <Icon icon='tabler:trash' />
-                            </IconButton>
-                          </Tooltip> */}
                         </Box>
                       </TableCell>
                     </TableRow>
