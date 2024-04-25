@@ -75,8 +75,6 @@ const StaffsTable = () => {
   const [editModal, setEditModal] = useState(false)
   const [selectedDept, setSelectedDept] = useState('')
 
-  const StaffDataToRender = StaffsData?.length > 0 && Array.isArray(StaffsData) ? StaffsData : [StaffsData]
-
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
     color: `${theme.palette.primary.main} !important`
@@ -237,7 +235,7 @@ const StaffsTable = () => {
                 </TableRow>
               ) : (
                 <Fragment>
-                  {StaffDataToRender?.map((staff, i) => (
+                  {StaffsData?.map((staff, i) => (
                     <TableRow hover role='checkbox' key={staff?.id}>
                       <TableCell align='left'>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -320,7 +318,7 @@ const StaffsTable = () => {
                     </TableRow>
                   ))}
 
-                  {StaffDataToRender?.length === 0 && (
+                  {StaffsData?.length === 0 && (
                     <tr className='text-center'>
                       <td colSpan={6}>
                         <NoData />
