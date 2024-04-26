@@ -9,12 +9,18 @@ import Grid from '@mui/material/Grid'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableRow from '@mui/material/TableRow'
+import TableHead from '@mui/material/TableHead'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
 
 // import Dialog from '@mui/material/Dialog'
 // import { styled } from '@mui/material/styles'
 
-import { CircularProgress, MenuItem } from '@mui/material'
-
+import { CircularProgress, MenuItem, Typography } from '@mui/material'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { editDepartmentSchema } from 'src/@core/Formschema'
@@ -23,15 +29,13 @@ import { useAppDispatch } from '../../../hooks'
 import { Fragment, useEffect, useState } from 'react'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
-
-// import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
-
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { createDepartment } from '../../../store/apps/departments/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { theme } from 'antd'
 
+// import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
 // const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 //   top: 0,
 //   right: 0,
@@ -111,115 +115,107 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode, clos
   }, [selectedDepartment])
 
   return (
-    //eslint-disable-next-line
-    // <Dialog
-    //   fullWidth
-    //   open={open}
-    //   maxWidth='md'
-    //   scroll='body'
+    <TableContainer component={Paper}>
+      <Table stickyHeader aria-label='sticky table'>
+        <TableHead>
+          <TableRow>
+            <TableCell align='center' sx={{ minWidth: 50 }}>
+              Create Department
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <form
+                onSubmit={handleSubmit(data => {
+                  if (editMode) {
+                    updateDepartment(data)
+                  } else {
+                    newDepartment(data)
+                  }
+                })}
+              >
+                <Box
+                  sx={{
+                    pb: theme => `${theme.spacing(8)} !important`
+                  }}
+                >
+                  <Grid container spacing={6}>
+                    <Grid item xs={12} sm={12}>
+                      <Controller
+                        name='name'
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field: { value, onChange } }) => (
+                          <CustomTextField
+                            fullWidth
+                            label='Department Name'
+                            value={value}
+                            onChange={onChange}
+                            error={Boolean(errors.name)}
 
-    //   //   TransitionComponent={Transition}
-    //   sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 390 } }}
-    // >
-    <Box
-      sx={{
-        pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
-        pt: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(5)} !important`],
-        px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(3)} !important`],
-        border: theme => [`1px solid ${theme.palette.divider}`],
-        borderRadius: 2
-      }}
-    >
-      {/* <CustomCloseButton onClick={closeModal}>
-          <Icon icon='tabler:x' fontSize='1.25rem' />
-        </CustomCloseButton> */}
+                            // {...(errors.name && { helperText: errors.name.message })}
+                          />
+                        )}
+                      />
+                    </Grid>
+                    {editMode && (
+                      <Grid item xs={12} sm={12}>
+                        <Controller
+                          name='hodId'
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field: { value, onChange } }) => (
+                            <CustomTextField
+                              select
+                              fullWidth
+                              value={value}
+                              label='Head of Department'
+                              onChange={onChange}
+                              error={Boolean(errors.hodId)}
+                              aria-describedby='stepper-linear-account-hodId'
 
-      <form
-        onSubmit={handleSubmit(data => {
-          if (editMode) {
-            updateDepartment(data)
-          } else {
-            newDepartment(data)
-          }
-        })}
-      >
-        <Box
-          sx={{
-            pb: theme => `${theme.spacing(8)} !important`
-          }}
-        >
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={12}>
-              <Controller
-                name='name'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    fullWidth
-                    label='Department Name'
-                    value={value}
-                    onChange={onChange}
-                    error={Boolean(errors.name)}
+                              // {...(errors.departmentId && { helperText: 'This field is required' })}
+                            >
+                              <MenuItem value=''>
+                                {' '}
+                                {staffsInSelectedDepartment?.length
+                                  ? 'Select Head of Department'
+                                  : 'No Staff in Selected Department'}{' '}
+                              </MenuItem>
+                              {staffsInSelectedDepartment?.map(staff => (
+                                <MenuItem key={staff?.id} value={staff.id}>
+                                  {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
+                                </MenuItem>
+                              ))}
+                            </CustomTextField>
+                          )}
+                        />
+                      </Grid>
+                    )}
+                  </Grid>
+                </Box>
 
-                    // {...(errors.name && { helperText: errors.name.message })}
-                  />
-                )}
-              />
-            </Grid>
+                <Box sx={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
+                  <Button type='submit' variant='contained'>
+                    {isSubmitting ? (
+                      <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
+                    ) : editMode ? (
+                      'Update'
+                    ) : (
+                      'Create'
+                    )}
+                  </Button>
 
-            <Grid item xs={12} sm={12}>
-              <Controller
-                name='hodId'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange } }) => (
-                  <CustomTextField
-                    select
-                    fullWidth
-                    value={value}
-                    label='Head of Department'
-                    onChange={onChange}
-                    error={Boolean(errors.hodId)}
-                    aria-describedby='stepper-linear-account-hodId'
-
-                    // {...(errors.departmentId && { helperText: 'This field is required' })}
-                  >
-                    <MenuItem value=''>
-                      {' '}
-                      {staffsInSelectedDepartment?.length
-                        ? 'Select Head of Department'
-                        : 'No Staff in Selected Department'}{' '}
-                    </MenuItem>
-                    {staffsInSelectedDepartment?.map(staff => (
-                      <MenuItem key={staff?.id} value={staff.id}>
-                        {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
-                      </MenuItem>
-                    ))}
-                  </CustomTextField>
-                )}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
-          <Button type='submit' variant='contained'>
-            {isSubmitting ? (
-              <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
-            ) : editMode ? (
-              'Update'
-            ) : (
-              'Create'
-            )}
-          </Button>
-
-          {editMode && <Button onClick={closeEdit}>Cancel</Button>}
-        </Box>
-      </form>
-    </Box>
-
-    // </Dialog>
+                  {editMode && <Button onClick={closeEdit}>Cancel</Button>}
+                </Box>
+              </form>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 

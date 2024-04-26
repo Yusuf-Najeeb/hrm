@@ -12,9 +12,7 @@ import Stack from '@mui/material/Stack'
 import Item from '@mui/material/ListItem'
 
 import Icon from 'src/@core/components/icon'
-
 import TablePagination from '@mui/material/TablePagination'
-
 import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
@@ -29,20 +27,16 @@ import { display } from '@mui/system'
 
 const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
-  const [DepartmentsData, loadingDepartments, paging] = useDepartments()
-
-  // const [StaffsData, loading] = useStaffs()
+  const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
   const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
-
   const [editMode, setEditMode] = useState(false)
   const [openEditDrawer, setEditDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
-
   const [DepartmentToView, setDepartmentToView] = useState(null)
 
   // const setActiveDepartment = value => {
@@ -66,7 +60,9 @@ const DepartmentsTable = () => {
     setSelectedDepartment(null)
   }
 
-  const updateFetch = () => setFetch(!refetch)
+  const updateFetch = () => {
+    setFetch(!refetch)
+  }
 
   const ondeleteClick = () => {
     dispatch(deleteDepartment(selectedDepartment))

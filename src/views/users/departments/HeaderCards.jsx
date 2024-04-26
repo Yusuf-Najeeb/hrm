@@ -25,102 +25,108 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
   // ** Hook
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const [DepartmentsData] = useDepartments()
+  const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
 
   useEffect(() => {
-    dispatch(fetchDepartments({ page: 1, limit: 200 }))
+    dispatch(fetchDepartments({ page: 1, limit: 10 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(DepartmentsData.length)
 
   return (
     <Grid container spacing={3} sx={{ display: { xs: 'none', lg: 'flex' } }}>
-      <Grid item md={4}>
-        <paper>
-          <Card>
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'start', justifyContent: 'space-between', p: 3 }}>
-              <CardHeader sx={{ pb: 0 }} title='Departments' />
-              <CustomAvatar
-                skin='light'
-                variant='rounded'
-                sx={{ mr: 2, mt: 5, width: 46, height: 46, selfAlign: 'end' }}
-              >
-                <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
-              </CustomAvatar>
-            </Box>
-            <Typography
-              variant='h6'
-              sx={{
-                ml: 10,
-                mb: 2,
-                mt: -5,
-                fontSize: '1.6rem',
-                display: 'flex',
-                justifyContent: 'start',
-                width: 'fit-content'
-              }}
-            >
-              {DepartmentsData.length}
-            </Typography>
-          </Card>
-        </paper>
+      <Grid item md={3}>
+        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '1rem' }}>Total Departments</Typography>
+
+            <CustomAvatar skin='light' variant='rounded' sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'end' }}>
+              <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
+            </CustomAvatar>
+          </Box>
+          <Typography
+            variant='h6'
+            sx={{
+              fontSize: '1.3rem',
+              display: 'flex',
+              mt: -4
+            }}
+          >
+            {aggregations.total}
+          </Typography>
+        </Card>
       </Grid>
-      <Grid item md={4}>
-        <paper>
-          <Card>
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'start', justifyContent: 'space-between', p: 3 }}>
-              <CardHeader sx={{ pb: 0 }} title='Active' />
-              <CustomAvatar skin='light' variant='rounded' sx={{ mt: 5, width: 46, height: 46, selfAlign: 'center' }}>
-                <Icon fontSize='2.125rem' icon='codicon:vm-active' />
-              </CustomAvatar>
-            </Box>
-            <Typography
-              variant='h6'
-              sx={{
-                ml: 10,
-                mb: 2,
-                mt: -5,
-                fontSize: '1.6rem',
-                display: 'flex',
-                justifyContent: 'start',
-                width: 'fit-content'
-              }}
-            >
-              {active || '--'}
-            </Typography>
-          </Card>
-        </paper>
+
+      <Grid item md={3}>
+        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '1rem' }}>Active Departments</Typography>
+            <CustomAvatar skin='light' variant='rounded' sx={{ mt: 5, width: 30, height: 30, selfAlign: 'center' }}>
+              <Icon fontSize='2.125rem' icon='codicon:vm-active' />
+            </CustomAvatar>
+          </Box>
+          <Typography
+            variant='h6'
+            sx={{
+              fontSize: '1.3rem',
+              display: 'flex',
+              mt: -4
+            }}
+          >
+            {aggregations.total_active}
+          </Typography>
+        </Card>
       </Grid>
-      <Grid item md={4}>
-        <paper>
-          <Card>
-            <Box sx={{ display: 'flex', direction: 'row', alignItems: 'start', justifyContent: 'space-between', p: 3 }}>
-              <CardHeader sx={{ pb: 0 }} title='Inactive' />
-              <CustomAvatar
-                skin='light'
-                variant='rounded'
-                sx={{ mr: 2, mt: 5, width: 46, height: 46, selfAlign: 'center' }}
-              >
-                <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
-              </CustomAvatar>
-            </Box>
-            <Typography
-              variant='h6'
-              sx={{
-                ml: 10,
-                mb: 2,
-                mt: -5,
-                fontSize: '1.6rem',
-                display: 'flex',
-                justifyContent: 'start',
-                width: 'fit-content'
-              }}
+
+      <Grid item md={3}>
+        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '1rem' }}>Inactive Departments</Typography>
+            <CustomAvatar
+              skin='light'
+              variant='rounded'
+              sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
             >
-              {inActive || '--'}
-            </Typography>
-          </Card>
-        </paper>
+              <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
+            </CustomAvatar>
+          </Box>
+          <Typography
+            variant='h6'
+            sx={{
+              fontSize: '1.3rem',
+              display: 'flex',
+              mt: -4
+            }}
+          >
+            {aggregations.total_deleted}
+          </Typography>
+        </Card>
+      </Grid>
+
+      <Grid item md={3}>
+        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '1rem' }}>Total Departments</Typography>
+
+            <CustomAvatar
+              skin='light'
+              variant='rounded'
+              sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
+            >
+              <Icon fontSize='2.125rem' icon='tabler:user-cog' />
+            </CustomAvatar>
+          </Box>
+          <Typography
+            variant='h6'
+            sx={{
+              fontSize: '1.3rem',
+              display: 'flex',
+              mt: -4
+            }}
+          >
+            {aggregations.total_staff}
+          </Typography>
+        </Card>
       </Grid>
     </Grid>
   )
