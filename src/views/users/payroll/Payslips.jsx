@@ -84,7 +84,7 @@ const PayslipTable = () => {
   }
 
   const renderClient = row => {
-    const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
+    const initials = `${formatFirstLetter(row?.user?.firstname)} ${formatFirstLetter(row?.user?.lastname)}`
     if (row?.image?.length) {
       return (
         <CustomAvatar
@@ -216,19 +216,12 @@ const PayslipTable = () => {
                             </Typography>
                           </Box>
                         </Box>
-                        {/* {`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
-                        payslip?.user?.lastname
-                      )}`} */}
                       </TableCell>
                       <TableCell align='left'>{departmentName ? formatFirstLetter(departmentName) : ''}</TableCell>
                       <TableCell align='left'>{payslip?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
-                      {/* <TableCell align='left'>{payslip?.totalAllowance?.toLocaleString() || '--'}</TableCell> */}
                       <TableCell align='center'>{payslip?.totalDeduction?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='left'>{payslip?.amount?.toLocaleString() || '--'}</TableCell>
-                      <TableCell
-                        align='center'
-                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                      >
+                      <TableCell align='center'>
                         {printingPayslipId === payslip?.user?.id && isPrinting ? (
                           <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
                         ) : (
@@ -268,10 +261,6 @@ const PayslipTable = () => {
         rowsPerPageOptions={[5, 10, 20]}
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
-
-      {/*
-
-       */}
 
       {generateModalOpen && (
         <GeneratePayslip
