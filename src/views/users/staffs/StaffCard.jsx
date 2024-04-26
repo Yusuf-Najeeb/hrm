@@ -1,5 +1,5 @@
 // ** React Imports
-import {  Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -17,13 +17,11 @@ import Icon from 'src/@core/components/icon'
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
-
 // ** Utils Import
-import EditStaffCard from './EditStaffCard'
-import { formatFirstLetter } from '../../../@core/utils/format'
+// import EditStaffCard from './EditStaffCard'
+import { formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
+import { getInitials } from 'src/@core/utils/get-initials'
 import StaffDetailCard from '../components/StaffDetailCard'
-
-
 
 const roleColors = {
   admin: 'error',
@@ -48,42 +46,57 @@ const Sub = styled('sub')(({ theme }) => ({
   fontSize: theme.typography.body1.fontSize
 }))
 
-
 const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaffCanvas }) => {
   // ** States
   const [openEdit, setOpenEdit] = useState(false)
 
   // const [profilePictureUrl, setProfilePictureUrl] = useState(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${Staff?.image}`);
-  const [profilePictureUrl, setProfilePictureUrl] = useState();
-
+  const [profilePictureUrl, setProfilePictureUrl] = useState()
 
   // Handle Edit dialog
   const handleEditClickOpen = () => setOpenEdit(true)
   const handleEditClose = () => setOpenEdit(false)
 
-  useEffect(()=>{
+  useEffect(() => {
     setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${Staff?.image}`)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profilePictureUrl])
-
+  const initials = `${formatFirstLetter(Staff?.firstname)} ${formatFirstLetter(Staff?.lastname)}`
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Fragment>
           <CardContent sx={{ pb: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            <Box sx={{ pt: 1.5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-              <CustomAvatar
-                src={Staff?.image ?  profilePictureUrl : '/images/avatars/14.png'}
-                variant='rounded'
-                alt={`${formatFirstLetter(Staff?.firstname)} ${formatFirstLetter(Staff?.lastname)}`}
-                sx={{ width: 100, height: 100, mb: 4 }}
-              />
+            <Box sx={{ pt: 0, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+              {Staff?.image ? (
+                <CustomAvatar
+                  src={Staff?.image ? profilePictureUrl : '/images/avatars/14.png'}
+                  variant='rounded'
+                  alt={`${formatFirstLetter(Staff?.firstname)} ${formatFirstLetter(Staff?.lastname)}`}
+                  sx={{ width: 100, height: 100, mb: 4 }}
+                />
+              ) : (
+                <CustomAvatar
+                  skin='light'
+                  color={Staff.id % 2 === 0 ? 'primary' : 'secondary'}
+                  sx={{
+                    mr: 2.5,
+                    width: 100,
+                    height: 100,
+                    fontWeight: 500,
 
+                    // fontSize: theme => theme.typography.body1.fontSize
+                    fontSize: '2rem'
+                  }}
+                >
+                  {getInitials(initials || 'John Doe')}
+                </CustomAvatar>
+              )}
 
               <Typography variant='h5' sx={{ mb: 3 }}>
-                {formatFirstLetter(Staff?.firstname) || '--'}
+                {`${formatFirstLetter(Staff?.firstname)} ${formatFirstLetter(Staff?.lastname)}` || '--'}
               </Typography>
               {/* <CustomChip
                 rounded
@@ -96,7 +109,7 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaf
             </Box>
             <Box sx={{ display: 'flex', position: 'relative' }}>
               <Typography variant='h5' sx={{ mt: -1, mb: -1.2, color: 'primary.main', fontSize: '2rem !important' }}>
-                {Staff?.grossSalary?.toLocaleString() }
+                {formatCurrency(Staff?.grossSalary, true)}
                 <Sub>/ month</Sub>
               </Typography>
             </Box>
@@ -134,14 +147,21 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaf
               Details
             </Typography>
             <Box sx={{ pt: 4 }}>
-              <StaffDetailCard iconName='solar:user-broken' cardTitle='Name' value={`${formatFirstLetter(Staff?.firstname)} ${formatFirstLetter(Staff?.lastname)}` || '--'} /> 
-              <StaffDetailCard iconName='fontisto:email' cardTitle='Email' value={Staff?.email || '--'} /> 
-              <StaffDetailCard iconName='solar:user-broken' cardTitle='Username' value={Staff?.username || '--'} /> 
-              <StaffDetailCard iconName='bi:phone' cardTitle='Phone Number' value={Staff?.phone || '--'} /> 
-              <StaffDetailCard iconName='la:user-tag' cardTitle='Designation' value={Staff?.designation || '--'} /> 
-              <StaffDetailCard iconName="fluent-emoji-high-contrast:department-store" cardTitle='Department' value={Staff?.department?.name || '--'} /> 
-              <StaffDetailCard iconName="tabler:user-pin" cardTitle='Address' value={Staff?.address || '--'} /> 
-
+              <StaffDetailCard
+                iconName='solar:user-broken'
+                cardTitle='Name'
+                value={`${formatFirstLetter(Staff?.firstname)} ${formatFirstLetter(Staff?.lastname)}` || '--'}
+              />
+              <StaffDetailCard iconName='fontisto:email' cardTitle='Email' value={Staff?.email || '--'} />
+              <StaffDetailCard iconName='solar:user-broken' cardTitle='Username' value={Staff?.username || '--'} />
+              <StaffDetailCard iconName='bi:phone' cardTitle='Phone Number' value={Staff?.phone || '--'} />
+              <StaffDetailCard iconName='la:user-tag' cardTitle='Designation' value={Staff?.designation || '--'} />
+              <StaffDetailCard
+                iconName='fluent-emoji-high-contrast:department-store'
+                cardTitle='Department'
+                value={Staff?.department?.name || '--'}
+              />
+              <StaffDetailCard iconName='tabler:user-pin' cardTitle='Address' value={Staff?.address || '--'} />
             </Box>
           </CardContent>
 
@@ -150,28 +170,46 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaf
               Account and Retirement Details
             </Typography>
             <Box sx={{ pt: 4 }}>
-              <StaffDetailCard iconName='solar:wallet-money-bold' cardTitle='Account Number' value={Staff?.accountNumber || '--'} /> 
-              <StaffDetailCard iconName="solar:wallet-money-bold" cardTitle='RSA Number' value={Staff?.rsaNumber || '--'} /> 
-              <StaffDetailCard iconName="ri:home-office-fill" cardTitle='RSA Company' value={Staff?.rsaCompany || '--'} /> 
-
+              <StaffDetailCard
+                iconName='solar:wallet-money-bold'
+                cardTitle='Account Number'
+                value={Staff?.accountNumber || '--'}
+              />
+              <StaffDetailCard
+                iconName='solar:wallet-money-bold'
+                cardTitle='RSA Number'
+                value={Staff?.rsaNumber || '--'}
+              />
+              <StaffDetailCard
+                iconName='ri:home-office-fill'
+                cardTitle='RSA Company'
+                value={Staff?.rsaCompany || '--'}
+              />
             </Box>
           </CardContent>
 
-          <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          {/* <CardActions sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               variant='contained'
               sx={{ mr: 2 }}
-              
               onClick={handleEditClickOpen}
-
               // onClick={()=> console.log('view staff')}
               startIcon={<Icon icon='tabler:edit' />}
             >
               Edit
             </Button>
-          </CardActions>
+          </CardActions> */}
 
-          <EditStaffCard openEdit={openEdit} handleEditClose={handleEditClose} data={Staff} hasUploadedImage={hasUploadedImage} profilePictureUrl={profilePictureUrl} closeViewStaffCanvas={closeViewStaffCanvas} setProfilePictureUrl={setProfilePictureUrl} setHasUploadedImage={setHasUploadedImage} />
+          {/* <EditStaffCard
+            openEdit={openEdit}
+            handleEditClose={handleEditClose}
+            data={Staff}
+            hasUploadedImage={hasUploadedImage}
+            profilePictureUrl={profilePictureUrl}
+            closeViewStaffCanvas={closeViewStaffCanvas}
+            setProfilePictureUrl={setProfilePictureUrl}
+            setHasUploadedImage={setHasUploadedImage}
+          /> */}
         </Fragment>
       </Grid>
     </Grid>

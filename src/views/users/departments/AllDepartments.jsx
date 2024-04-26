@@ -19,8 +19,6 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
-
-// import DepartmentsTableHeader from './DepartmentsHeader'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
@@ -83,6 +81,12 @@ const DepartmentsTable = () => {
     setEditMode(true)
   }
 
+  const cancelEditMode = () => {
+    setEditDrawer(false)
+    setDepartmentToEdit(null)
+    setEditMode(false)
+  }
+
   const handleChangePage = newPage => {
     setPage(newPage)
   }
@@ -91,7 +95,6 @@ const DepartmentsTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-
   const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
 
   // const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
@@ -152,7 +155,7 @@ const DepartmentsTable = () => {
                               ? `${formatFirstLetter(department?.hod.firstname)}  ${formatFirstLetter(
                                   department?.hod.lastname
                                 )}`
-                              : department?.id
+                              : '--'
                           }`}
                         </TableCell>
 
@@ -181,7 +184,12 @@ const DepartmentsTable = () => {
           </TableContainer>
         </Item>
         <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
-          <EditDepartment refetchDepartments={updateFetch} selectedDepartment={DepartmentToView} editMode={editMode} />
+          <EditDepartment
+            refetchDepartments={updateFetch}
+            selectedDepartment={DepartmentToView}
+            editMode={editMode}
+            closeEdit={cancelEditMode}
+          />
         </Item>
       </Stack>
 

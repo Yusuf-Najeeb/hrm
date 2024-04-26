@@ -42,6 +42,7 @@ export const workInfoSchema = yup.object().shape({
   accountNumber: yup.string().required(),
   rsaCompany: yup.string().required(),
   rsaNumber: yup.string().required(),
+  roleId: yup.string().required(),
   departmentId: yup.string().required('Department is required')
 })
 

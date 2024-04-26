@@ -47,12 +47,14 @@ import {
 
 // Custom Hooks
 import { useDepartments } from '../../../hooks/useDepartments'
+import { useRoles } from '../../../hooks/useRoles'
 import { useAppDispatch } from '../../../hooks'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // Others
 import { notifyWarn } from '../../../@core/components/toasts/notifyWarn'
 import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
@@ -63,8 +65,6 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import SubmitSpinnerMessage from '../components/SubmitSpinnerMessage'
 
 // import { CustomCloseButton } from '../departments/CreateDepartment'
-
-
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -77,14 +77,11 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: `${theme.palette.background.paper} !important`
 }))
 
-const EditStaff = ({
-  data,
-  openEdit,
-  closeModal,
-}) => {
+const EditStaff = ({ data, openEdit, closeModal }) => {
   const dispatch = useAppDispatch()
 
   const [DepartmentsData] = useDepartments()
+  const [RolesData] = useRoles()
 
   // ** States
   const [activeStep, setActiveStep] = useState(0)
@@ -92,7 +89,7 @@ const EditStaff = ({
   const [previewUrl, setPreviewUrl] = useState()
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
 
-  const [profilePictureUrl, setProfilePictureUrl] = useState();
+  const [profilePictureUrl, setProfilePictureUrl] = useState()
 
   // ** Hooks & Var
   const { settings } = useSettings()
@@ -129,7 +126,7 @@ const EditStaff = ({
     setValue: setNextofKinValue,
     control: nextOfKinControl,
     handleSubmit: handleNextOfKinSubmit,
-    formState: { errors: nextOfKinErrors , isSubmitting},
+    formState: { errors: nextOfKinErrors, isSubmitting },
     getValues: getNextOfKinValues
   } = useForm({
     defaultValues: defaultNextOfKinValues,
@@ -230,6 +227,9 @@ const EditStaff = ({
         id: data?.id
       }
       payload.userNOK = { ...nextOfKinValues }
+      const { grossSalary } = payload
+      const formatSalary = +grossSalary
+      payload.grossSalary = formatSalary
 
       const response = await axios.patch('users/modify', payload, {
         headers: {
@@ -241,7 +241,7 @@ const EditStaff = ({
         handleReset()
         setActiveStep(0)
         closeEditDrawer()
-        dispatch(fetchStaffs({page: 1 }))
+        dispatch(fetchStaffs({ page: 1 }))
       }
 
       // if (response?.data?.data?.image) {
@@ -252,9 +252,8 @@ const EditStaff = ({
     }
   }
 
-
-  useEffect(()=>{
-    if (data){
+  useEffect(() => {
+    if (data) {
       setProfilePictureUrl(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${data?.image}`)
     }
 
@@ -263,6 +262,7 @@ const EditStaff = ({
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: 1, limit: 200 }))
+    dispatch(fetchRoles({ page: 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -280,6 +280,7 @@ const EditStaff = ({
       setPersonalValue('allergies', data?.allergies)
       setPersonalValue('maritalStatus', data?.maritalStatus)
       setWorkInfoValue('designation', data?.designation)
+      setWorkInfoValue('roleId', data?.role?.id)
       setWorkInfoValue('employeeNumber', data?.employeeNumber)
       setWorkInfoValue('grossSalary', data?.grossSalary)
       setWorkInfoValue('accountNumber', data?.accountNumber)
@@ -572,6 +573,32 @@ const EditStaff = ({
                   )}
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='roleId'
+                  control={workInfoControl}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='Role'
+                      onChange={onChange}
+                      error={Boolean(workInfoErrors.roleId)}
+                      aria-describedby='stepper-linear-account-roleId'
+                      {...(workInfoErrors.roleId && { helperText: 'This field is required' })}
+                    >
+                      <MenuItem value=''>Select Role</MenuItem>
+                      {RolesData?.map(role => (
+                        <MenuItem key={role?.id} value={role?.id}>
+                          {formatFirstLetter(role?.name)}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
 
               <Grid item xs={12} sm={6}>
                 <FormController
@@ -781,7 +808,7 @@ const EditStaff = ({
                   Back
                 </Button>
                 <Button type='submit' variant='contained' disabled={isSubmitting}>
-                {isSubmitting ? <SubmitSpinnerMessage /> : 'Submit'}
+                  {isSubmitting ? <SubmitSpinnerMessage /> : 'Submit'}
                 </Button>
               </Grid>
             </Grid>
@@ -840,14 +867,16 @@ const EditStaff = ({
         <Card>
           <CardContent>
             <StepperWrapper>
-              <Stepper 
-               activeStep={activeStep}
-               connector={
-                 !smallScreen ? <Icon icon={direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'} /> : null
-               }
+              <Stepper
+                activeStep={activeStep}
+                connector={
+                  !smallScreen ? (
+                    <Icon icon={direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'} />
+                  ) : null
+                }
               >
                 {steps.map((step, index) => {
-              const RenderAvatar = activeStep >= index ? CustomAvatar : Avatar
+                  const RenderAvatar = activeStep >= index ? CustomAvatar : Avatar
                   const labelProps = {}
                   if (index === activeStep) {
                     labelProps.error = false
@@ -864,6 +893,7 @@ const EditStaff = ({
                       labelProps.error = true
                     } else if (
                       workInfoErrors.designation ||
+                      workInfoErrors.roleId ||
                       workInfoErrors.departmentId ||
                       workInfoErrors.employeeNumber ||
                       workInfoErrors.rsaCompany ||

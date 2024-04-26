@@ -1,5 +1,5 @@
 // ** React Imports
-import {  forwardRef, } from 'react'
+import { forwardRef } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -49,38 +49,36 @@ const Transition = forwardRef(function Transition(props, ref) {
 })
 
 const defaultValues = {
-    reason: ''
-  }
+  reason: ''
+}
 
 const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
+  const {
+    control,
+    setValue,
+    reset,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requireReason) })
 
-    const {
-        control,
-        setValue,
-        reset,
-        handleSubmit,
-        formState: { errors, isSubmitting }
-      } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requireReason)})
+  const onDeleteClick = async payload => {
+    try {
+      const { data } = await axios({
+        method: 'delete',
+        url: `users?id=${selectedStaff}`,
+        data: payload
+      })
 
-      const onDeleteClick = async (payload) => {
-        try {
-            const { data } = await axios({
-                method: 'delete',
-                url: `users?id=${selectedStaff}`,
-                data: payload,
-            });
-        
-            if (data.success) {
-                notifySuccess('Staff Deleted Successfully')
-                reset()
-                refetchStaffs()
-                handleClose()
-            }
-        
-          } catch (error) {
-            notifyError('Error deleting staff')
-          }
+      if (data.success) {
+        notifySuccess('Staff Deactivated')
+        reset()
+        refetchStaffs()
+        handleClose()
       }
+    } catch (error) {
+      notifyError('Error deleting staff')
+    }
+  }
 
   return (
     <Dialog
@@ -104,7 +102,7 @@ const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
 
-       <form onSubmit={handleSubmit(onDeleteClick)}>
+        <form onSubmit={handleSubmit(onDeleteClick)}>
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`
@@ -133,17 +131,13 @@ const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button type='submit' variant='contained'>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : "Delete"}
-              
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Delete'}
             </Button>
           </Box>
-        </form> 
-        
+        </form>
       </DialogContent>
 
-    
-
-    {/* <DialogActions
+      {/* <DialogActions
         sx={{
           justifyContent: 'center',
           px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],

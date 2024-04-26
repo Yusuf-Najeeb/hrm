@@ -22,6 +22,8 @@ import DeleteDialog from '../../../@core/components/delete-dialog'
 import { useDeductions } from '../../../hooks/useDeductions'
 import PageHeader from '../components/PageHeader'
 import { deleteDeduction, fetchDeductions } from '../../../store/apps/deductions/asyncthunk'
+import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { useStaffs } from '../../../hooks/useStaffs'
 import CreateDeduction from './CreateDeduction'
 import { useDeductionCategory } from '../../../hooks/useDeductionCategory'
 import { findDeductionCategory } from '../../../@core/utils/utils'
@@ -31,18 +33,20 @@ const DeductionsTable = () => {
   const dispatch = useAppDispatch()
   const [deductionsData, loading] = useDeductions()
   const [deductioncategoryData] = useDeductionCategory()
+  const [StaffsData] = useStaffs()
 
-  console.log(deductionsData, 'deductions data')
-  console.log(deductioncategoryData, 'deductions category data')
+  // console.log(deductionsData, 'deductions data')
+
+  // console.log(deductioncategoryData, 'deductions category data')
 
   // States
-
   const [deduction, setDeduction] = useState(null)
   const [addDeductionOpen, setDeductionOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDeduction, setSelectedDeduction] = useState(null)
-
+  const [staffId, setStaffId] = useState('')
+  console.log(staffId, 'if found....')
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
   const doDelete = value => {
@@ -79,7 +83,7 @@ const DeductionsTable = () => {
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                S/N
+                STAFF
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 DEDUCTION CATEGORY
@@ -108,8 +112,8 @@ const DeductionsTable = () => {
 
                   return (
                     <TableRow hover role='checkbox' key={deduction.id}>
-                      <TableCell align='left'>{i + 1}</TableCell>
                       {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
+                      <TableCell align='left'>{`${StaffsData.find(user => user.id === deduction.userId)}`}</TableCell>
                       <TableCell align='left'>{deductionCategoryName}</TableCell>
                       <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
 

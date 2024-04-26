@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react'
+
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -9,54 +11,28 @@ import { styled, useTheme } from '@mui/material/styles'
 import LinearProgress from '@mui/material/LinearProgress'
 
 // ** Custom Components Imports
+import { useAppDispatch, useAppSelector } from '../../../hooks'
 import Icon from 'src/@core/components/icon'
 import CustomChip from 'src/@core/components/mui/chip'
 import OptionsMenu from 'src/@core/components/option-menu'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
-
+import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { useDepartments } from '../../../hooks/useDepartments'
 import paper from 'src/@core/theme/overrides/paper'
 
-// ** Util Import
-// import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
-// import Paper from 'src/@core/theme/overrides/paper'
-
-// const series = [{ data: [37, 76, 65, 41, 99, 53, 70] }]
-
-// const data = [
-//   {
-//     progress: 64,
-//     stats: '$545.69',
-//     title: 'Earnings',
-//     avatarIcon: 'tabler:currency-dollar'
-//   },
-//   {
-//     progress: 59,
-//     title: 'Profit',
-//     stats: '$256.34',
-//     avatarColor: 'info',
-//     progressColor: 'info',
-//     avatarIcon: 'tabler:chart-pie-2'
-//   },
-//   {
-//     progress: 22,
-//     stats: '$74.19',
-//     title: 'Expense',
-//     avatarColor: 'error',
-//     progressColor: 'error',
-//     avatarIcon: 'tabler:brand-paypal'
-//   }
-// ]
-
-// const StyledGrid = styled(Grid)(({ theme }) => ({
-//   [theme.breakpoints.up('sm')]: {
-//     paddingTop: '0 !important'
-//   }
-// }))
-
-const DepartmentInfo = () => {
+const DepartmentInfo = ({ departments, active, inActive }) => {
   // ** Hook
+  const dispatch = useAppDispatch()
   const theme = useTheme()
+  const [DepartmentsData] = useDepartments()
+
+  useEffect(() => {
+    dispatch(fetchDepartments({ page: 1, limit: 200 }))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  console.log(DepartmentsData.length)
 
   return (
     <Grid container spacing={3} sx={{ display: { xs: 'none', lg: 'flex' } }}>
@@ -85,7 +61,7 @@ const DepartmentInfo = () => {
                 width: 'fit-content'
               }}
             >
-              0
+              {DepartmentsData.length}
             </Typography>
           </Card>
         </paper>
@@ -111,7 +87,7 @@ const DepartmentInfo = () => {
                 width: 'fit-content'
               }}
             >
-              0
+              {active || '--'}
             </Typography>
           </Card>
         </paper>
@@ -141,7 +117,7 @@ const DepartmentInfo = () => {
                 width: 'fit-content'
               }}
             >
-              0
+              {inActive || '--'}
             </Typography>
           </Card>
         </paper>

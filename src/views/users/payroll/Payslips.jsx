@@ -8,14 +8,13 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
-
+import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
-
 import TablePagination from '@mui/material/TablePagination'
-
+import { getInitials } from 'src/@core/utils/get-initials'
 import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
@@ -26,7 +25,17 @@ import { fetchPayslips, printPayslip } from '../../../store/apps/payslip/asyncth
 import { useDepartments } from '../../../hooks/useDepartments'
 import GeneratePayslip from './GeneratePayslip'
 import PageHeader from './PayslipPageHeader'
-import { Card, CardContent, CardHeader, CircularProgress, Grid, MenuItem, Tooltip } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  Grid,
+  MenuItem,
+  Tooltip
+} from '@mui/material'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
 
@@ -48,7 +57,7 @@ const PayslipTable = () => {
   const [isPrinting, setIsPrinting] = useState(false)
   const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
   const [payslipDownloadLink, setPayslipDownloadLink] = useState()
-  const [printingPayslipId, setPrintingPayslipId] = useState(null);
+  const [printingPayslipId, setPrintingPayslipId] = useState(null)
 
   const defaultId = getFirstId(DepartmentsData)
 
@@ -63,17 +72,39 @@ const PayslipTable = () => {
   const printPayslipItem = (selectedId, period) => {
     setIsPrinting(true)
     setPrintingPayslipId(selectedId)
-    printPayslip(selectedId, period).then(res => {
+    printPayslip(selectedId, period)
+      .then(res => {
         setIsPayslipAvailable(true)
         setPayslipDownloadLink(res.data.url)
-      setIsPrinting(false)
-    }).catch(()=>{
         setIsPrinting(false)
-    })
+      })
+      .catch(() => {
+        setIsPrinting(false)
+      })
   }
 
+  const renderClient = row => {
+    const initials = `${formatFirstLetter(row?.user?.firstname)} ${formatFirstLetter(row?.user?.lastname)}`
+    if (row?.image?.length) {
+      return (
+        <CustomAvatar
+          src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/${row?.image}`}
+          sx={{ mr: 2.5, width: 38, height: 38 }}
+        />
+      )
+    } else {
+      return (
+        <CustomAvatar
+          skin='light'
+          color={row?.id % 2 === 0 ? 'primary' : 'secondary'}
+          sx={{ mr: 2.5, width: 38, height: 38, fontWeight: 500, fontSize: theme => theme.typography.body1.fontSize }}
+        >
+          {getInitials(initials || 'John Doe')}
+        </CustomAvatar>
+      )
+    }
+  }
   const updateFetch = () => setFetch(!refetch)
-
 
   const toggleGeneratePayslipDrawer = () => setPayslipOpen(!generateModalOpen)
   const toggleSendPayslipModal = () => setSendModalOpen(!sendModalOpen)
@@ -84,27 +115,31 @@ const PayslipTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch, defaultId, departmentId])
 
-  useEffect(()=>{
-    if ( isPayslipDownloadLinkAvailable) {
-    //   window.location.href = payslipDownloadLink  
-    window.open(payslipDownloadLink, '_blank');
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (isPayslipDownloadLinkAvailable) {
+      //   window.location.href = payslipDownloadLink
+      window.open(payslipDownloadLink, '_blank')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPayslipDownloadLinkAvailable])
 
   return (
     <div>
       <Card>
-        <CardHeader title='Filter' />
+        {/* <CardHeader title='Filter' /> */}
         <CardContent>
-          <Grid container spacing={12}>
+          <Grid
+            container
+            spacing={12}
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 4 }}
+          >
             <Grid item xs={12} sm={4}>
               <CustomTextField
                 select
                 fullWidth
                 label='Department'
-                placeholderText='he'
-
+                placeholder='Department'
+                // eslint-disable-next-line
                 // placeholderText={`${DepartmentsData[defaultId]?.name}`}
                 SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
               >
@@ -116,24 +151,21 @@ const PayslipTable = () => {
                 ))}
               </CustomTextField>
             </Grid>
+            <PageHeader
+              action1='Send Payslips to Staffs Email'
+              toggleSend={toggleSendPayslipModal}
+              month={month}
+              action2='Create Payslip'
+              toggle={toggleGeneratePayslipDrawer}
+            />
           </Grid>
         </CardContent>
       </Card>
 
-      <PageHeader
-        action1='Send Payslips to Staffs Email'
-        toggleSend={toggleSendPayslipModal}
-        month={month}
-        action2='Generate Payslip'
-        toggle={toggleGeneratePayslipDrawer}
-      />
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
-                S/N
-              </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 STAFF NAME
               </TableCell>
@@ -143,9 +175,6 @@ const PayslipTable = () => {
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 GROSS SALARY
               </TableCell>
-              {/* <TableCell align='left' sx={{ minWidth: 100 }}>
-                TOTAL ALLOWANCE
-              </TableCell>  */}
               <TableCell align='center' sx={{ minWidth: 100 }}>
                 TOTAL DEDUCTION
               </TableCell>
@@ -173,22 +202,38 @@ const PayslipTable = () => {
 
                   return (
                     <TableRow hover role='checkbox' key={payslip?.id}>
-                      <TableCell align='left'>{i + 1}</TableCell>
-                      <TableCell align='left'>{`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(payslip?.user?.lastname)}`}</TableCell>
+                      <TableCell align='left'>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          {renderClient(payslip)}
+                          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                              {`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
+                                payslip?.user?.lastname
+                              )}`}
+                            </Typography>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
+                              {payslip?.user?.email}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </TableCell>
                       <TableCell align='left'>{departmentName ? formatFirstLetter(departmentName) : ''}</TableCell>
                       <TableCell align='left'>{payslip?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
-                      {/* <TableCell align='left'>{payslip?.totalAllowance?.toLocaleString() || '--'}</TableCell> */}
                       <TableCell align='center'>{payslip?.totalDeduction?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='left'>{payslip?.amount?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='center' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        
-
-                        {printingPayslipId === payslip?.user?.id && isPrinting  ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 
-                        <Tooltip title='Print Payslip' placement='top'>
-                          <IconButton size='small' onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}>
-                            <Icon icon='material-symbols:print-outline' />
-                          </IconButton>
-                        </Tooltip>}
+                      <TableCell align='center'>
+                        {printingPayslipId === payslip?.user?.id && isPrinting ? (
+                          <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
+                        ) : (
+                          <Tooltip title='Print Payslip' placement='top'>
+                            <IconButton
+                              size='small'
+                              onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}
+                            >
+                              <Icon icon='material-symbols:print-outline' />
+                            </IconButton>
+                          </Tooltip>
+                        )}
                       </TableCell>
                     </TableRow>
                   )
@@ -216,10 +261,6 @@ const PayslipTable = () => {
         rowsPerPageOptions={[5, 10, 20]}
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
-
-      {/* 
-
-       */}
 
       {generateModalOpen && (
         <GeneratePayslip
