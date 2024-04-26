@@ -33,7 +33,7 @@ const navigation = () => {
     {
       title: 'Duty-Roster',
       icon: 'tabler:address-book',
-      path: '/apps/duty-roster'
+      path: '/apps/dutyRoster'
     },
 
     // {

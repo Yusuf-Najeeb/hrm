@@ -20,7 +20,7 @@ const navigation = () => {
     {
       title: 'Duty Roster',
       icon: 'tabler:calendar',
-      path: '/apps/duty-roster/'
+      path: '/apps/dutyRoster/'
     },
 
     {
