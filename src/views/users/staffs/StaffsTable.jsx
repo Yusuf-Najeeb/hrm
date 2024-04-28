@@ -49,6 +49,7 @@ import DeleteStaff from './DeleteStaff'
 import EditStaffCard from './EditStaffCard'
 
 import ViewStaff from './ViewStaff'
+import StaffHeaderCard from './StaffHeaderCard'
 import { styled } from '@mui/material/styles'
 import AddStaff from './AddStaff'
 import { Stack } from '@mui/system'
@@ -174,6 +175,7 @@ const StaffsTable = () => {
 
   return (
     <Stack>
+      <StaffHeaderCard />
       <Grid item xs={12}>
         <Card>
           <CardHeader title='Search Filters' />
