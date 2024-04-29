@@ -9,7 +9,7 @@ import Icon from 'src/@core/components/icon'
 // ** Custom Components Imports
 import CustomTextField from 'src/@core/components/mui/text-field'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import { Box, Button, CircularProgress, Grid, MenuItem, Popover } from '@mui/material'
+import { Box, Button, CircularProgress, Grid, MenuItem, Popover, Typography } from '@mui/material'
 import DatePicker from 'react-datepicker'
 
 // Custom Hooks
@@ -106,7 +106,7 @@ const DownloadTemplateDialog = ({ open, anchorEl, handleClose }) => {
       }}
     >
       <form onSubmit={handleSubmit(downloadTemplate)}>
-        <Grid container spacing={5} sx={{ p: '2rem', width: '310px' }}>
+        <Grid container spacing={5} sx={{ p: '1rem', width: '350px' }}>
           <Grid item xs={12} sm={12}>
             <Controller
               name='rosterDate'
@@ -176,6 +176,10 @@ const DownloadTemplateDialog = ({ open, anchorEl, handleClose }) => {
           </Grid>
         </Grid>
       </form>
+      <Box sx={{ p: '1rem', textAlign: 'center' }}>
+        <Typography sx={{ color: 'red' }}>Warning!</Typography>
+        <Typography>Do Not Edit the ID column on the Template </Typography>
+      </Box>
     </Popover>
   )
 }
