@@ -61,9 +61,8 @@ const DownloadTemplateDialog = ({ open, anchorEl, handleClose }) => {
     reset()
   }
 
-  const downloadTemplate = async (values) => {
+  const downloadTemplate = async values => {
     const period = formatDateToYYYYMM(values.rosterDate)
-
     try {
       const { data } = await axios.get(`/roster/download/template?period=${period}&departmentId=${values.departmentId}`)
 
@@ -74,12 +73,10 @@ const DownloadTemplateDialog = ({ open, anchorEl, handleClose }) => {
         closeDialog()
       }
     } catch (error) {
-      if(error.response.data.message.includes('No staff')){
-
+      if (error.response.data.message.includes('No staff')) {
         notifyError('No Staffs in selected department')
-      }
-      else{
-        notifyError("Download failed")
+      } else {
+        notifyError('Download failed')
       }
     }
   }
@@ -90,11 +87,11 @@ const DownloadTemplateDialog = ({ open, anchorEl, handleClose }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(()=>{
-    if ( isTemplateAvailable) {
-      window.location.href = rosterTemplateRes  
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (isTemplateAvailable) {
+      window.location.href = rosterTemplateRes
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTemplateAvailable])
 
   return (

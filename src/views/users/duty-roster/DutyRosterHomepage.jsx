@@ -27,6 +27,7 @@ import DownloadTemplateDialog from './DownloadTemplateDialog'
 import UploadRosterDialog from './UploadRosterDialog'
 import AddEventSidebar from 'src/views/apps/calendar/AddEventSidebar'
 import SidebarLeft from 'src/views/apps/calendar/SidebarLeft'
+import InfoDialog from './InfoDialog'
 
 import { fetchRosterDetails } from '../../../store/apps/roster/asyncthunk'
 import { formatDateToYYYYMM, formatFirstLetter, formatMonthYear, getFirstId } from '../../../@core/utils/format'
@@ -89,6 +90,7 @@ const DutyRosterHomepage = () => {
   const [selectedId, setSelectedId] = useState()
   const [departmentName, setDepartmentName] = useState('')
   const [defaultDepartmentName, setDefaultDepartmentName] = useState('')
+  const [infoModal, setModal] = useState(false)
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
@@ -119,6 +121,10 @@ const DutyRosterHomepage = () => {
     const selectedDept = DepartmentsData?.find(dept => dept?.id == departmentId)
 
     selectedDept && setDepartmentName(selectedDept?.name)
+  }
+
+  const toggleModal = () => {
+    setModal(!infoModal)
   }
 
   const toggleDownloadDialog = e => {
@@ -177,7 +183,7 @@ const DutyRosterHomepage = () => {
         <CardHeader title='Filters' />
         <CardContent>
           <Grid container spacing={3} sx={{ display: 'flex' }}>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md={6} lg={3}>
               <CustomTextField
                 select
                 fullWidth
@@ -196,7 +202,7 @@ const DutyRosterHomepage = () => {
               </CustomTextField>
             </Grid>
 
-            <Grid item xs={12} md={3} sx={{ mb: 4 }}>
+            <Grid item xs={12} md={6} lg={3} sx={{ mb: { xs: 4, sm: 1 } }}>
               <DatePicker
                 //eslint-disable-next-line
                 // selected={period}
@@ -281,6 +287,8 @@ const DutyRosterHomepage = () => {
         handleAddEventSidebarToggle={handleAddEventSidebarToggle}
       /> */}
       </CalendarWrapper>
+
+      {infoModal && <InfoDialog openModal={toggleModal} closeModal={toggleModal} />}
 
       <DownloadTemplateDialog open={openDownloadDialog} anchorEl={anchorEl} handleClose={closeDownloadDialog} />
       <UploadRosterDialog open={openUploadDialog} anchorEl={anchorElement} handleClose={closeUploadDialog} />
