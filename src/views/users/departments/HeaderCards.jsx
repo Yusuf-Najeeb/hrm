@@ -52,7 +52,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               mt: -4
             }}
           >
-            {aggregations.total}
+            {aggregations?.total || 0}
           </Typography>
         </Card>
       </Grid>
@@ -73,7 +73,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               mt: -4
             }}
           >
-            {aggregations.total_active}
+            {aggregations?.total_active || 0}
           </Typography>
         </Card>
       </Grid>
@@ -98,7 +98,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               mt: -4
             }}
           >
-            {aggregations.total_deleted}
+            {aggregations?.total_deleted || 0}
           </Typography>
         </Card>
       </Grid>
@@ -124,7 +124,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               mt: -4
             }}
           >
-            {aggregations.total_staff}
+            {aggregations?.total_staff || 0}
           </Typography>
         </Card>
       </Grid>

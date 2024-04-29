@@ -44,7 +44,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             <Typography sx={{ fontSize: '1rem' }}>All Staff</Typography>
 
             <CustomAvatar skin='light' variant='rounded' sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'end' }}>
-              <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
+              <Icon fontSize='2.125rem' icon='mdi:user-group-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -65,7 +65,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Active Staff</Typography>
             <CustomAvatar skin='light' variant='rounded' sx={{ mt: 5, width: 30, height: 30, selfAlign: 'center' }}>
-              <Icon fontSize='2.125rem' icon='codicon:vm-active' />
+              <Icon fontSize='2.125rem' icon='mdi:user-badge-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -90,7 +90,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               variant='rounded'
               sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
+              <Icon fontSize='2.125rem' icon='mdi:user-badge-alert-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -116,7 +116,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               variant='rounded'
               sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='tabler:user-cog' />
+              <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
             </CustomAvatar>
           </Box>
           <Typography
