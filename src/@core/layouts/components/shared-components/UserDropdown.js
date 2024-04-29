@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/navigation'
@@ -13,6 +13,8 @@ import Divider from '@mui/material/Divider'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import MenuItem from '@mui/material/MenuItem'
+import { getInitials } from 'src/@core/utils/get-initials'
+import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -33,6 +35,7 @@ const MenuItemStyled = styled(MenuItem)(({ theme }) => ({
     color: theme.palette.primary.main
   }
 }))
+const backEndURL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 const UserDropdown = props => {
   // ** Props
@@ -40,6 +43,9 @@ const UserDropdown = props => {
 
   // ** States
   const [anchorEl, setAnchorEl] = useState(null)
+  const [user, setUser] = useState({})
+
+  console.log(user, 'All user data')
 
   // ** Hooks
   const router = useRouter()
@@ -81,6 +87,32 @@ const UserDropdown = props => {
     handleDropdownClose('/login')
   }
 
+  useEffect(() => {
+    const userData = JSON.parse(window.localStorage.getItem('loggedInUser'))
+    setUser(userData)
+  }, [])
+
+  const { lastname, firstname } = user
+
+  const renderClient = row => {
+    const initials = `${row?.firstname?.toUpperCase()} ${row?.lastname?.toUpperCase()}`
+    if (row?.image !== null && row?.image?.length) {
+      return (
+        <CustomAvatar src={`${backEndURL?.replace('api', '')}/${row?.image}`} sx={{ mr: 2.5, width: 32, height: 32 }} />
+      )
+    } else {
+      return (
+        <CustomAvatar
+          skin='light'
+          color='info'
+          sx={{ mr: 2.5, width: 38, height: 38, fontWeight: 500, fontSize: theme => theme.typography.body1.fontSize }}
+        >
+          {getInitials(initials || 'John Doe')}
+        </CustomAvatar>
+      )
+    }
+  }
+
   return (
     <Fragment>
       <Badge
@@ -93,12 +125,13 @@ const UserDropdown = props => {
           horizontal: 'right'
         }}
       >
-        <Avatar
+        {/* <Avatar
           alt='John Doe'
           src='/images/avatars/1.png'
           onClick={handleDropdownOpen}
           sx={{ width: 38, height: 38 }}
-        />
+        /> */}
+        {renderClient(user)}
       </Badge>
       <Menu
         anchorEl={anchorEl}
@@ -118,11 +151,12 @@ const UserDropdown = props => {
                 horizontal: 'right'
               }}
             >
-              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              {/* <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} /> */}
+              {renderClient(user)}
             </Badge>
             <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 500 }}>John Doe</Typography>
-              <Typography variant='body2'>Admin</Typography>
+              <Typography sx={{ fontWeight: 500 }}>{`${firstname} ${lastname}`}</Typography>
+              <Typography variant='body2'>{user?.role?.name}</Typography>
             </Box>
           </Box>
         </Box>
