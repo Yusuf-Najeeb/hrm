@@ -109,11 +109,12 @@ const DeductionsTable = () => {
                   const deductionCategoryId = deduction?.categoryId
                   const matchingDeductionCategory = findDeductionCategory(deductioncategoryData, deductionCategoryId)
                   const deductionCategoryName = formatFirstLetter(matchingDeductionCategory?.name)
+                  const userName = StaffsData.find(user => user.id === deduction.userId)
 
                   return (
                     <TableRow hover role='checkbox' key={deduction.id}>
                       {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
-                      <TableCell align='left'>{`${StaffsData.find(user => user.id === deduction.userId)}`}</TableCell>
+                      <TableCell align='left'>{`${userName?.firstname} ${userName?.lastname}`}</TableCell>
                       <TableCell align='left'>{deductionCategoryName}</TableCell>
                       <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
 

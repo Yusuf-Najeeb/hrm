@@ -155,7 +155,7 @@ const PayslipTable = () => {
               action1='Send Payslips to Staffs Email'
               toggleSend={toggleSendPayslipModal}
               month={month}
-              action2='Create Payslip'
+              action2='Generate Payslip'
               toggle={toggleGeneratePayslipDrawer}
             />
           </Grid>
