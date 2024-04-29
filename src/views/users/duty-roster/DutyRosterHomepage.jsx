@@ -5,7 +5,6 @@ import { useEffect, useState, forwardRef } from 'react'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 
@@ -21,7 +20,7 @@ import CalendarWrapper from 'src/@core/styles/libs/fullcalendar'
 import DatePicker from 'react-datepicker'
 
 // ** Redux Imports
-import {  useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import PageHeader from './PageHeader'
 import DownloadTemplateDialog from './DownloadTemplateDialog'
@@ -65,14 +64,11 @@ const calendarsColor = {
   ETC: 'info'
 }
 
-
-
 const DutyRosterHomepage = () => {
-
   // ** Hooks
   const { settings } = useSettings()
   const [RosterData, loading] = useRoster()
-  const store = useSelector((store) => store.calendar)
+  const store = useSelector(store => store.calendar)
 
   const dispatch = useAppDispatch()
 
@@ -96,21 +92,17 @@ const DutyRosterHomepage = () => {
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
-  
-
   // ** Vars
   const leftSidebarWidth = 300
   const addEventSidebarWidth = 400
   const { skin, direction } = settings
   const mdAbove = useMediaQuery(theme => theme.breakpoints.up('md'))
 
- 
-
-  const handleChangeDepartment = (e) => {
+  const handleChangeDepartment = e => {
     setDepartmentId(e.target.value)
   }
 
-  const handleChangePeriod = (e) => {
+  const handleChangePeriod = e => {
     const year = e.getFullYear()
     const month = String(e.getMonth() + 1).padStart(2, '0') // Adding 1 as months are zero-based
 
@@ -124,17 +116,17 @@ const DutyRosterHomepage = () => {
     setPeriod(newPeriodValue)
     setSelectedId(departmentId)
 
-    const selectedDept = DepartmentsData?.find((dept)=> dept?.id == departmentId)
+    const selectedDept = DepartmentsData?.find(dept => dept?.id == departmentId)
 
-    selectedDept &&  setDepartmentName(selectedDept?.name) 
+    selectedDept && setDepartmentName(selectedDept?.name)
   }
 
-  const toggleDownloadDialog = (e) => {
+  const toggleDownloadDialog = e => {
     setAnchorEl(e.currentTarget)
     setOpenDialog(!openDownloadDialog)
   }
 
-  const toggleUploadDialog = (e) => {
+  const toggleUploadDialog = e => {
     setAnchorElement(e.currentTarget)
     setDialog(!openUploadDialog)
   }
@@ -145,27 +137,25 @@ const DutyRosterHomepage = () => {
   const handleLeftSidebarToggle = () => setLeftSidebarOpen(!leftSidebarOpen)
   const handleAddEventSidebarToggle = () => setAddEventSidebarOpen(!addEventSidebarOpen)
 
-  console.log(defaultDepartmentName, "default department")
+  console.log(defaultDepartmentName, 'default department')
 
-  useEffect(()=>{
-    if(defaultId){
-
-      const Dept = DepartmentsData?.find((dept)=> dept?.id == defaultId)
+  useEffect(() => {
+    if (defaultId) {
+      const Dept = DepartmentsData?.find(dept => dept?.id == defaultId)
 
       setDefaultDepartmentName(Dept?.name)
-
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultId, DepartmentsData])
 
   useEffect(() => {
-    if (DepartmentsData.length > 0 ) {
-      const initialDepartmentId = getFirstId(DepartmentsData);
-      const initialDepartmentName = DepartmentsData[initialDepartmentId]?.name || '';
-      setDepartmentName(initialDepartmentName);
+    if (DepartmentsData.length > 0) {
+      const initialDepartmentId = getFirstId(DepartmentsData)
+      const initialDepartmentName = DepartmentsData[initialDepartmentId]?.name || ''
+      setDepartmentName(initialDepartmentName)
     }
-  }, [DepartmentsData]);
+  }, [DepartmentsData])
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: 1, limit: 200 }))
@@ -183,19 +173,19 @@ const DutyRosterHomepage = () => {
 
   return (
     <div>
-      <Card>
+      <Card sx={{ width: '100%' }}>
         <CardHeader title='Filters' />
         <CardContent>
-          <Grid container spacing={12}>
-            <Grid item xs={12} sm={4}>
+          <Grid container spacing={3} sx={{ display: 'flex' }}>
+            <Grid item xs={12} md={3}>
               <CustomTextField
                 select
                 fullWidth
                 label='Department'
-                placeholderText='he'
-
-                // placeholderText={`${DepartmentsData[defaultId]?.name}`}
-                SelectProps={{ value: departmentId, onChange: (e) => handleChangeDepartment(e) }}
+                //eslint-disable-next-line
+                // placeholderText='he'
+                placeholderText={`${DepartmentsData[defaultId]?.name}`}
+                SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
               >
                 <MenuItem value=''>Select Department</MenuItem>
                 {DepartmentsData?.map(department => (
@@ -206,9 +196,9 @@ const DutyRosterHomepage = () => {
               </CustomTextField>
             </Grid>
 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} md={3} sx={{ mb: 4 }}>
               <DatePicker
-
+                //eslint-disable-next-line
                 // selected={period}
                 dateFormat='MMM y'
                 popperPlacement='bottom-end'
@@ -218,20 +208,13 @@ const DutyRosterHomepage = () => {
                   handleChangePeriod(e)
                 }}
                 placeholderText='MM/YYYY'
-                customInput={
-                  <CustomInput
-                    period={period}
-                    autoComplete='off'
-                    label='Period'
-                  />
-                }
+                customInput={<CustomInput period={period} autoComplete='off' label='Period' />}
               />
             </Grid>
+            <PageHeader toggle={toggleDownloadDialog} toggleUpload={toggleUploadDialog} />
           </Grid>
         </CardContent>
       </Card>
-
-      <PageHeader toggle={toggleDownloadDialog} toggleUpload={toggleUploadDialog} />
 
       <CalendarWrapper
         className='app-calendar'
@@ -240,24 +223,23 @@ const DutyRosterHomepage = () => {
           ...(skin === 'bordered' && { border: theme => `1px solid ${theme.palette.divider}` })
         }}
       >
+        <SidebarLeft
+          store={store}
+          mdAbove={mdAbove}
+          dispatch={dispatch}
+          calendarApi={calendarApi}
+          calendarsColor={calendarsColor}
+          leftSidebarOpen={leftSidebarOpen}
+          leftSidebarWidth={leftSidebarWidth}
+          handleSelectEvent={handleSelectEvent}
+          handleAllCalendars={handleAllCalendars}
+          handleCalendarsUpdate={handleCalendarsUpdate}
+          handleLeftSidebarToggle={handleLeftSidebarToggle}
+          handleAddEventSidebarToggle={handleAddEventSidebarToggle}
+          departmentName={departmentName}
+          defaultDepartmentName={defaultDepartmentName}
+        />
 
-<SidebarLeft
-        store={store}
-        mdAbove={mdAbove}
-        dispatch={dispatch}
-        calendarApi={calendarApi}
-        calendarsColor={calendarsColor}
-        leftSidebarOpen={leftSidebarOpen}
-        leftSidebarWidth={leftSidebarWidth}
-        handleSelectEvent={handleSelectEvent}
-        handleAllCalendars={handleAllCalendars}
-        handleCalendarsUpdate={handleCalendarsUpdate}
-        handleLeftSidebarToggle={handleLeftSidebarToggle}
-        handleAddEventSidebarToggle={handleAddEventSidebarToggle}
-        departmentName={departmentName}
-        defaultDepartmentName={defaultDepartmentName}
-      />
-        
         <Box
           sx={{
             p: 6,
@@ -275,7 +257,7 @@ const DutyRosterHomepage = () => {
             store={RosterData}
             dispatch={dispatch}
             direction={direction}
-
+            // eslint-disable-next-line no-undef
             // updateEvent={updateEvent}
             calendarApi={calendarApi}
             calendarsColor={calendarsColor}

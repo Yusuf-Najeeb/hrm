@@ -43,7 +43,6 @@ const Calendar = props => {
     handleAddEventSidebarToggle
   } = props
 
-
   const [RosterData, loading, paging] = useRoster()
 
   const [calendarEvents, setCalendarEvents] = useState([])
@@ -53,17 +52,14 @@ const Calendar = props => {
   // ** Refs
   const calendarRef = useRef()
 
-  
-useEffect(()=>{
-  if(store){
-    const parsedEvents = parseRoster(store)
+  useEffect(() => {
+    if (store) {
+      const parsedEvents = parseRoster(store)
 
-    setCalendarEvents([...parsedEvents])
-  }
+      setCalendarEvents([...parsedEvents])
+    }
+  }, [store])
 
-},[store])
-
-  
   useEffect(() => {
     if (calendarApi === null) {
       // @ts-ignore
@@ -73,8 +69,7 @@ useEffect(()=>{
 
   if (showCalendar) {
     const calendarOptions = {
-      
-       events: calendarEvents,
+      events: calendarEvents,
 
       plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin, bootstrap5Plugin],
       initialView: 'dayGridMonth',
@@ -127,7 +122,7 @@ useEffect(()=>{
         ]
       },
       eventClick({ event: clickedEvent }) {
-        dispatch(handleSelectEvent(clickedEvent))
+        // dispatch(handleSelectEvent(clickedEvent))
         handleAddEventSidebarToggle()
 
         // * Only grab required field otherwise it goes in infinity loop
