@@ -40,7 +40,12 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Total Departments</Typography>
 
-            <CustomAvatar skin='light' variant='rounded' sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'end' }}>
+            <CustomAvatar
+              skin='light'
+              variant='rounded'
+              color={'info'}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'end' }}
+            >
               <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
             </CustomAvatar>
           </Box>
@@ -61,7 +66,12 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
         <Card sx={{ px: 3, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Active Departments</Typography>
-            <CustomAvatar skin='light' variant='rounded' sx={{ mt: 5, width: 30, height: 30, selfAlign: 'center' }}>
+            <CustomAvatar
+              skin='light'
+              color={'success'}
+              variant='rounded'
+              sx={{ mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+            >
               <Icon fontSize='2.125rem' icon='codicon:vm-active' />
             </CustomAvatar>
           </Box>
@@ -84,8 +94,9 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             <Typography sx={{ fontSize: '1rem' }}>Inactive Departments</Typography>
             <CustomAvatar
               skin='light'
+              color={'error'}
               variant='rounded'
-              sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
             >
               <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
             </CustomAvatar>
@@ -111,7 +122,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             <CustomAvatar
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
+              color={'warning'}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
             >
               <Icon fontSize='2.125rem' icon='tabler:user-cog' />
             </CustomAvatar>

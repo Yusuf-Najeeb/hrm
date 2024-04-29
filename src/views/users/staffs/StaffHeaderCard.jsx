@@ -43,7 +43,12 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>All Staff</Typography>
 
-            <CustomAvatar skin='light' variant='rounded' sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'end' }}>
+            <CustomAvatar
+              color={'info'}
+              skin='light'
+              variant='rounded'
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'end' }}
+            >
               <Icon fontSize='2.125rem' icon='mdi:user-group-outline' />
             </CustomAvatar>
           </Box>
@@ -64,7 +69,12 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
         <Card sx={{ px: 3, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Active Staff</Typography>
-            <CustomAvatar skin='light' variant='rounded' sx={{ mt: 5, width: 30, height: 30, selfAlign: 'center' }}>
+            <CustomAvatar
+              color={'success'}
+              skin='light'
+              variant='rounded'
+              sx={{ mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+            >
               <Icon fontSize='2.125rem' icon='mdi:user-badge-outline' />
             </CustomAvatar>
           </Box>
@@ -86,9 +96,10 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Inactive Staff</Typography>
             <CustomAvatar
+              color={'error'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, selfAlign: 'center', borderRadius: 4 }}
             >
               <Icon fontSize='2.125rem' icon='mdi:user-badge-alert-outline' />
             </CustomAvatar>
@@ -112,9 +123,10 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             <Typography sx={{ fontSize: '1rem' }}>All Departments</Typography>
 
             <CustomAvatar
+              color={'warning'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, width: 30, height: 30, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
             >
               <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
             </CustomAvatar>
