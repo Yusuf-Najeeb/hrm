@@ -45,8 +45,6 @@ const UserDropdown = props => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [user, setUser] = useState({})
 
-  console.log(user, 'All user data')
-
   // ** Hooks
   const router = useRouter()
 

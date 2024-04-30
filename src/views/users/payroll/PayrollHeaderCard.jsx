@@ -18,7 +18,7 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-import { fetchPayrolls } from '../../../store/apps/payroll/asyncthunk'
+import { fetchPayroll } from '../../../store/apps/payroll/asyncthunk'
 
 import { usePayrolls } from '../../../hooks/usePayroll'
 
@@ -29,13 +29,10 @@ const PayrollInfo = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
 
-  // const [StaffsData, paging, loading, aggregations] = useStaffs()
   const [PayrollData, paging, loading, aggregations] = usePayrolls()
 
-  console.log(PayrollData, 'Payroll Data')
-
   useEffect(() => {
-    dispatch(fetchPayrolls({ year: 2024, departmentId: 1, userId: 1 }))
+    dispatch(fetchPayroll({ year: 2024, departmentId: 1, userId: 1 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
