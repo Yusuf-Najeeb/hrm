@@ -38,6 +38,7 @@ import {
 } from '@mui/material'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
+import PayrollHeader from './PayrollHeaderCard'
 
 const PayslipTable = () => {
   // Hooks
@@ -124,16 +125,52 @@ const PayslipTable = () => {
   }, [isPayslipDownloadLinkAvailable])
 
   return (
-    <div>
+    <main>
+      <PayrollHeader />
       <Card>
-        {/* <CardHeader title='Filter' /> */}
-        <CardContent>
-          <Grid
-            container
-            spacing={12}
-            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', gap: 4 }}
-          >
-            <Grid item xs={12} sm={4}>
+        <CardHeader title='Filter' />
+        <CardContent sx={{ display: 'flex', justifyContent: 'between', alignItems: 'end' }}>
+          <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'start', alignItems: 'end' }}>
+            {/* Year/Period */}
+            <Grid item xs={12} sm={3}>
+              <CustomTextField
+                select
+                fullWidth
+                label='Year'
+                placeholder='Department'
+                // eslint-disable-next-line
+                // placeholderText={`${DepartmentsData[defaultId]?.name}`}
+                SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
+              >
+                <MenuItem value=''>Select Year</MenuItem>
+                {DepartmentsData?.map(department => (
+                  <MenuItem key={department?.id} value={department?.id}>
+                    {formatFirstLetter(department?.name)}
+                  </MenuItem>
+                ))}
+              </CustomTextField>
+            </Grid>
+
+            {/* UserId */}
+            <Grid item xs={12} sm={3}>
+              <CustomTextField
+                select
+                fullWidth
+                label='Staff'
+                placeholder='Staff'
+                SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
+              >
+                <MenuItem value=''>Select Department</MenuItem>
+                {DepartmentsData?.map(department => (
+                  <MenuItem key={department?.id} value={department?.id}>
+                    {formatFirstLetter(department?.name)}
+                  </MenuItem>
+                ))}
+              </CustomTextField>
+            </Grid>
+
+            {/* Department */}
+            <Grid item xs={12} sm={3}>
               <CustomTextField
                 select
                 fullWidth
@@ -151,11 +188,13 @@ const PayslipTable = () => {
                 ))}
               </CustomTextField>
             </Grid>
+          </Grid>
+          <Grid item xs={12} sm={3}>
             <PageHeader
               action1='Send Payslips to Staffs Email'
               toggleSend={toggleSendPayslipModal}
               month={month}
-              action2='Generate Payslip'
+              action2='Generate/Fetch'
               toggle={toggleGeneratePayslipDrawer}
             />
           </Grid>
@@ -273,7 +312,7 @@ const PayslipTable = () => {
       {sendModalOpen && (
         <SendPayslip open={sendModalOpen} closeModal={toggleSendPayslipModal} refetchPayslip={updateFetch} />
       )}
-    </div>
+    </main>
   )
 }
 

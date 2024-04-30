@@ -18,6 +18,7 @@ import roster from 'src/store/apps/roster'
 import deductioncategory from '/src/store/apps/deductionCatergory'
 import deductions from 'src/store/apps/deductions'
 import payslip from 'src/store/apps/payslip'
+import payroll from 'src/store/apps/payroll'
 
 export const store = configureStore({
   reducer: {
@@ -33,9 +34,10 @@ export const store = configureStore({
     staffs,
     roles,
     roster,
-    deductioncategory, 
+    deductioncategory,
     deductions,
-    payslip
+    payslip,
+    payroll
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
