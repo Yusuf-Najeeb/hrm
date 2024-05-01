@@ -117,7 +117,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       <Grid item md={3}>
         <Card sx={{ px: 3, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography sx={{ fontSize: '1rem' }}>Total Departments</Typography>
+            <Typography sx={{ fontSize: '1rem' }}>Total Staff</Typography>
 
             <CustomAvatar
               skin='light'

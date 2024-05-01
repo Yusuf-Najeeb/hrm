@@ -29,7 +29,7 @@ const PageHeader = ({ month, toggle, toggleSend, action1, action2 }) => {
         <Typography>{month}</Typography>
       </Box> */}
 
-      <Stack direction='row' justifyContent='space-between' spacing={4}>
+      <Stack direction='row' justifyContent='end' spacing={4} sx={{ pr: 5 }}>
         {/* <Button onClick={toggleSend} variant='outlined' disabled={StaffsData?.length == 0} sx={{ '& svg': { mr: 2 } }}>
           <Icon fontSize='1.125rem' icon='prime:send' />
           {action1}

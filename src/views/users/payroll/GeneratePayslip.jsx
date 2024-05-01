@@ -1,5 +1,3 @@
-
-
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 import DatePicker from 'react-datepicker'
@@ -29,7 +27,6 @@ import { CustomInput } from '../duty-roster/UploadRosterDialog'
 import { generatePayslip } from '../../../store/apps/payslip/asyncthunk'
 import { formatDateToYYYYMM } from '../../../@core/utils/format'
 
-
 export const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
   right: 0,
@@ -44,8 +41,6 @@ export const CustomCloseButton = styled(IconButton)(({ theme }) => ({
     transform: 'translate(7px, -5px)'
   }
 }))
-
-
 
 const defaultValues = {
   period: ''
@@ -62,18 +57,15 @@ const GeneratePayslip = ({ open, closeModal, refetchPayslip }) => {
     formState: { errors, isSubmitting }
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
 
-  const onSubmit = async (data) => {
-
+  const onSubmit = async data => {
     const formattedPeriod = formatDateToYYYYMM(data.period)
 
-    const res = generatePayslip({period: formattedPeriod}).then(()=>{   
-        reset()
-        closeModal()
-        refetchPayslip()})
-
-    
+    const res = generatePayslip({ period: formattedPeriod }).then(() => {
+      reset()
+      closeModal()
+      refetchPayslip()
+    })
   }
-  
 
   return (
     <Dialog
@@ -81,8 +73,8 @@ const GeneratePayslip = ({ open, closeModal, refetchPayslip }) => {
       open={open}
       maxWidth='md'
       scroll='body'
-
-    //   TransitionComponent={Transition}
+      //eslint-disable-next-line
+      //   TransitionComponent={Transition}
       sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
     >
       <DialogContent
@@ -103,42 +95,41 @@ const GeneratePayslip = ({ open, closeModal, refetchPayslip }) => {
           >
             <Grid container spacing={6}>
               <Grid item xs={12} sm={12}>
-              <Controller
-              name='period'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <DatePicker
-                  selected={value}
-                  dateFormat='MMM y'
-                  popperPlacement='bottom-end'
-                  showMonthYearPicker
-                  maxDate={new Date()}
-                  onChange={e => {
-                    onChange(e)
-                  }}
-                  placeholderText='MM/YYYY'
-                  customInput={
-                    <CustomInput
-                      value={value}
-                      onChange={onChange}
-                      autoComplete='off'
-                      label='Date'
-                      error={Boolean(errors.period)}
-                      {...(errors.period && { helperText: errors.period.message })}
+                <Controller
+                  name='period'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <DatePicker
+                      selected={value}
+                      dateFormat='MMM y'
+                      popperPlacement='bottom-end'
+                      showMonthYearPicker
+                      maxDate={new Date()}
+                      onChange={e => {
+                        onChange(e)
+                      }}
+                      placeholderText='MM/YYYY'
+                      customInput={
+                        <CustomInput
+                          value={value}
+                          onChange={onChange}
+                          autoComplete='off'
+                          label='Date'
+                          error={Boolean(errors.period)}
+                          {...(errors.period && { helperText: errors.period.message })}
+                        />
+                      }
                     />
-                  }
+                  )}
                 />
-              )}
-            />
               </Grid>
             </Grid>
           </DialogContent>
 
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button type='submit' variant='contained'>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : "Generate"}
-              
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Generate'}
             </Button>
           </Box>
         </form>

@@ -35,6 +35,7 @@ import { useStaffs } from '../../../hooks/useStaffs'
 import { usePayroll } from '../../../hooks/usePayroll'
 import GeneratePayslip from './GeneratePayslip'
 import PageHeader from './PayslipPageHeader'
+import GeneratePayroll from './Payroll'
 import {
   Box,
   Typography,
@@ -44,7 +45,8 @@ import {
   CircularProgress,
   Grid,
   MenuItem,
-  Tooltip
+  Tooltip,
+  Button
 } from '@mui/material'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
@@ -72,6 +74,7 @@ const PayslipTable = () => {
   const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
   const [payslipDownloadLink, setPayslipDownloadLink] = useState()
   const [printingPayslipId, setPrintingPayslipId] = useState(null)
+  const [openPayroll, setPayroll] = useState(false)
 
   const defaultId = getFirstId(DepartmentsData)
 
@@ -105,6 +108,10 @@ const PayslipTable = () => {
       .catch(() => {
         setIsPrinting(false)
       })
+  }
+
+  const togglePayrollModal = () => {
+    setPayroll(!openPayroll)
   }
 
   const renderClient = row => {
@@ -157,10 +164,22 @@ const PayslipTable = () => {
     <main>
       <PayrollHeader />
       <Card>
-        <CardHeader title='Filter' />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pr: 10 }}>
+          <CardHeader title='Filter' />
+          <Button
+            onClick={togglePayrollModal}
+            variant='contained'
+            color={'success'}
+            disabled={StaffsData?.length == 0}
+            sx={{ '& svg': { mr: 2 } }}
+          >
+            <Icon fontSize='1.125rem' icon='prime:send' />
+            Prepare Payroll
+          </Button>
+        </Box>
+
         <CardContent sx={{ display: 'flex', justifyContent: 'between', alignItems: 'end' }}>
           <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'start', alignItems: 'end' }}>
-            {/* Year/Period */}
             <Grid item xs={12} sm={3}>
               <CustomTextField
                 select
@@ -175,8 +194,6 @@ const PayslipTable = () => {
                 <MenuItem value={+defaultYear + 1}>{+defaultYear + 1}</MenuItem>
               </CustomTextField>
             </Grid>
-
-            {/* Department */}
             <Grid item xs={12} sm={3}>
               <CustomTextField
                 select
@@ -195,8 +212,6 @@ const PayslipTable = () => {
                 ))}
               </CustomTextField>
             </Grid>
-
-            {/* UserId */}
             <Grid item xs={12} sm={3}>
               <CustomTextField
                 select
@@ -216,11 +231,12 @@ const PayslipTable = () => {
           </Grid>
           <Grid item xs={12} sm={3}>
             <PageHeader
-              action1='Send Payslips to Staffs Email'
-              toggleSend={toggleSendPayslipModal}
               month={month}
               action2='Generate/Fetch'
               toggle={toggleGeneratePayslipDrawer}
+              // eslint-disable-next-line
+              // action1='Generate Payslip'
+              // toggleSend={toggleSendPayslipModal}
             />
           </Grid>
         </CardContent>
@@ -266,9 +282,10 @@ const PayslipTable = () => {
             ) : (
               <Fragment>
                 {payslipData?.map((payslip, i) => {
-                  // const staffDepartmentId = payslip?.user?.departmentId
-                  // const matchingDepartment = findDepartment(DepartmentsData, staffDepartmentId)
-                  // const departmentName = matchingDepartment?.name
+                  const staffDepartmentId = payslip?.user?.departmentId
+                  const matchingDepartment = findDepartment(DepartmentsData, staffDepartmentId)
+                  const departmentName = matchingDepartment?.name
+
                   return (
                     <TableRow hover role='checkbox' key={payslip?.id}>
                       <TableCell align='left'>
@@ -310,7 +327,7 @@ const PayslipTable = () => {
 
                 {payslipData?.length === 0 && (
                   <tr className='text-center'>
-                    <td colSpan={6}>
+                    <td colSpan={12}>
                       <NoData />
                     </td>
                   </tr>
@@ -337,6 +354,9 @@ const PayslipTable = () => {
           closeModal={toggleGeneratePayslipDrawer}
           refetchPayslip={updateFetch}
         />
+      )}
+      {openPayroll && (
+        <GeneratePayroll open={openPayroll} closeModal={togglePayrollModal} refetchPayroll={updateFetch} />
       )}
 
       {sendModalOpen && (
