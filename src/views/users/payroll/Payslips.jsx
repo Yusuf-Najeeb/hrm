@@ -18,11 +18,21 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
-import { formatDateToYYYYMM, formatFirstLetter, formatMonthYear, getFirstId } from '../../../@core/utils/format'
+import {
+  formatDateToYYYY,
+  formatDateToYYYYMM,
+  formatFirstLetter,
+  formatMonthYear,
+  getFirstId
+} from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import { usePayslip } from '../../../hooks/usePayslip'
 import { fetchPayslips, printPayslip } from '../../../store/apps/payslip/asyncthunk'
+import { fetchPayroll } from '../../../store/apps/payroll/asyncthunk'
 import { useDepartments } from '../../../hooks/useDepartments'
+import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { useStaffs } from '../../../hooks/useStaffs'
+import { usePayroll } from '../../../hooks/usePayroll'
 import GeneratePayslip from './GeneratePayslip'
 import PageHeader from './PayslipPageHeader'
 import {
@@ -45,6 +55,7 @@ const PayslipTable = () => {
   const dispatch = useAppDispatch()
   const [payslipData, loading] = usePayslip()
   const [DepartmentsData] = useDepartments()
+  const [StaffsData] = useStaffs()
 
   // States
 
@@ -55,6 +66,8 @@ const PayslipTable = () => {
   const [selectedpayslip, setSelectedpayslip] = useState(null)
   const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
   const [departmentId, setDepartmentId] = useState()
+  const [staffId, setStaffId] = useState()
+  const [year, setYear] = useState()
   const [isPrinting, setIsPrinting] = useState(false)
   const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
   const [payslipDownloadLink, setPayslipDownloadLink] = useState()
@@ -64,10 +77,20 @@ const PayslipTable = () => {
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
+  const defaultYear = formatDateToYYYY(new Date())
+
   const month = formatMonthYear(new Date())
 
   const handleChangeDepartment = e => {
     setDepartmentId(e.target.value)
+  }
+
+  const handleChangeStaff = e => {
+    setStaffId(e.target.value)
+  }
+
+  const handleChangeYear = e => {
+    console.log(e.target.value)
   }
 
   const printPayslipItem = (selectedId, period) => {
@@ -111,10 +134,16 @@ const PayslipTable = () => {
   const toggleSendPayslipModal = () => setSendModalOpen(!sendModalOpen)
 
   useEffect(() => {
-    dispatch(fetchPayslips({ period: defaultPeriod, departmentId: departmentId ? departmentId : defaultId }))
+    dispatch(fetchPayroll({ userId: staffId, departmentId: departmentId, period: year }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch, defaultId, departmentId])
+  }, [refetch, staffId, departmentId, year])
+
+  // useEffect(() => {
+  //   dispatch(fetchPayslips({ period: defaultPeriod, departmentId: departmentId ? departmentId : defaultId }))
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [refetch, defaultId, departmentId])
 
   useEffect(() => {
     if (isPayslipDownloadLinkAvailable) {
@@ -137,35 +166,13 @@ const PayslipTable = () => {
                 select
                 fullWidth
                 label='Year'
-                placeholder='Department'
-                // eslint-disable-next-line
-                // placeholderText={`${DepartmentsData[defaultId]?.name}`}
-                SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
+                placeholder='Year'
+                SelectProps={{ value: year, onChange: e => handleChangeYear(e) }}
               >
                 <MenuItem value=''>Select Year</MenuItem>
-                {DepartmentsData?.map(department => (
-                  <MenuItem key={department?.id} value={department?.id}>
-                    {formatFirstLetter(department?.name)}
-                  </MenuItem>
-                ))}
-              </CustomTextField>
-            </Grid>
-
-            {/* UserId */}
-            <Grid item xs={12} sm={3}>
-              <CustomTextField
-                select
-                fullWidth
-                label='Staff'
-                placeholder='Staff'
-                SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
-              >
-                <MenuItem value=''>Select Department</MenuItem>
-                {DepartmentsData?.map(department => (
-                  <MenuItem key={department?.id} value={department?.id}>
-                    {formatFirstLetter(department?.name)}
-                  </MenuItem>
-                ))}
+                <MenuItem value={+defaultYear - 1}>{+defaultYear - 1}</MenuItem>
+                <MenuItem value={+defaultYear}>{+defaultYear}</MenuItem>
+                <MenuItem value={+defaultYear + 1}>{+defaultYear + 1}</MenuItem>
               </CustomTextField>
             </Grid>
 
@@ -184,6 +191,24 @@ const PayslipTable = () => {
                 {DepartmentsData?.map(department => (
                   <MenuItem key={department?.id} value={department?.id}>
                     {formatFirstLetter(department?.name)}
+                  </MenuItem>
+                ))}
+              </CustomTextField>
+            </Grid>
+
+            {/* UserId */}
+            <Grid item xs={12} sm={3}>
+              <CustomTextField
+                select
+                fullWidth
+                label='Staff'
+                placeholder='Staff'
+                SelectProps={{ value: staffId, onChange: e => handleChangeStaff(e) }}
+              >
+                <MenuItem value=''>Select Staff</MenuItem>
+                {StaffsData?.map(staff => (
+                  <MenuItem key={staff?.id} value={staff?.id}>
+                    {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)}`}
                   </MenuItem>
                 ))}
               </CustomTextField>
@@ -209,16 +234,22 @@ const PayslipTable = () => {
                 STAFF NAME
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                DEPARTMENT NAME
+                PERIOD
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 GROSS SALARY
               </TableCell>
               <TableCell align='center' sx={{ minWidth: 100 }}>
-                TOTAL DEDUCTION
+                BENEFITS
+              </TableCell>
+              <TableCell align='center' sx={{ minWidth: 100 }}>
+                DEDUCTIONS
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                NET PAY
+                STATUS
+              </TableCell>
+              <TableCell align='center' sx={{ minWidth: 100 }}>
+                MODIFIED BY
               </TableCell>
               <TableCell align='center' sx={{ minWidth: 100 }}>
                 ACTIONS
@@ -235,10 +266,9 @@ const PayslipTable = () => {
             ) : (
               <Fragment>
                 {payslipData?.map((payslip, i) => {
-                  const staffDepartmentId = payslip?.user?.departmentId
-                  const matchingDepartment = findDepartment(DepartmentsData, staffDepartmentId)
-                  const departmentName = matchingDepartment?.name
-
+                  // const staffDepartmentId = payslip?.user?.departmentId
+                  // const matchingDepartment = findDepartment(DepartmentsData, staffDepartmentId)
+                  // const departmentName = matchingDepartment?.name
                   return (
                     <TableRow hover role='checkbox' key={payslip?.id}>
                       <TableCell align='left'>

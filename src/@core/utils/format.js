@@ -114,6 +114,16 @@ export const formatDateToYYYYMM = dateString => {
   return formattedDate
 }
 
+export const formatDateToYYYY = dateString => {
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+
+  // const month = (date.getMonth() + 1).toString().padStart(2, '0') // Months are zero-based
+  const formattedDate = `${year}`
+
+  return formattedDate
+}
+
 export const formatMonthYear = date => {
   // Check if date is a valid Date object
   if (!(date instanceof Date) || isNaN(date.getTime())) {
