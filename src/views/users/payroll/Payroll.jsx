@@ -9,6 +9,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requirePeriod } from 'src/@core/Formschema'
 import Icon from 'src/@core/components/icon'
+import { formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
 
 // ** MUI Imports
 import { DataGrid } from '@mui/x-data-grid'
@@ -66,6 +67,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
   const [checked, setChecked] = useState([])
   const [allChecked, setAllChecked] = useState(false)
   const [refetch, setFetch] = useState(false)
+  const [status, setStatus] = useState('pending')
 
   const {
     control,
@@ -76,11 +78,11 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
   const updateFetch = () => setFetch(!refetch)
 
-  // useEffect(() => {
-  //   dispatch(fetchPayroll({ userId: staffId, departmentId: departmentId, period: year }))
+  useEffect(() => {
+    dispatch(fetchPayroll({ status: status }))
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [refetch, staffId, departmentId, year])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, status])
 
   return (
     <Dialog
@@ -90,7 +92,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
       scroll='body'
       //eslint-disable-next-line
       //   TransitionComponent={Transition}
-      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 950 } }}
+      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', minWidth: 950 } }}
     >
       <DialogContent
         sx={{
@@ -154,7 +156,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
                         setChecked([])
                       } else {
                         setAllChecked(true)
-                        setChecked(payroll?.map(p => p?.id))
+                        setChecked(PayrollData?.map(p => p?.id))
                       }
                     }}
                   />
@@ -166,17 +168,58 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
                   NAME
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
+                  GROSS SALARY
+                </TableCell>
+                <TableCell align='left' sx={{ minWidth: 100 }}>
                   TOTAL BENEFITS
                 </TableCell>
-                <TableCell align='left' sx={{ minWidth: 100 }}></TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   TOTAL DEDUCTIONS
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
-                  ACTIONS
+                  MODIFIED BY
                 </TableCell>
               </TableRow>
             </TableHead>
+            <TableBody>
+              {PayrollData?.map(payroll => (
+                <TableRow key={payroll?.id}>
+                  <TableCell align='left'>
+                    <Checkbox
+                      size='small'
+                      name={`${payroll?.id}-checked`}
+                      checked={checked.includes(payroll?.id)}
+                      onChange={() => {
+                        if (checked.includes(payroll.id)) {
+                          const restChecked = checked.filter(c => c !== payroll?.id)
+                          setChecked(restChecked)
+                          setAllChecked(false)
+                        } else {
+                          if (checked.length + 1 === payroll?.length) {
+                            setAllChecked(true)
+                          }
+                          setChecked([...checked, payroll?.id])
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell align='left' sx={{ minWidth: 50 }}>
+                    {payroll?.id}
+                  </TableCell>
+                  <TableCell align='left'>{`${formatFirstLetter(payroll?.user?.firstname)} ${formatFirstLetter(
+                    payroll?.user?.lastname
+                  )}`}</TableCell>
+                  <TableCell align='left'>{formatCurrency(payroll?.amount, true)}</TableCell>
+                  <TableCell align='left'>{formatCurrency(payroll?.totalAllowance, true)}</TableCell>
+                  <TableCell align='left'>{formatCurrency(payroll?.totalDeduction, true)}</TableCell>
+                  <TableCell align='left'>
+                    {payroll?.lastChangedBy
+                      ? formatFirstLetter(payroll?.lastChangedBy)
+                      : formatFirstLetter(payroll?.createdBy)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </TableContainer>
       </DialogContent>

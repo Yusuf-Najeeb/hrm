@@ -138,7 +138,7 @@ const PayrollInfo = () => {
               mt: -4
             }}
           >
-            {aggregations?.totalPeriods || 0}
+            {aggregations?.totalPeriod || 0}
           </Typography>
         </Card>
       </Grid>

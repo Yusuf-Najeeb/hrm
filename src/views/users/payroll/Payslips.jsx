@@ -9,6 +9,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
 import CustomAvatar from 'src/@core/components/mui/avatar'
+import CustomChip from 'src/@core/components/mui/chip'
 import Icon from 'src/@core/components/icon'
 
 // ** Custom Component Import
@@ -307,7 +308,13 @@ const PayslipTable = () => {
                       <TableCell align='left'>{payroll?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='left'>{payroll?.totalAllowance?.toLocaleString() || '--'}</TableCell>
                       <TableCell align='center'>{payroll?.totalDeduction?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='left'>{payroll?.paymentMade ? 'Paid' : 'Pending' || '--'}</TableCell>
+                      <TableCell align='left'>
+                        {payroll?.paymentMade ? (
+                          <CustomChip rounded size='small' skin='light' color='success' label='Paid' />
+                        ) : (
+                          <CustomChip rounded size='small' skin='light' color='error' label='pending' />
+                        )}
+                      </TableCell>
                       <TableCell align='left'>
                         {payroll?.lastChangedBy ? payroll?.lastChangedBy : payroll?.createdBy || '--'}
                       </TableCell>

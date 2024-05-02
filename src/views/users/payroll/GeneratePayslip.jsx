@@ -61,9 +61,10 @@ const GeneratePayslip = ({ open, closeModal, refetchPayslip }) => {
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
 
   const onSubmit = async data => {
-    const formattedPeriod = formatDateToYYYYMM(data.period)
+    const formatDate = formatDateToYYYYMM(data.period)
+    const formattedPeriod = formatDate.slice(0, 4) + '-' + formatDate.slice(4)
 
-    const res = generatePayroll({ period: '2024-01' }).then(() => {
+    const res = generatePayroll({ period: formattedPeriod }).then(() => {
       reset()
       closeModal()
       refetchPayslip()
