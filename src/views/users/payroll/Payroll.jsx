@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // ** Custom Component Import
+import { useAppDispatch } from '../../../hooks'
+
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useForm, Controller } from 'react-hook-form'
@@ -9,7 +11,18 @@ import { requirePeriod } from 'src/@core/Formschema'
 import Icon from 'src/@core/components/icon'
 
 // ** MUI Imports
-import { CircularProgress, Paper, Typography, Card, CardHeader, CardContent, Grid, MenuItem } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
+import {
+  CircularProgress,
+  Paper,
+  Typography,
+  Card,
+  CardHeader,
+  CardContent,
+  Grid,
+  MenuItem,
+  Checkbox
+} from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -20,10 +33,11 @@ import TableContainer from '@mui/material/TableContainer'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-
 import IconButton from '@mui/material/IconButton'
+
+// * Global states
+import { fetchPayroll } from '../../../store/apps/payroll/asyncthunk'
+import { usePayrolls } from '../../../hooks/usePayroll'
 
 export const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -45,8 +59,13 @@ const defaultValues = {
 }
 
 const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
-  const [departmentId, setDepartmentId] = useState()
-  const DepartmentsData = []
+  const dispatch = useAppDispatch()
+  const [PayrollData, paging, loading, aggregations] = usePayrolls()
+
+  //States
+  const [checked, setChecked] = useState([])
+  const [allChecked, setAllChecked] = useState(false)
+  const [refetch, setFetch] = useState(false)
 
   const {
     control,
@@ -55,6 +74,13 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
+  const updateFetch = () => setFetch(!refetch)
+
+  // useEffect(() => {
+  //   dispatch(fetchPayroll({ userId: staffId, departmentId: departmentId, period: year }))
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [refetch, staffId, departmentId, year])
 
   return (
     <Dialog
@@ -113,13 +139,25 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
             </Grid>
           </CardContent>
         </Card>
-        {/*         
+
         <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
                 <TableCell align='left' sx={{ minWidth: 50 }}>
-                  <FormControlLabel control={<Checkbox />} label='All' />
+                  <Checkbox
+                    size='small'
+                    name={'all-checked'}
+                    onChange={() => {
+                      if (allChecked) {
+                        setAllChecked(false)
+                        setChecked([])
+                      } else {
+                        setAllChecked(true)
+                        setChecked(payroll?.map(p => p?.id))
+                      }
+                    }}
+                  />
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   ID
@@ -140,7 +178,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
               </TableRow>
             </TableHead>
           </Table>
-        </TableContainer> */}
+        </TableContainer>
       </DialogContent>
     </Dialog>
   )

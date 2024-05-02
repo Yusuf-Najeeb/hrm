@@ -28,11 +28,11 @@ import {
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import { usePayslip } from '../../../hooks/usePayslip'
 import { fetchPayslips, printPayslip } from '../../../store/apps/payslip/asyncthunk'
-import { fetchPayroll } from '../../../store/apps/payroll/asyncthunk'
+import { fetchPayroll, generatePayroll } from '../../../store/apps/payroll/asyncthunk'
 import { useDepartments } from '../../../hooks/useDepartments'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
-import { usePayroll } from '../../../hooks/usePayroll'
+import { usePayrolls } from '../../../hooks/usePayroll'
 import GeneratePayslip from './GeneratePayslip'
 import PageHeader from './PayslipPageHeader'
 import GeneratePayroll from './Payroll'
@@ -55,7 +55,7 @@ import PayrollHeader from './PayrollHeaderCard'
 const PayslipTable = () => {
   // Hooks
   const dispatch = useAppDispatch()
-  const [payslipData, loading] = usePayslip()
+  const [PayrollData, loading] = usePayrolls()
   const [DepartmentsData] = useDepartments()
   const [StaffsData] = useStaffs()
 
@@ -174,7 +174,7 @@ const PayslipTable = () => {
             sx={{ '& svg': { mr: 2 } }}
           >
             <Icon fontSize='1.125rem' icon='prime:send' />
-            Prepare Payroll
+            Make Payment
           </Button>
         </Box>
 
@@ -232,7 +232,7 @@ const PayslipTable = () => {
           <Grid item xs={12} sm={3}>
             <PageHeader
               month={month}
-              action2='Generate/Fetch'
+              action2='Generate/Fetch Payroll'
               toggle={toggleGeneratePayslipDrawer}
               // eslint-disable-next-line
               // action1='Generate Payslip'
@@ -255,7 +255,7 @@ const PayslipTable = () => {
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 GROSS SALARY
               </TableCell>
-              <TableCell align='center' sx={{ minWidth: 100 }}>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
                 BENEFITS
               </TableCell>
               <TableCell align='center' sx={{ minWidth: 100 }}>
@@ -264,7 +264,7 @@ const PayslipTable = () => {
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 STATUS
               </TableCell>
-              <TableCell align='center' sx={{ minWidth: 100 }}>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
                 MODIFIED BY
               </TableCell>
               <TableCell align='center' sx={{ minWidth: 100 }}>
@@ -281,40 +281,44 @@ const PayslipTable = () => {
               </TableRow>
             ) : (
               <Fragment>
-                {payslipData?.map((payslip, i) => {
-                  const staffDepartmentId = payslip?.user?.departmentId
+                {PayrollData?.map((payroll, i) => {
+                  const staffDepartmentId = payroll?.user?.departmentId
                   const matchingDepartment = findDepartment(DepartmentsData, staffDepartmentId)
                   const departmentName = matchingDepartment?.name
 
                   return (
-                    <TableRow hover role='checkbox' key={payslip?.id}>
+                    <TableRow hover role='checkbox' key={payroll?.id}>
                       <TableCell align='left'>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          {renderClient(payslip)}
+                          {renderClient(payroll)}
                           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-                              {`${formatFirstLetter(payslip?.user?.firstname)} ${formatFirstLetter(
-                                payslip?.user?.lastname
+                              {`${formatFirstLetter(payroll?.user?.firstname)} ${formatFirstLetter(
+                                payroll?.user?.lastname
                               )}`}
                             </Typography>
                             <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
-                              {payslip?.user?.email}
+                              {payroll?.user?.email}
                             </Typography>
                           </Box>
                         </Box>
                       </TableCell>
-                      <TableCell align='left'>{departmentName ? formatFirstLetter(departmentName) : ''}</TableCell>
-                      <TableCell align='left'>{payslip?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='center'>{payslip?.totalDeduction?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='left'>{payslip?.amount?.toLocaleString() || '--'}</TableCell>
+                      <TableCell align='left'>{payroll?.period || '--'}</TableCell>
+                      <TableCell align='left'>{payroll?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
+                      <TableCell align='left'>{payroll?.totalAllowance?.toLocaleString() || '--'}</TableCell>
+                      <TableCell align='center'>{payroll?.totalDeduction?.toLocaleString() || '--'}</TableCell>
+                      <TableCell align='left'>{payroll?.paymentMade ? 'Paid' : 'Pending' || '--'}</TableCell>
+                      <TableCell align='left'>
+                        {payroll?.lastChangedBy ? payroll?.lastChangedBy : payroll?.createdBy || '--'}
+                      </TableCell>
                       <TableCell align='center'>
-                        {printingPayslipId === payslip?.user?.id && isPrinting ? (
+                        {printingPayslipId === payroll?.user?.id && isPrinting ? (
                           <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
                         ) : (
                           <Tooltip title='Print Payslip' placement='top'>
                             <IconButton
                               size='small'
-                              onClick={() => printPayslipItem(payslip?.user?.id, payslip?.period)}
+                              onClick={() => printPayslipItem(payroll?.user?.id, payroll?.period)}
                             >
                               <Icon icon='material-symbols:print-outline' />
                             </IconButton>
@@ -325,7 +329,7 @@ const PayslipTable = () => {
                   )
                 })}
 
-                {payslipData?.length === 0 && (
+                {PayrollData?.length === 0 && (
                   <tr className='text-center'>
                     <td colSpan={12}>
                       <NoData />

@@ -27,7 +27,6 @@ const PayrollInfo = () => {
   // ** Hook
   const dispatch = useAppDispatch()
   const theme = useTheme()
-
   const [PayrollData, paging, loading, aggregations] = usePayrolls()
 
   useEffect(() => {

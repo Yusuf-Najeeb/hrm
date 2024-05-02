@@ -24,7 +24,10 @@ import { requirePeriod } from 'src/@core/Formschema'
 import { createDepartment } from '../../../store/apps/departments/asyncthunk'
 import { useAppDispatch } from '../../../hooks'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
-import { generatePayslip } from '../../../store/apps/payslip/asyncthunk'
+
+// import { generatePayslip } from '../../../store/apps/payslip/asyncthunk'
+
+import { generatePayroll } from '../../../store/apps/payroll/asyncthunk'
 import { formatDateToYYYYMM } from '../../../@core/utils/format'
 
 export const CustomCloseButton = styled(IconButton)(({ theme }) => ({
@@ -60,7 +63,7 @@ const GeneratePayslip = ({ open, closeModal, refetchPayslip }) => {
   const onSubmit = async data => {
     const formattedPeriod = formatDateToYYYYMM(data.period)
 
-    const res = generatePayslip({ period: formattedPeriod }).then(() => {
+    const res = generatePayroll({ period: '2024-01' }).then(() => {
       reset()
       closeModal()
       refetchPayslip()
