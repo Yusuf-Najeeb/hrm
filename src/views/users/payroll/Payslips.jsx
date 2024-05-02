@@ -24,6 +24,7 @@ import {
   formatDateToYYYYMM,
   formatFirstLetter,
   formatMonthYear,
+  formatCurrency,
   getFirstId
 } from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
@@ -231,14 +232,7 @@ const PayslipTable = () => {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <PageHeader
-              month={month}
-              action2='Generate/Fetch Payroll'
-              toggle={toggleGeneratePayslipDrawer}
-              // eslint-disable-next-line
-              // action1='Generate Payslip'
-              // toggleSend={toggleSendPayslipModal}
-            />
+            <PageHeader month={month} action2='Generate/Fetch Payroll' toggle={toggleGeneratePayslipDrawer} />
           </Grid>
         </CardContent>
       </Card>
@@ -265,7 +259,7 @@ const PayslipTable = () => {
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 STATUS
               </TableCell>
-              <TableCell align='left' sx={{ minWidth: 100 }}>
+              <TableCell align='center' sx={{ minWidth: 100 }}>
                 MODIFIED BY
               </TableCell>
               <TableCell align='center' sx={{ minWidth: 100 }}>
@@ -305,9 +299,9 @@ const PayslipTable = () => {
                         </Box>
                       </TableCell>
                       <TableCell align='left'>{payroll?.period || '--'}</TableCell>
-                      <TableCell align='left'>{payroll?.user?.grossSalary?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='left'>{payroll?.totalAllowance?.toLocaleString() || '--'}</TableCell>
-                      <TableCell align='center'>{payroll?.totalDeduction?.toLocaleString() || '--'}</TableCell>
+                      <TableCell align='left'>{formatCurrency(payroll?.user?.grossSalary, true) || '--'}</TableCell>
+                      <TableCell align='left'>{formatCurrency(payroll?.totalAllowance, true) || '--'}</TableCell>
+                      <TableCell align='center'>{formatCurrency(payroll?.totalDeduction, true) || '--'}</TableCell>
                       <TableCell align='left'>
                         {payroll?.paymentMade ? (
                           <CustomChip rounded size='small' skin='light' color='success' label='Paid' />
@@ -315,8 +309,10 @@ const PayslipTable = () => {
                           <CustomChip rounded size='small' skin='light' color='error' label='pending' />
                         )}
                       </TableCell>
-                      <TableCell align='left'>
-                        {payroll?.lastChangedBy ? payroll?.lastChangedBy : payroll?.createdBy || '--'}
+                      <TableCell align='center'>
+                        {payroll?.lastChangedBy
+                          ? formatFirstLetter(payroll?.lastChangedBy)
+                          : formatFirstLetter(payroll?.createdBy) || '--'}
                       </TableCell>
                       <TableCell align='center'>
                         {printingPayslipId === payroll?.user?.id && isPrinting ? (
