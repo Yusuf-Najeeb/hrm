@@ -48,9 +48,9 @@ import {
   Grid,
   MenuItem,
   Tooltip,
-  Button
+  Button,
+  Divider
 } from '@mui/material'
-import Divider from '@mui/material/Divider'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
 import PayrollHeader from './PayrollHeaderCard'

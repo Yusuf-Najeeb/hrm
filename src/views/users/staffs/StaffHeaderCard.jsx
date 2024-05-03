@@ -26,8 +26,6 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
   // ** Hook
   const dispatch = useAppDispatch()
   const theme = useTheme()
-
-  // const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
   const [StaffsData, paging, loading, aggregations] = useStaffs()
 
   useEffect(() => {
@@ -39,7 +37,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
   return (
     <Grid container spacing={3} sx={{ display: { xs: 'none', lg: 'flex' }, mb: 5 }}>
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>All Staff</Typography>
 
@@ -47,9 +45,9 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               color={'info'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'end' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 43, height: 43, borderRadius: 4, selfAlign: 'end' }}
             >
-              <Icon fontSize='2.125rem' icon='mdi:user-group-outline' />
+              <Icon fontSize='1.7rem' icon='mdi:user-group-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -57,7 +55,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total || 0}
@@ -66,16 +65,16 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Active Staff</Typography>
             <CustomAvatar
               color={'success'}
               skin='light'
               variant='rounded'
-              sx={{ mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mt: 5, p: 1.5, width: 43, height: 43, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='mdi:user-badge-outline' />
+              <Icon fontSize='1.7rem' icon='mdi:user-badge-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -83,7 +82,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total_active || 0}
@@ -92,16 +92,16 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Inactive Staff</Typography>
             <CustomAvatar
               color={'error'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, selfAlign: 'center', borderRadius: 4 }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 45, height: 45, selfAlign: 'center', borderRadius: 4 }}
             >
-              <Icon fontSize='2.125rem' icon='mdi:user-badge-alert-outline' />
+              <Icon fontSize='1.7rem' icon='mdi:user-badge-alert-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -109,7 +109,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total_inactive || 0}
@@ -118,7 +119,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>All Departments</Typography>
 
@@ -126,9 +127,9 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               color={'warning'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 43, height: 43, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
+              <Icon fontSize='1.7rem' icon='arcticons:emoji-department-store' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -136,7 +137,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total_departments || 0}

@@ -178,10 +178,15 @@ const StaffsTable = () => {
       <StaffHeaderCard />
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Search Filters' />
-          <CardContent>
+          <CardContent
+            sx={{
+              pt: theme => `${theme.spacing(5)} !important`,
+              pb: theme => `${theme.spacing(4)} !important`,
+              px: theme => `${theme.spacing(6)} !important`
+            }}
+          >
             <Grid container spacing={6} sx={{ display: 'flex', justifyContent: 'start' }}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <CustomTextField
                   select
                   fullWidth
@@ -207,16 +212,19 @@ const StaffsTable = () => {
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
-                <TableCell align='center' sx={{ minWidth: 100 }}>
+                <TableCell align='left' sx={{ maxWidth: 80 }}>
                   STAFF
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   DEPARTMENT
                 </TableCell>
-                <TableCell align='center' sx={{ minWidth: 100 }}>
+                <TableCell align='left' sx={{ maxWidth: 80 }}>
+                  PHONE
+                </TableCell>
+                <TableCell align='center' sx={{ maxWidth: 80 }}>
                   ROLE
                 </TableCell>
-                <TableCell align='center' sx={{ minWidth: 100 }}>
+                <TableCell align='center' sx={{ maxWidth: 80 }}>
                   STATUS
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
@@ -252,6 +260,7 @@ const StaffsTable = () => {
                         </Box>
                       </TableCell>
                       <TableCell align='left'>{staff?.department?.name.toUpperCase()}</TableCell>
+                      <TableCell align='left'>{staff?.phone ? staff?.phone : 'N/A'}</TableCell>
                       <TableCell align='center'>
                         <IconButton component={IconButtonStyled}>
                           <Icon
