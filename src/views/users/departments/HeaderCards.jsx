@@ -36,7 +36,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
   return (
     <Grid container spacing={3} sx={{ display: { xs: 'none', lg: 'flex' } }}>
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Total Departments</Typography>
 
@@ -44,9 +44,9 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               skin='light'
               variant='rounded'
               color={'info'}
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'end' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 45, height: 45, borderRadius: 4, selfAlign: 'end' }}
             >
-              <Icon fontSize='2.125rem' icon='arcticons:emoji-department-store' />
+              <Icon fontSize='1.7rem' icon='arcticons:emoji-department-store' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -54,7 +54,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total || 0}
@@ -63,16 +64,16 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Active Departments</Typography>
             <CustomAvatar
               skin='light'
               color={'success'}
               variant='rounded'
-              sx={{ mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mt: 5, p: 1.5, width: 45, height: 45, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='codicon:vm-active' />
+              <Icon fontSize='1.7rem' icon='codicon:vm-active' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -80,7 +81,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total_active || 0}
@@ -89,16 +91,16 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Inactive Departments</Typography>
             <CustomAvatar
               skin='light'
               color={'error'}
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 45, height: 45, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='material-symbols-light:inactive-order' />
+              <Icon fontSize='1.7rem' icon='material-symbols-light:inactive-order' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -106,7 +108,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total_deleted || 0}
@@ -115,7 +118,7 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Total Staff</Typography>
 
@@ -123,9 +126,9 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
               skin='light'
               variant='rounded'
               color={'warning'}
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 45, height: 45, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='tabler:user-cog' />
+              <Icon fontSize='1.7rem' icon='tabler:user-cog' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -133,7 +136,8 @@ const DepartmentInfo = ({ departments, active, inActive }) => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total_staff || 0}
