@@ -50,6 +50,7 @@ import {
   Tooltip,
   Button
 } from '@mui/material'
+import Divider from '@mui/material/Divider'
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
 import PayrollHeader from './PayrollHeaderCard'
@@ -159,24 +160,15 @@ const PayslipTable = () => {
   return (
     <main>
       <PayrollHeader />
-      <Card>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pr: 10 }}>
-          <CardHeader title='Filter' />
-          <Button
-            onClick={togglePayrollModal}
-            variant='contained'
-            color={'success'}
-            disabled={StaffsData?.length == 0}
-            sx={{ '& svg': { mr: 2 } }}
-          >
-            <Icon fontSize='1.125rem' icon='prime:send' />
-            Make Payment
-          </Button>
-        </Box>
-
-        <CardContent sx={{ display: 'flex', justifyContent: 'between', alignItems: 'end' }}>
-          <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'start', alignItems: 'end' }}>
-            <Grid item xs={12} sm={3}>
+      <Card
+        sx={{
+          py: theme => `${theme.spacing(1)} !important`,
+          px: theme => `${theme.spacing(0)} !important`
+        }}
+      >
+        <CardContent>
+          <Grid container spacing={6} sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
+            <Grid item xs={12} sm={4}>
               <CustomTextField
                 select
                 fullWidth
@@ -190,7 +182,7 @@ const PayslipTable = () => {
                 <MenuItem value={+defaultYear + 1}>{+defaultYear + 1}</MenuItem>
               </CustomTextField>
             </Grid>
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={4}>
               <CustomTextField
                 select
                 fullWidth
@@ -200,7 +192,7 @@ const PayslipTable = () => {
                 // placeholderText={`${DepartmentsData[defaultId]?.name}`}
                 SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
               >
-                <MenuItem value=''>Select Department</MenuItem>
+                <MenuItem value=''>All</MenuItem>
                 {DepartmentsData?.map(department => (
                   <MenuItem key={department?.id} value={department?.id}>
                     {formatFirstLetter(department?.name)}
@@ -208,7 +200,7 @@ const PayslipTable = () => {
                 ))}
               </CustomTextField>
             </Grid>
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={4}>
               <CustomTextField
                 select
                 fullWidth
@@ -216,7 +208,7 @@ const PayslipTable = () => {
                 placeholder='Staff'
                 SelectProps={{ value: staffId, onChange: e => handleChangeStaff(e) }}
               >
-                <MenuItem value=''>Select Staff</MenuItem>
+                <MenuItem value=''>All</MenuItem>
                 {StaffsData?.map(staff => (
                   <MenuItem key={staff?.id} value={staff?.id}>
                     {`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)}`}
@@ -225,8 +217,17 @@ const PayslipTable = () => {
               </CustomTextField>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={3}>
-            <PageHeader month={month} action2='Generate/Fetch Payroll' toggle={toggleGeneratePayslipDrawer} />
+
+          <Divider component='div' sx={{ mt: theme => `${theme.spacing(4)} !important` }} />
+
+          <Grid>
+            <PageHeader
+              month={month}
+              action2='Generate/Fetch Payroll'
+              toggle={toggleGeneratePayslipDrawer}
+              action1='Make Payment'
+              togglePayment={togglePayrollModal}
+            />
           </Grid>
         </CardContent>
       </Card>

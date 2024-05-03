@@ -149,7 +149,7 @@ const DepartmentsTable = () => {
                           {`${
                             department?.hod
                               ? `${formatFirstLetter(department?.hod.firstname)}  ${formatFirstLetter(
-                                  department?.hod.lastname
+                                  department?.hod?.lastname
                                 )}`
                               : '--'
                           }`}

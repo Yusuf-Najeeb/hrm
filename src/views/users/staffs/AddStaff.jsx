@@ -418,7 +418,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                     requireBoolean={true}
                     label='Last Name'
                     error={personalErrors['lastname']}
-                    errorMessage={personalErrors.lastname?.message}
+                    errorMessage={personalErrors?.lastname?.message}
                   />
                 </Grid>
 

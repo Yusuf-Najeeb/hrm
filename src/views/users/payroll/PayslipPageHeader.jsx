@@ -7,33 +7,34 @@ import Button from '@mui/material/Button'
 import Icon from 'src/@core/components/icon'
 import { useStaffs } from '../../../hooks/useStaffs'
 
-const PageHeader = ({ month, toggle, toggleSend, action1, action2 }) => {
+const PageHeader = ({ month, toggle, togglePayment, action1, action2 }) => {
   const [StaffsData] = useStaffs()
 
   return (
     <Box
-      sx={
-        {
-          // py: 4,
-          // px: 6,
-          // rowGap: 2,
-          // columnGap: 4,
-          // display: 'flex',
-          // flexWrap: 'wrap',
-          // alignItems: 'center',
-          // justifyContent: 'space-between'
-        }
-      }
-    >
-      {/* <Box sx={{}}>
-        <Typography>{month}</Typography>
-      </Box> */}
+      sx={{
+        py: 4,
 
-      <Stack direction='row' justifyContent='end' spacing={4} sx={{ pr: 5 }}>
-        {/* <Button onClick={toggleSend} variant='outlined' disabled={StaffsData?.length == 0} sx={{ '& svg': { mr: 2 } }}>
+        // px: 6,
+        rowGap: 2,
+
+        // columnGap: 4,
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'end'
+      }}
+    >
+      <Stack direction='row' justifyContent='end' spacing={4}>
+        <Button
+          onClick={togglePayment}
+          variant='outlined'
+          disabled={StaffsData?.length == 0}
+          sx={{ '& svg': { mr: 2 } }}
+        >
           <Icon fontSize='1.125rem' icon='prime:send' />
           {action1}
-        </Button> */}
+        </Button>
 
         <Button onClick={toggle} variant='contained' disabled={StaffsData?.length == 0} sx={{ '& svg': { mr: 2 } }}>
           <Icon fontSize='1.125rem' icon='tabler:plus' />

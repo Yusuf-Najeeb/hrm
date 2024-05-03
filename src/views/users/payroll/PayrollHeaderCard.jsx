@@ -38,17 +38,16 @@ const PayrollInfo = () => {
   return (
     <Grid container spacing={3} sx={{ display: { xs: 'none', lg: 'flex' }, mb: 5 }}>
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Total</Typography>
-
             <CustomAvatar
               color={'info'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.7, width: 40, height: 40, borderRadius: 4, selfAlign: 'end' }}
+              sx={{ mr: 2, mt: 5, p: 1.7, width: 43, height: 43, borderRadius: 4, selfAlign: 'end' }}
             >
-              <Icon fontSize='2.125rem' icon='uiw:pay' />
+              <Icon fontSize='1.5rem' icon='uiw:pay' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -56,7 +55,8 @@ const PayrollInfo = () => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.total || 0}
@@ -65,16 +65,16 @@ const PayrollInfo = () => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Paid</Typography>
             <CustomAvatar
               color={'success'}
               skin='light'
               variant='rounded'
-              sx={{ mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mt: 5, p: 1.5, width: 43, height: 43, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='healthicons:money-bag' />
+              <Icon fontSize='2rem' icon='healthicons:money-bag' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -82,7 +82,8 @@ const PayrollInfo = () => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.paid || 0}
@@ -91,16 +92,16 @@ const PayrollInfo = () => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Pending</Typography>
             <CustomAvatar
               color={'error'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, selfAlign: 'center', borderRadius: 4 }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 43, height: 43, selfAlign: 'center', borderRadius: 4 }}
             >
-              <Icon fontSize='2.125rem' icon='mdi:account-pending-outline' />
+              <Icon fontSize='1.8rem' icon='mdi:account-pending-outline' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -108,7 +109,8 @@ const PayrollInfo = () => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.pending || 0}
@@ -117,7 +119,7 @@ const PayrollInfo = () => {
       </Grid>
 
       <Grid item md={3}>
-        <Card sx={{ px: 3, pb: 5, pt: 4 }}>
+        <Card sx={{ px: 5, pb: 5, pt: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography sx={{ fontSize: '1rem' }}>Periods</Typography>
 
@@ -125,9 +127,9 @@ const PayrollInfo = () => {
               color={'warning'}
               skin='light'
               variant='rounded'
-              sx={{ mr: 2, mt: 5, p: 1.5, width: 40, height: 40, borderRadius: 4, selfAlign: 'center' }}
+              sx={{ mr: 2, mt: 5, p: 1.5, width: 43, height: 43, borderRadius: 4, selfAlign: 'center' }}
             >
-              <Icon fontSize='2.125rem' icon='fluent-mdl2:calendar-year' />
+              <Icon fontSize='1.5rem' icon='fluent-mdl2:calendar-year' />
             </CustomAvatar>
           </Box>
           <Typography
@@ -135,7 +137,8 @@ const PayrollInfo = () => {
             sx={{
               fontSize: '1.3rem',
               display: 'flex',
-              mt: -4
+              mt: -4,
+              ml: 1
             }}
           >
             {aggregations?.totalPeriod || 0}
