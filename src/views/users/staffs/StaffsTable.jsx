@@ -177,7 +177,12 @@ const StaffsTable = () => {
     <Stack>
       <StaffHeaderCard />
       <Grid item xs={12}>
-        <Card>
+        <Card
+          sx={{
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0
+          }}
+        >
           <CardContent
             sx={{
               pt: theme => `${theme.spacing(5)} !important`,
@@ -208,7 +213,7 @@ const StaffsTable = () => {
         </Card>
       </Grid>
       <Grid>
-        <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
+        <TableContainer component={Paper} sx={{ maxHeight: 840, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>

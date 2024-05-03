@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 
 // ** Custom Component Import
 import { useAppDispatch } from '../../../hooks'
@@ -7,6 +7,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requirePeriod } from 'src/@core/Formschema'
 import Icon from 'src/@core/components/icon'
+import NoData from '../../../@core/components/emptyData/NoData'
+import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter, formatCurrency, formatDateToYYYY, formatMonthYear } from '../../../@core/utils/format'
 
 // ** MUI Imports
@@ -123,7 +125,13 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
 
         <Card>
           <CardHeader title='Filter Payroll' />
-          <CardContent>
+          <CardContent
+            sx={{
+              pt: theme => `${theme.spacing(2)} !important`,
+              px: theme => `${theme.spacing(5)} !important`,
+              pb: theme => `${theme.spacing(4)} !important`
+            }}
+          >
             <Grid container spacing={6}>
               <Grid item xs={12} sm={3}>
                 <CustomTextField
@@ -201,43 +209,60 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {PayrollData?.map(payroll => (
-                <TableRow key={payroll?.id}>
-                  <TableCell align='left'>
-                    <Checkbox
-                      size='small'
-                      name={`${payroll?.id}-checked`}
-                      checked={checked.includes(payroll?.id)}
-                      onChange={() => {
-                        if (checked.includes(payroll.id)) {
-                          const restChecked = checked.filter(c => c !== payroll?.id)
-                          setChecked(restChecked)
-                          setAllChecked(false)
-                        } else {
-                          if (checked.length + 1 === payroll?.length) {
-                            setAllChecked(true)
-                          }
-                          setChecked([...checked, payroll?.id])
-                        }
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align='left' sx={{ minWidth: 50 }}>
-                    {payroll?.id}
-                  </TableCell>
-                  <TableCell align='left'>{`${formatFirstLetter(payroll?.user?.firstname)} ${formatFirstLetter(
-                    payroll?.user?.lastname
-                  )}`}</TableCell>
-                  <TableCell align='left'>{formatCurrency(payroll?.amount, true)}</TableCell>
-                  <TableCell align='left'>{formatCurrency(payroll?.totalAllowance, true)}</TableCell>
-                  <TableCell align='left'>{formatCurrency(payroll?.totalDeduction, true)}</TableCell>
-                  <TableCell align='left'>
-                    {payroll?.lastChangedBy
-                      ? formatFirstLetter(payroll?.lastChangedBy)
-                      : formatFirstLetter(payroll?.createdBy)}
+              {loading ? (
+                <TableRow className='text-center'>
+                  <TableCell colSpan={6}>
+                    <CustomSpinner />
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                <Fragment>
+                  {PayrollData?.map(payroll => (
+                    <TableRow key={payroll?.id}>
+                      <TableCell align='left'>
+                        <Checkbox
+                          size='small'
+                          name={`${payroll?.id}-checked`}
+                          checked={checked.includes(payroll?.id)}
+                          onChange={() => {
+                            if (checked.includes(payroll.id)) {
+                              const restChecked = checked.filter(c => c !== payroll?.id)
+                              setChecked(restChecked)
+                              setAllChecked(false)
+                            } else {
+                              if (checked.length + 1 === payroll?.length) {
+                                setAllChecked(true)
+                              }
+                              setChecked([...checked, payroll?.id])
+                            }
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell align='left' sx={{ minWidth: 50 }}>
+                        {payroll?.id}
+                      </TableCell>
+                      <TableCell align='left'>{`${formatFirstLetter(payroll?.user?.firstname)} ${formatFirstLetter(
+                        payroll?.user?.lastname
+                      )}`}</TableCell>
+                      <TableCell align='left'>{formatCurrency(payroll?.amount, true)}</TableCell>
+                      <TableCell align='left'>{formatCurrency(payroll?.totalAllowance, true)}</TableCell>
+                      <TableCell align='left'>{formatCurrency(payroll?.totalDeduction, true)}</TableCell>
+                      <TableCell align='left'>
+                        {payroll?.lastChangedBy
+                          ? formatFirstLetter(payroll?.lastChangedBy)
+                          : formatFirstLetter(payroll?.createdBy)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {PayrollData?.length === 0 && (
+                    <tr className='text-center'>
+                      <td colSpan={12}>
+                        <NoData />
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

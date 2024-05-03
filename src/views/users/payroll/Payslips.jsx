@@ -70,7 +70,7 @@ const PayslipTable = () => {
   const [refetch, setFetch] = useState(false)
   const [selectedpayslip, setSelectedpayslip] = useState(null)
   const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
-  const [departmentId, setDepartmentId] = useState()
+  const [deptId, setDept] = useState()
   const [staffId, setStaffId] = useState()
   const [year, setYear] = useState()
   const [isPrinting, setIsPrinting] = useState(false)
@@ -88,7 +88,7 @@ const PayslipTable = () => {
   const month = formatMonthYear(new Date())
 
   const handleChangeDepartment = e => {
-    setDepartmentId(e.target.value)
+    setDept(e.target.value)
   }
 
   const handleChangeStaff = e => {
@@ -96,7 +96,7 @@ const PayslipTable = () => {
   }
 
   const handleChangeYear = e => {
-    console.log(e.target.value)
+    setYear(e.target.value)
   }
 
   const printPayslipItem = (selectedId, period) => {
@@ -144,10 +144,10 @@ const PayslipTable = () => {
   const toggleSendPayslipModal = () => setSendModalOpen(!sendModalOpen)
 
   useEffect(() => {
-    dispatch(fetchPayroll({ userId: staffId, departmentId: departmentId, period: year }))
+    dispatch(fetchPayroll({ userId: staffId, departmentId: deptId, period: year }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch, staffId, departmentId, year])
+  }, [refetch, staffId, deptId, year])
 
   useEffect(() => {
     if (isPayslipDownloadLinkAvailable) {
@@ -160,7 +160,12 @@ const PayslipTable = () => {
   return (
     <main>
       <PayrollHeader />
-      <Card>
+      <Card
+        sx={{
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0
+        }}
+      >
         <CardContent
           sx={{
             pt: theme => `${theme.spacing(5)} !important`,
@@ -199,7 +204,7 @@ const PayslipTable = () => {
                 placeholder='Department'
                 // eslint-disable-next-line
                 // placeholderText={`${DepartmentsData[defaultId]?.name}`}
-                SelectProps={{ value: departmentId, onChange: e => handleChangeDepartment(e) }}
+                SelectProps={{ value: deptId, onChange: e => handleChangeDepartment(e) }}
               >
                 <MenuItem value=''>All</MenuItem>
                 {DepartmentsData?.map(department => (
@@ -226,9 +231,7 @@ const PayslipTable = () => {
               </CustomTextField>
             </Grid>
           </Grid>
-
           <Divider component='div' sx={{ mt: theme => `${theme.spacing(4)} !important` }} />
-
           <Grid>
             <PageHeader
               month={month}
@@ -241,7 +244,7 @@ const PayslipTable = () => {
         </CardContent>
       </Card>
 
-      <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 840, borderTopRightRadius: 0, borderTopLeftRadius: 0 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow>
@@ -281,7 +284,7 @@ const PayslipTable = () => {
             ) : (
               <Fragment>
                 {PayrollData?.map((payroll, i) => {
-                  const staffDepartmentId = payroll?.user?.departmentId
+                  const staffDepartmentId = payroll?.user?.deptId
                   const matchingDepartment = findDepartment(DepartmentsData, staffDepartmentId)
                   const departmentName = matchingDepartment?.name
 
