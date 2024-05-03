@@ -69,7 +69,6 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
   const [period, setPeriod] = useState('all-all')
-  console.log(period, 'Period')
 
   // * Default values
   const defaultMonths = []

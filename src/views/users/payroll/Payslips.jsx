@@ -184,7 +184,7 @@ const PayslipTable = () => {
                 placeholder='Year'
                 SelectProps={{ value: year, onChange: e => handleChangeYear(e) }}
               >
-                <MenuItem value=''>Select Year</MenuItem>
+                <MenuItem value=''>All</MenuItem>
                 <MenuItem value={+defaultYear - 1}>{+defaultYear - 1}</MenuItem>
                 <MenuItem value={+defaultYear}>{+defaultYear}</MenuItem>
                 <MenuItem value={+defaultYear + 1}>{+defaultYear + 1}</MenuItem>
