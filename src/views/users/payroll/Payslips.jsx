@@ -160,14 +160,23 @@ const PayslipTable = () => {
   return (
     <main>
       <PayrollHeader />
-      <Card
-        sx={{
-          py: theme => `${theme.spacing(1)} !important`,
-          px: theme => `${theme.spacing(0)} !important`
-        }}
-      >
-        <CardContent>
-          <Grid container spacing={6} sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
+      <Card>
+        <CardContent
+          sx={{
+            pt: theme => `${theme.spacing(5)} !important`,
+            pb: theme => `${theme.spacing(2)} !important`,
+            px: theme => `${theme.spacing(4)} !important`
+          }}
+        >
+          <Grid
+            container
+            spacing={6}
+            sx={{
+              display: 'flex',
+              justifyContent: 'start',
+              alignItems: 'center'
+            }}
+          >
             <Grid item xs={12} sm={4}>
               <CustomTextField
                 select
