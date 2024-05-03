@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react'
 
 // ** Custom Component Import
 import { useAppDispatch } from '../../../hooks'
-
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import CustomTextField from 'src/@core/components/mui/text-field'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requirePeriod } from 'src/@core/Formschema'
 import Icon from 'src/@core/components/icon'
-import { formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
+import { formatFirstLetter, formatCurrency, formatDateToYYYY, formatMonthYear } from '../../../@core/utils/format'
 
 // ** MUI Imports
 import { DataGrid } from '@mui/x-data-grid'
@@ -68,21 +66,40 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
   const [allChecked, setAllChecked] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [status, setStatus] = useState('pending')
+  const [year, setYear] = useState('')
+  const [month, setMonth] = useState('')
+  const [period, setPeriod] = useState('all-all')
+  console.log(period, 'Period')
 
-  const {
-    control,
-    setValue,
-    reset,
-    handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
+  // * Default values
+  const defaultMonths = []
+  const defaultYear = formatDateToYYYY(new Date())
+
+  const getMonths = () => {
+    let month
+    for (let month = 0; month < 12; month++) {
+      const date = new Date(2022, month, 1)
+      const monthName = date.toLocaleString('default', { month: 'long' })
+      defaultMonths.push(monthName)
+    }
+  }
+  getMonths()
+
+  const handleChangeYear = e => {
+    setYear(e.target.value)
+  }
+
+  const handleChangeMonth = e => {
+    setMonth(e.target.value)
+  }
   const updateFetch = () => setFetch(!refetch)
 
   useEffect(() => {
-    dispatch(fetchPayroll({ status: status }))
+    setPeriod(year + '-' + month)
+    dispatch(fetchPayroll({ status: status, period: period }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, status])
+  }, [dispatch, status, year, month])
 
   return (
     <Dialog
@@ -104,39 +121,42 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
         <CustomCloseButton onClick={closeModal}>
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
+
         <Card>
           <CardHeader title='Filter Payroll' />
           <CardContent>
-            <Grid>
-              <Grid item xs={12} sm={4}>
-                <Controller
-                  name='period'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <DatePicker
-                      selected={value}
-                      dateFormat='MMM yy'
-                      popperPlacement='bottom-end'
-                      showMonthYearPicker
-                      maxDate={new Date()}
-                      onChange={e => {
-                        onChange(e)
-                      }}
-                      placeholderText='MM/YYYY'
-                      customInput={
-                        <CustomInput
-                          value={value}
-                          onChange={onChange}
-                          autoComplete='off'
-                          label='Date'
-                          error={Boolean(errors.period)}
-                          {...(errors.period && { helperText: errors.period.message })}
-                        />
-                      }
-                    />
-                  )}
-                />
+            <Grid container spacing={6}>
+              <Grid item xs={12} sm={3}>
+                <CustomTextField
+                  select
+                  fullWidth
+                  label='Year'
+                  placeholder='Year'
+                  SelectProps={{ value: year, onChange: e => handleChangeYear(e) }}
+                >
+                  <MenuItem value=''>All</MenuItem>
+                  <MenuItem value={+defaultYear - 1}>{+defaultYear - 2}</MenuItem>
+                  <MenuItem value={+defaultYear - 1}>{+defaultYear - 1}</MenuItem>
+                  <MenuItem value={+defaultYear}>{+defaultYear}</MenuItem>
+                  <MenuItem value={+defaultYear + 1}>{+defaultYear + 1}</MenuItem>
+                  <MenuItem value={+defaultYear + 1}>{+defaultYear + 2}</MenuItem>
+                </CustomTextField>
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <CustomTextField
+                  select
+                  fullWidth
+                  label='Month'
+                  placeholder='Month'
+                  SelectProps={{ value: month, onChange: e => handleChangeMonth(e) }}
+                >
+                  <MenuItem value=''>All</MenuItem>
+                  {defaultMonths.map((month, i) => (
+                    <MenuItem key={i} value={`0${i + 1}`}>
+                      {month}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
               </Grid>
             </Grid>
           </CardContent>

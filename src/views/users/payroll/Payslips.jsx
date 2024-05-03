@@ -148,12 +148,6 @@ const PayslipTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch, staffId, departmentId, year])
 
-  // useEffect(() => {
-  //   dispatch(fetchPayslips({ period: defaultPeriod, departmentId: departmentId ? departmentId : defaultId }))
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [refetch, defaultId, departmentId])
-
   useEffect(() => {
     if (isPayslipDownloadLinkAvailable) {
       //   window.location.href = payslipDownloadLink

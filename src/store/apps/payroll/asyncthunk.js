@@ -7,7 +7,7 @@ export const fetchPayroll = createAsyncThunk('payroll/fetchPayrolls', async quer
   try {
     const response = await axios.get(`/payroll`, {
       params: {
-        year: query.year ? query.year : '',
+        period: query.period ? query.period : '',
         userId: query.userId ? query.userId : '',
         departmentId: query.departmentId ? query.departmentId : '',
         status: query.status ? query.status : ''
@@ -27,5 +27,16 @@ export const generatePayroll = async vals => {
     return response
   } catch (err) {
     notifyError('Failed to generate payroll')
+  }
+}
+
+export const makePayment = vals => {
+  try {
+    const response = axios.post('/payroll/makePayment', { id: vals?.id })
+    notifySuccess('Payment Successful')
+
+    return response
+  } catch (error) {
+    notifyError('Payment failed')
   }
 }
