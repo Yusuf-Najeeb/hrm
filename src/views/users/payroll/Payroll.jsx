@@ -4,6 +4,8 @@ import React, { useState, useEffect, Fragment } from 'react'
 import { useAppDispatch } from '../../../hooks'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { useForm, Controller } from 'react-hook-form'
+import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
+import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requirePeriod } from 'src/@core/Formschema'
 import Icon from 'src/@core/components/icon'
@@ -22,7 +24,8 @@ import {
   CardContent,
   Grid,
   MenuItem,
-  Checkbox
+  Checkbox,
+  Button
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
@@ -37,7 +40,7 @@ import { CustomInput } from '../duty-roster/UploadRosterDialog'
 import IconButton from '@mui/material/IconButton'
 
 // * Global states
-import { fetchPayroll } from '../../../store/apps/payroll/asyncthunk'
+import { fetchPayroll, makePayment } from '../../../store/apps/payroll/asyncthunk'
 import { usePayrolls } from '../../../hooks/usePayroll'
 
 export const CustomCloseButton = styled(IconButton)(({ theme }) => ({
@@ -71,6 +74,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
   const [period, setPeriod] = useState('all-all')
+  const [sendPayslips, setPayslips] = useState(false)
 
   // * Default values
   const defaultMonths = []
@@ -93,6 +97,32 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
   const handleChangeMonth = e => {
     setMonth(e.target.value)
   }
+
+  const handleChangePayslips = e => {
+    setPayslips(e.target.value)
+  }
+
+  const submitPayment = () => {
+    let payload
+    if (checked.length === 0) {
+      notifyError('Select Staff to pay')
+    } else {
+      payload = { checked, sendPayslips }
+    }
+
+    if (payload) {
+      makePayment(payload).then(res => {
+        if (!res.ok) {
+          updateFetch()
+          closeModal()
+          notifySuccess('Payment Successful')
+        } else {
+          notifyError('Payment Unsuccessful')
+        }
+      })
+    }
+  }
+
   const updateFetch = () => setFetch(!refetch)
 
   useEffect(() => {
@@ -123,7 +153,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
 
-        <Card>
+        <Card sx={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
           <CardHeader title='Filter Payroll' />
           <CardContent
             sx={{
@@ -165,11 +195,37 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
                   ))}
                 </CustomTextField>
               </Grid>
+              <Grid item xs={12} sm={3}>
+                <CustomTextField
+                  select
+                  fullWidth
+                  label='Send Payslip'
+                  placeholder='Send Payslip'
+                  SelectProps={{ value: sendPayslips, onChange: e => handleChangePayslips(e) }}
+                >
+                  <MenuItem value=''>Send Payslips</MenuItem>
+                  <MenuItem value={true}>Yes</MenuItem>
+                  <MenuItem value={false}>No</MenuItem>
+                </CustomTextField>
+              </Grid>
+              <Grid item sx={{ ml: 'auto', alignSelf: 'end' }}>
+                <Button
+                  // eslint-disable-next-line
+                  onClick={submitPayment}
+                  variant='contained'
+                  color={'success'}
+                  disabled={PayrollData?.length == 0}
+                  sx={{ '& svg': { mr: 2 } }}
+                >
+                  <Icon fontSize='1.125rem' icon='prime:send' />
+                  Send Payment
+                </Button>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>
 
-        <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
+        <TableContainer component={Paper} sx={{ maxHeight: 840, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>

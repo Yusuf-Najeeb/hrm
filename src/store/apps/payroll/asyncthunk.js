@@ -30,13 +30,15 @@ export const generatePayroll = async vals => {
   }
 }
 
-export const makePayment = vals => {
+export const makePayment = payload => {
   try {
-    const response = axios.post('/payroll/makePayment', { id: vals?.id })
-    notifySuccess('Payment Successful')
+    const response = axios.post('/payroll/make-payment', {
+      ids: payload?.checked,
+      send: payload?.sendPayslips
+    })
 
     return response
   } catch (error) {
-    notifyError('Payment failed')
+    console.log(error)
   }
 }
