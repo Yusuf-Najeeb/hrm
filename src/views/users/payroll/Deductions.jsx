@@ -18,7 +18,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
-import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
+import { formatDateToYYYYMM, formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import { useDeductions } from '../../../hooks/useDeductions'
 import PageHeader from '../components/PageHeader'
@@ -33,7 +33,9 @@ const DeductionsTable = () => {
   // Hooks
   const dispatch = useAppDispatch()
   const [deductionsData, loading] = useDeductions()
-  const [deductioncategoryData] = useDeductionCategory()
+  console.log(deductionsData, 'Deductions data')
+
+  // const [deductioncategoryData] = useDeductionCategory()
   const [StaffsData] = useStaffs()
 
   // console.log(deductionsData, 'deductions data')
@@ -44,9 +46,8 @@ const DeductionsTable = () => {
   const [refetch, setFetch] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDeduction, setSelectedDeduction] = useState(null)
-  const [staffId, setStaffId] = useState('')
-  console.log(staffId, 'if found....')
   const defaultPeriod = formatDateToYYYYMM(new Date())
+  const formatDefaultPeriod = defaultPeriod.slice(0, 4) + '-' + defaultPeriod.slice(4, 6)
 
   const doDelete = value => {
     setDeleteModal(true)
@@ -78,7 +79,7 @@ const DeductionsTable = () => {
   }
 
   useEffect(() => {
-    dispatch(fetchDeductions(defaultPeriod))
+    dispatch(fetchDeductions(formatDefaultPeriod))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch])
@@ -126,17 +127,22 @@ const DeductionsTable = () => {
             ) : (
               <Fragment>
                 {deductionsData?.map((deduction, i) => {
-                  const deductionCategoryId = deduction?.categoryId
-                  const matchingDeductionCategory = findDeductionCategory(deductioncategoryData, deductionCategoryId)
-                  const deductionCategoryName = formatFirstLetter(matchingDeductionCategory?.name)
                   const userName = StaffsData.find(user => user.id === deduction.userId)
 
                   return (
                     <TableRow hover role='checkbox' key={deduction.id}>
-                      <TableCell align='left'>{`${userName?.firstname} ${userName?.lastname}`}</TableCell>
-                      <TableCell align='left'>{deductionCategoryName}</TableCell>
-                      <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
-
+                      <TableCell align='left'>{`${formatFirstLetter(userName?.firstname)} ${formatFirstLetter(
+                        userName?.lastname
+                      )}`}</TableCell>
+                      <TableCell align='left'>{deduction?.period}</TableCell>
+                      <TableCell align='left'>{formatCurrency(userName?.grossSalary)}</TableCell>
+                      <TableCell align='left'>{formatCurrency(deduction?.amount, true)}</TableCell>
+                      <TableCell align='left'>{formatFirstLetter(deduction?.type)}</TableCell>
+                      <TableCell align='left'>
+                        {deduction?.modifiedBy
+                          ? formatFirstLetter(deduction?.modifiedBy)
+                          : formatFirstLetter(deduction?.createdBy)}
+                      </TableCell>
                       <TableCell align='left' sx={{ display: 'flex' }}>
                         <IconButton size='small' onClick={() => doDelete(deduction)}>
                           <Icon icon='tabler:trash' />
@@ -161,7 +167,9 @@ const DeductionsTable = () => {
 
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
 
-      {addDeductionOpen && <CreateDeduction openDialog={addDeductionOpen} closeDialog={toggleDrawer} type={type} />}
+      {addDeductionOpen && (
+        <CreateDeduction openDialog={addDeductionOpen} closeDialog={toggleDrawer} amountType={type} />
+      )}
     </main>
   )
 }

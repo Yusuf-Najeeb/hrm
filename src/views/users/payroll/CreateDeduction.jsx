@@ -14,8 +14,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { deductionsSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
-import { fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
 
+// import { fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
 // import { useDeductionCategory } from '../../../hooks/useDeductionCategory'
 // import CreateDeductionCategory from './CreateDeductionCategory'
 // import Icon from 'src/@core/components/icon'
@@ -25,8 +25,8 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useAppDispatch } from '../../../hooks'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
-
 import { useStaffs } from '../../../hooks/useStaffs'
+import { createDeduction } from '../../../store/apps/deductions/asyncthunk'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 
 const defaultValues = {
@@ -36,7 +36,7 @@ const defaultValues = {
   description: ''
 }
 
-const CreateDeduction = ({ openDialog, closeDialog, type }) => {
+const CreateDeduction = ({ openDialog, closeDialog, amountType }) => {
   const dispatch = useAppDispatch()
   const [StaffsData] = useStaffs()
   const [fetch, setFetch] = useState(false)
@@ -61,28 +61,25 @@ const CreateDeduction = ({ openDialog, closeDialog, type }) => {
     resolver: yupResolver(deductionsSchema)
   })
 
-  useEffect(() => {
-    dispatch(fetchDeductionCategory())
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetch])
+  // useEffect(() => {
+  //   // dispatch(fetchDeductionCategory())
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [fetch])
 
   const createDeduction = async values => {
-    console.log(values, 'payload deduction')
-    console.log('Request type', type)
     try {
-      const period = formatDateToYYYYMM(values.period)
-      const createUrl = `/deductions`
+      const { type, period, amount, description, userId } = values
+      const dateString = formatDateToYYYYMM(period)
+      const formattedPeriod = dateString.slice(0, 4) + '-' + dateString.slice(4)
 
-      const resp = await axios.post(
-        createUrl,
-        { categoryId: values.categoryId, userId: values.userId, period },
-        {
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
+      const createUrl = `/deductions`
+      const payload = { type: amountType, period: formattedPeriod, amount, description, userId }
+
+      const resp = await axios.post(createUrl, payload, {
+        headers: { 'Content-Type': 'application/json' }
+      })
       if (resp.data.success) {
-        notifySuccess('Deduction Created Successfully')
+        notifySuccess(`${formatFirstLetter(type)} Created Successfully`)
         closeDialog()
         reset()
         updateFetch()
@@ -102,7 +99,9 @@ const CreateDeduction = ({ openDialog, closeDialog, type }) => {
               px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'center', fontSize: '1.25rem' }}>Create {formatFirstLetter(type)}</Typography>
+            <Typography sx={{ textAlign: 'center', fontSize: '1.25rem' }}>
+              Create {formatFirstLetter(amountType)}
+            </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12}>
                 <Controller

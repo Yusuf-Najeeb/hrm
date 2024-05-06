@@ -23,7 +23,6 @@ export const payrollSlice = createSlice({
       state.loading = true
     })
     builder.addCase(fetchPayroll.fulfilled, (state, action) => {
-      console.log(action.payload, 'action payload Payroll')
       state.loading = false
       state.PayrollData = action?.payload?.data?.data
       state.aggregations = action?.payload?.data?.aggregations
