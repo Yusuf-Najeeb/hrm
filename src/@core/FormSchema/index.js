@@ -100,9 +100,11 @@ export const downloadRosterSchema = yup.object().shape({
 })
 
 export const deductionsSchema = yup.object().shape({
-  categoryId: yup.number().required('Deduction Category is required'),
+  // categoryId: yup.number().required('Deduction Category is required'),
   userId: yup.number().required('Staff is required'),
-  period: yup.string().required('Period is required')
+  period: yup.string().required('Period is required'),
+  amount: yup.number().required('Amount is required'),
+  description: yup.string().required('Description is required')
 })
 
 export const requirePeriod = yup.object().shape({

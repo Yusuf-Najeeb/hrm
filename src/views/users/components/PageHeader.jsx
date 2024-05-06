@@ -6,21 +6,19 @@ import Button from '@mui/material/Button'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-
 const PageHeader = ({ toggle, action }) => {
-
   return (
     <Box
       sx={{
-        py: 4,
-        px: 6,
+        // py: 4,
+        // px: 6,
         rowGap: 2,
         columnGap: 4,
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'flex-end'
-        
+
         // justifyContent: 'flex-end',
       }}
     >

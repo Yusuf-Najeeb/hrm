@@ -8,6 +8,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
+import { Box, Stack } from '@mui/material'
 
 import Icon from 'src/@core/components/icon'
 
@@ -37,10 +38,8 @@ const DeductionsTable = () => {
 
   // console.log(deductionsData, 'deductions data')
 
-  // console.log(deductioncategoryData, 'deductions category data')
-
   // States
-  const [deduction, setDeduction] = useState(null)
+  const [type, setType] = useState('')
   const [addDeductionOpen, setDeductionOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -66,8 +65,17 @@ const DeductionsTable = () => {
     updateFetch()
     doCancelDelete()
   }
+  const toggleDrawer = () => setDeductionOpen(!addDeductionOpen)
 
-  const toggleDeductionDrawer = () => setDeductionOpen(!addDeductionOpen)
+  const toggleAddBenefit = () => {
+    setDeductionOpen(!addDeductionOpen)
+    setType('benefit')
+  }
+
+  const toggleAddDeduction = () => {
+    setDeductionOpen(!addDeductionOpen)
+    setType('deduction')
+  }
 
   useEffect(() => {
     dispatch(fetchDeductions(defaultPeriod))
@@ -76,8 +84,11 @@ const DeductionsTable = () => {
   }, [refetch])
 
   return (
-    <div>
-      <PageHeader action='Create Deduction' toggle={toggleDeductionDrawer} />
+    <main>
+      <Box sx={{ display: 'flex', justifyContent: 'end', gap: 6, mb: 4 }}>
+        <PageHeader action='Add Benefit' toggle={toggleAddBenefit} />
+        <PageHeader action='Add Deduction' toggle={toggleAddDeduction} />
+      </Box>
       <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -86,10 +97,19 @@ const DeductionsTable = () => {
                 STAFF
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                DEDUCTION CATEGORY
+                PERIOD
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                DEDUCTION AMOUNT
+                GROSS SALARY
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
+                AMOUNT
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
+                TYPE
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
+                MODIFIED BY
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTIONS
@@ -113,7 +133,6 @@ const DeductionsTable = () => {
 
                   return (
                     <TableRow hover role='checkbox' key={deduction.id}>
-                      {/* <TableCell align='left'>{deductioncategoryData[]}</TableCell> */}
                       <TableCell align='left'>{`${userName?.firstname} ${userName?.lastname}`}</TableCell>
                       <TableCell align='left'>{deductionCategoryName}</TableCell>
                       <TableCell align='left'>{deduction?.amount?.toLocaleString()}</TableCell>
@@ -142,14 +161,8 @@ const DeductionsTable = () => {
 
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
 
-      {addDeductionOpen && (
-        <CreateDeduction
-          openDialog={addDeductionOpen}
-          closeDialog={toggleDeductionDrawer}
-          refetchDeductionCategory={updateFetch}
-        />
-      )}
-    </div>
+      {addDeductionOpen && <CreateDeduction openDialog={addDeductionOpen} closeDialog={toggleDrawer} type={type} />}
+    </main>
   )
 }
 
