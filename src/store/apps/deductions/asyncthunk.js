@@ -19,7 +19,7 @@ export const createDeduction = createAsyncThunk('deduction/createItem', async ()
   }
 })
 
-export const fetchDeductions = createAsyncThunk('deductions/fetch ', async (period) => {
+export const fetchDeductions = createAsyncThunk('deductions/fetch ', async period => {
   try {
     const response = await axios.get(`/deductions?period=${period}`)
 
@@ -27,23 +27,11 @@ export const fetchDeductions = createAsyncThunk('deductions/fetch ', async (peri
 
     return response
   } catch (error) {
-
     notifyError('Error Fetching Deductions')
   }
 })
 
-export const fetchDeductionsForOneUser = async (id, period) => {
-    try {
-      const response = await axios.get(`/deductions?period=${period}&userId=${id}`)
-  
-      return response?.data.data
-    } catch (error) {
-  
-      notifyError('Error Fetching Deductions')
-    }
-  }
-
-export const deleteDeduction = createAsyncThunk('/delete-deduction', async (id) => {
+export const deleteDeduction = createAsyncThunk('/delete-deduction', async id => {
   try {
     const response = await axios.delete(`/deductions?id=${id}`)
 
@@ -62,3 +50,13 @@ export const deleteDeduction = createAsyncThunk('/delete-deduction', async (id) 
     }
   }
 })
+
+export const fetchDeductionsForOneUser = async (id, period) => {
+  try {
+    const response = await axios.get(`/deductions?period=${period}&userId=${id}`)
+
+    return response?.data.data
+  } catch (error) {
+    notifyError('Error Fetching Deductions')
+  }
+}

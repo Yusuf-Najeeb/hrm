@@ -42,3 +42,13 @@ export const makePayment = payload => {
     console.log(error)
   }
 }
+
+export const getPeriods = () => {
+  try {
+    const response = axios.get('/payroll/periods')
+
+    return response
+  } catch (error) {
+    notifyError('Failed to fetch periods')
+  }
+}

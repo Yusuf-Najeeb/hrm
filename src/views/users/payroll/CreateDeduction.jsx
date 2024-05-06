@@ -19,6 +19,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useAppDispatch } from '../../../hooks'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
+import { getPeriods } from '../../../store/apps/payroll/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
@@ -32,6 +33,7 @@ const defaultValues = {
 
 const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) => {
   const dispatch = useAppDispatch()
+  const [periods, setPeriods] = useState([])
   const [StaffsData] = useStaffs()
 
   const {
@@ -49,11 +51,9 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   const createDeduction = async values => {
     try {
       const { type, period, amount, description, userId } = values
-      const dateString = formatDateToYYYYMM(period)
-      const formattedPeriod = dateString.slice(0, 4) + '-' + dateString.slice(4)
-
       const createUrl = `/deductions`
-      const payload = { type: amountType, period: formattedPeriod, amount, description, userId }
+
+      const payload = { type: amountType, period, amount, description, userId }
 
       const resp = await axios.post(createUrl, payload, {
         headers: { 'Content-Type': 'application/json' }
@@ -69,6 +69,12 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    getPeriods().then(res => setPeriods(res.data.data))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Fragment>
@@ -117,27 +123,25 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
-                    <DatePicker
-                      selected={value}
-                      dateFormat='MMM y'
-                      popperPlacement='bottom-end'
-                      showMonthYearPicker
-                      minDate={new Date()}
-                      onChange={e => {
-                        onChange(e)
-                      }}
-                      placeholderText='MM/YYYY'
-                      customInput={
-                        <CustomInput
-                          value={value}
-                          onChange={onChange}
-                          autoComplete='off'
-                          label='Date'
-                          error={Boolean(errors?.period)}
-                          {...(errors?.period && { helperText: errors?.period.message })}
-                        />
-                      }
-                    />
+                    <CustomInput
+                      select
+                      fullWidth
+                      value={value}
+                      onChange={onChange}
+                      autoComplete='off'
+                      label='Date'
+                      error={Boolean(errors?.period)}
+                      {...(errors?.period && { helperText: errors?.period.message })}
+                    >
+                      <MenuItem value=''>Select Period</MenuItem>
+                      {periods.map(period => {
+                        return (
+                          <MenuItem key={period} value={period}>
+                            {period}
+                          </MenuItem>
+                        )
+                      })}
+                    </CustomInput>
                   )}
                 />
               </Grid>
