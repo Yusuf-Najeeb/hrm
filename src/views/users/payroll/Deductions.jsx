@@ -168,7 +168,12 @@ const DeductionsTable = () => {
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
 
       {addDeductionOpen && (
-        <CreateDeduction openDialog={addDeductionOpen} closeDialog={toggleDrawer} amountType={type} />
+        <CreateDeduction
+          openDialog={addDeductionOpen}
+          closeDialog={toggleDrawer}
+          amountType={type}
+          updateFetch={updateFetch}
+        />
       )}
     </main>
   )

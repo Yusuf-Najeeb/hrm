@@ -14,20 +14,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { deductionsSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
-
-// import { fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
-// import { useDeductionCategory } from '../../../hooks/useDeductionCategory'
-// import CreateDeductionCategory from './CreateDeductionCategory'
-// import Icon from 'src/@core/components/icon'
-
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useAppDispatch } from '../../../hooks'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
 import { useStaffs } from '../../../hooks/useStaffs'
-import { createDeduction } from '../../../store/apps/deductions/asyncthunk'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
+import { notifyError } from '../../../@core/components/toasts/notifyError'
 
 const defaultValues = {
   userId: Number(''),
@@ -36,18 +30,9 @@ const defaultValues = {
   description: ''
 }
 
-const CreateDeduction = ({ openDialog, closeDialog, amountType }) => {
+const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) => {
   const dispatch = useAppDispatch()
   const [StaffsData] = useStaffs()
-  const [fetch, setFetch] = useState(false)
-
-  // const toggleDeductionCategoryModal = () => setOpenDeductionCategoryModal(true)
-
-  // const closeDeductionCategoryModal = () => {
-  //   setOpenDeductionCategoryModal(!openDeductionCategoryModal)
-  // }
-
-  const updateFetch = () => setFetch(!fetch)
 
   const {
     control,
@@ -60,11 +45,6 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType }) => {
     mode: 'onChange',
     resolver: yupResolver(deductionsSchema)
   })
-
-  // useEffect(() => {
-  //   // dispatch(fetchDeductionCategory())
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [fetch])
 
   const createDeduction = async values => {
     try {
@@ -85,6 +65,7 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType }) => {
         updateFetch()
       }
     } catch (error) {
+      notifyError(`Error Creating ${formatFirstLetter(type)}`)
       console.log(error)
     }
   }
