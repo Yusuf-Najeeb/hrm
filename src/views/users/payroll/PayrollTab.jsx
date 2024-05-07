@@ -17,7 +17,9 @@ import MuiTabList from '@mui/lab/TabList'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import Deduction from './DeductionCategory'
+
+// import Deduction from './DeductionCategory'
+import Config from './Config'
 import DeductionsHome from './DeductionsHome'
 import PayslipsHome from './PayslipHome'
 
@@ -77,7 +79,7 @@ const PayrollTab = ({ tab }) => {
   const tabContentList = {
     payroll: <PayslipsHome />,
     deductions: <DeductionsHome />,
-    deductionCategories: <Deduction />
+    config: <Config />
   }
 
   return (
@@ -107,7 +109,7 @@ const PayrollTab = ({ tab }) => {
                     }
                   />
                   <Tab
-                    value='deductionCategories'
+                    value='config'
                     label={
                       <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                         <Icon fontSize='1.125rem' icon='solar:settings-linear' />

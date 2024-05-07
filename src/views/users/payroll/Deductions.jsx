@@ -24,6 +24,7 @@ import PageHeader from '../components/PageHeader'
 import { deleteDeduction, fetchDeductions } from '../../../store/apps/deductions/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
 import CreateDeduction from './CreateDeduction'
+import PayrollHeader from './PayrollHeaderCard'
 
 const DeductionsTable = () => {
   // Hooks
@@ -99,6 +100,7 @@ const DeductionsTable = () => {
 
   return (
     <main>
+      <PayrollHeader />
       <Box sx={{ display: 'flex', justifyContent: 'end', gap: 6, mb: 4 }}>
         <PageHeader action='Add Benefit' toggle={toggleAddBenefit} />
         <PageHeader action='Add Deduction' toggle={toggleAddDeduction} />
