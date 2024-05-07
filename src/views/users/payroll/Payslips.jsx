@@ -70,9 +70,10 @@ const PayslipTable = () => {
   const [refetch, setFetch] = useState(false)
 
   // const [selectedpayslip, setSelectedpayslip] = useState(null)
+  // const [isPrinting, setIsPrinting] = useState(false)
   const [payslip, setpayslip] = useState(null)
-  const [isPrinting, setIsPrinting] = useState(false)
-  const [printingPayslipId, setPrintingPayslipId] = useState(null)
+
+  // const [printingPayslipId, setPrintingPayslipId] = useState(null)
   const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
   const [deptId, setDept] = useState()
   const [staffId, setStaffId] = useState()
@@ -103,19 +104,19 @@ const PayslipTable = () => {
     setYear(e.target.value)
   }
 
-  const printPayslipItem = (selectedId, period) => {
-    setIsPrinting(true)
-    setPrintingPayslipId(selectedId)
-    printPayslip(selectedId, period)
-      .then(res => {
-        setIsPayslipAvailable(true)
-        setPayslipDownloadLink(res.data.url)
-        setIsPrinting(false)
-      })
-      .catch(() => {
-        setIsPrinting(false)
-      })
-  }
+  // const printPayslipItem = (selectedId, period) => {
+  //   setIsPrinting(true)
+  //   setPrintingPayslipId(selectedId)
+  //   printPayslip(selectedId, period)
+  //     .then(res => {
+  //       setIsPayslipAvailable(true)
+  //       setPayslipDownloadLink(res.data.url)
+  //       setIsPrinting(false)
+  //     })
+  //     .catch(() => {
+  //       setIsPrinting(false)
+  //     })
+  // }
 
   const setActiveStaff = val => {
     setSelectedStaff(val)
