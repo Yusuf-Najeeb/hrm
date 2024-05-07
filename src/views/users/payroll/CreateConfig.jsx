@@ -1,56 +1,58 @@
 import React, { Fragment, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { deductionsSchema } from 'src/@core/FormSchema'
+import { configSchema } from 'src/@core/FormSchema'
 
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
 import { Grid, Box, Button, Typography, CircularProgress } from '@mui/material'
-import { maxWidth } from '@mui/system'
 
 const defaultValues = {
-  userId: Number(''),
-  period: ''
+  name: '',
+  percent: ''
 }
 
 const CreateConfig = () => {
   const {
     control,
     reset,
-    setValue,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(deductionsSchema)
+    resolver: yupResolver(configSchema)
   })
+
+  const onSubmit = val => {
+    console.log(val)
+  }
 
   return (
     <Fragment>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         sx={{
           pb: theme => `${theme.spacing(8)} !important`,
           px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
         }}
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={6}>
           <Grid item xs={12} sm={12}>
             <Controller
-              name='userId'
+              name='name'
               control={control}
               rules={{ required: true }}
               render={({ field: { value, onChange } }) => (
                 <CustomTextField
-                  select
                   fullWidth
                   value={value}
-                  label='Staff'
+                  label='Name'
+                  Placeholder='Item Name'
                   onChange={onChange}
-                  error={Boolean(errors?.userId)}
+                  error={Boolean(errors?.name)}
                   aria-describedby='stepper-linear-account-userId'
-                  {...(errors?.userId && { helperText: errors?.userId.message })}
+                  {...(errors?.name && { helperText: errors?.name.message })}
                 />
               )}
             />
@@ -58,51 +60,26 @@ const CreateConfig = () => {
 
           <Grid item xs={12} sm={12}>
             <Controller
-              name='period'
+              name='percent'
               control={control}
               rules={{ required: true }}
               render={({ field: { value, onChange } }) => (
                 <CustomInput
-                  select
                   fullWidth
                   value={value}
                   onChange={onChange}
-                  autoComplete='off'
-                  label='Date'
-                  error={Boolean(errors?.period)}
-                  {...(errors?.period && { helperText: errors?.period.message })}
+                  label='Percentage %'
+                  Placeholder='Percentage'
+                  error={Boolean(errors?.percent)}
+                  {...(errors?.percent && { helperText: errors?.percent.message })}
                 />
               )}
             />
           </Grid>
-
-          {/* <Grid item xs={12} sm={12}>
-            <Controller
-              name='amount'
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <CustomTextField
-                  fullWidth
-                  value={value}
-                  label='Amount'
-                  onChange={onChange}
-                  error={Boolean(errors?.amount)}
-                  aria-describedby='stepper-linear-account-userId'
-                  {...(errors?.amount && { helperText: errors?.amount.message })}
-                />
-              )}
-            />
-          </Grid> */}
         </Grid>
-        <Box
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Button type='submit' variant='contained' sx={{ mr: 2 }}>
+
+        <Box sx={{ my: 5, display: 'flex', justifyContent: 'center', gap: 5 }}>
+          <Button type='submit' variant='contained'>
             {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Submit'}
           </Button>
           <Button type='button' variant='tonal' color='secondary'>
