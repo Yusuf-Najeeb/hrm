@@ -54,6 +54,7 @@ import {
 import { findDepartment } from '../../../@core/utils/utils'
 import SendPayslip from './SendPayslipToEmail'
 import PayrollHeader from './PayrollHeaderCard'
+import ViewPayroll from './ViewPayroll'
 
 const PayslipTable = () => {
   // Hooks
@@ -64,20 +65,23 @@ const PayslipTable = () => {
 
   // States
 
-  const [payslip, setpayslip] = useState(null)
   const [generateModalOpen, setPayslipOpen] = useState(false)
   const [sendModalOpen, setSendModalOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
-  const [selectedpayslip, setSelectedpayslip] = useState(null)
+
+  // const [selectedpayslip, setSelectedpayslip] = useState(null)
+  const [payslip, setpayslip] = useState(null)
+  const [isPrinting, setIsPrinting] = useState(false)
+  const [printingPayslipId, setPrintingPayslipId] = useState(null)
   const [period, setPeriod] = useState(formatDateToYYYYMM(new Date()))
   const [deptId, setDept] = useState()
   const [staffId, setStaffId] = useState()
   const [year, setYear] = useState()
-  const [isPrinting, setIsPrinting] = useState(false)
   const [isPayslipDownloadLinkAvailable, setIsPayslipAvailable] = useState(false)
   const [payslipDownloadLink, setPayslipDownloadLink] = useState()
-  const [printingPayslipId, setPrintingPayslipId] = useState(null)
   const [openPayroll, setPayroll] = useState(false)
+  const [viewModal, setViewModal] = useState(false)
+  const [selectedStaff, setSelectedStaff] = useState(null)
 
   const defaultId = getFirstId(DepartmentsData)
 
@@ -113,9 +117,14 @@ const PayslipTable = () => {
       })
   }
 
-  const togglePayrollModal = () => {
-    setPayroll(!openPayroll)
+  const setActiveStaff = val => {
+    setSelectedStaff(val)
+    setViewModal(true)
   }
+
+  const toggleViewPayroll = () => setViewModal(!viewModal)
+
+  const togglePayrollModal = () => setPayroll(!openPayroll)
 
   const renderClient = row => {
     const initials = `${formatFirstLetter(row?.user?.firstname)} ${formatFirstLetter(row?.user?.lastname)}`
@@ -322,18 +331,16 @@ const PayslipTable = () => {
                           : formatFirstLetter(payroll?.createdBy) || '--'}
                       </TableCell>
                       <TableCell align='center'>
-                        {printingPayslipId === payroll?.user?.id && isPrinting ? (
+                        <Tooltip title='Print Payslip' placement='top'>
+                          <IconButton size='small' onClick={() => setActiveStaff(payroll?.user?.id)}>
+                            <Icon icon='carbon:view' />
+                          </IconButton>
+                        </Tooltip>
+                        {/* {printingPayslipId === payroll?.user?.id && isPrinting ? (
                           <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} />
                         ) : (
-                          <Tooltip title='Print Payslip' placement='top'>
-                            <IconButton
-                              size='small'
-                              onClick={() => printPayslipItem(payroll?.user?.id, payroll?.period)}
-                            >
-                              <Icon icon='material-symbols:print-outline' />
-                            </IconButton>
-                          </Tooltip>
-                        )}
+
+                        )} */}
                       </TableCell>
                     </TableRow>
                   )
@@ -361,6 +368,8 @@ const PayslipTable = () => {
         rowsPerPageOptions={[5, 10, 20]}
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
+
+      <ViewPayroll openModal={viewModal} closeModal={toggleViewPayroll} staffInfo={selectedStaff} />
 
       {generateModalOpen && (
         <GeneratePayslip
