@@ -53,11 +53,11 @@ const Config = () => {
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
                 <TableRow>
-                  <TableCell>NAME</TableCell>
-                  <TableCell>PERCENTAGE</TableCell>
-                  <TableCell>MODIFIED BY</TableCell>
-                  <TableCell>MODIFIED ON</TableCell>
-                  <TableCell>ACTIONS</TableCell>
+                  <TableCell align='left'>NAME</TableCell>
+                  <TableCell align='left'>PERCENTAGE</TableCell>
+                  <TableCell align='left'>MODIFIED BY</TableCell>
+                  <TableCell align='left'>MODIFIED ON</TableCell>
+                  <TableCell align='center'>ACTIONS</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -83,6 +83,9 @@ const Config = () => {
                             {item?.updatedAt ? formatDate(item?.updatedAt) : formatDate(item?.createdAt)}
                           </TableCell>
                           <TableCell align='center'>
+                            <IconButton size='small' onClick={() => doDelete(deduction)}>
+                              <Icon icon='tabler:edit' />
+                            </IconButton>
                             <IconButton size='small' onClick={() => doDelete(deduction)}>
                               <Icon icon='tabler:trash' />
                             </IconButton>
