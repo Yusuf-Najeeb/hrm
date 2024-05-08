@@ -154,7 +154,6 @@ const DepartmentsTable = () => {
                               : '--'
                           }`}
                         </TableCell>
-
                         <TableCell align='right' sx={{ display: 'flex' }}>
                           <IconButton size='small' onClick={() => setDepartmentToEdit(department)}>
                             <Icon icon='tabler:edit' />

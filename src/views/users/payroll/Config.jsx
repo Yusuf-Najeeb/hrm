@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Paper, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import Icon from 'src/@core/components/icon'
+
+import { useAppDispatch } from '../../../hooks'
+import NoData from '../../../@core/components/emptyData/NoData'
+import CustomSpinner from '../../../@core/components/custom-spinner'
+import { formatFirstLetter, formatDate } from '../../../@core/utils/format'
 import PayrollHeader from './PayrollHeaderCard'
 import CreateConfig from './CreateConfig'
+import { fetchSalaryItems } from '../../../store/apps/salaryItems/asyncthunk'
+import { useSalaryItems } from '../../../hooks/useSalaryItems'
 
 const Config = () => {
-  const [open, setOpen] = useState(true)
+  const [fetch, setRefetch] = useState(false)
 
-  const close = () => setOpen(!open)
+  const dispatch = useAppDispatch()
+  const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
+  console.log(SalaryItemsData)
+  const updateFetch = () => setRefetch(!fetch)
+  useEffect(() => {
+    dispatch(fetchSalaryItems())
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetch])
 
   return (
     <main>
@@ -23,7 +40,7 @@ const Config = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>
-                    <CreateConfig />
+                    <CreateConfig refetch={updateFetch} />
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -36,9 +53,6 @@ const Config = () => {
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
                 <TableRow>
-                  {/* <TableCell align='left' sx={{ maxWidth: 100 }}>
-                ADD SALARY ITEM
-              </TableCell> */}
                   <TableCell>NAME</TableCell>
                   <TableCell>PERCENTAGE</TableCell>
                   <TableCell>MODIFIED BY</TableCell>
@@ -47,9 +61,44 @@ const Config = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell></TableCell>
-                </TableRow>
+                {loadingSalaryItems ? (
+                  <TableRow className='text-center'>
+                    <TableCell colSpan={6}>
+                      <CustomSpinner />
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <Fragment>
+                    {SalaryItemsData?.map((item, index) => {
+                      return (
+                        <TableRow key={index}>
+                          <TableCell>{formatFirstLetter(item?.name)}</TableCell>
+                          <TableCell>{`${item?.percentage}%`}</TableCell>
+                          <TableCell>
+                            {item?.lastChangedBy
+                              ? formatFirstLetter(item?.lastChangedBy)
+                              : formatFirstLetter(item?.createdBy)}
+                          </TableCell>
+                          <TableCell>
+                            {item?.updatedAt ? formatDate(item?.updatedAt) : formatDate(item?.createdAt)}
+                          </TableCell>
+                          <TableCell align='center'>
+                            <IconButton size='small' onClick={() => doDelete(deduction)}>
+                              <Icon icon='tabler:trash' />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+                    {SalaryItemsData?.length === 0 && (
+                      <tr className='text-center'>
+                        <td colSpan={6}>
+                          <NoData />
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

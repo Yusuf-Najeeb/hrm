@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { configSchema } from 'src/@core/FormSchema'
+import { createSalaryItem } from '../../../store/apps/salaryItems/asyncthunk'
 
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -12,7 +13,7 @@ const defaultValues = {
   percent: ''
 }
 
-const CreateConfig = () => {
+const CreateConfig = ({ refetch }) => {
   const {
     control,
     reset,
@@ -26,6 +27,12 @@ const CreateConfig = () => {
 
   const onSubmit = val => {
     console.log(val)
+    createSalaryItem(val).then(res => {
+      if (res) {
+        reset()
+        refetch()
+      }
+    })
   }
 
   return (
