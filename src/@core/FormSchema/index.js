@@ -111,7 +111,7 @@ export const requirePeriod = yup.object().shape({
   period: yup.string().required('Period is required')
 })
 
-export const configSchema = yup.object().shape({
+export const salaryItemSchema = yup.object().shape({
   name: yup.string().required('name is required'),
-  percent: yup.string().required('percentage is required')
+  percentage: yup.string().required('percentage is required')
 })

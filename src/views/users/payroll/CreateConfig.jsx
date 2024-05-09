@@ -1,16 +1,19 @@
 import React, { Fragment, useState } from 'react'
+import axios from 'axios'
+
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { configSchema } from 'src/@core/FormSchema'
-import { createSalaryItem } from '../../../store/apps/salaryItems/asyncthunk'
+import { salaryItemSchema } from 'src/@core/FormSchema'
+import { CustomInput } from '../duty-roster/UploadRosterDialog'
+import { notifyError } from '../../../@core/components/toasts/notifyError'
+import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 
 import CustomTextField from 'src/@core/components/mui/text-field'
-import { CustomInput } from '../duty-roster/UploadRosterDialog'
-import { Grid, Box, Button, Typography, CircularProgress } from '@mui/material'
+import { Grid, Box, Button, CircularProgress } from '@mui/material'
 
 const defaultValues = {
   name: '',
-  percent: ''
+  percentage: ''
 }
 
 const CreateConfig = ({ refetch }) => {
@@ -22,23 +25,31 @@ const CreateConfig = ({ refetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(configSchema)
+    resolver: yupResolver(salaryItemSchema)
   })
 
-  const onSubmit = val => {
-    console.log(val)
-    createSalaryItem(val).then(res => {
-      if (res) {
+  const createItem = async val => {
+    try {
+      const createUrl = `/salary-items`
+
+      const response = await axios.post(createUrl, val, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (response.data.success) {
+        notifySuccess(`Salary item Created Successfully`)
         reset()
         refetch()
       }
-    })
+    } catch (error) {
+      notifyError(`Error Creating salary item`)
+      console.log(error)
+    }
   }
 
   return (
     <Fragment>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(createItem)}
         sx={{
           pb: theme => `${theme.spacing(8)} !important`,
           px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
@@ -67,7 +78,7 @@ const CreateConfig = ({ refetch }) => {
 
           <Grid item xs={12} sm={12}>
             <Controller
-              name='percent'
+              name='percentage'
               control={control}
               rules={{ required: true }}
               render={({ field: { value, onChange } }) => (
@@ -75,10 +86,10 @@ const CreateConfig = ({ refetch }) => {
                   fullWidth
                   value={value}
                   onChange={onChange}
-                  label='Percentage %'
+                  label='Percentage'
                   Placeholder='Percentage'
-                  error={Boolean(errors?.percent)}
-                  {...(errors?.percent && { helperText: errors?.percent.message })}
+                  error={Boolean(errors?.percentage)}
+                  {...(errors?.percentage && { helperText: errors?.percentage.message })}
                 />
               )}
             />
@@ -89,7 +100,7 @@ const CreateConfig = ({ refetch }) => {
           <Button type='submit' variant='contained'>
             {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Submit'}
           </Button>
-          <Button type='button' variant='tonal' color='secondary'>
+          <Button type='button' variant='tonal' color='secondary' onClick={() => reset()}>
             Cancel
           </Button>
         </Box>

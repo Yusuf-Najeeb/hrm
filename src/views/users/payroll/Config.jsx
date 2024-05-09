@@ -1,27 +1,50 @@
 import React, { Fragment, useEffect, useState } from 'react'
+
+// * MUI Imports
 import { Paper, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import Icon from 'src/@core/components/icon'
 
+// ** Utilities and Hooks Imports
+import Icon from 'src/@core/components/icon'
 import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
+import { fetchSalaryItems, deleteSalaryItem } from '../../../store/apps/salaryItems/asyncthunk'
+import { useSalaryItems } from '../../../hooks/useSalaryItems'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter, formatDate } from '../../../@core/utils/format'
 import PayrollHeader from './PayrollHeaderCard'
 import CreateConfig from './CreateConfig'
-import { fetchSalaryItems } from '../../../store/apps/salaryItems/asyncthunk'
-import { useSalaryItems } from '../../../hooks/useSalaryItems'
+import DeleteDialog from '../../../@core/components/delete-dialog'
 
 const Config = () => {
   const [fetch, setRefetch] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(null)
 
-  const dispatch = useAppDispatch()
+  // * Hooks
   const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
-  console.log(SalaryItemsData)
+  console.log(SalaryItemsData, 'SalaryItemsData')
+  const dispatch = useAppDispatch()
   const updateFetch = () => setRefetch(!fetch)
+
+  const doDelete = value => {
+    setDeleteModal(true)
+    setSelectedItem(value?.id)
+  }
+
+  const doCancelDelete = () => {
+    setDeleteModal(false)
+    setSelectedItem(null)
+  }
+
+  const onDeleteClick = () => {
+    dispatch(deleteSalaryItem(selectedItem))
+    updateFetch()
+    doCancelDelete()
+  }
+
   useEffect(() => {
     dispatch(fetchSalaryItems())
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetch])
 
@@ -34,7 +57,7 @@ const Config = () => {
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
                 <TableRow>
-                  <TableCell>Add Salary Item</TableCell>
+                  <TableCell align='center'>Add Salary Item</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -83,10 +106,10 @@ const Config = () => {
                             {item?.updatedAt ? formatDate(item?.updatedAt) : formatDate(item?.createdAt)}
                           </TableCell>
                           <TableCell align='center'>
-                            <IconButton size='small' onClick={() => doDelete(deduction)}>
+                            <IconButton size='small' onClick={() => editItem(item)}>
                               <Icon icon='tabler:edit' />
                             </IconButton>
-                            <IconButton size='small' onClick={() => doDelete(deduction)}>
+                            <IconButton size='small' onClick={() => doDelete(item)}>
                               <Icon icon='tabler:trash' />
                             </IconButton>
                           </TableCell>
@@ -107,6 +130,8 @@ const Config = () => {
           </TableContainer>
         </Grid>
       </Grid>
+
+      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
     </main>
   )
 }

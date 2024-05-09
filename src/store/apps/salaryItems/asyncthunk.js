@@ -50,3 +50,22 @@ export const deleteSalaryItem = createAsyncThunk('salaryItem/deleteSalaryItem', 
     }
   }
 })
+
+export const updateSalaryItem = createAsyncThunk('salaryItem/updateSalaryItem', async id => {
+  try {
+    const response = await axios.patch(`salary-items/${id}`, vals)
+    if (response.data.success) {
+      notifySuccess('Payslip Item Updated Successfully')
+    }
+
+    return {
+      status: true
+    }
+  } catch (error) {
+    console.log(error, 'error')
+
+    return {
+      status: false
+    }
+  }
+})

@@ -26,7 +26,7 @@ export const departmentsSlice = createSlice({
       state.loadingDepartments = false
       state.DepartmentsData = action?.payload?.data?.data
       state.DepartmentsPaging = action?.payload?.data?.paging
-      state.aggregations = action?.payload.data.aggregations
+      state.aggregations = action?.payload?.data?.aggregations
     })
     builder.addCase(fetchDepartments.rejected, state => {
       state.loadingDepartments = false
