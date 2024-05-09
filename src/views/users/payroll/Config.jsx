@@ -22,9 +22,8 @@ const Config = () => {
   const [selectedItem, setSelectedItem] = useState(null)
 
   // * Hooks
-  const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
-  console.log(SalaryItemsData, 'SalaryItemsData')
   const dispatch = useAppDispatch()
+  const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
   const updateFetch = () => setRefetch(!fetch)
 
   const doDelete = value => {
@@ -57,7 +56,7 @@ const Config = () => {
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
                 <TableRow>
-                  <TableCell align='center'>Add Salary Item</TableCell>
+                  <TableCell align='center'>Create Salary Item</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

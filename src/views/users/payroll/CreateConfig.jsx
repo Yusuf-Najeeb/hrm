@@ -100,7 +100,7 @@ const CreateConfig = ({ refetch }) => {
           <Button type='submit' variant='contained'>
             {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Submit'}
           </Button>
-          <Button type='button' variant='tonal' color='secondary' onClick={() => reset()}>
+          <Button type='button' variant='tonal' color='secondary' onClick={reset}>
             Cancel
           </Button>
         </Box>
