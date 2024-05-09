@@ -13,18 +13,28 @@ import { useSalaryItems } from '../../../hooks/useSalaryItems'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter, formatDate } from '../../../@core/utils/format'
 import PayrollHeader from './PayrollHeaderCard'
-import CreateConfig from './CreateConfig'
+import CreateItem from './CreateSalaryItem'
 import DeleteDialog from '../../../@core/components/delete-dialog'
+import EditSalaryItem from './EditSalaryItem'
 
 const Config = () => {
   const [fetch, setRefetch] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [openEditModal, setOpenEditModal] = useState(false)
 
   // * Hooks
   const dispatch = useAppDispatch()
   const [SalaryItemsData, loadingSalaryItems] = useSalaryItems()
+
   const updateFetch = () => setRefetch(!fetch)
+
+  const toggleEditModal = () => setOpenEditModal(!openEditModal)
+
+  const handleEdit = value => {
+    setSelectedItem(value)
+    setOpenEditModal(true)
+  }
 
   const doDelete = value => {
     setDeleteModal(true)
@@ -62,7 +72,7 @@ const Config = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>
-                    <CreateConfig refetch={updateFetch} />
+                    <CreateItem refetch={updateFetch} />
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -105,7 +115,7 @@ const Config = () => {
                             {item?.updatedAt ? formatDate(item?.updatedAt) : formatDate(item?.createdAt)}
                           </TableCell>
                           <TableCell align='center'>
-                            <IconButton size='small' onClick={() => editItem(item)}>
+                            <IconButton size='small' onClick={() => handleEdit(item)}>
                               <Icon icon='tabler:edit' />
                             </IconButton>
                             <IconButton size='small' onClick={() => doDelete(item)}>
@@ -131,6 +141,13 @@ const Config = () => {
       </Grid>
 
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={onDeleteClick} />
+
+      <EditSalaryItem
+        open={openEditModal}
+        closeModal={toggleEditModal}
+        selectedSalaryItem={selectedItem}
+        refetch={updateFetch}
+      />
     </main>
   )
 }
