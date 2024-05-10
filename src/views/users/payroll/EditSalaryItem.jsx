@@ -90,7 +90,7 @@ const EditSalaryItem = ({ open, closeModal, selectedSalaryItem, refetch }) => {
       open={open}
       maxWidth='md'
       scroll='body'
-      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 400 } }}
+      sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 300 } }}
     >
       <DialogContent
         sx={{
