@@ -267,17 +267,22 @@ const StaffsTable = () => {
                       <TableCell align='left'>{staff?.department?.name.toUpperCase()}</TableCell>
                       <TableCell align='left'>{staff?.phone ? staff?.phone : 'N/A'}</TableCell>
                       <TableCell align='center'>
-                        <IconButton component={IconButtonStyled}>
-                          <Icon
-                            icon={
-                              staff?.role?.name == 'Admin' || staff?.role?.name == 'admin'
-                                ? 'grommet-icons:user-admin'
-                                : staff?.role == 'staff'
-                                ? 'wpf:administrator'
-                                : 'ph:user'
-                            }
-                          />
-                        </IconButton>
+                        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', alignItems: 'center' }}>
+                          <IconButton component={IconButtonStyled}>
+                            <Icon
+                              icon={
+                                staff?.role?.name == 'Admin' || staff?.role?.name == 'admin'
+                                  ? 'grommet-icons:user-admin'
+                                  : staff?.role == 'staff'
+                                  ? 'wpf:administrator'
+                                  : 'ph:user'
+                              }
+                            />
+                          </IconButton>
+                          <Typography sx={{ fontSize: '14px', color: 'text.secondary' }}>
+                            {staff?.role?.name == 'Admin' || staff?.role?.name == 'admin' ? 'Admin' : 'Staff'}
+                          </Typography>
+                        </Box>
                       </TableCell>
                       <TableCell align='center'>
                         {staff?.deletedAt === null ? (

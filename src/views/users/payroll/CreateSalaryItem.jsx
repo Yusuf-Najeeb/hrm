@@ -13,7 +13,7 @@ import { Grid, Box, Button, CircularProgress } from '@mui/material'
 
 const defaultValues = {
   name: '',
-  percentage: ''
+  percentage: 0
 }
 
 const CreateConfig = ({ refetch }) => {
@@ -29,21 +29,23 @@ const CreateConfig = ({ refetch }) => {
   })
 
   const createItem = async val => {
-    try {
-      const createUrl = `/salary-items`
+    console.log(val)
 
-      const response = await axios.post(createUrl, val, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      if (response.data.success) {
-        notifySuccess(`Salary item Created Successfully`)
-        reset()
-        refetch()
-      }
-    } catch (error) {
-      notifyError(`Error Creating salary item`)
-      console.log(error)
-    }
+    // try {
+    //   const createUrl = `/salary-items`
+
+    //   const response = await axios.post(createUrl, val, {
+    //     headers: { 'Content-Type': 'application/json' }
+    //   })
+    //   if (response.data.success) {
+    //     notifySuccess(`Salary item Created Successfully`)
+    //     reset()
+    //     refetch()
+    //   }
+    // } catch (error) {
+    //   notifyError(`Error Creating salary item`)
+    //   console.log(error)
+    // }
   }
 
   return (
