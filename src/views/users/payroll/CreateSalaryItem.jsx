@@ -29,23 +29,21 @@ const CreateConfig = ({ refetch }) => {
   })
 
   const createItem = async val => {
-    console.log(val)
+    try {
+      const createUrl = `/salary-items`
 
-    // try {
-    //   const createUrl = `/salary-items`
-
-    //   const response = await axios.post(createUrl, val, {
-    //     headers: { 'Content-Type': 'application/json' }
-    //   })
-    //   if (response.data.success) {
-    //     notifySuccess(`Salary item Created Successfully`)
-    //     reset()
-    //     refetch()
-    //   }
-    // } catch (error) {
-    //   notifyError(`Error Creating salary item`)
-    //   console.log(error)
-    // }
+      const response = await axios.post(createUrl, val, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (response.data.success) {
+        notifySuccess(`Salary item Created Successfully`)
+        reset()
+        refetch()
+      }
+    } catch (error) {
+      notifyError(`Error Creating salary item`)
+      console.log(error)
+    }
   }
 
   return (
