@@ -267,15 +267,17 @@ const StaffsTable = () => {
                       <TableCell align='left'>{staff?.department?.name.toUpperCase()}</TableCell>
                       <TableCell align='left'>{staff?.phone ? staff?.phone : 'N/A'}</TableCell>
                       <TableCell align='center'>
-                        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', alignItems: 'center' }}>
-                          <IconButton component={IconButtonStyled}>
+                        <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                          <IconButton component={IconButtonStyled} sx={{ pb: 3 }}>
                             <Icon
                               icon={
                                 staff?.role?.name == 'Admin' || staff?.role?.name == 'admin'
-                                  ? 'grommet-icons:user-admin'
-                                  : staff?.role == 'staff'
-                                  ? 'wpf:administrator'
-                                  : 'ph:user'
+                                  ? 'tabler:device-laptop'
+                                  : staff?.role?.name == 'staff'
+                                  ? 'tabler:circle-check'
+                                  : staff?.role?.name == 'accountant'
+                                  ? 'tabler:chart-pie-2'
+                                  : 'tabler:circle-check'
                               }
                             />
                           </IconButton>

@@ -27,7 +27,8 @@ import EditRole from './EditRole'
 import { useRoles } from '../../../hooks/useRoles'
 import PageHeader from '../components/PageHeader'
 import CreateRole from './CreateRole'
-import { Box, Typography } from '@mui/material'
+import RoleCard from './RoleCard'
+import { Box, Typography, Card, CardHeader, CardContent } from '@mui/material'
 
 const userRoleObj = {
   'super-admin': { icon: 'grommet-icons:user-admin', color: 'info' },
@@ -56,7 +57,6 @@ const RolesTable = () => {
   const [openEditDrawer, setEditDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRole, setSelectedRole] = useState(null)
-
   const [roleToView, setRoleToView] = useState(null)
 
   const setActiveRole = value => {
@@ -108,8 +108,16 @@ const RolesTable = () => {
 
   return (
     <div>
-      <PageHeader action='Create Role' toggle={toggleRoleDrawer} />
-      <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
+      <RoleCard />
+
+      {/* <PageHeader action='Create Role' toggle={toggleRoleDrawer} /> */}
+      <Card sx={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
+        <CardHeader title='All Roles' />
+        <CardContent>
+          <PageHeader action='Create Role' toggle={toggleRoleDrawer} />
+        </CardContent>
+      </Card>
+      <TableContainer component={Paper} sx={{ maxHeight: 840, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow>
