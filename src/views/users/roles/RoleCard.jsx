@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
@@ -8,6 +8,8 @@ import { useDepartments } from '../../../hooks/useDepartments'
 import { useRoles } from '../../../hooks/useRoles'
 import { getInitials } from 'src/@core/utils/get-initials'
 import Icon from 'src/@core/components/icon'
+import PageHeader from '../components/PageHeader'
+import CreateRole from './CreateRole'
 
 // MUI Imports
 import { Grid, Card, Box, Typography, Stack } from '@mui/material'
@@ -21,7 +23,11 @@ const RoleCard = ({ department }) => {
   const [DepartmentsData] = useDepartments()
   const [StaffsData] = useStaffs()
   const [RolesData] = useRoles()
-  console.log(StaffsData)
+  const [addRoleOpen, setaddRoleOpen] = useState(false)
+  const [refetch, setFetch] = useState(false)
+
+  const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
+  const updateFetch = () => setFetch(!refetch)
 
   const renderClient = row => {
     const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
@@ -45,7 +51,7 @@ const RoleCard = ({ department }) => {
   useEffect(() => {
     dispatch(fetchRoles({ page: 1, limit: 10 }))
     dispatch(fetchStaffs())
-  }, [dispatch])
+  }, [dispatch, refetch])
 
   return (
     <Grid container sx={{ mb: 5 }}>
@@ -70,7 +76,7 @@ const RoleCard = ({ department }) => {
               </Box>
               <Stack direction='row' sx={{ justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
                 <Box>
-                  <Typography sx={{ fontSize: '1.25rem', fontWeight: 500 }}>{formatFirstLetter(role?.name)}</Typography>
+                  <Typography sx={{ fontSize: '1.3rem', fontWeight: 500 }}>{formatFirstLetter(role?.name)}</Typography>
                   <Typography>Edit Role</Typography>
                 </Box>
                 <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
@@ -81,6 +87,20 @@ const RoleCard = ({ department }) => {
           </Grid>
         )
       })}
+      <Grid item xs={6} sm={4}>
+        <Card
+          sx={{
+            m: theme => theme.spacing(2),
+            p: theme => theme.spacing(6)
+          }}
+        >
+          <Stack sx={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+            <PageHeader action='Add New Role' toggle={toggleRoleDrawer} />
+            <Typography sx={{ mt: 4 }}>Add a role if it doesn't exist</Typography>
+          </Stack>
+        </Card>
+      </Grid>
+      {addRoleOpen && <CreateRole open={addRoleOpen} closeModal={toggleRoleDrawer} refetchRoles={updateFetch} />}
     </Grid>
   )
 }
