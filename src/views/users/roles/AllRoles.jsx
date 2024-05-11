@@ -1,5 +1,7 @@
+// ** React Imports
 import React, { useEffect, useState, Fragment } from 'react'
 
+// ** MUI Imports
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
@@ -8,27 +10,29 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
-
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-
 import { styled } from '@mui/material/styles'
-
-import Icon from 'src/@core/components/icon'
-
 import TablePagination from '@mui/material/TablePagination'
 
+// ** Icon Import
+import Icon from 'src/@core/components/icon'
+
+// ** Components, Hooks & Utils Imports
 import { useAppDispatch } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
-import { deleteRole, fetchRoles } from '../../../store/apps/roles/asyncthunk'
+import CustomTextField from 'src/@core/components/mui/text-field'
 import CustomSpinner from '../../../@core/components/custom-spinner'
+import { deleteRole, fetchRoles } from '../../../store/apps/roles/asyncthunk'
+import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { useRoles } from '../../../hooks/useRoles'
 import { formatDate, formatFirstLetter } from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditRole from './EditRole'
-import { useRoles } from '../../../hooks/useRoles'
-import PageHeader from '../components/PageHeader'
-import CreateRole from './CreateRole'
 import RoleCard from './RoleCard'
-import { Box, Typography, Card, CardHeader, CardContent } from '@mui/material'
 
 const userRoleObj = {
   'super-admin': { icon: 'grommet-icons:user-admin', color: 'info' },
@@ -53,11 +57,11 @@ const RolesTable = () => {
   const [role, setRole] = useState(null)
   const [addRoleOpen, setaddRoleOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
-
   const [openEditDrawer, setEditDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRole, setSelectedRole] = useState(null)
   const [roleToView, setRoleToView] = useState(null)
+  const [value, setValue] = useState('')
 
   const setActiveRole = value => {
     setRole(value)
@@ -97,32 +101,35 @@ const RolesTable = () => {
     setPage(0)
   }
 
-  const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
   const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
     dispatch(fetchRoles({ page: page + 1, limit: 10 }))
+    dispatch(fetchStaffs({ page: page + 1, q: value }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch])
+  }, [page, refetch, value])
 
   return (
     <div>
       <RoleCard />
-
       <Card sx={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
-        <CardHeader title='All Roles' />
-        <CardContent>{/* <PageHeader action='Create Role' toggle={toggleRoleDrawer} /> */}</CardContent>
+        <CardContent sx={{ py: theme => theme.spacing(4), display: 'flex', justifyContent: 'end' }}>
+          <CustomTextField value={value} placeholder='Search User' onChange={e => handleFilter(e.target.value)} />
+        </CardContent>
       </Card>
       <TableContainer component={Paper} sx={{ maxHeight: 840, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                S/N
+                USER
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                ROLE TITLE
+                ROLE
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
+                STATUS
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 DATE CREATED
@@ -158,9 +165,10 @@ const RolesTable = () => {
                         </Typography>
                       </Box>
                     </TableCell>
+                    <TableCell>{role?.Status || '--'}</TableCell>
                     <TableCell align='left'>{formatDate(role?.createdAt)}</TableCell>
 
-                    <TableCell align='left' sx={{ display: 'flex' }}>
+                    <TableCell align='left'>
                       <IconButton size='small' onClick={() => setRoleToEdit(role)}>
                         <Icon icon='tabler:edit' />
                       </IconButton>
@@ -204,8 +212,6 @@ const RolesTable = () => {
           selectedRole={roleToView}
         />
       )}
-
-      {addRoleOpen && <CreateRole open={addRoleOpen} closeModal={toggleRoleDrawer} refetchRoles={updateFetch} />}
     </div>
   )
 }
