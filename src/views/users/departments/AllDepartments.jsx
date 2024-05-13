@@ -39,8 +39,6 @@ const DepartmentsTable = () => {
   const [selectedDepartment, setSelectedDepartment] = useState(null)
   const [DepartmentToView, setDepartmentToView] = useState(null)
 
-  console.log(DepartmentsData)
-
   // const setActiveDepartment = value => {
   //   setDepartment(value)
   //   setOpenCanvas(true)

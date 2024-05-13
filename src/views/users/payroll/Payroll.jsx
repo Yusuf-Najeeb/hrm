@@ -113,8 +113,8 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
     if (payload) {
       makePayment(payload).then(res => {
         if (!res.ok) {
-          updateFetch()
           closeModal()
+          refetchPayroll()
           notifySuccess('Payment Successful')
         } else {
           notifyError('Payment Unsuccessful')
@@ -130,7 +130,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
     dispatch(fetchPayroll({ status: status, period: period }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, status, year, month])
+  }, [dispatch, status, year, month, refetch])
 
   return (
     <Dialog
@@ -149,7 +149,12 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
           px: theme => [`${theme.spacing(1)} !important`, `${theme.spacing(1)} !important`]
         }}
       >
-        <CustomCloseButton onClick={closeModal}>
+        <CustomCloseButton
+          onClick={() => {
+            closeModal()
+            refetchPayroll()
+          }}
+        >
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
 
