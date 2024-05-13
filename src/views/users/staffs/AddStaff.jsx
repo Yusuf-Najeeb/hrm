@@ -134,10 +134,10 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
   const [refetch, setFetch] = useState(false)
 
-  const [state, setState] = useState({
-    password: '',
-    showPassword: false
-  })
+  // const [state, setState] = useState({
+  //   password: '',
+  //   showPassword: false
+  // })
 
   // ** Hooks & Var
   const { settings } = useSettings()
@@ -235,7 +235,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
       roleId: ''
     })
     personalReset({
-      username: '',
+      // username: '',
       email: '',
       firstname: '',
       lastname: '',
@@ -316,9 +316,9 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   }
 
   // Handle Password
-  const handleClickShowPassword = () => {
-    setState({ ...state, showPassword: !state.showPassword })
-  }
+  // const handleClickShowPassword = () => {
+  //   setState({ ...state, showPassword: !state.showPassword })
+  // }
 
   const updateFetch = () => setFetch(!refetch)
 
@@ -444,7 +444,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <FormController
                     name='username'
                     control={personalControl}
@@ -453,8 +453,8 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                     error={personalErrors['username']}
                     errorMessage={personalErrors?.username?.message}
                   />
-                </Grid>
-
+                </Grid> */}
+                {/*
                 <Grid item xs={12} sm={4}>
                   <Controller
                     name='password'
@@ -487,9 +487,9 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                       />
                     )}
                   />
-                </Grid>
+                </Grid> */}
 
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                   <FormController
                     name='address'
                     control={personalControl}
@@ -690,7 +690,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   name='grossSalary'
                   control={workInfoControl}
                   requireBoolean={true}
-                  label='Gross Salary'
+                  label='Gross Monthly Salary'
                   error={workInfoErrors['grossSalary']}
                   errorMessage={workInfoErrors?.grossSalary?.message}
                 />
@@ -952,8 +952,9 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                     if (index === activeStep) {
                       labelProps.error = false
                       if (
+                        // personalErrors.username ||
+
                         personalErrors.email ||
-                        personalErrors.username ||
                         personalErrors.lastname ||
                         personalErrors.firstname ||
                         personalErrors.allergies ||

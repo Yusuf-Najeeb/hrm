@@ -10,9 +10,7 @@ export const defaultWorkInfoValues = {
 }
 
 export const defaultPersonalValues = {
-  username: '',
   email: '',
-  password: '',
   lastname: '',
   firstname: '',
   phone: '',
@@ -23,6 +21,8 @@ export const defaultPersonalValues = {
   address: ''
 
   // additionalInfo: ''
+  // username: '',
+  // password: '',
 }
 
 export const defaultNextOfKinValues = {

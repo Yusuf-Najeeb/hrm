@@ -17,11 +17,9 @@ export const SalaryItemSchema = yup.object().shape({
 })
 
 export const personalInfoSchema = yup.object().shape({
-  username: yup.string().min(3, obj => showErrors('Username', obj.value.length, obj.min)),
   email: yup.string().email().required(),
   lastname: yup.string().required(),
   firstname: yup.string().required(),
-  password: yup.string().min(5).required(),
   phone: yup
     .string()
     .typeError('Phone Number  is required')
@@ -33,6 +31,8 @@ export const personalInfoSchema = yup.object().shape({
   address: yup.string().required()
 
   // additionalInfo: yup.string()
+  // username: yup.string().min(3, obj => showErrors('Username', obj.value.length, obj.min)),
+  // password: yup.string().min(5).required(),
 })
 
 export const workInfoSchema = yup.object().shape({
