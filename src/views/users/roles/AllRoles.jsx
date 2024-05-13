@@ -35,6 +35,7 @@ import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditRole from './EditRole'
 import RoleCard from './RoleCard'
 import { useStaffs } from '../../../hooks/useStaffs'
+import ViewStaff from '../staffs/ViewStaff'
 
 const userRoleObj = {
   'super-admin': { icon: 'grommet-icons:user-admin', color: 'info' },
@@ -52,18 +53,18 @@ const TypographyStyled = styled(Typography)(({ theme }) => ({
 
 const RolesTable = () => {
   const dispatch = useAppDispatch()
-
   const [RolesDate] = useRoles()
   const [StaffsData, loading, paging] = useStaffs()
+
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [role, setRole] = useState(null)
   const [addRoleOpen, setaddRoleOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
-  const [openEditDrawer, setEditDrawer] = useState(false)
+  const [openViewDrawer, setViewDrawer] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRole, setSelectedRole] = useState(null)
-  const [roleToView, setRoleToView] = useState(null)
+  const [staff, setStaff] = useState(null)
   const [search, setSearch] = useState('')
 
   const setActiveRole = value => {
@@ -72,15 +73,15 @@ const RolesTable = () => {
   }
 
   // are you sure ou want to delete funtion
-  const doDelete = value => {
-    setDeleteModal(true)
-    setSelectedRole(value?.id)
-  }
+  // const doDelete = value => {
+  //   setDeleteModal(true)
+  //   setSelectedRole(value?.id)
+  // }
 
-  const doCancelDelete = () => {
-    setDeleteModal(false)
-    setSelectedRole(null)
-  }
+  // const doCancelDelete = () => {
+  //   setDeleteModal(false)
+  //   setSelectedRole(null)
+  // }
 
   const updateFetch = () => setFetch(!refetch)
 
@@ -88,15 +89,15 @@ const RolesTable = () => {
     setSearch(val)
   }
 
-  const ondeleteClick = () => {
-    dispatch(deleteRole(selectedRole))
-    updateFetch()
-    doCancelDelete()
-  }
+  // const ondeleteClick = () => {
+  //   dispatch(deleteRole(selectedRole))
+  //   updateFetch()
+  //   doCancelDelete()
+  // }
 
-  const setRoleToEdit = prod => {
-    setEditDrawer(true)
-    setRoleToView(prod)
+  const handleViewStaff = val => {
+    setViewDrawer(true)
+    setStaff(val)
   }
 
   const handleChangePage = newPage => {
@@ -108,7 +109,7 @@ const RolesTable = () => {
     setPage(0)
   }
 
-  const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
+  const toggleViewDrawer = () => setViewDrawer(!openViewDrawer)
 
   useEffect(() => {
     dispatch(fetchRoles({ page: page + 1, limit: 10 }))
@@ -195,12 +196,12 @@ const RolesTable = () => {
                     </TableCell>
                     <TableCell align='left'>{formatDate(staff?.createdAt)}</TableCell>
                     <TableCell align='left'>
-                      <IconButton size='small' onClick={() => setRoleToEdit(staff)}>
-                        <Icon icon='tabler:edit' />
+                      <IconButton size='small' onClick={() => handleViewStaff(staff)}>
+                        <Icon icon='tabler:eye' />
                       </IconButton>
-                      <IconButton size='small' onClick={() => doDelete(staff)}>
+                      {/* <IconButton size='small' onClick={() => doDelete(staff)}>
                         <Icon icon='tabler:trash' />
-                      </IconButton>
+                      </IconButton> */}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -228,16 +229,18 @@ const RolesTable = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+      <ViewStaff open={openViewDrawer} closeCanvas={toggleViewDrawer} staffUser={staff} />
 
-      {openEditDrawer && (
+      {/* <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} /> */}
+
+      {/* {openEditDrawer && (
         <EditRole
           open={openEditDrawer}
           closeModal={toggleEditDrawer}
           refetchRoles={updateFetch}
           selectedRole={roleToView}
         />
-      )}
+      )} */}
     </div>
   )
 }

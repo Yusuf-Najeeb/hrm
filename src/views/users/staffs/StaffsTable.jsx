@@ -309,32 +309,35 @@ const StaffsTable = () => {
                       </TableCell>
                       <TableCell align='left'>{formatCurrency(staff?.grossSalary, true)}</TableCell>
 
-                      <TableCell align='left' sx={{ display: 'flex', minHeight: 72 }}>
+                      <TableCell align='left' sx={{ display: 'flex', gap: 2, minHeight: 72 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Tooltip title='Edit Staff'>
                             <IconButton size='small' onClick={() => toggleEditModal(staff)}>
                               <Icon icon='tabler:edit' />
                             </IconButton>
                           </Tooltip>
+
                           <Tooltip title='View Staff'>
                             <IconButton
                               size='small'
-                              sx={{ color: 'text.secondary' }}
+                              sx={{ color: 'text.secondary', mr: 2 }}
                               onClick={() => setActiveStaff(staff)}
                             >
                               <Icon icon='tabler:eye' />
                             </IconButton>
                           </Tooltip>
-                          <FormGroup row sx={{ transform: 'translateX(-44%)' }}>
-                            <FormControlLabel
-                              value='start'
-                              label=''
-                              labelPlacement='start'
-                              control={
-                                <Switch checked={staff.deletedAt === null} onChange={() => handleToggle(staff)} />
-                              }
-                            />
-                          </FormGroup>
+                          <Tooltip title='Deactivate Staff' sx={{ ml: 4 }}>
+                            <FormGroup row sx={{ transform: 'translateX(-44%)' }}>
+                              <FormControlLabel
+                                value='start'
+                                label=''
+                                labelPlacement='start'
+                                control={
+                                  <Switch checked={staff.deletedAt === null} onChange={() => handleToggle(staff)} />
+                                }
+                              />
+                            </FormGroup>
+                          </Tooltip>
                         </Box>
                       </TableCell>
                     </TableRow>
