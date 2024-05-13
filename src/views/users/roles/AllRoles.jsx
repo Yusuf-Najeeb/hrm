@@ -153,7 +153,7 @@ const RolesTable = () => {
                 DATE CREATED
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                ACTIONS
+                ACTION
               </TableCell>
             </TableRow>
           </TableHead>
