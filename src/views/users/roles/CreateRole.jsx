@@ -66,8 +66,8 @@ const CreateRole = ({ open, closeModal, refetchRoles }) => {
       open={open}
       maxWidth='md'
       scroll='body'
-
-      //   TransitionComponent={Transition}
+      // eslint-disable-next-line
+      // TransitionComponent={Transition}
       sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
     >
       <DialogContent

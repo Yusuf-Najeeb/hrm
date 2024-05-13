@@ -25,7 +25,7 @@ import Tooltip from '@mui/material/Tooltip'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
-const RoleCard = ({ department }) => {
+const RoleCard = () => {
   const [page, setPage] = useState(0)
   const [addRoleOpen, setaddRoleOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
@@ -35,9 +35,9 @@ const RoleCard = ({ department }) => {
   const [DepartmentsData] = useDepartments()
   const [StaffsData] = useStaffs()
   const [RolesData] = useRoles()
-  console.log(RolesData)
 
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
+
   const updateFetch = () => setFetch(!refetch)
 
   const renderClient = row => {
@@ -116,7 +116,7 @@ const RoleCard = ({ department }) => {
         <Card
           sx={{
             m: theme => theme.spacing(2),
-            pt: theme => theme.spacing(5),
+            pt: theme => theme.spacing(6),
             display: 'flex',
             justifyContent: 'space-around',
             alignItems: 'flex-end'
@@ -125,7 +125,7 @@ const RoleCard = ({ department }) => {
           <Box
             sx={{
               height: '100%',
-              minHeight: 140,
+              minHeight: 135,
               display: 'flex',
               alignItems: 'flex-end',
               justifyContent: 'center'

@@ -17,6 +17,7 @@ import CardContent from '@mui/material/CardContent'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { styled } from '@mui/material/styles'
 import TablePagination from '@mui/material/TablePagination'
+import CustomChip from 'src/@core/components/mui/chip'
 
 // ** Icon Import
 import Icon from 'src/@core/components/icon'
@@ -33,6 +34,7 @@ import { formatDate, formatFirstLetter } from '../../../@core/utils/format'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditRole from './EditRole'
 import RoleCard from './RoleCard'
+import { useStaffs } from '../../../hooks/useStaffs'
 
 const userRoleObj = {
   'super-admin': { icon: 'grommet-icons:user-admin', color: 'info' },
@@ -51,7 +53,8 @@ const TypographyStyled = styled(Typography)(({ theme }) => ({
 const RolesTable = () => {
   const dispatch = useAppDispatch()
 
-  const [RolesDate, loading, paging] = useRoles()
+  const [RolesDate] = useRoles()
+  const [StaffsData, loading, paging] = useStaffs()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [role, setRole] = useState(null)
@@ -61,7 +64,9 @@ const RolesTable = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRole, setSelectedRole] = useState(null)
   const [roleToView, setRoleToView] = useState(null)
-  const [value, setValue] = useState('')
+  const [search, setSearch] = useState('')
+
+  console.log(StaffsData)
 
   const setActiveRole = value => {
     setRole(value)
@@ -80,6 +85,10 @@ const RolesTable = () => {
   }
 
   const updateFetch = () => setFetch(!refetch)
+
+  const handleFilter = val => {
+    setSearch(val)
+  }
 
   const ondeleteClick = () => {
     dispatch(deleteRole(selectedRole))
@@ -105,17 +114,21 @@ const RolesTable = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: page + 1, limit: 10 }))
-    dispatch(fetchStaffs({ page: page + 1, q: value }))
+    dispatch(fetchStaffs({ page: page + 1, q: search }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch, value])
+  }, [page, refetch, search])
 
   return (
     <div>
       <RoleCard />
       <Card sx={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}>
         <CardContent sx={{ py: theme => theme.spacing(4), display: 'flex', justifyContent: 'end' }}>
-          <CustomTextField value={value} placeholder='Search User' onChange={e => handleFilter(e.target.value)} />
+          <CustomTextField
+            defaultValue={search}
+            placeholder='Search Staff'
+            onChange={e => handleFilter(e.target.value)}
+          />
         </CardContent>
       </Card>
       <TableContainer component={Paper} sx={{ maxHeight: 840, borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
@@ -126,7 +139,13 @@ const RolesTable = () => {
                 USER
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
+                DESIGNATION
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
                 ROLE
+              </TableCell>
+              <TableCell align='left' sx={{ minWidth: 100 }}>
+                DEPARTMENT
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 STATUS
@@ -148,10 +167,13 @@ const RolesTable = () => {
               </TableRow>
             ) : (
               <Fragment>
-                {RolesDate?.map((role, i) => (
-                  <TableRow hover role='checkbox' key={role.id}>
-                    <TableCell align='left'> {i + 1}</TableCell>
-                    <TableCell align='left' sx={{ textTransform: 'uppercase', display: 'flex' }}>
+                {StaffsData?.map((staff, i) => (
+                  <TableRow hover role='checkbox' key={staff?.id}>
+                    <TableCell align='left'>{`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(
+                      staff?.lastname
+                    )}`}</TableCell>
+                    <TableCell align='left'>{formatFirstLetter(staff?.designation) || '--'}</TableCell>
+                    <TableCell align='left' sx={{ textTransform: 'uppercase' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <CustomAvatar
                           skin='light'
@@ -161,25 +183,31 @@ const RolesTable = () => {
                           <Icon icon={userRoleObj[role?.name]?.icon} />
                         </CustomAvatar>
                         <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                          {formatFirstLetter(role?.name)}
+                          {formatFirstLetter(staff?.role?.name)}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{role?.Status || '--'}</TableCell>
-                    <TableCell align='left'>{formatDate(role?.createdAt)}</TableCell>
-
+                    <TableCell>{formatFirstLetter(staff?.department.name) || '--'}</TableCell>
+                    <TableCell>
+                      {staff?.deletedAt ? (
+                        <CustomChip rounded size='small' skin='light' color='error' label='Inactive' />
+                      ) : (
+                        <CustomChip rounded size='small' skin='light' color='success' label='Active' />
+                      )}
+                    </TableCell>
+                    <TableCell align='left'>{formatDate(staff?.createdAt)}</TableCell>
                     <TableCell align='left'>
-                      <IconButton size='small' onClick={() => setRoleToEdit(role)}>
+                      <IconButton size='small' onClick={() => setRoleToEdit(staff)}>
                         <Icon icon='tabler:edit' />
                       </IconButton>
-                      <IconButton size='small' onClick={() => doDelete(role)}>
+                      <IconButton size='small' onClick={() => doDelete(staff)}>
                         <Icon icon='tabler:trash' />
                       </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
 
-                {RolesDate?.length === 0 && (
+                {StaffsData?.length === 0 && (
                   <tr className='text-center'>
                     <td colSpan={6}>
                       <NoData />
