@@ -81,7 +81,7 @@ const RoleCard = () => {
                 <Typography>Total {StaffsData.length} users</Typography>
                 <AvatarGroup className='pull-up' max={StaffsData.length}>
                   {StaffsData?.map((staff, index) => (
-                    <Tooltip key={staff?.id} title={staff?.lastname}>
+                    <Tooltip key={staff?.id} title={formatFirstLetter(staff?.lastname)}>
                       {renderClient(staff)}
                     </Tooltip>
                   ))}
