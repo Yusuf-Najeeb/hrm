@@ -269,9 +269,10 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
 
   useEffect(() => {
     if (data) {
+      // setPersonalValue('username', data?.username)
+
       setPersonalValue('firstname', data?.firstname)
       setPersonalValue('lastname', data?.lastname)
-      setPersonalValue('username', data?.username)
       setPersonalValue('email', data?.email)
       setPersonalValue('address', data?.address)
       setPersonalValue('phone', data?.phone)
@@ -410,7 +411,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <FormController
                     name='username'
                     control={personalControl}
@@ -419,7 +420,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
                     error={personalErrors['username']}
                     errorMessage={personalErrors?.username?.message}
                   />
-                </Grid>
+                </Grid> */}
 
                 <Grid item xs={12} sm={6}>
                   <FormController
@@ -616,7 +617,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
                   name='grossSalary'
                   control={workInfoControl}
                   requireBoolean={true}
-                  label='Gross Salary'
+                  label='Gross Monthly Salary'
                   error={workInfoErrors['grossSalary']}
                   errorMessage={workInfoErrors?.grossSalary?.message}
                 />
@@ -881,8 +882,9 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
                   if (index === activeStep) {
                     labelProps.error = false
                     if (
+                      // personalErrors.username ||
+
                       personalErrors.email ||
-                      personalErrors.username ||
                       personalErrors.lastname ||
                       personalErrors.firstname ||
                       personalErrors.allergies ||

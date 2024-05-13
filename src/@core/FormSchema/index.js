@@ -59,7 +59,6 @@ export const nextOfKinSchema = yup.object().shape({
 })
 
 export const updatePersonalInfoSchema = yup.object().shape({
-  username: yup.string().min(3, obj => showErrors('Username', obj.value.length, obj.min)),
   email: yup.string().email().required(),
   lastname: yup.string().required(),
   firstname: yup.string().required(),
@@ -73,6 +72,7 @@ export const updatePersonalInfoSchema = yup.object().shape({
   maritalStatus: yup.string().required(),
   address: yup.string().required()
 
+  // username: yup.string().min(3, obj => showErrors('Username', obj.value.length, obj.min)),
   // additionalInfo: yup.string()
 })
 
