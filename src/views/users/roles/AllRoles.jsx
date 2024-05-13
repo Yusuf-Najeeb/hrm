@@ -66,8 +66,6 @@ const RolesTable = () => {
   const [roleToView, setRoleToView] = useState(null)
   const [search, setSearch] = useState('')
 
-  console.log(StaffsData)
-
   const setActiveRole = value => {
     setRole(value)
     setOpenCanvas(true)

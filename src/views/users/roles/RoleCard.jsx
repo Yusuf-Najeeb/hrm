@@ -24,11 +24,14 @@ import { Grid, Card, Box, Typography, Stack } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import CustomAvatar from 'src/@core/components/mui/avatar'
+import Permissions from './Permissions'
 
 const RoleCard = () => {
   const [page, setPage] = useState(0)
   const [addRoleOpen, setaddRoleOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
+  const [openPermissions, setPermissions] = useState(false)
+  const [dialogTitle, setDialogTitle] = useState('Add')
 
   // * Hooks
   const dispatch = useAppDispatch()
@@ -37,7 +40,11 @@ const RoleCard = () => {
   const [RolesData] = useRoles()
 
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
+  const togglePermissions = () => setPermissions(!openPermissions)
 
+  const updatePermission = () => {
+    setPermissions(true)
+  }
   const updateFetch = () => setFetch(!refetch)
 
   const renderClient = row => {
@@ -91,15 +98,12 @@ const RoleCard = () => {
                 <Box>
                   <Typography sx={{ fontSize: '1.3rem', fontWeight: 500 }}>{formatFirstLetter(role?.name)}</Typography>
                   <Typography
-                    href='#'
-                    component={Link}
-                    sx={{ color: 'primary.main', textDecoration: 'none' }}
-
-                    // onClick={e => {
-                    //   e.preventDefault()
-                    //   handleClickOpen()
-                    //   setDialogTitle('Edit')
-                    // }}
+                    sx={{ color: 'primary.main', textDecoration: 'none', cursor: 'pointer' }}
+                    onClick={e => {
+                      e.preventDefault()
+                      updatePermission()
+                      setDialogTitle('Edit')
+                    }}
                   >
                     Edit Role
                   </Typography>
@@ -141,6 +145,10 @@ const RoleCard = () => {
       </Grid>
 
       {addRoleOpen && <CreateRole open={addRoleOpen} closeModal={toggleRoleDrawer} refetchRoles={updateFetch} />}
+
+      {openPermissions && (
+        <Permissions open={updatePermission} closeModal={togglePermissions} dialogTitle={dialogTitle} />
+      )}
     </Grid>
   )
 }
