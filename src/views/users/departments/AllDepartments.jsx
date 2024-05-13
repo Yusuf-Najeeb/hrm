@@ -18,7 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
-import { formatFirstLetter } from '../../../@core/utils/format'
+import { formatFirstLetter, formatDateToYYYYMM } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import DepartmentInfo from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
@@ -38,6 +38,8 @@ const DepartmentsTable = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
   const [DepartmentToView, setDepartmentToView] = useState(null)
+
+  console.log(DepartmentsData)
 
   // const setActiveDepartment = value => {
   //   setDepartment(value)
@@ -105,7 +107,7 @@ const DepartmentsTable = () => {
     <div>
       <DepartmentInfo />
       <Stack spacing={1} direction={'row'} sx={{ mt: 10 }}>
-        <Item sx={{ xs: '100%', md: '60%', px: 0 }}>
+        <Item sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'end', xs: '100%', md: '60%', px: 0 }}>
           <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
@@ -114,7 +116,11 @@ const DepartmentsTable = () => {
                     NAME
                   </TableCell>
 
-                  <TableCell align='center' sx={{ minWidth: 80 }}>
+                  <TableCell align='left' sx={{ minWidth: 50 }}>
+                    CREATED ON
+                  </TableCell>
+
+                  <TableCell align='left' sx={{ minWidth: 80 }}>
                     MODIFIED BY
                   </TableCell>
 
@@ -139,12 +145,13 @@ const DepartmentsTable = () => {
                     {DepartmentsData?.map((department, i) => (
                       <TableRow hover role='checkbox' key={department.id}>
                         <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
-                        <TableCell align='center'>{`${
+                        <TableCell>{formatDateToYYYYMM(department?.createdAt)}</TableCell>
+
+                        <TableCell align='left'>{`${
                           department?.lastChangedBy !== null
                             ? department?.lastChangedBy.toUpperCase()
                             : department?.createdBy.toUpperCase()
                         }`}</TableCell>
-
                         <TableCell align='center' sx={{ minWidth: 80 }}>
                           {`${
                             department?.hod
@@ -177,6 +184,17 @@ const DepartmentsTable = () => {
               </TableBody>
             </Table>
           </TableContainer>
+
+          <TablePagination
+            page={page}
+            component='div'
+            count={paging?.totalItems}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 20]}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{ ml: 'auto' }}
+          />
         </Item>
         <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
           <EditDepartment
@@ -187,16 +205,6 @@ const DepartmentsTable = () => {
           />
         </Item>
       </Stack>
-
-      <TablePagination
-        page={page}
-        component='div'
-        count={paging?.totalItems}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handleChangePage}
-        rowsPerPageOptions={[5, 10, 20]}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
 
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
     </div>
