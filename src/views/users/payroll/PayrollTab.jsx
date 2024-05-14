@@ -97,6 +97,7 @@ const PayrollTab = ({ tab }) => {
                 sx={{
                   width: '100%',
                   mt: theme => theme.spacing(6),
+                  px: theme => theme.spacing(7),
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center'
