@@ -27,7 +27,6 @@ import DownloadTemplateDialog from './DownloadTemplateDialog'
 import UploadRosterDialog from './UploadRosterDialog'
 import AddEventSidebar from 'src/views/apps/calendar/AddEventSidebar'
 import SidebarLeft from 'src/views/apps/calendar/SidebarLeft'
-import InfoDialog from './InfoDialog'
 
 import { fetchRosterDetails } from '../../../store/apps/roster/asyncthunk'
 import { formatDateToYYYYMM, formatFirstLetter, formatMonthYear, getFirstId } from '../../../@core/utils/format'
@@ -90,7 +89,6 @@ const DutyRosterHomepage = () => {
   const [selectedId, setSelectedId] = useState()
   const [departmentName, setDepartmentName] = useState('')
   const [defaultDepartmentName, setDefaultDepartmentName] = useState('')
-  const [infoModal, setModal] = useState(false)
 
   const defaultPeriod = formatDateToYYYYMM(new Date())
 
@@ -287,8 +285,6 @@ const DutyRosterHomepage = () => {
         handleAddEventSidebarToggle={handleAddEventSidebarToggle}
       /> */}
       </CalendarWrapper>
-
-      {infoModal && <InfoDialog openModal={toggleModal} closeModal={toggleModal} />}
 
       <DownloadTemplateDialog open={openDownloadDialog} anchorEl={anchorEl} handleClose={closeDownloadDialog} />
       <UploadRosterDialog open={openUploadDialog} anchorEl={anchorElement} handleClose={closeUploadDialog} />
