@@ -99,6 +99,11 @@ export const downloadRosterSchema = yup.object().shape({
   rosterDate: yup.string().required('Date is required')
 })
 
+export const uploadRosterSchema = yup.object().shape({
+  departmentId: yup.string(),
+  rosterDate: yup.string().required('Date is required')
+})
+
 export const deductionsSchema = yup.object().shape({
   // categoryId: yup.number().required('Deduction Category is required'),
   userId: yup.number().required('Staff is required'),

@@ -962,7 +962,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                         personalErrors.allergies ||
                         personalErrors.bloodGroup ||
                         personalErrors.genotype ||
-                        (personalErrors.password && activeStep === 0)
+                        activeStep === 0
                       ) {
                         labelProps.error = true
                       } else if (

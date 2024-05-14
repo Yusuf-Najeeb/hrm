@@ -20,7 +20,7 @@ import { useAppDispatch } from '../../../hooks'
 // Third Party/Schema Imports
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { downloadRosterSchema } from 'src/@core/Formschema'
+import { uploadRosterSchema } from 'src/@core/Formschema'
 import axios from 'axios'
 
 // Custom Functions
@@ -66,7 +66,7 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
     formState: { errors, isSubmitting }
   } = useForm({
     defaultValues,
-    resolver: yupResolver(downloadRosterSchema)
+    resolver: yupResolver(uploadRosterSchema)
   })
 
   const closeDialog = () => {
@@ -74,7 +74,7 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
     reset()
   }
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = async e => {
     const fileInput = e.target
 
     if (fileInput.files && fileInput.files.length > 0) {
@@ -85,43 +85,37 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
       const fileSize = file.size / 1024 / 1024 // in MB
 
       if (fileSize > 10) {
-        notifyWarn('FILE ERROR', 'File size should not exceed 10MB.');
-        setSelectedFile(null);
+        notifyWarn('FILE ERROR', 'File size should not exceed 10MB.')
+        setSelectedFile(null)
       }
-
     } else {
       notifyWarn('FILE ERROR', 'No file selected.')
       setSelectedFile(null)
     }
   }
 
-
-
-  const handleSubmitFile = async (values)=>{
-   
+  const handleSubmitFile = async values => {
     const period = formatDateToYYYYMM(values.rosterDate)
 
     const formData = new FormData()
     formData.append('file', selectedFile)
-
-      try {
-        const response = await axios.post(`roster?departmentId=${values.departmentId}&period=${period}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data;'
-          }
-        })
-  
-        if (response) {
-          notifySuccess('File Upload successful')
-          closeDialog()
-
-          // setUploadStatus(!hasUploadedProducts)
+    console.log(values, 'Just in case')
+    try {
+      const response = await axios.post(`roster?departmentId=${values.departmentId}&period=${period}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data;'
         }
-      } catch (error) {
-        notifyError(error?.response ? error?.response.data.message :'File upload failed, try again')
-      }
+      })
 
-    
+      if (response) {
+        notifySuccess('File Upload successful')
+        closeDialog()
+
+        // setUploadStatus(!hasUploadedProducts)
+      }
+    } catch (error) {
+      notifyError(error?.response ? error?.response.data.message : 'File upload failed, try again')
+    }
   }
 
   useEffect(() => {
@@ -129,8 +123,6 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
- 
 
   return (
     <Popover
@@ -180,7 +172,7 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
             <Controller
               name='departmentId'
               control={control}
-              rules={{ required: true }}
+              rules={{ required: false }}
               render={({ field: { value, onChange } }) => (
                 <CustomTextField
                   select
@@ -204,55 +196,48 @@ const UploadRosterDialog = ({ open, anchorEl, handleClose }) => {
           </Grid>
 
           <Grid
-          item
-          xs={12}
-          sm={6}
-          sx={{ mb: 6, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-        >
-          <Grid item xs={12} sm={12}>
-            <Box
-              sx={{
-                border: '3px dotted black',
-                borderRadius: 3,
-                p: 3,
-                display: 'flex',
-                textAlign: 'center',
-                alignItems: 'center',
-                flexDirection: 'column'
-              }}
-            >
-              <ButtonStyled component='label' variant='contained' htmlFor='upload-excel-file'>
-                <input
-                  hidden
-                  type='file'
-                  accept='.xls, .xlsx'
-                  onChange={handleFileChange}
-                  id='upload-excel-file'
-                />
-
-                <Icon icon='tabler:upload' fontSize='0.85rem' />
-              </ButtonStyled>
-              <Typography variant='body2' sx={{ mt: 2 }}>
-                Upload File
-              </Typography>
-            </Box>
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'center',
-              alignItems: 'center',
-              alignSelf: 'center'
-            }}
+            item
+            xs={12}
+            sm={6}
+            sx={{ mb: 6, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
           >
-            <Typography variant='body2'>{fileName}</Typography>
-          </Box>
-          </Grid>
+            <Grid item xs={12} sm={12}>
+              <Box
+                sx={{
+                  border: '3px dotted black',
+                  borderRadius: 3,
+                  p: 3,
+                  display: 'flex',
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column'
+                }}
+              >
+                <ButtonStyled component='label' variant='contained' htmlFor='upload-excel-file'>
+                  <input hidden type='file' accept='.xls, .xlsx' onChange={handleFileChange} id='upload-excel-file' />
 
-        </Grid>
+                  <Icon icon='tabler:upload' fontSize='0.85rem' />
+                </ButtonStyled>
+                <Typography variant='body2' sx={{ mt: 2 }}>
+                  Upload File
+                </Typography>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center'
+                }}
+              >
+                <Typography variant='body2'>{fileName}</Typography>
+              </Box>
+            </Grid>
+          </Grid>
 
           <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button variant='tonal' onClick={closeDialog} startIcon={<Icon icon='mdi:arrow-left-bold' />}>
