@@ -25,7 +25,9 @@ export const fetchRoles = createAsyncThunk('roles/fetchItems', async query => {
     const response = await axios.get(`/role`, {
       params: {
         page: query.page,
-        limit: query.limit
+        limit: query.limit,
+        userLimit: 100,
+        userPage: 1
       }
     })
 

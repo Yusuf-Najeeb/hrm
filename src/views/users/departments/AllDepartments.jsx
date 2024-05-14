@@ -18,7 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
-import { formatFirstLetter, formatDateToYYYYMM } from '../../../@core/utils/format'
+import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import DepartmentInfo from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
@@ -143,7 +143,7 @@ const DepartmentsTable = () => {
                     {DepartmentsData?.map((department, i) => (
                       <TableRow hover role='checkbox' key={department.id}>
                         <TableCell align='left'>{formatFirstLetter(department?.name)}</TableCell>
-                        <TableCell>{formatDateToYYYYMM(department?.createdAt)}</TableCell>
+                        <TableCell>{department?.createdAt.slice(0, 7)}</TableCell>
 
                         <TableCell align='left'>{`${
                           department?.lastChangedBy !== null

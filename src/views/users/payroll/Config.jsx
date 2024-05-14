@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
 // * MUI Imports
+import Typography from '@mui/material/Typography'
 import { Paper, Grid, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 

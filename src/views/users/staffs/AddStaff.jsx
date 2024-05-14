@@ -126,6 +126,8 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   const [DepartmentsData] = useDepartments()
   const [RolesData] = useRoles()
 
+  console.log(RolesData, 'Roles data')
+
   // ** States
   const [activeStep, setActiveStep] = useState(0)
   const [openDepartmentsModal, setOpenDepartmentsModal] = useState(false)
