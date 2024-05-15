@@ -3,30 +3,21 @@ import React, { useEffect } from 'react'
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid'
-import { styled, useTheme } from '@mui/material/styles'
-import LinearProgress from '@mui/material/LinearProgress'
 
 // ** Custom Components Imports
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import Icon from 'src/@core/components/icon'
-import CustomChip from 'src/@core/components/mui/chip'
-import OptionsMenu from 'src/@core/components/option-menu'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import ReactApexcharts from 'src/@core/components/react-apexcharts'
-
 import { fetchPayroll } from '../../../store/apps/payroll/asyncthunk'
 import { usePayrolls } from '../../../hooks/usePayroll'
-
-import paper from 'src/@core/theme/overrides/paper'
 
 const PayrollInfo = () => {
   // ** Hook
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+
+  // const theme = useTheme()
   const [PayrollData, paging, loading, aggregations] = usePayrolls()
 
   useEffect(() => {

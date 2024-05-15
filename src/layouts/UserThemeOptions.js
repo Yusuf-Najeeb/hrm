@@ -12,8 +12,7 @@ const UserThemeOptions = () => {
   // ** To use core palette, uncomment the below line
   // const palette = corePalette(mode as PaletteMode, skin)
   return {
-    /*
-    palette:{
+    palette: {
       primary: {
         light: '#8479F2',
         main: '#7367F0',
@@ -29,8 +28,9 @@ const UserThemeOptions = () => {
         lg: 1200,
         xl: 1920
       }
-    },
-    components: {
+    }
+
+    /*  components: {
       MuiButton: {
         defaultProps: {
           disableElevation: true

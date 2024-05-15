@@ -81,8 +81,8 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode, clos
 
       if (data.success) {
         notifySuccess('Department updated successfully')
-        reset()
         refetchDepartments()
+        reset()
       }
     } catch (error) {
       notifyError('Error updating department')
@@ -90,9 +90,9 @@ const EditDepartment = ({ refetchDepartments, selectedDepartment, editMode, clos
   }
 
   const newDepartment = async data => {
-    const res = dispatch(createDepartment(data))
-    reset()
+    dispatch(createDepartment(data))
     refetchDepartments()
+    reset()
   }
 
   // Editing Department

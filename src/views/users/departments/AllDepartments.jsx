@@ -66,14 +66,13 @@ const DepartmentsTable = () => {
 
   const ondeleteClick = () => {
     dispatch(deleteDepartment(selectedDepartment))
-    updateFetch()
     doCancelDelete()
+    setFetch(!refetch)
   }
 
   const setDepartmentToEdit = dept => {
     setEditDrawer(true)
     setDepartmentToView(dept)
-
     setEditMode(true)
   }
 
@@ -91,15 +90,15 @@ const DepartmentsTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
-  const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
 
+  // const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
   // const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
 
   useEffect(() => {
-    dispatch(fetchDepartments({ page: page + 1, limit: 10 }))
+    dispatch(fetchDepartments({ page: page + 1, limit: 200 }))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, refetch])
+  }, [dispatch, page, refetch])
 
   return (
     <div>

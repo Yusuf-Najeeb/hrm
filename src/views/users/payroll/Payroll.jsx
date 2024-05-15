@@ -36,6 +36,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
+import Box from '@mui/material/Box'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
 import IconButton from '@mui/material/IconButton'
 
@@ -63,6 +64,14 @@ const defaultValues = {
 }
 
 const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
+  const {
+    control,
+    setValue,
+    reset,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
+
   const dispatch = useAppDispatch()
   const [PayrollData, paging, loading, aggregations] = usePayrolls()
 
@@ -110,17 +119,28 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
       payload = { checked, sendPayslips }
     }
 
-    if (payload) {
-      makePayment(payload).then(res => {
-        if (!res.ok) {
-          closeModal()
-          refetchPayroll()
-          notifySuccess('Payment Successful')
-        } else {
-          notifyError('Payment Unsuccessful')
-        }
-      })
+    // if (payload) {
+    //   makePayment(payload).then(res => {
+    //     if (!res.ok) {
+    //       closeModal()
+    //       refetchPayroll()
+    //       notifySuccess('Payment Successful')
+    //     } else {
+    //       notifyError('Payment Unsuccessful')
+    //     }
+    //   })
+    // }
+    if (payload.sendPayslips) {
+      console.log('Send receipts')
     }
+
+    // const formattedPeriod = formatDateToYYYYMM(data.period)
+
+    // const res = sendPayslip({ period: formattedPeriod }).then(() => {
+    //   reset()
+    //   closeModal()
+    //   refetchPayslip()
+    // })
   }
 
   const updateFetch = () => setFetch(!refetch)
@@ -214,9 +234,9 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
                 </CustomTextField>
               </Grid>
               <Grid item sx={{ ml: 'auto', alignSelf: 'end' }}>
-                <Button
+                {/* <Button
                   // eslint-disable-next-line
-                  onClick={submitPayment}
+                  onClick={() => submitPayment()}
                   variant='contained'
                   color={'success'}
                   disabled={PayrollData?.length == 0}
@@ -224,7 +244,21 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
                 >
                   <Icon fontSize='1.125rem' icon='prime:send' />
                   Send Payment
-                </Button>
+                </Button> */}
+
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <Button
+                    type='submit'
+                    onClick={submitPayment}
+                    variant='contained'
+                    color={'success'}
+                    disabled={PayrollData?.length == 0}
+                    sx={{ '& svg': { mr: 2 } }}
+                  >
+                    <Icon fontSize='1.125rem' icon='prime:send' />
+                    {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Send Payment'}
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </CardContent>

@@ -146,10 +146,8 @@ const HorizontalLayout = props => {
                 }}
               >
                 {(userNavMenuContent && userNavMenuContent(props)) || (
-
                   <Navigation {...props} horizontalNavItems={horizontalLayoutProps.navMenu?.navItems} />
-
-                 )} 
+                )}
               </Toolbar>
             </Box>
           )}
