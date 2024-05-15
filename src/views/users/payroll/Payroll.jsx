@@ -12,6 +12,7 @@ import Icon from 'src/@core/components/icon'
 import NoData from '../../../@core/components/emptyData/NoData'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter, formatCurrency, formatDateToYYYY, formatMonthYear } from '../../../@core/utils/format'
+import { sendPayslip } from '../../../store/apps/payslip/asyncthunk'
 
 // ** MUI Imports
 import { DataGrid } from '@mui/x-data-grid'
@@ -64,14 +65,6 @@ const defaultValues = {
 }
 
 const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
-  const {
-    control,
-    setValue,
-    reset,
-    handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(requirePeriod) })
-
   const dispatch = useAppDispatch()
   const [PayrollData, paging, loading, aggregations] = usePayrolls()
 
@@ -119,28 +112,33 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
       payload = { checked, sendPayslips }
     }
 
-    // if (payload) {
-    //   makePayment(payload).then(res => {
-    //     if (!res.ok) {
-    //       closeModal()
-    //       refetchPayroll()
-    //       notifySuccess('Payment Successful')
-    //     } else {
-    //       notifyError('Payment Unsuccessful')
-    //     }
-    //   })
-    // }
-    if (payload.sendPayslips) {
-      console.log('Send receipts')
+    if (payload) {
+      makePayment(payload).then(res => {
+        if (!res.ok) {
+          closeModal()
+          refetchPayroll()
+          notifySuccess('Payment Successful')
+        } else {
+          notifyError('Payment Unsuccessful')
+        }
+      })
     }
 
-    // const formattedPeriod = formatDateToYYYYMM(data.period)
+    if (payload.sendPayslips) {
+      const selectedPeriod = PayrollData?.filter(payroll => checked?.includes(payroll?.id))
 
-    // const res = sendPayslip({ period: formattedPeriod }).then(() => {
-    //   reset()
-    //   closeModal()
-    //   refetchPayslip()
-    // })
+      const getPeriod = selectedPeriod.map(paymentPeriod => {
+        return paymentPeriod.period
+      })
+      const formattedPeriod = getPeriod[0]
+
+      sendPayslip({ period: formattedPeriod }).then(res => {
+        if (!res.ok) {
+          closeModal()
+          refetchPayroll()
+        }
+      })
+    }
   }
 
   const updateFetch = () => setFetch(!refetch)
@@ -256,7 +254,7 @@ const GeneratePayroll = ({ open, closeModal, refetchPayroll }) => {
                     sx={{ '& svg': { mr: 2 } }}
                   >
                     <Icon fontSize='1.125rem' icon='prime:send' />
-                    {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Send Payment'}
+                    Send Payment
                   </Button>
                 </Box>
               </Grid>
