@@ -5,7 +5,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 
 export const createDeduction = createAsyncThunk('deduction/createItem', async () => {
   try {
-    const response = await axios.post('/deductions', vals)
+    const response = await axios.post('/deductions', vals, {
+      headers: { 'Content-Type': 'application/json' }
+    })
 
     notifySuccess('Added deduction')
 

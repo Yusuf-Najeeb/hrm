@@ -15,10 +15,9 @@ import { deductionsSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 import { useAppDispatch } from '../../../hooks'
 import { formatDateToYYYYMM, formatFirstLetter } from '../../../@core/utils/format'
+import { createDeduction } from '../../../store/apps/deductions/asyncthunk'
 import { getPeriods } from '../../../store/apps/payroll/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
@@ -36,6 +35,8 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   const [periods, setPeriods] = useState([])
   const [StaffsData] = useStaffs()
 
+  console.log(StaffsData, 'Staff data')
+
   const {
     control,
     reset,
@@ -51,13 +52,13 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   const createDeduction = async values => {
     try {
       const { type, period, amount, description, userId } = values
-      const createUrl = `/deductions`
+
+      // const createUrl = `/deductions`
 
       const payload = { type: amountType, period, amount, description, userId }
 
-      const resp = await axios.post(createUrl, payload, {
-        headers: { 'Content-Type': 'application/json' }
-      })
+      const resp = await createDeduction(payload)
+
       if (resp.data.success) {
         notifySuccess(`${formatFirstLetter(type)} Created Successfully`)
         closeDialog()
