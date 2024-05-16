@@ -2,15 +2,12 @@
 import React, { useEffect, useState } from 'react'
 
 // ** Next Import
-import Link from 'next/link'
+// import Link from 'next/link'
 
 // ** Custom Component Import
 import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
-import { useStaffs } from '../../../hooks/useStaffs'
 import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
-import { useDepartments } from '../../../hooks/useDepartments'
 import { useRoles } from '../../../hooks/useRoles'
 import { getInitials } from 'src/@core/utils/get-initials'
 import PageHeader from '../components/PageHeader'
@@ -35,8 +32,6 @@ const RoleCard = () => {
 
   // * Hooks
   const dispatch = useAppDispatch()
-  const [DepartmentsData] = useDepartments()
-  const [StaffsData] = useStaffs()
   const [RolesData] = useRoles()
 
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
@@ -68,7 +63,6 @@ const RoleCard = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: page + 1, limit: 10 }))
-    dispatch(fetchStaffs())
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, refetch])
@@ -88,11 +82,11 @@ const RoleCard = () => {
               {role?.user?.length === 0 && (
                 <CustomAvatar
                   skin='light'
-                  color={role?.id % 2 === 0 ? 'primary' : 'success'}
+                  color={role?.id % 2 === 0 ? 'primary' : 'info'}
                   sx={{
                     ml: 'auto',
-                    width: 40,
-                    height: 40,
+                    width: 43,
+                    height: 43,
                     fontWeight: 500,
                     fontSize: theme => theme.typography.body1.fontSize
                   }}
