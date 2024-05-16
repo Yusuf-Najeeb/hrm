@@ -73,49 +73,67 @@ const RoleCard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, refetch])
 
+  const renderCards = () =>
+    RolesData?.map(role => {
+      return (
+        <Grid key={role?.id} item xs={12} sm={6} lg={4}>
+          <Card
+            sx={{
+              m: theme => theme.spacing(2),
+              p: theme => theme.spacing(6)
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography>Total {role?.user?.length} Staff</Typography>
+              {role?.user?.length === 0 && (
+                <CustomAvatar
+                  skin='light'
+                  color={role?.id % 2 === 0 ? 'primary' : 'success'}
+                  sx={{
+                    ml: 'auto',
+                    width: 40,
+                    height: 40,
+                    fontWeight: 500,
+                    fontSize: theme => theme.typography.body1.fontSize
+                  }}
+                >
+                  <Icon icon='tabler:user-plus' />
+                </CustomAvatar>
+              )}
+              <AvatarGroup className='pull-up' max={role?.user?.length}>
+                {role?.user?.map(user => (
+                  <Tooltip key={user?.id} title={formatFirstLetter(user?.lastname)}>
+                    {renderClient(user)}
+                  </Tooltip>
+                ))}
+              </AvatarGroup>
+            </Box>
+            <Stack direction='row' sx={{ justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
+              <Box>
+                <Typography sx={{ fontSize: '1.3rem', fontWeight: 500 }}>{formatFirstLetter(role?.name)}</Typography>
+                <Typography
+                  sx={{ color: 'primary.main', textDecoration: 'none', cursor: 'pointer' }}
+                  onClick={e => {
+                    e.preventDefault()
+                    updatePermission()
+                    setDialogTitle('Edit')
+                  }}
+                >
+                  Edit Role
+                </Typography>
+              </Box>
+              <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
+                <Icon icon='tabler:settings' />
+              </CustomAvatar>
+            </Stack>
+          </Card>
+        </Grid>
+      )
+    })
+
   return (
     <Grid container sx={{ mb: 5 }}>
-      {RolesData?.map(role => {
-        return (
-          <Grid key={role?.id} item xs={12} sm={6} lg={4}>
-            <Card
-              sx={{
-                m: theme => theme.spacing(2),
-                p: theme => theme.spacing(6)
-              }}
-            >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography>Total {StaffsData.length} users</Typography>
-                <AvatarGroup className='pull-up' max={StaffsData.length}>
-                  {StaffsData?.map((staff, index) => (
-                    <Tooltip key={staff?.id} title={formatFirstLetter(staff?.lastname)}>
-                      {renderClient(staff)}
-                    </Tooltip>
-                  ))}
-                </AvatarGroup>
-              </Box>
-              <Stack direction='row' sx={{ justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
-                <Box>
-                  <Typography sx={{ fontSize: '1.3rem', fontWeight: 500 }}>{formatFirstLetter(role?.name)}</Typography>
-                  <Typography
-                    sx={{ color: 'primary.main', textDecoration: 'none', cursor: 'pointer' }}
-                    onClick={e => {
-                      e.preventDefault()
-                      updatePermission()
-                      setDialogTitle('Edit')
-                    }}
-                  >
-                    Edit Role
-                  </Typography>
-                </Box>
-                <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
-                  <Icon icon='tabler:settings' />
-                </CustomAvatar>
-              </Stack>
-            </Card>
-          </Grid>
-        )
-      })}
+      {renderCards()}
       <Grid item xs={12} sm={6} lg={4}>
         <Card
           sx={{

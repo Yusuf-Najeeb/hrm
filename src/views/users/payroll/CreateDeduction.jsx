@@ -35,8 +35,6 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   const [periods, setPeriods] = useState([])
   const [StaffsData] = useStaffs()
 
-  console.log(StaffsData, 'Staff data')
-
   const {
     control,
     reset,
