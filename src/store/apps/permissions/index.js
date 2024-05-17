@@ -1,35 +1,28 @@
 // ** Redux Imports
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { fetchPermissions } from './asyncthunk'
 
-// ** Axios Imports
-import axios from 'axios'
+const initialState = {
+  loading: false,
+  PermissionsData: []
+}
 
-// ** Fetch Invoices
-export const fetchData = createAsyncThunk('appPermissions/fetchData', async params => {
-  const response = await axios.get('/apps/permissions/data', {
-    params
-  })
-
-  return response.data
-})
-
-export const appPermissionsSlice = createSlice({
-  name: 'appPermissions',
-  initialState: {
-    data: [],
-    total: 1,
-    params: {},
-    allData: []
-  },
+export const permissionSlice = createSlice({
+  name: 'permission',
+  initialState,
   reducers: {},
-  extraReducers: builder => {
-    builder.addCase(fetchData.fulfilled, (state, action) => {
-      state.data = action.payload.permissions
-      state.params = action.payload.params
-      state.allData = action.payload.allData
-      state.total = action.payload.total
+  extraReducers(builder) {
+    builder.addCase(fetchPermissions.pending, state => {
+      state.loading = true
+    })
+    builder.addCase(fetchPermissions.fulfilled, (state, action) => {
+      state.loading = false
+      state.PermissionsData = action?.payload?.data?.data
+    })
+    builder.addCase(fetchPermissions.rejected, state => {
+      state.loading = false
     })
   }
 })
 
-export default appPermissionsSlice.reducer
+export default permissionSlice.reducer
