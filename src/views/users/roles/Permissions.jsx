@@ -25,111 +25,69 @@ import Icon from 'src/@core/components/icon'
 
 // ** Custom Component & Hooks Import
 import CustomTextField from 'src/@core/components/mui/text-field'
+import { formatFirstLetter } from '../../../@core/utils/format'
 import { fetchPermissions } from '../../../store/apps/permissions/asyncthunk'
 import { usePermissions } from '../../../hooks/usePermissions'
 import { useAppDispatch } from '../../../hooks'
+import { set } from 'date-fns'
 
 const Permissions = ({ open, closeModal, dialogTitle }) => {
   const dispatch = useAppDispatch()
   const [PermissionsData] = usePermissions()
 
+  const [permissionsId, setPermissionsId] = useState([])
   const [allPermissions, setAllPermissions] = useState([])
-  const [checkedPermissions, setCheckedPermissions] = useState([])
-  const [selectAll, setSelectAll] = useState(false)
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState(false)
-
-  console.log(PermissionsData)
-  console.log(allPermissions)
+  const [selectAll, setSelectAll] = useState(false)
 
   const handleChange = id => {
-    setAllPermissions(prev => {
-      const updateStatus = [...prev]
-      const matchingIndex = updateStatus.findIndex(item => item.id === id)
-
-      if (matchingIndex !== -1) {
-        updateStatus[matchingIndex] = {
-          ...updateStatus[matchingIndex],
-          active: !updateStatus[matchingIndex].active
-        }
-      }
-
-      return updateStatus
-    })
+    if (permissionsId.includes(id)) {
+      const newIds = permissionsId.filter(perm => perm !== id)
+      setPermissionsId([...newIds])
+    } else {
+      setPermissionsId(prev => [...prev, id])
+    }
   }
 
-  const handleSelectAll = e => {
-    const newSelectAll = e.target.checked // Get the checked state of "select all"
-
-    setCheckedPermissions(prevActiveValues => {
-      const newValue = newSelectAll ? Array(prevActiveValues.length).fill(true) : []
-
-      return newValue
-    })
-
-    setSelectAll(newSelectAll) // Update "select all" state for UI
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectAll(false)
+      setPermissionsId([])
+    } else {
+      setPermissionsId(allPermissions.map(item => item.id))
+      setSelectAll(true)
+    }
   }
-
-  // const handleSelectAllClick = () => {
-  //   const allChecked = Object.values(checkedPermissions).every(Boolean)
-  //   const updatedPermissions = []
-  //   for (const item of PermissionsData) {
-  //     for (const perm of item.permissions) {
-  //       updatedPermissions[perm.id] = !allChecked
-  //     }
-  //   }
-  //   setCheckedPermissions(updatedPermissions)
-  // }
 
   const handleClose = () => {
-    setCheckedPermissions([])
     setIsIndeterminateCheckbox(false)
     closeModal()
   }
 
-  const handleCheckboxClick = id => {
-    console.log(id)
-
-    // setCheckedPermissions(prevState => [
-    //   {
-    //     ...prevState,
-    //     [id]: !prevState[id]
-    //   }
-    // ])
-
-    // const arr = checkedPermissions
-    // console.log(arr, 'before')
-    // if (checkedPermissions.includes(id)) {
-    //   arr.splice(arr.indexOf(id), 1)
-    //   console.log(arr, 'removed')
-    //   setCheckedPermissions([...arr])
-    // } else {
-    //   arr.push(id)
-    //   console.log(arr, 'added')
-    //   setCheckedPermissions([...arr])
-    // }
-  }
-
   useEffect(() => {
-    if (checkedPermissions.length > 0 && checkedPermissions.length < PermissionsData.length * 5) {
+    if (permissionsId.length > 0 && permissionsId.length < allPermissions.length) {
       setIsIndeterminateCheckbox(true)
     } else {
       setIsIndeterminateCheckbox(false)
     }
     // eslint-disable-next-line
-  }, [checkedPermissions])
+  }, [permissionsId])
 
   useEffect(() => {
     dispatch(fetchPermissions())
 
     const reduceAllPermissions = PermissionsData.map(perm => perm.permissions)
     const flattenedArray = reduceAllPermissions.flatMap(item => item)
+    const getIds = flattenedArray.map(item => item.id)
 
     setAllPermissions(flattenedArray)
+    setPermissionsId(getIds)
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <Dialog fullWidth maxWidth='md' scroll='body' onClose={closeModal} open={open}>
+    <Dialog fullWidth maxWidth='lg' scroll='body' onClose={closeModal} open={open}>
       <DialogTitle
         component='div'
         sx={{
@@ -187,7 +145,7 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
                         size='small'
                         onChange={handleSelectAll}
                         indeterminate={isIndeterminateCheckbox}
-                        checked={allPermissions.length === PermissionsData.length * 5}
+                        checked={permissionsId.length === allPermissions.length}
                       />
                     }
                   />
@@ -196,8 +154,6 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
             </TableHead>
             <TableBody>
               {PermissionsData.map(role => {
-                const id = role.name.toLowerCase().split(' ').join('-')
-
                 return (
                   <TableRow key={role?.id} sx={{ '& .MuiTableCell-root:first-of-type': { pl: '0 !important' } }}>
                     <TableCell
@@ -207,18 +163,18 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
                         fontSize: theme => theme.typography.h6.fontSize
                       }}
                     >
-                      {role?.name}
+                      {role?.name.toUpperCase()}
                     </TableCell>
                     {role?.permissions?.map((permission, i) => (
                       <TableCell key={i}>
                         <FormControlLabel
-                          label={permission?.name}
+                          label={formatFirstLetter(permission?.name)}
                           sx={{ '& .MuiTypography-root': { color: 'text.secondary' } }}
                           control={
                             <Checkbox
                               size='small'
                               id={role?.id}
-                              checked={permission?.active}
+                              checked={permissionsId.includes(permission.id)}
                               onChange={() => handleChange(permission.id)}
                             />
                           }

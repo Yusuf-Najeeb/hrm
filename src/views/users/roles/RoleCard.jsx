@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
+import { fetchPermissions } from '../../../store/apps/permissions/asyncthunk'
 import { useRoles } from '../../../hooks/useRoles'
 import { getInitials } from 'src/@core/utils/get-initials'
 import PageHeader from '../components/PageHeader'
@@ -63,6 +64,7 @@ const RoleCard = () => {
 
   useEffect(() => {
     dispatch(fetchRoles({ page: page + 1, limit: 10 }))
+    dispatch(fetchPermissions())
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, refetch])
