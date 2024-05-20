@@ -529,6 +529,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                       >
                         <MenuItem value='Single'>Single</MenuItem>
                         <MenuItem value='Married'>Married</MenuItem>
+                        <MenuItem value='Divorced'>Divorced</MenuItem>
                         <MenuItem value='Others'>Others</MenuItem>
                       </CustomTextField>
                     )}
@@ -882,6 +883,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                     >
                       <MenuItem value='Single'>Single</MenuItem>
                       <MenuItem value='Married'>Married</MenuItem>
+                      <MenuItem value='Divorced'>Divorced</MenuItem>
                       <MenuItem value='Others'>Others</MenuItem>
                     </CustomTextField>
                   )}
