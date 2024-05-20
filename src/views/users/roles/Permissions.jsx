@@ -18,9 +18,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import TableContainer from '@mui/material/TableContainer'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
@@ -41,19 +38,6 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
   const [allPermissions, setAllPermissions] = useState([])
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState(false)
   const [selectAll, setSelectAll] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(Array(PermissionsData?.length)?.fill(null))
-
-  const handleRowOptionsClick = (event, index) => {
-    const newAnchorEl = [...anchorEl]
-    newAnchorEl[index] = event.currentTarget
-    setAnchorEl(newAnchorEl)
-  }
-
-  const handleRowOptionsClose = index => {
-    const newAnchorEl = [...anchorEl]
-    newAnchorEl[index] = null
-    setAnchorEl(newAnchorEl)
-  }
 
   const handleChange = id => {
     if (permissionsId.includes(id)) {
@@ -168,7 +152,7 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {PermissionsData.map(role => {
+              {PermissionsData.map((role, i) => {
                 return (
                   <TableRow key={role?.id} sx={{ '& .MuiTableCell-root:first-of-type': { pl: '0 !important' } }}>
                     <TableCell
@@ -196,53 +180,6 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
                         />
                       </TableCell>
                     ))}
-                    <>
-                      <IconButton size='small' onClick={event => handleRowOptionsClick(event, i)}>
-                        <Icon icon='tabler:dots-vertical' />
-                      </IconButton>
-                      <Menu
-                        keepMounted
-                        anchorEl={anchorEl[i]}
-                        open={Boolean(anchorEl[i])}
-                        onClose={() => handleRowOptionsClose(i)}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right'
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right'
-                        }}
-                        PaperProps={{ style: { minWidth: '8rem' } }}
-                      >
-                        <MenuItem onClick={() => setStudentToEdit(item)} sx={{ '& svg': { mr: 2 } }}>
-                          <Icon icon='tabler:edit' fontSize={20} />
-                          Edit Student
-                        </MenuItem>
-                        <MenuItem onClick={() => setStudentToView(item)} sx={{ '& svg': { mr: 2 } }}>
-                          <Icon icon='tabler:eye' fontSize={20} />
-                          View Student
-                        </MenuItem>
-
-                        <MenuItem onClick={() => setStudentToAssignClassRoom(item)} sx={{ '& svg': { mr: 2 } }}>
-                          <Icon icon='fluent:stack-add-20-filled' fontSize={20} />
-                          Change Class
-                        </MenuItem>
-                        <MenuItem onClick={() => setStudentToAssignSubjects(item)} sx={{ '& svg': { mr: 2 } }}>
-                          <Icon icon='fluent:stack-add-20-filled' fontSize={20} />
-                          Assign Subject
-                        </MenuItem>
-                        {item.boarder && (
-                          <MenuItem
-                            onClick={() => setStudentToAssignHostelCategories(item)}
-                            sx={{ '& svg': { mr: 2 } }}
-                          >
-                            <Icon icon='clarity:assign-user-solid' fontSize={20} />
-                            Assign Hostel Room
-                          </MenuItem>
-                        )}
-                      </Menu>
-                    </>
                   </TableRow>
                 )
               })}

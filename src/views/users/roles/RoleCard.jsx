@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { fetchPermissions } from '../../../store/apps/permissions/asyncthunk'
+import { usePermissions } from '../../../hooks/usePermissions'
 import { useRoles } from '../../../hooks/useRoles'
 import { getInitials } from 'src/@core/utils/get-initials'
 import PageHeader from '../components/PageHeader'
@@ -18,22 +19,41 @@ import CreateRole from './CreateRole'
 import Icon from 'src/@core/components/icon'
 
 // ** MUI Imports
-import { Grid, Card, Box, Typography, Stack } from '@mui/material'
+import Grid from '@mui/material/Grid'
+import Card from '@mui/material/Card'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import AvatarGroup from '@mui/material/AvatarGroup'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import IconButton from '@mui/material/IconButton'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Permissions from './Permissions'
 
 const RoleCard = () => {
+  const dispatch = useAppDispatch()
+  const [PermissionsData] = usePermissions()
+  const [RolesData] = useRoles()
   const [page, setPage] = useState(0)
   const [addRoleOpen, setaddRoleOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [openPermissions, setPermissions] = useState(false)
   const [dialogTitle, setDialogTitle] = useState('Add')
+  const [anchorEl, setAnchorEl] = useState(Array(PermissionsData?.length)?.fill(null))
 
-  // * Hooks
-  const dispatch = useAppDispatch()
-  const [RolesData] = useRoles()
+  const handleRowOptionsClick = (event, index) => {
+    const newAnchorEl = [...anchorEl]
+    newAnchorEl[index] = event.currentTarget
+    setAnchorEl(newAnchorEl)
+  }
+
+  const handleRowOptionsClose = index => {
+    const newAnchorEl = [...anchorEl]
+    newAnchorEl[index] = null
+    setAnchorEl(newAnchorEl)
+  }
 
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
   const togglePermissions = () => setPermissions(!openPermissions)
@@ -70,7 +90,7 @@ const RoleCard = () => {
   }, [dispatch, refetch])
 
   const renderCards = () =>
-    RolesData?.map(role => {
+    RolesData?.map((role, i) => {
       return (
         <Grid key={role?.id} item xs={12} sm={6} lg={4}>
           <Card
@@ -118,9 +138,39 @@ const RoleCard = () => {
                   Edit Role
                 </Typography>
               </Box>
-              <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
-                <Icon icon='tabler:settings' />
-              </CustomAvatar>
+
+              <>
+                <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
+                  <IconButton size='small' onClick={event => handleRowOptionsClick(event, i)}>
+                    {/* <Icon icon='tabler:dots-vertical' /> */}
+                    <Icon icon='tabler:settings' />
+                  </IconButton>
+                  <Menu
+                    keepMounted
+                    anchorEl={anchorEl[i]}
+                    open={Boolean(anchorEl[i])}
+                    onClose={() => handleRowOptionsClose(i)}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right'
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }}
+                    PaperProps={{ style: { minWidth: '8rem' } }}
+                  >
+                    {/* <MenuItem onClick={() => setStudentToEdit(role)} sx={{ '& svg': { mr: 2 } }}>
+                      <Icon icon='tabler:edit' fontSize={20} />
+                      Edit Student
+                    </MenuItem> */}
+                    <MenuItem onClick={() => setStudentToView(role)} sx={{ '& svg': { mr: 2 } }}>
+                      <Icon icon='fluent:delete-24-regular' fontSize={20} />
+                      Delete Role
+                    </MenuItem>
+                  </Menu>
+                </CustomAvatar>
+              </>
             </Stack>
           </Card>
         </Grid>
