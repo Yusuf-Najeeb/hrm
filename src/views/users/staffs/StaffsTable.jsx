@@ -59,7 +59,6 @@ const StaffsTable = () => {
 
   // const router = useRouter()
   const [StaffsData, loading, paging] = useStaffs()
-  console.log(StaffsData)
   const [DepartmentsData] = useDepartments()
   const [RolesData] = useRoles()
   const [page, setPage] = useState(0)

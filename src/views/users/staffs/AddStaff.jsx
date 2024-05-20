@@ -72,6 +72,7 @@ import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { uploadImage } from '../../../store/apps/upload'
 import { steps } from '../../../@core/FormSchema/utils'
 import SubmitSpinnerMessage from '../components/SubmitSpinnerMessage'
+import CreateDepartment from './CreateDepartment'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -126,8 +127,6 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   const [DepartmentsData] = useDepartments()
   const [RolesData] = useRoles()
 
-  console.log(RolesData, 'Roles data')
-
   // ** States
   const [activeStep, setActiveStep] = useState(0)
   const [openDepartmentsModal, setOpenDepartmentsModal] = useState(false)
@@ -135,6 +134,11 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   const [previewUrl, setPreviewUrl] = useState('/images/avatars/1.png')
   const [imageLinkPayload, setImageLinkPayload] = useState(null)
   const [refetch, setFetch] = useState(false)
+  const [departmentModal, setDepartmentModal] = useState(false)
+
+  const toggleDepartmentModal = () => {
+    setDepartmentModal(!departmentModal)
+  }
 
   // const [state, setState] = useState({
   //   password: '',
@@ -323,6 +327,10 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
   // }
 
   const updateFetch = () => setFetch(!refetch)
+
+  const handleCreate = () => {
+    setDepartmentModal(true)
+  }
 
   const toggleDepartmentsModal = () => {
     setOpenDepartmentsModal(!openDepartmentsModal)
@@ -645,7 +653,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
               </Grid>
 
               <Grid item xs={2} sm={1} sx={{ mt: 5.4 }}>
-                <Button size='small' variant='contained' onClick={() => toggleDepartmentsModal()}>
+                <Button size='small' variant='contained' onClick={() => handleCreate()}>
                   <Icon fontSize='1.125rem' icon='tabler:plus' />
                 </Button>
               </Grid>
@@ -1022,6 +1030,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
             <CardContent>{renderContent()}</CardContent>
           </Card>
         </DialogContent>
+        {departmentModal && <CreateDepartment open={handleCreate} closeModal={toggleDepartmentModal} />}
       </Dialog>
     </Fragment>
   )
