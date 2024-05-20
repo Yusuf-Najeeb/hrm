@@ -143,7 +143,7 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaf
           <Divider sx={{ my: '0 !important', mx: 6 }} />
 
           <CardContent sx={{ pb: 4 }}>
-            <Typography variant='body2' sx={{ color: 'text.disabled', textTransform: 'uppercase' }}>
+            <Typography variant='body2' sx={{ color: 'text.disabled', textTransform: 'uppercase', fontSize: '1rem' }}>
               Details
             </Typography>
             <Box sx={{ pt: 4 }}>
@@ -166,7 +166,7 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaf
           </CardContent>
 
           <CardContent sx={{ pb: 4 }}>
-            <Typography variant='body2' sx={{ color: 'text.disabled', textTransform: 'uppercase' }}>
+            <Typography variant='body2' sx={{ color: 'text.disabled', textTransform: 'uppercase', fontSize: '1rem' }}>
               Account and Retirement Details
             </Typography>
             <Box sx={{ pt: 4 }}>
@@ -184,6 +184,34 @@ const StaffCard = ({ Staff, hasUploadedImage, setHasUploadedImage, closeViewStaf
                 iconName='ri:home-office-fill'
                 cardTitle='RSA Company'
                 value={Staff?.rsaCompany || '--'}
+              />
+            </Box>
+          </CardContent>
+
+          <Divider sx={{ my: '0 !important', mx: 6 }} />
+
+          <CardContent sx={{ pb: 4 }}>
+            <Typography variant='body2' sx={{ color: 'text.disabled', textTransform: 'uppercase', fontSize: '1rem' }}>
+              Next of Kin Details
+            </Typography>
+            <Box sx={{ pt: 4 }}>
+              <StaffDetailCard iconName='solar:user-broken' cardTitle='Title' value={Staff?.userNOK?.title || '--'} />
+              <StaffDetailCard
+                iconName='gg:rename'
+                cardTitle='Name'
+                value={`${Staff?.userNOK?.firstname} ${Staff?.userNOK?.lastname}` || '--'}
+              />
+              <StaffDetailCard iconName='ic:baseline-email' cardTitle='Email' value={Staff?.userNOK?.email || '--'} />
+              <StaffDetailCard iconName='bi:phone' cardTitle='Phone number' value={Staff?.userNOK?.phone || '--'} />
+              <StaffDetailCard
+                iconName='ri:home-office-fill'
+                cardTitle='Address'
+                value={Staff?.userNOK?.address || '--'}
+              />
+              <StaffDetailCard
+                iconName='fluent-mdl2:family'
+                cardTitle='Relationship'
+                value={Staff?.userNOK?.relationship || '--'}
               />
             </Box>
           </CardContent>
