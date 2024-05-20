@@ -3,17 +3,17 @@ import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const createDeduction = createAsyncThunk('deduction/createItem', async () => {
+export const createDeduction = createAsyncThunk('deduction/createItem', async vals => {
   try {
     const response = await axios.post('/deductions', vals, {
       headers: { 'Content-Type': 'application/json' }
     })
 
-    notifySuccess('Added deduction')
+    // notifySuccess(`Added ${vals?.type}`)
 
     return response
   } catch (error) {
-    notifyError('error add deduction')
+    // notifyError(`error add ${vals?.type}`)
 
     return {
       success: false
@@ -21,9 +21,9 @@ export const createDeduction = createAsyncThunk('deduction/createItem', async ()
   }
 })
 
-export const fetchDeductions = createAsyncThunk('deductions/fetch ', async period => {
+export const fetchDeductions = createAsyncThunk('deductions/fetch ', async () => {
   try {
-    const response = await axios.get(`/deductions?period=${period}`)
+    const response = await axios.get('/deductions')
 
     // console.log(response, 'deductions res')
 

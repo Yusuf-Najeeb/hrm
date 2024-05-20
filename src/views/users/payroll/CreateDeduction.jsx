@@ -27,7 +27,8 @@ const defaultValues = {
   userId: Number(''),
   period: '',
   amount: Number(''),
-  description: ''
+  description: '',
+  type: ''
 }
 
 const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) => {
@@ -47,24 +48,30 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
     resolver: yupResolver(deductionsSchema)
   })
 
-  const createDeduction = async values => {
+  const handleDeductions = async values => {
     try {
-      const { type, period, amount, description, userId } = values
+      const { period, amount, description, userId } = values
 
-      // const createUrl = `/deductions`
+      const createUrl = `/deductions`
 
       const payload = { type: amountType, period, amount, description, userId }
 
-      const resp = await createDeduction(payload)
+      const resp = await axios.post(
+        createUrl,
+        { ...payload },
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
 
       if (resp.data.success) {
-        notifySuccess(`${formatFirstLetter(type)} Created Successfully`)
-        closeDialog()
+        notifySuccess(`${formatFirstLetter(amountType)} Created Successfully`)
         reset()
         updateFetch()
+        closeDialog()
       }
     } catch (error) {
-      notifyError(`Error Creating ${formatFirstLetter(type)}`)
+      notifyError(`Error Creating ${formatFirstLetter(amountType)}`)
       console.log(error)
     }
   }
@@ -78,7 +85,7 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   return (
     <Fragment>
       <Dialog open={openDialog} sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 450 } }}>
-        <form onSubmit={handleSubmit(createDeduction)}>
+        <form onSubmit={handleSubmit(handleDeductions)}>
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`,

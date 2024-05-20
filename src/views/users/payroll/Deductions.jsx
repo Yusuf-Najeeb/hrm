@@ -32,6 +32,8 @@ const DeductionsTable = () => {
   const [deductionsData, loading] = useDeductions()
   const [StaffsData] = useStaffs()
 
+  console.log(deductionsData)
+
   // States
   const [type, setType] = useState('')
   const [addDeductionOpen, setDeductionOpen] = useState(false)
@@ -93,7 +95,7 @@ const DeductionsTable = () => {
   }
 
   useEffect(() => {
-    dispatch(fetchDeductions(formatDefaultPeriod))
+    dispatch(fetchDeductions())
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch])
@@ -142,7 +144,7 @@ const DeductionsTable = () => {
             ) : (
               <Fragment>
                 {deductionsData?.map((deduction, i) => {
-                  const userName = StaffsData.find(user => user.id === deduction.userId)
+                  const userName = StaffsData.find(user => user.id === deduction?.userId)
 
                   return (
                     <TableRow hover role='checkbox' key={deduction.id}>

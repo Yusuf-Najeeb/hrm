@@ -4,8 +4,7 @@ import { fetchDeductions } from './asyncthunk'
 
 const initialState = {
   loading: false,
-  deductionsData: [],
- 
+  deductionsData: []
 }
 
 export const deduction = createSlice({
@@ -18,10 +17,9 @@ export const deduction = createSlice({
     })
     builder.addCase(fetchDeductions.fulfilled, (state, action) => {
       state.loading = false
-
       state.deductionsData = action?.payload?.data?.data
 
-    //   state.Paging = action?.payload?.data?.paging
+      //   state.Paging = action?.payload?.data?.paging
     })
     builder.addCase(fetchDeductions.rejected, state => {
       state.loading = false
