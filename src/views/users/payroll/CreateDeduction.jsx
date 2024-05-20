@@ -51,9 +51,7 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   const handleDeductions = async values => {
     try {
       const { period, amount, description, userId } = values
-
       const createUrl = `/deductions`
-
       const payload = { type: amountType, period, amount, description, userId }
 
       const resp = await axios.post(

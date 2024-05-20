@@ -32,8 +32,6 @@ const DeductionsTable = () => {
   const [deductionsData, loading] = useDeductions()
   const [StaffsData] = useStaffs()
 
-  console.log(deductionsData)
-
   // States
   const [type, setType] = useState('')
   const [addDeductionOpen, setDeductionOpen] = useState(false)
