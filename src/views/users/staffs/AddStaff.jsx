@@ -352,7 +352,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
               <Grid item xs={12} sm={6}>
                 <Box
                   sx={{
-                    border: '3px dotted black',
+                    border: '3px dotted',
                     borderRadius: 3,
                     p: 3,
                     display: 'flex',
@@ -741,7 +741,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
               </Grid>
 
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                <Button variant='contained' color='primary' onClick={handleBack}>
                   Back
                 </Button>
                 <Button type='submit' variant='contained'>
@@ -891,7 +891,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
               </Grid>
 
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                <Button variant='contained' color='primary' onClick={handleBack}>
                   Back
                 </Button>
                 <Button type='submit' variant='contained' disabled={isSubmitting}>
