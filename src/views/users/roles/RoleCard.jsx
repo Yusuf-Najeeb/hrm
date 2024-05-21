@@ -59,7 +59,6 @@ const RoleCard = () => {
     const newAnchorEl = [...anchorEl]
     newAnchorEl[index] = null
     setAnchorEl(newAnchorEl)
-    updateFetch()
   }
 
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
@@ -80,12 +79,12 @@ const RoleCard = () => {
   const ondeleteClick = () => {
     dispatch(deleteRole(selectedRole))
     doCancelDelete()
-    updateFetch()
   }
 
   const doCancelDelete = () => {
     setDeleteModal(false)
     setSelectedRole(null)
+    updateFetch()
   }
 
   const doDelete = value => {
@@ -176,8 +175,8 @@ const RoleCard = () => {
               <Box sx={{ alignSelf: 'end' }}>
                 <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
                   <IconButton size='small' onClick={event => handleRowOptionsClick(event, i)}>
-                    {/* <Icon icon='tabler:dots-vertical' /> */}
-                    <Icon icon='tabler:settings' />
+                    <Icon icon='tabler:dots-vertical' />
+                    {/* <Icon icon='tabler:settings' /> */}
                   </IconButton>
                   <Menu
                     keepMounted
