@@ -7,13 +7,14 @@ import React, { useEffect, useState } from 'react'
 // ** Custom Component Import
 import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
+import { fetchRoles, deleteRole } from '../../../store/apps/roles/asyncthunk'
 import { fetchPermissions } from '../../../store/apps/permissions/asyncthunk'
 import { usePermissions } from '../../../hooks/usePermissions'
 import { useRoles } from '../../../hooks/useRoles'
 import { getInitials } from 'src/@core/utils/get-initials'
 import PageHeader from '../components/PageHeader'
 import CreateRole from './CreateRole'
+import DeleteDialog from '../../../@core/components/delete-dialog'
 
 // ** Icon Import
 import Icon from 'src/@core/components/icon'
@@ -42,6 +43,8 @@ const RoleCard = () => {
   const [openPermissions, setPermissions] = useState(false)
   const [dialogTitle, setDialogTitle] = useState('Add')
   const [anchorEl, setAnchorEl] = useState(Array(PermissionsData?.length)?.fill(null))
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [selectedRole, setSelectedRole] = useState(null)
 
   const handleRowOptionsClick = (event, index) => {
     const newAnchorEl = [...anchorEl]
@@ -53,15 +56,33 @@ const RoleCard = () => {
     const newAnchorEl = [...anchorEl]
     newAnchorEl[index] = null
     setAnchorEl(newAnchorEl)
+    updateFetch()
   }
+
+  const updateFetch = () => setFetch(!refetch)
 
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
   const togglePermissions = () => setPermissions(!openPermissions)
 
+  const ondeleteClick = () => {
+    dispatch(deleteRole(selectedRole))
+    doCancelDelete()
+    updateFetch()
+  }
+
+  const doCancelDelete = () => {
+    setDeleteModal(false)
+    setSelectedRole(null)
+  }
+
+  const doDelete = value => {
+    setDeleteModal(true)
+    setSelectedRole(value?.id)
+  }
+
   const updatePermission = () => {
     setPermissions(true)
   }
-  const updateFetch = () => setFetch(!refetch)
 
   const renderClient = row => {
     const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
@@ -135,11 +156,11 @@ const RoleCard = () => {
                     setDialogTitle('Edit')
                   }}
                 >
-                  Edit Role
+                  Permissions
                 </Typography>
               </Box>
 
-              <>
+              <Box sx={{ alignSelf: 'end' }}>
                 <CustomAvatar skin='light' color={2 % 2 === 0 ? 'primary' : 'secondary'}>
                   <IconButton size='small' onClick={event => handleRowOptionsClick(event, i)}>
                     {/* <Icon icon='tabler:dots-vertical' /> */}
@@ -160,17 +181,17 @@ const RoleCard = () => {
                     }}
                     PaperProps={{ style: { minWidth: '8rem' } }}
                   >
-                    {/* <MenuItem onClick={() => setStudentToEdit(role)} sx={{ '& svg': { mr: 2 } }}>
+                    <MenuItem onClick={() => setStudentToEdit(role)} sx={{ '& svg': { mr: 2 } }}>
                       <Icon icon='tabler:edit' fontSize={20} />
-                      Edit Student
-                    </MenuItem> */}
-                    <MenuItem onClick={() => setStudentToView(role)} sx={{ '& svg': { mr: 2 } }}>
+                      Edit
+                    </MenuItem>
+                    <MenuItem onClick={() => doDelete(role)} sx={{ '& svg': { mr: 2 } }}>
                       <Icon icon='fluent:delete-24-regular' fontSize={20} />
-                      Delete Role
+                      Delete
                     </MenuItem>
                   </Menu>
                 </CustomAvatar>
-              </>
+              </Box>
             </Stack>
           </Card>
         </Grid>
@@ -213,6 +234,7 @@ const RoleCard = () => {
       {openPermissions && (
         <Permissions open={updatePermission} closeModal={togglePermissions} dialogTitle={dialogTitle} />
       )}
+      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
     </Grid>
   )
 }
