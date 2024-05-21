@@ -78,8 +78,6 @@ const EditRole = ({ open, closeModal, refetchRoles, selectedRole }) => {
       open={open}
       maxWidth='md'
       scroll='body'
-      
-      //   TransitionComponent={Transition}
       sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 390 } }}
     >
       <DialogContent

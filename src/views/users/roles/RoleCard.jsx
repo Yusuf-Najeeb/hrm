@@ -32,6 +32,7 @@ import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Permissions from './Permissions'
+import EditRole from './EditRole'
 
 const RoleCard = () => {
   const dispatch = useAppDispatch()
@@ -45,12 +46,14 @@ const RoleCard = () => {
   const [anchorEl, setAnchorEl] = useState(Array(PermissionsData?.length)?.fill(null))
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRole, setSelectedRole] = useState(null)
+  const [editModal, setEditModal] = useState(false)
 
   const handleRowOptionsClick = (event, index) => {
     const newAnchorEl = [...anchorEl]
     newAnchorEl[index] = event.currentTarget
     setAnchorEl(newAnchorEl)
   }
+  const updateFetch = () => setFetch(!refetch)
 
   const handleRowOptionsClose = index => {
     const newAnchorEl = [...anchorEl]
@@ -59,10 +62,20 @@ const RoleCard = () => {
     updateFetch()
   }
 
-  const updateFetch = () => setFetch(!refetch)
-
   const toggleRoleDrawer = () => setaddRoleOpen(!addRoleOpen)
   const togglePermissions = () => setPermissions(!openPermissions)
+  const toggleEditModal = () => setEditModal(!editModal)
+
+  const setRoleEdit = role => {
+    setEditModal(true)
+    setSelectedRole(role)
+  }
+
+  const cancelEditMode = () => {
+    setEditModal(false)
+    setSelectedRole(null)
+    toggleEditModal()
+  }
 
   const ondeleteClick = () => {
     dispatch(deleteRole(selectedRole))
@@ -170,7 +183,7 @@ const RoleCard = () => {
                     keepMounted
                     anchorEl={anchorEl[i]}
                     open={Boolean(anchorEl[i])}
-                    onClose={() => handleRowOptionsClose(i)}
+                    onBlur={() => handleRowOptionsClose(i)}
                     anchorOrigin={{
                       vertical: 'bottom',
                       horizontal: 'right'
@@ -181,7 +194,7 @@ const RoleCard = () => {
                     }}
                     PaperProps={{ style: { minWidth: '8rem' } }}
                   >
-                    <MenuItem onClick={() => setStudentToEdit(role)} sx={{ '& svg': { mr: 2 } }}>
+                    <MenuItem onClick={() => setRoleEdit(role)} sx={{ '& svg': { mr: 2 } }}>
                       <Icon icon='tabler:edit' fontSize={20} />
                       Edit
                     </MenuItem>
@@ -230,7 +243,9 @@ const RoleCard = () => {
       </Grid>
 
       {addRoleOpen && <CreateRole open={addRoleOpen} closeModal={toggleRoleDrawer} refetchRoles={updateFetch} />}
-
+      {editModal && (
+        <EditRole open={editModal} closeModal={cancelEditMode} refetchRoles={updateFetch} selectedRole={selectedRole} />
+      )}
       {openPermissions && (
         <Permissions open={updatePermission} closeModal={togglePermissions} dialogTitle={dialogTitle} />
       )}
