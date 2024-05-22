@@ -84,18 +84,21 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  username: yup.string().required(),
-  password: yup.string().min(5).required()
+  oldPassword: yup.string().required(),
+  password: yup.string().min(5).required(),
+  confirmPassword: yup.string().min(5).required()
 })
 
 const defaultValues = {
-  password: 'techtink.admin',
-  username: 'techtink.admin'
+  oldPassword: '',
+  password: '',
+  confirmPassword: ''
 }
 
-const LoginPage = () => {
+const UpdatePassword = () => {
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   // Next Js
   const router = useRouter()
@@ -130,7 +133,7 @@ const LoginPage = () => {
         router.replace('/dashboards/analytics')
       }
     } catch (error) {
-      notifyError('A network Error occured, please try again')
+      notifyError('A network Error occurred, please try again')
     }
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
@@ -198,51 +201,48 @@ const LoginPage = () => {
               <Typography variant='h3' sx={{ mb: 1.5 }}>
                 {`Welcome to ${themeConfig.templateName}! 👋🏻`}
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>
-                Please sign-in to your account and start the adventure
-              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>Update your password and start the adventure</Typography>
             </Box>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-              {/* <Box sx={{ mb: 4 }}>
+              <Box sx={{ mb: 4 }}>
                 <Controller
-                  name='email'
+                  name='oldPassword'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
                     <CustomTextField
                       fullWidth
                       autoFocus
-                      label='Email'
+                      label='Old Password'
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
-                      placeholder='admin@vuexy.com'
-                      error={Boolean(errors.email)}
-                      {...(errors.email && { helperText: errors.email.message })}
+                      placeholder='Old Password'
+                      error={Boolean(errors.oldPassword)}
+                      {...(errors.oldPassword && { helperText: errors.oldPassword.message })}
                     />
                   )}
                 />
-              </Box> */}
-              <Box sx={{ mb: 4 }}>
+              </Box>
+              {/* <Box sx={{ mb: 4 }}>
                 <Controller
-                  name='username'
+                  name='newPassword'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
                     <CustomTextField
                       fullWidth
-                      autoFocus
-                      label='Username'
+                      label='New Password'
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
-                      placeholder='admin'
+                      placeholder='New Password'
                       error={Boolean(errors.username)}
                       {...(errors.username && { helperText: errors.username.message })}
                     />
                   )}
                 />
-              </Box>
+              </Box> */}
               <Box sx={{ mb: 1.5 }}>
                 <Controller
                   name='password'
@@ -253,7 +253,7 @@ const LoginPage = () => {
                       fullWidth
                       value={value}
                       onBlur={onBlur}
-                      label='Password'
+                      label='New Password'
                       onChange={onChange}
                       id='auth-login-v2-password'
                       error={Boolean(errors.password)}
@@ -276,7 +276,40 @@ const LoginPage = () => {
                   )}
                 />
               </Box>
-              <Box
+              <Box sx={{ mb: 1.5 }}>
+                <Controller
+                  name='confirmPassword'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      onBlur={onBlur}
+                      label='Confirm Password'
+                      onChange={onChange}
+                      id='auth-login-v2-password'
+                      error={Boolean(errors.confirmPassword)}
+                      {...(errors.confirmPassword && { helperText: errors.confirmPassword.message })}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton
+                              edge='end'
+                              onMouseDown={e => e.preventDefault()}
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                              <Icon fontSize='1.25rem' icon={showConfirmPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  )}
+                />
+              </Box>
+              {/* <Box
                 sx={{
                   mb: 1.75,
                   display: 'flex',
@@ -292,16 +325,16 @@ const LoginPage = () => {
                 <Typography component={LinkStyled} href='/forgot-password'>
                   Forgot Password?
                 </Typography>
-              </Box>
-              <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
+              </Box> */}
+              <Button fullWidth type='submit' variant='contained' sx={{ my: 4 }}>
                 Login
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>New on our platform?</Typography>
                 <Typography href='/register' component={LinkStyled}>
                   Create an account
                 </Typography>
-              </Box>
+              </Box> */}
               <Divider
                 sx={{
                   color: 'text.disabled',
@@ -338,7 +371,7 @@ const LoginPage = () => {
     </Box>
   )
 }
-LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
-LoginPage.guestGuard = true
+UpdatePassword.getLayout = page => <BlankLayout>{page}</BlankLayout>
+UpdatePassword.guestGuard = true
 
-export default LoginPage
+export default UpdatePassword
