@@ -92,8 +92,9 @@ const RoleCard = () => {
     setSelectedRole(value?.id)
   }
 
-  const updatePermission = () => {
+  const updatePermission = data => {
     setPermissions(true)
+    setSelectedRole(data)
   }
 
   const renderClient = row => {
@@ -164,7 +165,7 @@ const RoleCard = () => {
                   sx={{ color: 'primary.main', textDecoration: 'none', cursor: 'pointer' }}
                   onClick={e => {
                     e.preventDefault()
-                    updatePermission()
+                    updatePermission(role)
                     setDialogTitle('Edit')
                   }}
                 >
@@ -246,7 +247,12 @@ const RoleCard = () => {
         <EditRole open={editModal} closeModal={cancelEditMode} refetchRoles={updateFetch} selectedRole={selectedRole} />
       )}
       {openPermissions && (
-        <Permissions open={updatePermission} closeModal={togglePermissions} dialogTitle={dialogTitle} />
+        <Permissions
+          open={updatePermission}
+          closeModal={togglePermissions}
+          dialogTitle={dialogTitle}
+          selectedRole={selectedRole}
+        />
       )}
       <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
     </Grid>

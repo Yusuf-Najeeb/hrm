@@ -26,11 +26,11 @@ import Icon from 'src/@core/components/icon'
 // ** Custom Component & Hooks Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import { fetchPermissions } from '../../../store/apps/permissions/asyncthunk'
+import { fetchPermissions, updatePermissions } from '../../../store/apps/permissions/asyncthunk'
 import { usePermissions } from '../../../hooks/usePermissions'
 import { useAppDispatch } from '../../../hooks'
 
-const Permissions = ({ open, closeModal, dialogTitle }) => {
+const Permissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   const dispatch = useAppDispatch()
   const [PermissionsData] = usePermissions()
 
@@ -38,6 +38,7 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
   const [allPermissions, setAllPermissions] = useState([])
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState(false)
   const [selectAll, setSelectAll] = useState(false)
+  const [roleId, setRoleId] = useState(null)
 
   const handleChange = id => {
     if (permissionsId.includes(id)) {
@@ -61,6 +62,19 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
   const handleClose = () => {
     setIsIndeterminateCheckbox(false)
     closeModal()
+    setRoleId(null)
+  }
+
+  const handleUpdate = async () => {
+    const payload = {
+      permissionIds: permissionsId,
+      roleId: roleId
+    }
+
+    if (payload) {
+      updatePermissions(payload)
+      closeModal()
+    }
   }
 
   useEffect(() => {
@@ -81,7 +95,7 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
 
     setAllPermissions(flattenedArray)
     setPermissionsId(getIds)
-
+    setRoleId(selectedRole?.id)
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -196,7 +210,7 @@ const Permissions = ({ open, closeModal, dialogTitle }) => {
         }}
       >
         <Box className='demo-space-x'>
-          <Button type='submit' variant='contained'>
+          <Button type='submit' variant='contained' onClick={handleUpdate}>
             Submit
           </Button>
           <Button color='secondary' variant='tonal' onClick={handleClose}>
