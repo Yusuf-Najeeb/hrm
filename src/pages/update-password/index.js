@@ -84,15 +84,19 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  oldPassword: yup.string().required(),
+  old_password: yup.string().required(),
   password: yup.string().min(5).required(),
-  confirmPassword: yup.string().min(5).required()
+  confirm_password: yup
+    .string()
+    .min(5)
+    .required()
+    .oneOf([yup.ref('password'), null], 'Passwords does not match')
 })
 
 const defaultValues = {
-  oldPassword: '',
+  old_password: '',
   password: '',
-  confirmPassword: ''
+  confirm_password: ''
 }
 
 const UpdatePassword = () => {
@@ -125,16 +129,18 @@ const UpdatePassword = () => {
   })
 
   const onSubmit = async data => {
-    const { username, password } = data
-    try {
-      const resp = await dispatch(LoginUser({ username, password }))
-      if (resp.payload?.success) {
-        console.log(resp, 'login response')
-        router.replace('/dashboards/analytics')
-      }
-    } catch (error) {
-      notifyError('A network Error occurred, please try again')
-    }
+    console.log(data)
+    const { old_password, password, confirmPassword } = data
+
+    // try {
+    //   const resp = await dispatch(LoginUser({ username, password }))
+    //   if (resp.payload?.success) {
+    //     console.log(resp, 'login response')
+    //     router.replace('/dashboards/analytics')
+    //   }
+    // } catch (error) {
+    //   notifyError('A network Error occurred, please try again')
+    // }
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
@@ -206,7 +212,7 @@ const UpdatePassword = () => {
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <Box sx={{ mb: 4 }}>
                 <Controller
-                  name='oldPassword'
+                  name='old_password'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
@@ -218,8 +224,8 @@ const UpdatePassword = () => {
                       onBlur={onBlur}
                       onChange={onChange}
                       placeholder='Old Password'
-                      error={Boolean(errors.oldPassword)}
-                      {...(errors.oldPassword && { helperText: errors.oldPassword.message })}
+                      error={Boolean(errors.old_password)}
+                      {...(errors.old_password && { helperText: errors.old_password.message })}
                     />
                   )}
                 />
@@ -278,7 +284,7 @@ const UpdatePassword = () => {
               </Box>
               <Box sx={{ mb: 1.5 }}>
                 <Controller
-                  name='confirmPassword'
+                  name='confirm_password'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
@@ -289,8 +295,8 @@ const UpdatePassword = () => {
                       label='Confirm Password'
                       onChange={onChange}
                       id='auth-login-v2-password'
-                      error={Boolean(errors.confirmPassword)}
-                      {...(errors.confirmPassword && { helperText: errors.confirmPassword.message })}
+                      error={Boolean(errors.confirm_password)}
+                      {...(errors.confirm_password && { helperText: errors.confirm_password.message })}
                       type={showConfirmPassword ? 'text' : 'password'}
                       InputProps={{
                         endAdornment: (
