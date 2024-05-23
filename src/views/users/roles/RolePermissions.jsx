@@ -30,7 +30,7 @@ import { fetchPermissions, updatePermissions } from '../../../store/apps/permiss
 import { usePermissions } from '../../../hooks/usePermissions'
 import { useAppDispatch } from '../../../hooks'
 
-const Permissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
+const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   const dispatch = useAppDispatch()
   const [PermissionsData] = usePermissions()
 
@@ -41,8 +41,8 @@ const Permissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   const [roleId, setRoleId] = useState(null)
 
   const handleChange = id => {
-    if (permissionsId.includes(id)) {
-      const newIds = permissionsId.filter(perm => perm !== id)
+    if (permissionsId?.includes(id)) {
+      const newIds = permissionsId?.filter(perm => perm !== id)
       setPermissionsId([...newIds])
     } else {
       setPermissionsId(prev => [...prev, id])
@@ -88,9 +88,9 @@ const Permissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   useEffect(() => {
     dispatch(fetchPermissions())
 
-    const reduceAllPermissions = PermissionsData.map(perm => perm?.permissions)
-    const flattenedArray = reduceAllPermissions.flatMap(item => item)
-    const getIds = flattenedArray.map(item => item?.id)
+    const reduceAllPermissions = PermissionsData?.map(perm => perm?.permissions)
+    const flattenedArray = reduceAllPermissions?.flatMap(item => item)
+    const getIds = flattenedArray?.map(item => item?.id)
 
     setAllPermissions(flattenedArray)
     setPermissionsId(getIds)
@@ -221,4 +221,4 @@ const Permissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   )
 }
 
-export default Permissions
+export default RolePermissions

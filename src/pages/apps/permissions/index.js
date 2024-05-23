@@ -31,7 +31,7 @@ import TableHeader from 'src/views/apps/permissions/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Actions Imports
-import { fetchData } from 'src/store/apps/permissions'
+import { fetchPermissions } from 'src/store/apps/permissions'
 
 const colors = {
   support: 'info',

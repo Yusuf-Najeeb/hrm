@@ -31,7 +31,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import Permissions from './Permissions'
+import Permissions from './RolePermissions'
 import EditRole from './EditRole'
 
 const RoleCard = () => {

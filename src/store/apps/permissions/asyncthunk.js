@@ -2,10 +2,9 @@ import axios from 'axios'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { headers } from 'next/dist/client/components/headers'
 
 export const fetchPermissions = createAsyncThunk(
-  'permission/fetchItems',
+  'role/fetchPermission',
 
   async () => {
     try {
@@ -28,6 +27,7 @@ export const updatePermissions = async vals => {
         permissionIds: vals?.permissionIds,
         roleId: vals?.roleId
       },
+
       {
         headers: { 'Content-Type': 'application/json' }
       }
