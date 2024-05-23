@@ -65,12 +65,11 @@ const Permissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
     setRoleId(null)
   }
 
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     const payload = {
       permissionIds: permissionsId,
       roleId: roleId
     }
-
     if (payload) {
       updatePermissions(payload)
       closeModal()

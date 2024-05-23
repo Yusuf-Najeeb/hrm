@@ -130,7 +130,7 @@ const LoginPage = () => {
         router.replace('/dashboards/analytics')
       }
     } catch (error) {
-      notifyError('A network Error occured, please try again')
+      notifyError('A network Error occurred, please try again')
     }
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'

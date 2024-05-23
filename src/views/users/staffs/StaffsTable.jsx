@@ -75,6 +75,8 @@ const StaffsTable = () => {
   const [editModal, setEditModal] = useState(false)
   const [selectedDept, setSelectedDept] = useState('')
 
+  console.log(StaffsData)
+
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
     color: `${theme.palette.primary.main} !important`
