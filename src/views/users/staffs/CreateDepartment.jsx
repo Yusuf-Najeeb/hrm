@@ -44,7 +44,7 @@ const defaultValues = {
   name: ''
 }
 
-const CreateDepartment = ({ open, closeModal }) => {
+const CreateDepartment = ({ open, closeModal, refetchDepartment }) => {
   const dispatch = useAppDispatch()
 
   const {
@@ -58,6 +58,7 @@ const CreateDepartment = ({ open, closeModal }) => {
     dispatch(createDepartment(data))
     reset()
     closeModal()
+    refetchDepartment()
   }
 
   return (

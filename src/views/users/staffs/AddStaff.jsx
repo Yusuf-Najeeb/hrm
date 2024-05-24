@@ -1032,7 +1032,9 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
             <CardContent>{renderContent()}</CardContent>
           </Card>
         </DialogContent>
-        {departmentModal && <CreateDepartment open={handleCreate} closeModal={toggleDepartmentModal} />}
+        {departmentModal && (
+          <CreateDepartment open={handleCreate} closeModal={toggleDepartmentModal} refetchDepartment={updateFetch} />
+        )}
       </Dialog>
     </Fragment>
   )

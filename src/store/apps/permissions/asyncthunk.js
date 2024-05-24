@@ -5,7 +5,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 
 export const fetchPermissions = createAsyncThunk(
   'role/fetchPermission',
-
   async () => {
     try {
       const response = await axios.get(`/permission`)

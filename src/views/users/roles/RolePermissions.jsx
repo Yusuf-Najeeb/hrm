@@ -34,6 +34,8 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   const dispatch = useAppDispatch()
   const [PermissionsData] = usePermissions()
 
+  console.log(PermissionsData, 'PermissionsData')
+
   const [permissionsId, setPermissionsId] = useState([])
   const [allPermissions, setAllPermissions] = useState([])
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState(false)
