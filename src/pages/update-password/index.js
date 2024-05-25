@@ -44,6 +44,7 @@ import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import { useAppDispatch } from '../../hooks'
 import { updatePassword } from '../../store/apps/auth/asyncthunk'
 import { notifyError } from '../../@core/components/toasts/notifyError'
+import { notifySuccess } from '../../@core/components/toasts/notifySuccess'
 
 // ** Styled Components
 const LoginIllustration = styled('img')(({ theme }) => ({
@@ -129,7 +130,6 @@ const UpdatePassword = () => {
   })
 
   const onSubmit = async data => {
-    console.log(data)
     const { oldPassword, newPassword, confirmNewPassword } = data
     try {
       const values = {
@@ -138,14 +138,21 @@ const UpdatePassword = () => {
         confirmNewPassword,
         id: 2
       }
-      console.log(values, 'values here')
       const response = await axios.patch(`users/password/update`, values)
+      notifySuccess('Password updated successfully')
 
-      console.log(response.success)
+      if (response?.data?.success) {
+        router.replace('/dashboards/analytics')
+        console.log(response, 'login response')
+      }
+
+      return response
     } catch (err) {
       console.log(err)
+      notifyError('Password update failed')
     }
   }
+
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
   return (

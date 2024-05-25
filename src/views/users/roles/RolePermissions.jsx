@@ -74,6 +74,7 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
       permissionIds: permissionsId,
       roleId: roleId
     }
+
     if (payload) {
       updatePermissions(payload)
       closeModal()
@@ -90,7 +91,7 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   }, [permissionsId])
 
   useEffect(() => {
-    const res = fetchRolePermissions(selectedRole?.id).then(res => {
+    fetchRolePermissions(selectedRole?.id).then(res => {
       if (res?.data?.success) {
         const permissions = res?.data?.data?.permissions
         const reducePermissions = permissions?.map(perm => perm?.permissions)
