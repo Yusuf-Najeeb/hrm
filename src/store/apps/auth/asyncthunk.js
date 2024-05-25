@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { notifyError } from '../../../@core/components/toasts/notifyError'
 
-export const LoginUser = createAsyncThunk('auth/login', async (values) => {
+export const LoginUser = createAsyncThunk('auth/login', async values => {
   try {
     const { data } = await axios({
       method: 'post',
@@ -24,3 +25,13 @@ export const LoginUser = createAsyncThunk('auth/login', async (values) => {
     throw new Error(error.response?.data?.message || 'failed to Login')
   }
 })
+
+// export const updatePassword = async values => {
+//   try {
+//     const res = await axios.patch(`users/password/update`, values)
+
+//     return res.data
+//   } catch (err) {
+//     notifyError(err)
+//   }
+// }

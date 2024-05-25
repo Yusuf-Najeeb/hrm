@@ -26,20 +26,22 @@ import Icon from 'src/@core/components/icon'
 // ** Custom Component & Hooks Import
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import { fetchPermissions, updatePermissions } from '../../../store/apps/permissions/asyncthunk'
+import { useRoles } from '../../../hooks/useRoles'
+import { updatePermissions } from '../../../store/apps/permissions/asyncthunk'
+import { fetchRolePermissions } from '../../../store/apps/roles/asyncthunk'
 import { usePermissions } from '../../../hooks/usePermissions'
 import { useAppDispatch } from '../../../hooks'
 
 const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   const dispatch = useAppDispatch()
-  const [PermissionsData] = usePermissions()
-
-  console.log(PermissionsData, 'PermissionsData')
+  const [RolesData] = useRoles()
 
   const [permissionsId, setPermissionsId] = useState([])
   const [allPermissions, setAllPermissions] = useState([])
+  const [totalPermissions, setTotalPermissions] = useState([])
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState(false)
   const [selectAll, setSelectAll] = useState(false)
+  const [role, setRole] = useState('')
   const [roleId, setRoleId] = useState(null)
 
   const handleChange = id => {
@@ -56,7 +58,7 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
       setSelectAll(false)
       setPermissionsId([])
     } else {
-      setPermissionsId(allPermissions.map(item => item.id))
+      setPermissionsId(totalPermissions.map(item => item.id))
       setSelectAll(true)
     }
   }
@@ -79,7 +81,7 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   }
 
   useEffect(() => {
-    if (permissionsId?.length > 0 && permissionsId?.length < allPermissions?.length) {
+    if (permissionsId?.length > 0 && permissionsId?.length < totalPermissions?.length) {
       setIsIndeterminateCheckbox(true)
     } else {
       setIsIndeterminateCheckbox(false)
@@ -88,15 +90,22 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
   }, [permissionsId])
 
   useEffect(() => {
-    dispatch(fetchPermissions())
+    const res = fetchRolePermissions(selectedRole?.id).then(res => {
+      if (res?.data?.success) {
+        const permissions = res?.data?.data?.permissions
+        const reducePermissions = permissions?.map(perm => perm?.permissions)
+        const flattenPermissions = reducePermissions?.flatMap(item => item)
+        const activePermissions = flattenPermissions?.filter(item => item?.active === true)
+        const activePermissionIds = activePermissions?.map(item => item?.id)
 
-    const reduceAllPermissions = PermissionsData?.map(perm => perm?.permissions)
-    const flattenedArray = reduceAllPermissions?.flatMap(item => item)
-    const getIds = flattenedArray?.map(item => item?.id)
+        setTotalPermissions(flattenPermissions)
+        setAllPermissions(permissions)
+        setPermissionsId(activePermissionIds)
+      }
+    })
 
-    setAllPermissions(flattenedArray)
-    setPermissionsId(getIds)
     setRoleId(selectedRole?.id)
+    setRole(RolesData?.find(role => role?.id === roleId))
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -121,7 +130,12 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
       >
         <Box sx={{ my: 4 }}>
           <FormControl fullWidth>
-            <CustomTextField fullWidth label='Role Name' placeholder='Enter Role Name' />
+            <CustomTextField
+              fullWidth
+              label='Role Name'
+              placeholder='Enter Role Name'
+              value={formatFirstLetter(role?.name)}
+            />
           </FormControl>
         </Box>
         <Typography variant='h4'>Role Permissions</Typography>
@@ -159,7 +173,7 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
                         size='small'
                         onChange={handleSelectAll}
                         indeterminate={isIndeterminateCheckbox}
-                        checked={permissionsId?.length === allPermissions?.length}
+                        checked={permissionsId?.length === totalPermissions?.length}
                       />
                     }
                   />
@@ -167,7 +181,7 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {PermissionsData.map((role, i) => {
+              {allPermissions.map(role => {
                 return (
                   <TableRow key={role?.id} sx={{ '& .MuiTableCell-root:first-of-type': { pl: '0 !important' } }}>
                     <TableCell
@@ -179,16 +193,16 @@ const RolePermissions = ({ open, closeModal, dialogTitle, selectedRole }) => {
                     >
                       {role?.name.toUpperCase()}
                     </TableCell>
-                    {role?.permissions?.map((permission, i) => (
-                      <TableCell key={i}>
+                    {role?.permissions?.map(permission => (
+                      <TableCell key={permission?.id}>
                         <FormControlLabel
                           label={formatFirstLetter(permission?.name)}
                           sx={{ '& .MuiTypography-root': { color: 'text.secondary' } }}
                           control={
                             <Checkbox
                               size='small'
-                              id={role?.id}
-                              checked={permissionsId?.includes(permission?.id)}
+                              id={permission?.id}
+                              checked={permissionsId?.includes(permission.id)}
                               onChange={() => handleChange(permission?.id)}
                             />
                           }

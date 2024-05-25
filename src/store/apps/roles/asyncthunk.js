@@ -39,22 +39,16 @@ export const fetchRoles = createAsyncThunk('roles/fetchItems', async query => {
   }
 })
 
-// export const updateRoles = createAsyncThunk('roles/updateItems', async query => {
-//   try {
-//     const response = await axios.put(`/role/updateItems`, {
-//       params: {
-//         page: query.page,
-//         limit: query.limit
-//       }
-//     })
+export const fetchRolePermissions = async id => {
+  try {
+    const resp = await axios.get(`/role/${id}`)
 
-//     return response
-//   } catch (error) {
-//     console.log(error, 'errorrrr')
-
-//     // notifyError('Error Fetching Salary Items')
-//   }
-// })
+    return resp
+  } catch (err) {
+    console.log(err)
+    notifyError('failed to fetch permissions')
+  }
+}
 
 export const deleteRole = createAsyncThunk('deleterole', async id => {
   try {

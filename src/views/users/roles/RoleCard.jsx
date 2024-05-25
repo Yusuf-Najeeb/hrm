@@ -169,7 +169,7 @@ const RoleCard = () => {
                     setDialogTitle('Edit')
                   }}
                 >
-                  Permissions
+                  Set Permissions
                 </Typography>
               </Box>
 

@@ -1,9 +1,9 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
-
+import axios from 'axios'
 import { useRouter } from 'next/router'
 
 // ** MUI Components
@@ -42,7 +42,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import { useAppDispatch } from '../../hooks'
-import { LoginUser } from '../../store/apps/auth/asyncthunk'
+import { updatePassword } from '../../store/apps/auth/asyncthunk'
 import { notifyError } from '../../@core/components/toasts/notifyError'
 
 // ** Styled Components
@@ -84,19 +84,19 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  old_password: yup.string().required(),
-  password: yup.string().min(5).required(),
-  confirm_password: yup
+  oldPassword: yup.string().required(),
+  newPassword: yup.string().min(5).required(),
+  confirmNewPassword: yup
     .string()
     .min(5)
     .required()
-    .oneOf([yup.ref('password'), null], 'Passwords does not match')
+    .oneOf([yup.ref('newPassword'), null], 'Passwords does not match')
 })
 
 const defaultValues = {
-  old_password: '',
-  password: '',
-  confirm_password: ''
+  oldPassword: '',
+  newPassword: '',
+  confirmNewPassword: ''
 }
 
 const UpdatePassword = () => {
@@ -130,17 +130,21 @@ const UpdatePassword = () => {
 
   const onSubmit = async data => {
     console.log(data)
-    const { old_password, password, confirmPassword } = data
+    const { oldPassword, newPassword, confirmNewPassword } = data
+    try {
+      const values = {
+        oldPassword,
+        newPassword,
+        confirmNewPassword,
+        id: 2
+      }
+      console.log(values, 'values here')
+      const response = await axios.patch(`users/password/update`, values)
 
-    // try {
-    //   const resp = await dispatch(LoginUser({ username, password }))
-    //   if (resp.payload?.success) {
-    //     console.log(resp, 'login response')
-    //     router.replace('/dashboards/analytics')
-    //   }
-    // } catch (error) {
-    //   notifyError('A network Error occurred, please try again')
-    // }
+      console.log(response.success)
+    } catch (err) {
+      console.log(err)
+    }
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
@@ -212,7 +216,7 @@ const UpdatePassword = () => {
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <Box sx={{ mb: 4 }}>
                 <Controller
-                  name='old_password'
+                  name='oldPassword'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
@@ -224,8 +228,8 @@ const UpdatePassword = () => {
                       onBlur={onBlur}
                       onChange={onChange}
                       placeholder='Old Password'
-                      error={Boolean(errors.old_password)}
-                      {...(errors.old_password && { helperText: errors.old_password.message })}
+                      error={Boolean(errors.oldPassword)}
+                      {...(errors.oldPassword && { helperText: errors.oldPassword.message })}
                     />
                   )}
                 />
@@ -251,7 +255,7 @@ const UpdatePassword = () => {
               </Box> */}
               <Box sx={{ mb: 1.5 }}>
                 <Controller
-                  name='password'
+                  name='newPassword'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
@@ -262,8 +266,8 @@ const UpdatePassword = () => {
                       label='New Password'
                       onChange={onChange}
                       id='auth-login-v2-password'
-                      error={Boolean(errors.password)}
-                      {...(errors.password && { helperText: errors.password.message })}
+                      error={Boolean(errors.newPassword)}
+                      {...(errors.newPassword && { helperText: errors.newPassword.message })}
                       type={showPassword ? 'text' : 'password'}
                       InputProps={{
                         endAdornment: (
@@ -284,7 +288,7 @@ const UpdatePassword = () => {
               </Box>
               <Box sx={{ mb: 1.5 }}>
                 <Controller
-                  name='confirm_password'
+                  name='confirmNewPassword'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
@@ -295,8 +299,8 @@ const UpdatePassword = () => {
                       label='Confirm Password'
                       onChange={onChange}
                       id='auth-login-v2-password'
-                      error={Boolean(errors.confirm_password)}
-                      {...(errors.confirm_password && { helperText: errors.confirm_password.message })}
+                      error={Boolean(errors.confirmNewPassword)}
+                      {...(errors.confirmNewPassword && { helperText: errors.confirmNewPassword.message })}
                       type={showConfirmPassword ? 'text' : 'password'}
                       InputProps={{
                         endAdornment: (

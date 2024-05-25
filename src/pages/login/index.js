@@ -43,6 +43,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import { useAppDispatch } from '../../hooks'
 import { LoginUser } from '../../store/apps/auth/asyncthunk'
+import { useAuth } from '../../hooks/useAuth'
 import { notifyError } from '../../@core/components/toasts/notifyError'
 
 // ** Styled Components
@@ -96,6 +97,7 @@ const defaultValues = {
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
+  const [loggedInUser] = useAuth()
 
   // Next Js
   const router = useRouter()
@@ -126,8 +128,12 @@ const LoginPage = () => {
     try {
       const resp = await dispatch(LoginUser({ username, password }))
       if (resp.payload?.success) {
-        console.log(resp, 'login response')
-        router.replace('/dashboards/analytics')
+        if (resp?.payload?.data?.passwordChanged) {
+          router.replace('/dashboards/analytics')
+          console.log(resp, 'login response')
+        } else {
+          router.replace('/update-password')
+        }
       }
     } catch (error) {
       notifyError('A network Error occurred, please try again')

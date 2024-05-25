@@ -10,7 +10,6 @@ import {
   Tooltip,
   Grid,
   Card,
-  CardHeader,
   CardContent,
   MenuItem,
   FormGroup,
@@ -44,10 +43,8 @@ import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import { fetchRoles } from '../../../store/apps/roles/asyncthunk'
 import { useRoles } from '../../../hooks/useRoles'
 import { useStaffs } from '../../../hooks/useStaffs'
-
 import DeleteStaff from './DeleteStaff'
 import EditStaffCard from './EditStaffCard'
-
 import ViewStaff from './ViewStaff'
 import StaffHeaderCard from './StaffHeaderCard'
 import { styled } from '@mui/material/styles'
@@ -74,8 +71,6 @@ const StaffsTable = () => {
   const [hasUploadedImage, setHasUploadedImage] = useState(false)
   const [editModal, setEditModal] = useState(false)
   const [selectedDept, setSelectedDept] = useState('')
-
-  console.log(StaffsData)
 
   const IconButtonStyled = styled(IconButton)(({ theme }) => ({
     fontSize: theme.typography.body1.fontSize,
