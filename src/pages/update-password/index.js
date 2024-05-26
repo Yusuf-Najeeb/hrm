@@ -101,7 +101,6 @@ const defaultValues = {
 }
 
 const UpdatePassword = () => {
-  const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -109,9 +108,7 @@ const UpdatePassword = () => {
   const router = useRouter()
 
   // ** Hooks
-  const dispatch = useAppDispatch()
   const theme = useTheme()
-  const bgColors = useBgColor()
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -218,7 +215,7 @@ const UpdatePassword = () => {
               <Typography variant='h3' sx={{ mb: 1.5 }}>
                 {`Welcome to ${themeConfig.templateName}! 👋🏻`}
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Update your password and start the adventure</Typography>
+              <Typography sx={{ color: 'text.secondary' }}>Update your password to start the adventure</Typography>
             </Box>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <Box sx={{ mb: 4 }}>
@@ -272,7 +269,7 @@ const UpdatePassword = () => {
                       onBlur={onBlur}
                       label='New Password'
                       onChange={onChange}
-                      id='auth-login-v2-password'
+                      // id='auth-login-v2-password'
                       error={Boolean(errors.newPassword)}
                       {...(errors.newPassword && { helperText: errors.newPassword.message })}
                       type={showPassword ? 'text' : 'password'}
@@ -305,7 +302,7 @@ const UpdatePassword = () => {
                       onBlur={onBlur}
                       label='Confirm Password'
                       onChange={onChange}
-                      id='auth-login-v2-password'
+                      // id='auth-login-v2-password'
                       error={Boolean(errors.confirmNewPassword)}
                       {...(errors.confirmNewPassword && { helperText: errors.confirmNewPassword.message })}
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -344,7 +341,7 @@ const UpdatePassword = () => {
                 </Typography>
               </Box> */}
               <Button fullWidth type='submit' variant='contained' sx={{ my: 4 }}>
-                Login
+                Update
               </Button>
               {/* <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ color: 'text.secondary', mr: 2 }}>New on our platform?</Typography>
