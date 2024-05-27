@@ -133,7 +133,6 @@ const LoginPage = () => {
           localStorage.removeItem('forcePasswordChange')
           console.log(resp, 'login response')
         } else {
-          // window.localStorage.removeItem('accessToken')
           window.localStorage.setItem('forcePasswordChange', 'true')
           router.replace('/update-password')
         }

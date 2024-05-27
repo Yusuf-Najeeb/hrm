@@ -657,7 +657,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
               </Grid>
 
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                <Button variant='contained' onClick={handleBack}>
                   Back
                 </Button>
                 <Button type='submit' variant='contained'>
@@ -805,7 +805,7 @@ const EditStaff = ({ data, openEdit, closeModal }) => {
               </Grid>
 
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant='tonal' color='secondary' onClick={handleBack}>
+                <Button variant='contained' onClick={handleBack}>
                   Back
                 </Button>
                 <Button type='submit' variant='contained' disabled={isSubmitting}>
