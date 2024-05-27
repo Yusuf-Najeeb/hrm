@@ -130,8 +130,11 @@ const LoginPage = () => {
       if (resp.payload?.success) {
         if (resp?.payload?.data?.passwordChanged) {
           router.replace('/dashboards/analytics')
+          localStorage.removeItem('forcePasswordChange')
           console.log(resp, 'login response')
         } else {
+          // window.localStorage.removeItem('accessToken')
+          window.localStorage.setItem('forcePasswordChange', 'true')
           router.replace('/update-password')
         }
       }

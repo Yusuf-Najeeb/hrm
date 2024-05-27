@@ -1,5 +1,6 @@
 // ** MUI Import
 import Grid from '@mui/material/Grid'
+import { useRouter } from 'next/router'
 
 // ** Demo Component Imports
 import AnalyticsProject from 'src/views/dashboards/analytics/AnalyticsProject'
@@ -16,8 +17,20 @@ import AnalyticsWebsiteAnalyticsSlider from 'src/views/dashboards/analytics/Anal
 import KeenSliderWrapper from 'src/@core/styles/libs/keen-slider'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import CardStatsWithAreaChart from 'src/@core/components/card-statistics/card-stats-with-area-chart'
+import { useEffect } from 'react'
 
 const AnalyticsDashboard = () => {
+  const router = useRouter()
+
+  useEffect(() => {
+    const forcePasswordChange = localStorage.getItem('forcePasswordChange')
+    if (forcePasswordChange) {
+      router.replace('/update-password') // Redirect if password change required
+    }
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <ApexChartWrapper>
       <KeenSliderWrapper>

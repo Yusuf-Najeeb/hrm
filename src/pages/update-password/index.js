@@ -103,6 +103,7 @@ const defaultValues = {
 const UpdatePassword = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [user, setUser] = useState({})
 
   // Next Js
   const router = useRouter()
@@ -133,14 +134,16 @@ const UpdatePassword = () => {
         oldPassword,
         newPassword,
         confirmNewPassword,
-        id: 2
+        id: user?.id
       }
+
       const response = await axios.patch(`users/password/update`, values)
       notifySuccess('Password updated successfully')
 
       if (response?.data?.success) {
         router.replace('/dashboards/analytics')
         console.log(response, 'login response')
+        window.localStorage.removeItem('forcePasswordChange')
       }
 
       return response
@@ -149,6 +152,10 @@ const UpdatePassword = () => {
       notifyError('Password update failed')
     }
   }
+  useEffect(() => {
+    const userData = JSON.parse(window.localStorage.getItem('loggedInUser'))
+    setUser(userData)
+  }, [])
 
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
