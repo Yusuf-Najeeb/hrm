@@ -269,6 +269,7 @@ const UpdatePassword = () => {
                       onBlur={onBlur}
                       label='New Password'
                       onChange={onChange}
+                      //eslint-disable-next-line
                       // id='auth-login-v2-password'
                       error={Boolean(errors.newPassword)}
                       {...(errors.newPassword && { helperText: errors.newPassword.message })}
@@ -302,6 +303,7 @@ const UpdatePassword = () => {
                       onBlur={onBlur}
                       label='Confirm Password'
                       onChange={onChange}
+                      //eslint-disable-next-line
                       // id='auth-login-v2-password'
                       error={Boolean(errors.confirmNewPassword)}
                       {...(errors.confirmNewPassword && { helperText: errors.confirmNewPassword.message })}
