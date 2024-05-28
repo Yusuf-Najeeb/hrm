@@ -1,10 +1,10 @@
-// ** React Imports
+//** React Imports
 import React, { Fragment, useState, useEffect } from 'react'
 
-// ** Axios Import
+//** Axios Import
 import axios from 'axios'
 
-// ** MUI Imports
+//** MUI Imports
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Dialog from '@mui/material/Dialog'
@@ -13,16 +13,15 @@ import DialogContent from '@mui/material/DialogContent'
 import Grid from '@mui/material/Grid'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
 import { deductionsSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
+import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
 import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
-import { getPeriods } from '../../../store/apps/payroll/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
@@ -35,7 +34,7 @@ const defaultValues = {
   type: ''
 }
 
-const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) => {
+const CreateLeave = ({ open, close, updateFetch }) => {
   const dispatch = useAppDispatch()
   const [periods, setPeriods] = useState([])
   const [StaffsData] = useStaffs()
@@ -52,51 +51,20 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
     resolver: yupResolver(deductionsSchema)
   })
 
-  const handleDeductions = async values => {
-    try {
-      const { period, amount, description, userId } = values
-      const createUrl = `/deductions`
-      const payload = { type: amountType, period, amount, description, userId }
-
-      const resp = await axios.post(
-        createUrl,
-        { ...payload },
-        {
-          headers: { 'Content-Type': 'application/json' }
-        }
-      )
-
-      if (resp.data.success) {
-        notifySuccess(`${formatFirstLetter(amountType)} Created Successfully`)
-        reset()
-        updateFetch()
-        closeDialog()
-      }
-    } catch (error) {
-      notifyError(`Error Creating ${formatFirstLetter(amountType)}`)
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getPeriods().then(res => setPeriods(res.data.data))
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <Fragment>
-      <Dialog open={openDialog} sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 450 } }}>
-        <form onSubmit={handleSubmit(handleDeductions)}>
+      <Dialog open={open} sx={{ '& .MuiPaper-root': { width: '100%', maxWidth: 550 } }}>
+        <form
+
+        //  onSubmit={handleSubmit(handleDeductions)}
+        >
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`,
-              px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`]
+              px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'center', fontSize: '1.25rem' }}>
-              Create {formatFirstLetter(amountType)}
-            </Typography>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Create Leave Application </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12}>
                 <Controller
@@ -198,14 +166,14 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
           <DialogActions
             sx={{
               justifyContent: 'center',
-              px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
+              px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(15)} !important`],
               pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
             }}
           >
             <Button type='submit' variant='contained' sx={{ mr: 2 }}>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Submit'}
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Create'}
             </Button>
-            <Button type='button' variant='tonal' color='secondary' onClick={closeDialog}>
+            <Button type='button' variant='tonal' color='secondary' onClick={close}>
               Cancel
             </Button>
           </DialogActions>
@@ -215,4 +183,4 @@ const CreateDeduction = ({ openDialog, closeDialog, amountType, updateFetch }) =
   )
 }
 
-export default CreateDeduction
+export default CreateLeave

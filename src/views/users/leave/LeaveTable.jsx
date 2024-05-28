@@ -51,6 +51,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
+import CreateLeave from './CreateLeave'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -234,9 +235,11 @@ const renderClient = row => {
 /* eslint-enable */
 const LeaveManager = () => {
   // ** State
-  const [dates, setDates] = useState([])
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
+  const [leaveModal, setLeaveModal] = useState(false)
+  const [refetch, setFetch] = useState(false)
+  const [dates, setDates] = useState([])
   const [endDateRange, setEndDateRange] = useState(null)
   const [selectedRows, setSelectedRows] = useState([])
   const [startDateRange, setStartDateRange] = useState(null)
@@ -245,6 +248,14 @@ const LeaveManager = () => {
   // ** Hooks
   const dispatch = useDispatch()
   const store = useSelector(state => state.invoice)
+
+  const toggleModal = () => {
+    setLeaveModal(!leaveModal)
+  }
+
+  const openLeaveModal = () => {
+    setLeaveModal(true)
+  }
 
   // useEffect(() => {
   //   dispatch(
@@ -263,6 +274,10 @@ const LeaveManager = () => {
 
   const handleStatusValue = e => {
     setStatusValue(e.target.value)
+  }
+
+  const updateFetch = () => {
+    setFetch(!refetch)
   }
 
   // const handleOnChangeRange = dates => {
@@ -339,7 +354,7 @@ const LeaveManager = () => {
               select
               SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
             >
-              <MenuItem value=''>All</MenuItem>
+              <MenuItem value='All'>All</MenuItem>
               <MenuItem value='Started'>Started</MenuItem>
               <MenuItem value='Ended'>Ended</MenuItem>
               <MenuItem value='Pending'>Pending</MenuItem>
@@ -356,7 +371,7 @@ const LeaveManager = () => {
             onChange={e => handleFilter(e.target.value)}
             sx={{ mr: 4 }}
           />
-          <Button sx={{ width: '50%', mb: 0 }} variant='contained'>
+          <Button sx={{ width: '40%', mb: 0 }} onClick={openLeaveModal} variant='contained'>
             Add New
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -367,13 +382,13 @@ const LeaveManager = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell>Staff</TableCell>
-                <TableCell>Department</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Start Date</TableCell>
-                <TableCell>End Date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align={'left'}>Staff</TableCell>
+                <TableCell align={'left'}>Department</TableCell>
+                <TableCell align={'left'}>Role</TableCell>
+                <TableCell align={'left'}>Start Date</TableCell>
+                <TableCell align={'left'}>End Date</TableCell>
+                <TableCell align={'left'}>Status</TableCell>
+                <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -382,6 +397,7 @@ const LeaveManager = () => {
           </Table>
         </TableContainer>
       </CardContent>
+      <CreateLeave open={leaveModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
 
     // <DatePickerWrapper>
