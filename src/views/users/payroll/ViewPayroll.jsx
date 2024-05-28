@@ -123,21 +123,19 @@ const ViewPayroll = ({ openModal, closeModal, payrollId }) => {
           <Box sx={{ minWidth: 120, minHeight: 120, mb: 2 }}>{renderClient(activeStaff)}</Box>
           <Grid container spacing={0}>
             <Grid item xs={1}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Name:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Role:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Phone:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Email:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Name:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Role:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Phone:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Email:</Typography>
             </Grid>
 
             <Grid item xs={8}>
-              <Typography sx={{ fontSize: '1rem', fontWeight: 300, py: theme.spacing(2) }}>
+              <Typography sx={{ fontWeight: 300, py: theme.spacing(2) }}>
                 {`${formatFirstLetter(activeStaff?.firstname)} ${formatFirstLetter(activeStaff?.lastname)}`}
               </Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
-                {formatFirstLetter(activeStaff?.role?.name)}
-              </Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.phone || 'N/A'}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.email || 'N/A'}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{formatFirstLetter(activeStaff?.role?.name)}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{activeStaff?.phone || 'N/A'}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{activeStaff?.email || 'N/A'}</Typography>
             </Grid>
           </Grid>
         </Box>
@@ -148,36 +146,32 @@ const ViewPayroll = ({ openModal, closeModal, payrollId }) => {
         >
           Payroll Information
         </Typography>
-        <Box sx={{ py: theme.spacing(6), px: theme.spacing(6) }}>
+        <Box sx={{ py: theme.spacing(6), px: theme.spacing(6), fontSize: '1rem' }}>
           <Grid container>
             <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Department:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Staff ID:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Gross Salary:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Net Salary</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Department:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Staff ID:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Gross Salary:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Net Salary</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.department?.name}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{`#${activeStaff?.id}`}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
-                {formatCurrency(activeStaff?.grossSalary, true)}
-              </Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{`${formatCurrency(
+              <Typography sx={{ py: theme.spacing(2) }}>{activeStaff?.department?.name}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{`#${activeStaff?.id}`}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{formatCurrency(activeStaff?.grossSalary, true)}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{`${formatCurrency(
                 activeStaff?.grossSalary + allowance - deduction,
                 true
               )}`}</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Period:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Account Name</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Account Number</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Period:</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Account Name</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>Account Number</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activePayroll?.period || '--'}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.bankName || 'N/A'}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
-                {activeStaff?.accountNumber || 'N/A'}
-              </Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{activePayroll?.period || '--'}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{activeStaff?.bankName || 'N/A'}</Typography>
+              <Typography sx={{ py: theme.spacing(2) }}>{activeStaff?.accountNumber || 'N/A'}</Typography>
             </Grid>
           </Grid>
         </Box>
@@ -196,13 +190,15 @@ const ViewPayroll = ({ openModal, closeModal, payrollId }) => {
             display: 'flex',
             alignItem: 'center',
             justifyContent: 'space-between',
-            fontSize: '1.2rem',
             gap: { sm: 8, md: 12 }
           }}
         >
           <Grid item xs={5}>
-            {/* <Typography sx={{ fontSize: '1.3rem' }}>Benefits</Typography> */}
-            {activePayroll?.allowances.map(item => {
+            {activePayroll?.allowances?.length < 1 && (
+              <Typography sx={{ textAlign: 'center' }}>No Allowance Found!</Typography>
+            )}
+
+            {activePayroll?.allowances?.map(item => {
               return (
                 <Box
                   key={item?.id}
@@ -243,8 +239,11 @@ const ViewPayroll = ({ openModal, closeModal, payrollId }) => {
               />
             </Box>
           </Grid>
+
           <Grid item xs={5}>
-            {/* <Typography sx={{ fontSize: '1.3rem' }}>Deductions</Typography> */}
+            {activePayroll?.deductions?.length < 1 && (
+              <Typography sx={{ textAlign: 'center' }}>No Deduction Found!</Typography>
+            )}
             {activePayroll?.deductions.map(item => {
               return (
                 <Box
