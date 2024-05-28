@@ -443,7 +443,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
                   <FormController
                     name='phone'
                     control={personalControl}
@@ -499,7 +499,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   />
                 </Grid> */}
 
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
                   <FormController
                     name='address'
                     control={personalControl}
@@ -615,7 +615,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   {steps[1].subtitle}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <FormController
                   name='designation'
                   control={workInfoControl}
@@ -626,7 +626,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                 />
               </Grid>
 
-              <Grid item xs={10} sm={5}>
+              <Grid item xs={10} sm={4}>
                 <Controller
                   name='departmentId'
                   control={workInfoControl}
@@ -658,7 +658,7 @@ const AddStaff = ({ open, closeModal, refetchStaffs }) => {
                   <Icon fontSize='1.125rem' icon='tabler:plus' />
                 </Button>
               </Grid>
-              <Grid item xs={10} sm={4}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='roleId'
                   control={workInfoControl}
