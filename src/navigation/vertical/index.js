@@ -35,12 +35,14 @@ const navigation = () => {
       icon: 'tabler:address-book',
       path: '/apps/dutyRoster'
     },
-
-    // {
-    //   title: 'Leave Manager',
-    //   icon: 'tabler:file',
-    //   path: '/apps/Leave-Manager'
-    // },
+    {
+      sectionTitle: 'Leave Manager'
+    },
+    {
+      title: 'Leave Manager',
+      icon: 'tabler:file',
+      path: '/apps/Leave-Manager'
+    },
 
     // {
     //   title: 'Attendence',
