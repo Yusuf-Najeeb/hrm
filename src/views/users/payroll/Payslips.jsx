@@ -333,7 +333,7 @@ const PayslipTable = () => {
                       </TableCell>
                       <TableCell align='center'>
                         <Tooltip title='Print Payslip' placement='top'>
-                          <IconButton size='small' onClick={() => setActiveStaff(payroll?.user?.id)}>
+                          <IconButton size='small' onClick={() => setActiveStaff(payroll?.id)}>
                             <Icon icon='carbon:view' />
                           </IconButton>
                         </Tooltip>
@@ -370,7 +370,7 @@ const PayslipTable = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       /> */}
 
-      <ViewPayroll openModal={viewModal} closeModal={toggleViewPayroll} staffInfo={selectedStaff} />
+      <ViewPayroll openModal={viewModal} closeModal={toggleViewPayroll} payrollId={selectedStaff} />
 
       {generateModalOpen && (
         <GeneratePayslip

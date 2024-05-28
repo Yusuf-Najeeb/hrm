@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react'
 
 // * MUI Imports
 import Drawer from '@mui/material/Drawer'
-import { Typography, Box, IconButton, Stack, Grid, CircularProgress, Tooltip } from '@mui/material'
+import { Typography, Box, Paper, IconButton, Grid, CircularProgress, Tooltip } from '@mui/material'
+import Divider from '@mui/material/Divider'
 import CustomAvatar from '../../../@core/components/mui/avatar'
 
 // * Hooks and components
 import { formatFirstLetter, formatCurrency } from '../../../@core/utils/format'
 import { printPayslip } from '../../../store/apps/payslip/asyncthunk'
-import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
+import { usePayrolls } from '../../../hooks/usePayroll'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { styled, useTheme } from '@mui/material/styles'
 import { getInitials } from 'src/@core/utils/get-initials'
 import Icon from 'src/@core/components/icon'
+import CustomChip from 'src/@core/components/mui/chip'
 
 export const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -21,14 +23,22 @@ export const Header = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between'
 }))
 
-const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
+const ViewPayroll = ({ openModal, closeModal, payrollId }) => {
   const [printingPayslipId, setPrintingPayslipId] = useState(null)
   const [isPrinting, setIsPrinting] = useState(false)
+  const [deduction, setDeduction] = useState(0)
+  const [allowance, setAllowance] = useState(0)
 
   // * Hooks
   const theme = useTheme()
+  const [PayrollData] = usePayrolls()
   const [StaffsData] = useStaffs()
-  const activeStaff = StaffsData?.find(staff => staff?.id === staffInfo)
+
+  const activePayroll = PayrollData?.find(payroll => payroll?.id === payrollId)
+  const activeStaff = StaffsData?.find(staff => staff?.id === activePayroll?.user?.id)
+
+  // console.log(activePayroll, 'active payroll')
+  // console.log(activeStaff)
 
   const renderClient = row => {
     const initials = `${formatFirstLetter(row?.firstname)} ${formatFirstLetter(row?.lastname)}`
@@ -71,6 +81,12 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
         setIsPrinting(false)
       })
   }
+  useEffect(() => {
+    setDeduction(activePayroll?.totalDeduction)
+    setAllowance(activePayroll?.totalAllowance)
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <main>
@@ -99,7 +115,7 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
               }
             }}
           >
-            <Icon icon='tabler:x' fontSize='1.7rem' />
+            <Icon icon='tabler:x' fontSize='1.5rem' />
           </IconButton>
         </Header>
 
@@ -138,6 +154,7 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Department:</Typography>
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Staff ID:</Typography>
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Gross Salary:</Typography>
+              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Net Salary</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.department?.name}</Typography>
@@ -145,6 +162,10 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
                 {formatCurrency(activeStaff?.grossSalary, true)}
               </Typography>
+              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{`${formatCurrency(
+                activeStaff?.grossSalary + allowance - deduction,
+                true
+              )}`}</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Period:</Typography>
@@ -152,7 +173,7 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Account Number</Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.period || '--'}</Typography>
+              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activePayroll?.period || '--'}</Typography>
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.bankName || 'N/A'}</Typography>
               <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
                 {activeStaff?.accountNumber || 'N/A'}
@@ -167,34 +188,107 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
         >
           Benefits and Deductions
         </Typography>
-        <Box sx={{ py: theme.spacing(6), px: theme.spacing(6) }}>
-          <Grid container>
-            <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Department:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Staff ID:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Gross Salary:</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.department?.name}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{`#${activeStaff?.id}`}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
-                {formatCurrency(activeStaff?.grossSalary, true)}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Period:</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Account Name</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>Account Number</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.period || '--'}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>{activeStaff?.bankName || 'N/A'}</Typography>
-              <Typography sx={{ fontSize: '1rem', py: theme.spacing(2) }}>
-                {activeStaff?.accountNumber || 'N/A'}
-              </Typography>
-            </Grid>
+        <Grid
+          container
+          sx={{
+            py: theme.spacing(6),
+            px: theme.spacing(6),
+            display: 'flex',
+            alignItem: 'center',
+            justifyContent: 'space-between',
+            fontSize: '1.2rem',
+            gap: { sm: 8, md: 12 }
+          }}
+        >
+          <Grid item xs={5}>
+            {/* <Typography sx={{ fontSize: '1.3rem' }}>Benefits</Typography> */}
+            {activePayroll?.allowances.map(item => {
+              return (
+                <Box
+                  key={item?.id}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Typography sx={{ my: 4 }}>{formatFirstLetter(item?.description)}</Typography>
+                  <CustomChip
+                    rounded
+                    skin='light'
+                    size='small'
+                    label={formatCurrency(item?.amount, true)}
+                    color={'success'}
+                  />
+                </Box>
+              )
+            })}
+            <Divider />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItem: 'center',
+                justifyContent: 'space-between',
+                my: 4,
+                fontSize: '1.4rem'
+              }}
+            >
+              <Typography>Total Allowance</Typography>
+              <CustomChip
+                rounded
+                skin='light'
+                size='small'
+                label={formatCurrency(activePayroll?.totalAllowance, true)}
+                color={'success'}
+              />
+            </Box>
           </Grid>
-        </Box>
+          <Grid item xs={5}>
+            {/* <Typography sx={{ fontSize: '1.3rem' }}>Deductions</Typography> */}
+            {activePayroll?.deductions.map(item => {
+              return (
+                <Box
+                  key={item?.id}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+
+                    // gap: { sm: 16, md: 20 }
+                  }}
+                >
+                  <Typography sx={{ my: 4 }}>{formatFirstLetter(item?.description)}</Typography>
+                  <CustomChip
+                    rounded
+                    skin='light'
+                    size='small'
+                    label={formatCurrency(item?.amount, true)}
+                    color={'error'}
+                  />
+                </Box>
+              )
+            })}
+            <Divider />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItem: 'center',
+                justifyContent: 'space-between',
+                my: 4,
+                fontSize: '1.4rem'
+              }}
+            >
+              <Typography>Total Deductions</Typography>
+              <CustomChip
+                rounded
+                skin='light'
+                size='small'
+                label={formatCurrency(activePayroll?.totalDeduction, true)}
+                color={'error'}
+              />
+            </Box>
+          </Grid>
+        </Grid>
 
         {/* Print Payroll */}
         <Box sx={{ display: 'flex', justifyContent: 'end', p: theme.spacing(6) }}>
@@ -204,7 +298,7 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
             <Tooltip title='Print Payslip' placement='top'>
               <IconButton
                 size='small'
-                onClick={() => printPayslipItem(activeStaff?.id, activeStaff?.period)}
+                onClick={() => printPayslipItem(activeStaff?.id, activePayroll?.period)}
                 sx={{
                   borderRadius: 1,
                   color: 'text.primary',
@@ -214,7 +308,7 @@ const ViewPayroll = ({ openModal, closeModal, staffInfo }) => {
                   }
                 }}
               >
-                <Icon icon='material-symbols:print-outline' fontSize='2rem' />
+                <Icon icon='material-symbols:print-outline' fontSize='1.5rem' />
               </IconButton>
             </Tooltip>
           )}
