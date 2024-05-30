@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
-import { leaveApplicationSchema } from 'src/@core/FormSchema'
+import { newQuerySchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -30,30 +30,17 @@ import { notifyError } from '../../../@core/components/toasts/notifyError'
 
 const defaultValues = {
   staff: Number(''),
-  leaveType: '',
-  start: '',
-  end: '',
-  reason: ''
+  date: '',
+  issuerName: '',
+  queryType: '',
+  comment: ''
 }
 
-const CreateLeave = ({ open, close, updateFetch }) => {
+const CreateQuery = ({ open, close, updateFetch }) => {
   const dispatch = useAppDispatch()
-  const [periods, setPeriods] = useState([])
   const [StaffsData] = useStaffs()
 
   const [dates, setDates] = useState([])
-  const [endDateRange, setEndDateRange] = useState(null)
-  const [startDateRange, setStartDateRange] = useState(null)
-  console.log(dates)
-
-  const handleOnChangeRange = dates => {
-    const [start, end] = dates
-    if (start !== null && end !== null) {
-      setDates(dates)
-    }
-    setStartDateRange(start)
-    setEndDateRange(end)
-  }
 
   const {
     control,
@@ -64,7 +51,7 @@ const CreateLeave = ({ open, close, updateFetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(leaveApplicationSchema)
+    resolver: yupResolver(newQuerySchema)
   })
 
   return (
@@ -80,7 +67,7 @@ const CreateLeave = ({ open, close, updateFetch }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Create Leave Application </Typography>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>New Query</Typography>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12}>
                 <Controller
@@ -108,10 +95,58 @@ const CreateLeave = ({ open, close, updateFetch }) => {
                   )}
                 />
               </Grid>
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='date'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <DatePicker
+                      selected={value}
+                      dateFormat='yyyy-MM-dd'
+                      popperPlacement='bottom-end'
+                      maxDate={new Date()}
+                      onChange={e => {
+                        onChange(e)
+                      }}
+                      placeholderText='YYYY-MM-DD'
+                      customInput={
+                        <CustomInput
+                          value={value}
+                          onChange={onChange}
+                          autoComplete='off'
+                          label='Date'
+                          error={Boolean(errors.period)}
+                          {...(errors.period && { helperText: errors.period.message })}
+                        />
+                      }
+                    />
+                  )}
+                />
+              </Grid>
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='leaveType'
+                  name='issuerName'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      label='Issuer Name'
+                      onChange={onChange}
+                      error={Boolean(errors?.issuerName)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.issuerName && { helperText: errors?.issuerName.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='queryType'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -122,8 +157,8 @@ const CreateLeave = ({ open, close, updateFetch }) => {
                       onChange={onChange}
                       autoComplete='on'
                       label='Leave Type'
-                      error={Boolean(errors?.leaveType)}
-                      {...(errors?.leaveType && { helperText: errors?.leaveType.message })}
+                      error={Boolean(errors?.queryType)}
+                      {...(errors?.queryType && { helperText: errors?.queryType.message })}
                     >
                       <MenuItem value=''>Select Leave Type</MenuItem>
                       <MenuItem value='Casual Leave'>Casual Leave</MenuItem>
@@ -149,50 +184,9 @@ const CreateLeave = ({ open, close, updateFetch }) => {
                 />
               </Grid>
 
-              {/* <Grid item xs={12} sm={12}>
-                <Controller
-                  name='start'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Start Date'
-                      onChange={onChange}
-                      error={Boolean(errors?.amount)}
-                      aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.amount && { helperText: errors?.amount.message })}
-                    />
-                  )}
-                />
-              </Grid> */}
-              <Grid item xs={12} sm={12}>
-                <DatePicker
-                  isClearable
-                  selectsRange
-                  monthsShown={2}
-                  endDate={endDateRange}
-                  selected={startDateRange}
-                  startDate={startDateRange}
-                  shouldCloseOnSelect={false}
-                  id='date-range-picker-months'
-                  onChange={handleOnChangeRange}
-                  customInput={
-                    <CustomInput
-                      dates={dates}
-                      setDates={setDates}
-                      label='Starts - Ends'
-                      end={endDateRange}
-                      start={startDateRange}
-                    />
-                  }
-                />
-              </Grid>
-
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='reason'
+                  name='comment'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -201,11 +195,11 @@ const CreateLeave = ({ open, close, updateFetch }) => {
                       value={value}
                       multiline
                       rows={4}
-                      label='Reason for leave'
+                      label='Comment'
                       onChange={onChange}
-                      placeholder='Reason for leave'
-                      error={Boolean(errors.reason)}
-                      {...(errors.reason && { helperText: errors.reason.message })}
+                      placeholder='Drop a comment'
+                      error={Boolean(errors.comment)}
+                      {...(errors.comment && { helperText: errors.comment.message })}
                     />
                   )}
                 />
@@ -232,4 +226,4 @@ const CreateLeave = ({ open, close, updateFetch }) => {
   )
 }
 
-export default CreateLeave
+export default CreateQuery

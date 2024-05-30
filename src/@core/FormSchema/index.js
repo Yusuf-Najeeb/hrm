@@ -127,3 +127,11 @@ export const leaveApplicationSchema = yup.object().shape({
   end: yup.string().required('End date is required'),
   Reason: yup.string().required('Reason for leave is required')
 })
+
+export const newQuerySchema = yup.object().shape({
+  staff: yup.number().required('Staff name is required'),
+  date: yup.string().required('Date is required'),
+  issuerName: yup.string().required('Issuer name is required'),
+  queryType: yup.string(),
+  comment: yup.string()
+})

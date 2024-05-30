@@ -274,7 +274,7 @@ const LeaveManager = () => {
         borderBottomRightRadius: 0
       }}
     >
-      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container>
           <Grid item xs={12} sm={6} spacing={4}>
             <CustomTextField
@@ -294,14 +294,18 @@ const LeaveManager = () => {
             </CustomTextField>
           </Grid>
         </Grid>
-        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
           <CustomTextField
             value={value}
             placeholder={'Search by staff name'}
             onChange={e => handleFilter(e.target.value)}
             sx={{ mr: 4 }}
           />
-          <Button sx={{ width: '40%', mb: 0 }} onClick={openLeaveModal} variant='contained'>
+          <Button
+            sx={{ width: '40%', mb: 0, display: 'flex', alignItems: 'center' }}
+            onClick={openLeaveModal}
+            variant='contained'
+          >
             Add New
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>

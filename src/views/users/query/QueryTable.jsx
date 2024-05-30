@@ -44,7 +44,7 @@ import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Styled Components
-// import CreateLeave from './CreateLeave'
+import NewQuery from './NewQuery'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -80,157 +80,11 @@ const renderClient = row => {
   }
 }
 
-// const defaultColumns = [
-//   {
-//     flex: 0.1,
-//     field: 'id',
-//     minWidth: 100,
-//     headerName: 'ID',
-//     renderCell: ({ row }) => (
-//       <Typography component={LinkStyled} href={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Typography>
-//     )
-//   },
-
-//   // {
-//   //   flex: 0.1,
-//   //   minWidth: 80,
-//   //   field: 'invoiceStatus',
-//   //   renderHeader: () => <Icon icon='tabler:trending-up' />,
-//   //   renderCell: ({ row }) => {
-//   //     const { dueDate, balance, invoiceStatus } = row
-//   //     const color = invoiceStatusObj[invoiceStatus] ? invoiceStatusObj[invoiceStatus].color : 'primary'
-
-//   //     return (
-//   //       <Tooltip
-//   //         title={
-//   //           <div>
-//   //             <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//   //               {invoiceStatus}
-//   //             </Typography>
-//   //             <br />
-//   //             <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//   //               Balance:
-//   //             </Typography>{' '}
-//   //             {balance}
-//   //             <br />
-//   //             <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//   //               Due Date:
-//   //             </Typography>{' '}
-//   //             {dueDate}
-//   //           </div>
-//   //         }
-//   //       >
-//   //         <CustomAvatar skin='light' color={color} sx={{ width: '1.875rem', height: '1.875rem' }}>
-//   //           <Icon icon={invoiceStatusObj[invoiceStatus].icon} />
-//   //         </CustomAvatar>
-//   //       </Tooltip>
-//   //     )
-//   //   }
-//   // },
-//   {
-//     flex: 0.25,
-//     field: 'name',
-//     minWidth: 320,
-//     headerName: 'full name',
-//     renderCell: ({ row }) => {
-//       const { name, companyEmail } = row
-
-//       return (
-//         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-//           {renderClient(row)}
-//           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-//             <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-//               {name}
-//             </Typography>
-//             <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
-//               {companyEmail}
-//             </Typography>
-//           </Box>
-//         </Box>
-//       )
-//     }
-//   },
-//   {
-//     flex: 0.1,
-//     minWidth: 100,
-//     field: 'total',
-//     headerName: 'Total Leave',
-//     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`$${row.total || 0}`}</Typography>
-//   },
-//   {
-//     flex: 0.15,
-//     minWidth: 140,
-//     field: 'issuedDate',
-//     headerName: 'Taken',
-//     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.issuedDate}</Typography>
-//   },
-//   {
-//     flex: 0.1,
-//     minWidth: 80,
-//     field: 'invoiceStatus',
-//     renderHeader: () => <Icon icon='tabler:trending-up' />,
-//     renderCell: ({ row }) => {
-//       const { dueDate, balance, invoiceStatus } = row
-//       const color = invoiceStatusObj[invoiceStatus] ? invoiceStatusObj[invoiceStatus].color : 'primary'
-
-//       return (
-//         <Tooltip
-//           title={
-//             <div>
-//               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//                 {invoiceStatus}
-//               </Typography>
-//               <br />
-//               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//                 Balance:
-//               </Typography>{' '}
-//               {balance}
-//               <br />
-//               <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-//                 Due Date:
-//               </Typography>{' '}
-//               {dueDate}
-//             </div>
-//           }
-//         >
-//           <CustomAvatar skin='light' color={color} sx={{ width: '1.875rem', height: '1.875rem' }}>
-//             <Icon icon={invoiceStatusObj[invoiceStatus].icon} />
-//           </CustomAvatar>
-//         </Tooltip>
-//       )
-//     }
-//   },
-//   {
-//     flex: 0.1,
-//     minWidth: 100,
-//     field: 'balance',
-//     headerName: 'Balance',
-//     renderCell: ({ row }) => {
-//       return row.balance !== 0 ? (
-//         <Typography sx={{ color: 'text.secondary' }}>{row.balance}</Typography>
-//       ) : (
-//         <CustomChip rounded size='small' skin='light' color='success' label='Paid' />
-//       )
-//     }
-//   }
-// ]
-/* eslint-disable */
-// const CustomInput = forwardRef((props, ref) => {
-//   const startDate = props.start !== null ? format(props.start, 'MM/dd/yyyy') : ''
-//   const endDate = props.end !== null ? ` - ${format(props.end, 'MM/dd/yyyy')}` : null
-//   const value = `${startDate}${endDate !== null ? endDate : ''}`
-//   props.start === null && props.dates.length && props.setDates ? props.setDates([]) : null
-//   const updatedProps = { ...props }
-//   delete updatedProps.setDates
-//   return <CustomTextField fullWidth inputRef={ref} {...updatedProps} label={props.label || ''} value={value} />
-// })
-
-/* eslint-enable */
 const Query = () => {
   // ** State
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [leaveModal, setLeaveModal] = useState(false)
+  const [queryModal, setQueryModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -242,11 +96,11 @@ const Query = () => {
   const store = useSelector(state => state.invoice)
 
   const toggleModal = () => {
-    setLeaveModal(!leaveModal)
+    setQueryModal(!queryModal)
   }
 
   const openLeaveModal = () => {
-    setLeaveModal(true)
+    setQueryModal(true)
   }
 
   const handleFilter = val => {
@@ -269,7 +123,7 @@ const Query = () => {
         borderBottomRightRadius: 0
       }}
     >
-      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container>
           <Grid item xs={12} sm={6} spacing={4}>
             <CustomTextField
@@ -281,7 +135,7 @@ const Query = () => {
             />
           </Grid>
         </Grid>
-        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end' }}>
+        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
           <Button sx={{ width: '40%', mb: 0 }} onClick={openLeaveModal} variant='contained'>
             Add New
             <Icon icon='mdi:plus' fontSize={20} />
@@ -308,78 +162,8 @@ const Query = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <CreateLeave open={leaveModal} close={toggleModal} updateFetch={updateFetch} /> */}
+      <NewQuery open={queryModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
-
-    // <DatePickerWrapper>
-    //   <Grid container spacing={6}>
-    //     <Grid item xs={12}>
-    //       <Card>
-    //         <CardHeader title='Filters' />
-    //         <CardContent>
-    //           <Grid container spacing={6}>
-    //             <Grid item xs={12} sm={6}>
-    //               <CustomTextField
-    //                 select
-    //                 fullWidth
-    //                 label='Invoice Status'
-    //                 SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
-    //               >
-    //                 <MenuItem value=''>None</MenuItem>
-    //                 <MenuItem value='downloaded'>Downloaded</MenuItem>
-    //                 <MenuItem value='draft'>Draft</MenuItem>
-    //                 <MenuItem value='paid'>Paid</MenuItem>
-    //                 <MenuItem value='partial payment'>Partial Payment</MenuItem>
-    //                 <MenuItem value='past due'>Past Due</MenuItem>
-    //                 <MenuItem value='sent'>Sent</MenuItem>
-    //               </CustomTextField>
-    //             </Grid>
-    //             <Grid item xs={12} sm={6}>
-    //               <DatePicker
-    //                 isClearable
-    //                 selectsRange
-    //                 monthsShown={2}
-    //                 endDate={endDateRange}
-    //                 selected={startDateRange}
-    //                 startDate={startDateRange}
-    //                 shouldCloseOnSelect={false}
-    //                 id='date-range-picker-months'
-    //                 onChange={handleOnChangeRange}
-    //                 customInput={
-    //                   <CustomInput
-    //                     dates={dates}
-    //                     setDates={setDates}
-    //                     label='Invoice Date'
-    //                     end={endDateRange}
-    //                     start={startDateRange}
-    //                   />
-    //                 }
-    //               />
-    //             </Grid>
-    //           </Grid>
-    //         </CardContent>
-    //       </Card>
-    //     </Grid>
-    //     <Grid item xs={12}>
-    //       <Card>
-    //         <TableHeader value={value} selectedRows={selectedRows} handleFilter={handleFilter} />
-    //         <DataGrid
-    //           autoHeight
-    //           pagination
-    //           rowHeight={62}
-    //           rows={store.data}
-    //           columns={columns}
-    //           checkboxSelection
-    //           disableRowSelectionOnClick
-    //           pageSizeOptions={[10, 25, 50]}
-    //           paginationModel={paginationModel}
-    //           onPaginationModelChange={setPaginationModel}
-    //           onRowSelectionModelChange={rows => setSelectedRows(rows)}
-    //         />
-    //       </Card>
-    //     </Grid>
-    //   </Grid>
-    // </DatePickerWrapper>
   )
 }
 
