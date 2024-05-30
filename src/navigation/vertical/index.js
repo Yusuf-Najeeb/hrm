@@ -48,6 +48,11 @@ const navigation = () => {
       icon: 'carbon:query',
       path: '/apps/query'
     },
+    {
+      title: 'Suspension',
+      icon: 'fluent:clock-pause-20-regular',
+      path: '/apps/suspension'
+    },
 
     // {
     //   title: 'Attendence',
