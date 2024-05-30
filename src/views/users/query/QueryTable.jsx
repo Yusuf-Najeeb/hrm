@@ -14,6 +14,13 @@ import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+import Button from '@mui/material/Button'
+import TableContainer from '@mui/material/TableContainer'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import TableBody from '@mui/material/TableBody'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -37,14 +44,7 @@ import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Styled Components
-import Button from '@mui/material/Button'
-import TableContainer from '@mui/material/TableContainer'
-import Table from '@mui/material/Table'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import TableBody from '@mui/material/TableBody'
-import CreateLeave from './CreateLeave'
+// import CreateLeave from './CreateLeave'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -226,23 +226,18 @@ const renderClient = row => {
 // })
 
 /* eslint-enable */
-const LeaveManager = () => {
+const Query = () => {
   // ** State
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
   const [leaveModal, setLeaveModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
-
-  // const [endDate, setEndDate] = useState(null)
-  // const [startDate, setStartDate] = useState(null)
   const [selectedRows, setSelectedRows] = useState([])
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
   // ** Hooks
   const dispatch = useDispatch()
-
-  // const { RangePicker } = DatePicker
 
   const store = useSelector(state => state.invoice)
 
@@ -279,28 +274,14 @@ const LeaveManager = () => {
           <Grid item xs={12} sm={6} spacing={4}>
             <CustomTextField
               fullWidth
-              placeholder={'Leave status'}
-              label={'Leave Status'}
-              select
-              SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
-            >
-              <MenuItem value=''>All</MenuItem>
-              <MenuItem value='Started'>Started</MenuItem>
-              <MenuItem value='Ended'>Ended</MenuItem>
-              <MenuItem value='Pending'>Pending</MenuItem>
-              <MenuItem value='Approved'>Approved</MenuItem>
-              <MenuItem value='Rejected'>Rejected</MenuItem>
-              <MenuItem value='Cancelled'>Cancelled</MenuItem>
-            </CustomTextField>
+              value={value}
+              placeholder={'Search by staff name or Query type'}
+              onChange={e => handleFilter(e.target.value)}
+              sx={{ mr: 4 }}
+            />
           </Grid>
         </Grid>
-        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <CustomTextField
-            value={value}
-            placeholder={'Search by staff name'}
-            onChange={e => handleFilter(e.target.value)}
-            sx={{ mr: 4 }}
-          />
+        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end' }}>
           <Button sx={{ width: '40%', mb: 0 }} onClick={openLeaveModal} variant='contained'>
             Add New
             <Icon icon='mdi:plus' fontSize={20} />
@@ -315,8 +296,8 @@ const LeaveManager = () => {
                 <TableCell align={'left'}>Staff</TableCell>
                 <TableCell align={'left'}>Department</TableCell>
                 <TableCell align={'left'}>Role</TableCell>
-                <TableCell align={'left'}>Start Date</TableCell>
-                <TableCell align={'left'}>End Date</TableCell>
+                <TableCell align={'left'}>Query</TableCell>
+                <TableCell align={'left'}>Date</TableCell>
                 <TableCell align={'left'}>Status</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
@@ -327,7 +308,7 @@ const LeaveManager = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      <CreateLeave open={leaveModal} close={toggleModal} updateFetch={updateFetch} />
+      {/* <CreateLeave open={leaveModal} close={toggleModal} updateFetch={updateFetch} /> */}
     </Card>
 
     // <DatePickerWrapper>
@@ -402,4 +383,4 @@ const LeaveManager = () => {
   )
 }
 
-export default LeaveManager
+export default Query

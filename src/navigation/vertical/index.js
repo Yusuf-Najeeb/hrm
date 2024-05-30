@@ -36,12 +36,17 @@ const navigation = () => {
       path: '/apps/dutyRoster'
     },
     {
-      sectionTitle: 'Leave Manager'
+      sectionTitle: 'Human Resource'
     },
     {
       title: 'Leave Manager',
       icon: 'tabler:file',
-      path: '/apps/Leave-Manager'
+      path: '/apps/leaveManager'
+    },
+    {
+      title: 'Query Manager',
+      icon: 'carbon:query',
+      path: '/apps/query'
     },
 
     // {

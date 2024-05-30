@@ -105,7 +105,6 @@ export const uploadRosterSchema = yup.object().shape({
 })
 
 export const deductionsSchema = yup.object().shape({
-  // categoryId: yup.number().required('Deduction Category is required'),
   userId: yup.number().required('Staff is required'),
   period: yup.string().required('Period is required'),
   amount: yup.number().required('Amount is required'),
@@ -119,4 +118,12 @@ export const requirePeriod = yup.object().shape({
 export const salaryItemSchema = yup.object().shape({
   name: yup.string().required('name is required'),
   percentage: yup.number().required('percentage is required')
+})
+
+export const leaveApplicationSchema = yup.object().shape({
+  staff: yup.number().required('Staff name is required'),
+  leaveType: yup.string().required('Leave type is required'),
+  start: yup.string().required('Start date is required'),
+  end: yup.string().required('End date is required'),
+  Reason: yup.string().required('Reason for leave is required')
 })
