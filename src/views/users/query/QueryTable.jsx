@@ -44,7 +44,7 @@ import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Styled Components
-import NewQuery from './NewQuery'
+import CreateQuery from './CreateQuery'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -99,7 +99,7 @@ const Query = () => {
     setQueryModal(!queryModal)
   }
 
-  const openLeaveModal = () => {
+  const openQueryModal = () => {
     setQueryModal(true)
   }
 
@@ -136,7 +136,11 @@ const Query = () => {
           </Grid>
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-          <Button sx={{ width: '40%', mb: 0 }} onClick={openLeaveModal} variant='contained'>
+          <Button
+            sx={{ width: '40%', mb: 0, display: 'flex', alignItems: 'center', gap: 1 }}
+            onClick={openQueryModal}
+            variant='contained'
+          >
             Add New
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -162,7 +166,7 @@ const Query = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      <NewQuery open={queryModal} close={toggleModal} updateFetch={updateFetch} />
+      <CreateQuery open={queryModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
   )
 }

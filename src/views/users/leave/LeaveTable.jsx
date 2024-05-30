@@ -302,7 +302,7 @@ const LeaveManager = () => {
             sx={{ mr: 4 }}
           />
           <Button
-            sx={{ width: '40%', mb: 0, display: 'flex', alignItems: 'center' }}
+            sx={{ width: '40%', mb: 0, display: 'flex', alignItems: 'center', gap: 1 }}
             onClick={openLeaveModal}
             variant='contained'
           >
@@ -319,8 +319,8 @@ const LeaveManager = () => {
                 <TableCell align={'left'}>Staff</TableCell>
                 <TableCell align={'left'}>Department</TableCell>
                 <TableCell align={'left'}>Role</TableCell>
-                <TableCell align={'left'}>Start Date</TableCell>
-                <TableCell align={'left'}>End Date</TableCell>
+                <TableCell align={'left'}>Starts</TableCell>
+                <TableCell align={'left'}>Ends</TableCell>
                 <TableCell align={'left'}>Status</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
