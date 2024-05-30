@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
-import { newQuerySchema } from 'src/@core/FormSchema'
+import { suspensionSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -27,13 +27,15 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
+import { end } from '@popperjs/core'
 
 const defaultValues = {
   staff: Number(''),
-  date: '',
   issuerName: '',
-  queryType: '',
-  comment: ''
+  suspensionType: '',
+  description: '',
+  start: '',
+  end: ''
 }
 
 const CreateSuspension = ({ open, close, updateFetch }) => {
@@ -41,6 +43,17 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
   const [StaffsData] = useStaffs()
 
   const [dates, setDates] = useState([])
+  const [endDateRange, setEndDateRange] = useState(null)
+  const [startDateRange, setStartDateRange] = useState(null)
+
+  const handleOnChangeRange = dates => {
+    const [start, end] = dates
+    if (start !== null && end !== null) {
+      setDates(dates)
+    }
+    setStartDateRange(start)
+    setEndDateRange(end)
+  }
 
   const {
     control,
@@ -51,7 +64,7 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(newQuerySchema)
+    resolver: yupResolver(suspensionSchema)
   })
 
   return (
@@ -67,7 +80,7 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>New Query</Typography>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>New Suspension</Typography>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12}>
                 <Controller
@@ -95,35 +108,6 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
                   )}
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
-                <Controller
-                  name='date'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <DatePicker
-                      selected={value}
-                      dateFormat='yyyy-MM-dd'
-                      popperPlacement='bottom-end'
-                      maxDate={new Date()}
-                      onChange={e => {
-                        onChange(e)
-                      }}
-                      placeholderText='YYYY-MM-DD'
-                      customInput={
-                        <CustomInput
-                          value={value}
-                          onChange={onChange}
-                          autoComplete='off'
-                          label='Date'
-                          error={Boolean(errors.period)}
-                          {...(errors.period && { helperText: errors.period.message })}
-                        />
-                      }
-                    />
-                  )}
-                />
-              </Grid>
 
               <Grid item xs={12} sm={12}>
                 <Controller
@@ -146,7 +130,7 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='queryType'
+                  name='suspensionType'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -156,21 +140,15 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
                       value={value}
                       onChange={onChange}
                       autoComplete='on'
-                      label='Leave Type'
-                      error={Boolean(errors?.queryType)}
-                      {...(errors?.queryType && { helperText: errors?.queryType.message })}
+                      label='Suspension For'
+                      error={Boolean(errors?.suspensionType)}
+                      {...(errors?.suspensionType && { helperText: errors?.suspensionType.message })}
                     >
-                      <MenuItem value=''>Select Leave Type</MenuItem>
-                      <MenuItem value='Casual Leave'>Casual Leave</MenuItem>
-                      <MenuItem value='Sick Leave'>Sick Leave</MenuItem>
-                      <MenuItem value='Religious Holiday'>Religious Holiday</MenuItem>
-                      <MenuItem value='Maternity Leave'>Maternity Leave</MenuItem>
-                      <MenuItem value='Paternity Leave'>Paternity Leave</MenuItem>
-                      <MenuItem value='Bereavement Leave'>Bereavement Leave</MenuItem>
-                      <MenuItem value='Compensatory Leave'>Compensatory Leave</MenuItem>
-                      <MenuItem value='Study Leave'>Study Leave</MenuItem>
-                      <MenuItem value='Examination Leave'>Examination Leave</MenuItem>
-                      <MenuItem value='Annual Leave'>Annual Leave</MenuItem>
+                      <MenuItem value=''>Reason for Suspension</MenuItem>
+                      <MenuItem value='Insubordination'>Insubordination</MenuItem>
+                      <MenuItem value='Punctuality'>Punctuality</MenuItem>
+                      <MenuItem value='Assault'>Assault</MenuItem>
+                      <MenuItem value='Theft'>Theft</MenuItem>
                       <MenuItem value='Others'>Others</MenuItem>
                       {/* {periods.map(period => {
                         return (
@@ -185,8 +163,31 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
               </Grid>
 
               <Grid item xs={12} sm={12}>
+                <DatePicker
+                  isClearable
+                  selectsRange
+                  monthsShown={2}
+                  endDate={endDateRange}
+                  selected={startDateRange}
+                  startDate={startDateRange}
+                  shouldCloseOnSelect={false}
+                  id='date-range-picker-months'
+                  onChange={handleOnChangeRange}
+                  customInput={
+                    <CustomInput
+                      dates={dates}
+                      setDates={setDates}
+                      label='Starts - Ends'
+                      end={endDateRange}
+                      start={startDateRange}
+                    />
+                  }
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
                 <Controller
-                  name='comment'
+                  name='description'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -195,11 +196,11 @@ const CreateSuspension = ({ open, close, updateFetch }) => {
                       value={value}
                       multiline
                       rows={4}
-                      label='Comment'
+                      label='Description'
                       onChange={onChange}
-                      placeholder='Drop a comment'
-                      error={Boolean(errors.comment)}
-                      {...(errors.comment && { helperText: errors.comment.message })}
+                      placeholder='Brief suspension description'
+                      error={Boolean(errors.description)}
+                      {...(errors.description && { helperText: errors.description.message })}
                     />
                   )}
                 />

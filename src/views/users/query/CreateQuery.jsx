@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
-import { newQuerySchema } from 'src/@core/FormSchema'
+import { querySchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -51,7 +51,7 @@ const CreateQuery = ({ open, close, updateFetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(newQuerySchema)
+    resolver: yupResolver(querySchema)
   })
 
   return (
@@ -156,7 +156,7 @@ const CreateQuery = ({ open, close, updateFetch }) => {
                       value={value}
                       onChange={onChange}
                       autoComplete='on'
-                      label='Leave Type'
+                      label='Query for'
                       error={Boolean(errors?.queryType)}
                       {...(errors?.queryType && { helperText: errors?.queryType.message })}
                     >

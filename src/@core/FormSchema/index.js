@@ -121,17 +121,26 @@ export const salaryItemSchema = yup.object().shape({
 })
 
 export const leaveApplicationSchema = yup.object().shape({
-  staff: yup.number().required('Staff name is required'),
+  staff: yup.number().required('Staff is required'),
   leaveType: yup.string().required('Leave type is required'),
   start: yup.string().required('Start date is required'),
   end: yup.string().required('End date is required'),
   Reason: yup.string().required('Reason for leave is required')
 })
 
-export const newQuerySchema = yup.object().shape({
-  staff: yup.number().required('Staff name is required'),
+export const querySchema = yup.object().shape({
+  staff: yup.number().required('Staff is required'),
   date: yup.string().required('Date is required'),
   issuerName: yup.string().required('Issuer name is required'),
   queryType: yup.string(),
   comment: yup.string()
+})
+
+export const suspensionSchema = yup.object().shape({
+  staff: yup.number().required('Staff is required'),
+  issuerName: yup.string().required('Issuer name is required'),
+  suspensionType: yup.string().required('Leave type is required'),
+  start: yup.string().required('Start date is required'),
+  end: yup.string().required('End date is required'),
+  description: yup.string().required('Reason for leave is required')
 })
