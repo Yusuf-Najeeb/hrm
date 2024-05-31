@@ -63,6 +63,11 @@ const navigation = () => {
       icon: 'carbon:upgrade',
       path: '/apps/promotion'
     },
+    {
+      title: 'Off-Boarding',
+      icon: 'material-symbols-light:indeterminate-check-box-outline',
+      path: '/apps/offboarding'
+    },
 
     // {
     //   title: 'Attendence',
