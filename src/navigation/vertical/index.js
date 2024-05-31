@@ -58,6 +58,11 @@ const navigation = () => {
       icon: 'fluent:clock-pause-20-regular',
       path: '/apps/suspension'
     },
+    {
+      title: 'Promotion',
+      icon: 'carbon:upgrade',
+      path: '/apps/promotion'
+    },
 
     // {
     //   title: 'Attendence',
