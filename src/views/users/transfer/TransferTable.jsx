@@ -42,6 +42,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
+import CreateTransfer from './CreateTransfer'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -165,7 +166,7 @@ const Transfers = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <CreateSuspension open={modal} close={toggleModal} updateFetch={updateFetch} /> */}
+      <CreateTransfer open={modal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
   )
 }

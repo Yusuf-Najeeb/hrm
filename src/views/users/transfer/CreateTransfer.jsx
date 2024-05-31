@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
-import { querySchema } from 'src/@core/FormSchema'
+import { suspensionSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -27,20 +27,34 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
+import { end } from '@popperjs/core'
 
 const defaultValues = {
   staff: Number(''),
-  date: '',
   issuerName: '',
-  queryType: '',
-  comment: ''
+  currentDepartment: '',
+  newDepartment: '',
+  newDesignation: '',
+  reportingDate: '',
+  reason: ''
 }
 
-const CreateQuery = ({ open, close, updateFetch }) => {
+const CreateTransfer = ({ open, close, updateFetch }) => {
   const dispatch = useAppDispatch()
   const [StaffsData] = useStaffs()
 
   const [dates, setDates] = useState([])
+  const [endDateRange, setEndDateRange] = useState(null)
+  const [startDateRange, setStartDateRange] = useState(null)
+
+  const handleOnChangeRange = dates => {
+    const [start, end] = dates
+    if (start !== null && end !== null) {
+      setDates(dates)
+    }
+    setStartDateRange(start)
+    setEndDateRange(end)
+  }
 
   const {
     control,
@@ -51,7 +65,7 @@ const CreateQuery = ({ open, close, updateFetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(querySchema)
+    resolver: yupResolver(suspensionSchema)
   })
 
   return (
@@ -67,7 +81,7 @@ const CreateQuery = ({ open, close, updateFetch }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>New Query</Typography>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>New Suspension</Typography>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={12}>
                 <Controller
@@ -98,36 +112,6 @@ const CreateQuery = ({ open, close, updateFetch }) => {
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='date'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <DatePicker
-                      selected={value}
-                      dateFormat='yyyy-MM-dd'
-                      popperPlacement='bottom-end'
-                      maxDate={new Date()}
-                      onChange={e => {
-                        onChange(e)
-                      }}
-                      placeholderText='YYYY-MM-DD'
-                      customInput={
-                        <CustomInput
-                          value={value}
-                          onChange={onChange}
-                          autoComplete='off'
-                          label='Date'
-                          error={Boolean(errors?.date)}
-                          {...(errors?.date && { helperText: errors?.date.message })}
-                        />
-                      }
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Controller
                   name='issuerName'
                   control={control}
                   rules={{ required: true }}
@@ -147,47 +131,102 @@ const CreateQuery = ({ open, close, updateFetch }) => {
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='queryType'
+                  name='currentDepartment'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
-                    <CustomInput
-                      select
+                    <CustomTextField
                       fullWidth
                       value={value}
+                      label='Current Department'
                       onChange={onChange}
-                      autoComplete='on'
-                      label='Query for'
-                      error={Boolean(errors?.queryType)}
-                      {...(errors?.queryType && { helperText: errors?.queryType.message })}
-                    >
-                      <MenuItem value=''>Select Leave Type</MenuItem>
-                      <MenuItem value='Casual Leave'>Casual Leave</MenuItem>
-                      <MenuItem value='Sick Leave'>Sick Leave</MenuItem>
-                      <MenuItem value='Religious Holiday'>Religious Holiday</MenuItem>
-                      <MenuItem value='Maternity Leave'>Maternity Leave</MenuItem>
-                      <MenuItem value='Paternity Leave'>Paternity Leave</MenuItem>
-                      <MenuItem value='Bereavement Leave'>Bereavement Leave</MenuItem>
-                      <MenuItem value='Compensatory Leave'>Compensatory Leave</MenuItem>
-                      <MenuItem value='Study Leave'>Study Leave</MenuItem>
-                      <MenuItem value='Examination Leave'>Examination Leave</MenuItem>
-                      <MenuItem value='Annual Leave'>Annual Leave</MenuItem>
-                      <MenuItem value='Others'>Others</MenuItem>
-                      {/* {periods.map(period => {
-                        return (
-                          <MenuItem key={period} value={period}>
-                            {period}
-                          </MenuItem>
-                        )
-                      })} */}
-                    </CustomInput>
+                      error={Boolean(errors?.currentDepartment)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.currentDepartment && { helperText: errors?.currentDepartment.message })}
+                    />
                   )}
                 />
               </Grid>
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='comment'
+                  name='newDepartment'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      select
+                      fullWidth
+                      value={value}
+                      label='new Department'
+                      onChange={onChange}
+                      error={Boolean(errors?.staff)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.staff && { helperText: errors?.staff.message })}
+                    >
+                      <MenuItem value=''>New Department</MenuItem>
+                      {StaffsData?.map(staff => (
+                        <MenuItem key={staff?.id} value={staff?.id}>
+                          {` ${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)} `}
+                        </MenuItem>
+                      ))}
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='newDesignation'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      label='New Designation'
+                      onChange={onChange}
+                      error={Boolean(errors?.newDesignation)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.newDesignation && { helperText: errors?.newDesignation.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='reportingDate'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <DatePicker
+                      selected={value}
+                      dateFormat='yyyy-MM-dd'
+                      popperPlacement='bottom-end'
+                      maxDate={new Date()}
+                      onChange={e => {
+                        onChange(e)
+                      }}
+                      placeholderText='YYYY-MM-DD'
+                      customInput={
+                        <CustomInput
+                          value={value}
+                          onChange={onChange}
+                          autoComplete='off'
+                          label='Reporting Date'
+                          error={Boolean(errors?.reportingDate)}
+                          {...(errors?.reportingDate && { helperText: errors?.reportingDate.message })}
+                        />
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='reason'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -196,11 +235,11 @@ const CreateQuery = ({ open, close, updateFetch }) => {
                       value={value}
                       multiline
                       rows={4}
-                      label='Comment'
+                      label='Reason'
                       onChange={onChange}
-                      placeholder='Drop a comment'
-                      error={Boolean(errors.comment)}
-                      {...(errors.comment && { helperText: errors.comment.message })}
+                      placeholder='Reason for transfer'
+                      error={Boolean(errors?.reason)}
+                      {...(errors?.reason && { helperText: errors.reason?.message })}
                     />
                   )}
                 />
@@ -215,7 +254,7 @@ const CreateQuery = ({ open, close, updateFetch }) => {
             }}
           >
             <Button type='submit' variant='contained' sx={{ mr: 2 }}>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Create'}
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Process Transfer'}
             </Button>
             <Button type='button' variant='tonal' color='secondary' onClick={close}>
               Cancel
@@ -227,4 +266,4 @@ const CreateQuery = ({ open, close, updateFetch }) => {
   )
 }
 
-export default CreateQuery
+export default CreateTransfer
