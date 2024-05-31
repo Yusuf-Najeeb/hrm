@@ -39,12 +39,17 @@ const navigation = () => {
       sectionTitle: 'Human Resource'
     },
     {
-      title: 'Leave Manager',
-      icon: 'tabler:file',
+      title: 'Transfer',
+      icon: 'tabler:transfer',
+      path: '/apps/transfer'
+    },
+    {
+      title: 'Leave',
+      icon: 'fluent-mdl2:leave',
       path: '/apps/leaveManager'
     },
     {
-      title: 'Query Manager',
+      title: 'Query',
       icon: 'carbon:query',
       path: '/apps/query'
     },
