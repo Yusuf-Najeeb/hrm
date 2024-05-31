@@ -106,7 +106,7 @@ const OffBoardingTab = ({ tab }) => {
                       value='retirement'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.125rem' icon='fluent:table-dismiss-20-filled' />
+                          <Icon fontSize='1.25rem' icon='fluent:laptop-dismiss-20-regular' />
                           {!hideText && 'Retirement'}
                         </Box>
                       }
@@ -115,7 +115,7 @@ const OffBoardingTab = ({ tab }) => {
                       value='termination'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.125rem' icon='entypo:old-phone' />
+                          <Icon fontSize='1.125rem' icon='fluent:book-dismiss-16-regular' />
                           {!hideText && 'Termination'}
                         </Box>
                       }
@@ -131,35 +131,6 @@ const OffBoardingTab = ({ tab }) => {
                     /> */}
                   </TabList>
                 </Grid>
-                {/* <Grid item xs={3}>
-                  {activeTab === 'config' && (
-                    <Box>
-                      {salaryItems?.reduce((prev, curr) => prev + curr, 0) === 100 ? (
-                        <CustomChip
-                          rounded
-                          skin='light'
-                          size='small'
-                          label={'GOOD'}
-                          color={'success'}
-                          sx={{
-                            textTransform: 'capitalize'
-                          }}
-                        />
-                      ) : (
-                        <CustomChip
-                          rounded
-                          skin='light'
-                          size='small'
-                          label={'SUM OF SALARY ITEMS % SHOULD BE 100%'}
-                          color={'warning'}
-                          sx={{
-                            textTransform: 'capitalize'
-                          }}
-                        />
-                      )}
-                    </Box>
-                  )}
-                </Grid> */}
               </Box>
 
               <Grid item xs={12}>
