@@ -127,7 +127,7 @@ const Transfers = () => {
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search by staff name'}
+              placeholder={'Search Staff'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />

@@ -43,19 +43,6 @@ const CreateTransfer = ({ open, close, updateFetch }) => {
   const dispatch = useAppDispatch()
   const [StaffsData] = useStaffs()
 
-  const [dates, setDates] = useState([])
-  const [endDateRange, setEndDateRange] = useState(null)
-  const [startDateRange, setStartDateRange] = useState(null)
-
-  const handleOnChangeRange = dates => {
-    const [start, end] = dates
-    if (start !== null && end !== null) {
-      setDates(dates)
-    }
-    setStartDateRange(start)
-    setEndDateRange(end)
-  }
-
   const {
     control,
     reset,

@@ -297,7 +297,7 @@ const LeaveManager = () => {
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
           <CustomTextField
             value={value}
-            placeholder={'Search by staff name'}
+            placeholder={'Search Staff'}
             onChange={e => handleFilter(e.target.value)}
             sx={{ mr: 4 }}
           />

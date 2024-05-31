@@ -129,7 +129,7 @@ const Query = () => {
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search by staff name or Query type'}
+              placeholder={'Search Staff or Query type'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />
