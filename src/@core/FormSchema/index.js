@@ -142,5 +142,15 @@ export const suspensionSchema = yup.object().shape({
   suspensionType: yup.string().required('Leave type is required'),
   start: yup.string().required('Start date is required'),
   end: yup.string().required('End date is required'),
-  description: yup.string().required('Reason for leave is required')
+  description: yup.string().required('Description for leave is required')
+})
+
+export const transferSchema = yup.object().shape({
+  staff: yup.number().required('Staff is required'),
+  issuerName: yup.string().required('Issuer name is required'),
+  currentDepartment: yup.string().required('Current Department is required'),
+  newDepartment: yup.string().required('New Department is required'),
+  newDesignation: yup.string().required('New Designation is required'),
+  reportingDate: yup.string().required('Resumption date is required'),
+  reason: yup.string().required('Reason for transfer is required')
 })

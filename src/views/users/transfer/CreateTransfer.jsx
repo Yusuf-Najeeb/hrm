@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
-import { suspensionSchema } from 'src/@core/FormSchema'
+import { transferSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -65,7 +65,7 @@ const CreateTransfer = ({ open, close, updateFetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(suspensionSchema)
+    resolver: yupResolver(transferSchema)
   })
 
   return (
@@ -158,11 +158,11 @@ const CreateTransfer = ({ open, close, updateFetch }) => {
                       select
                       fullWidth
                       value={value}
-                      label='new Department'
+                      label='New Department'
                       onChange={onChange}
-                      error={Boolean(errors?.staff)}
+                      error={Boolean(errors?.newDepartment)}
                       aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.staff && { helperText: errors?.staff.message })}
+                      {...(errors?.newDepartment && { helperText: errors?.newDepartment.message })}
                     >
                       <MenuItem value=''>New Department</MenuItem>
                       {StaffsData?.map(staff => (
