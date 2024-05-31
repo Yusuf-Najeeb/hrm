@@ -221,10 +221,10 @@ const AddPromotion = ({ open, close, updateFetch }) => {
             }}
           >
             <Button type='submit' variant='contained' sx={{ mr: 2 }}>
-              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Save'}
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Approve'}
             </Button>
-            <Button type='button' variant='tonal' color='secondary' onClick={close}>
-              Cancel
+            <Button type='button' variant='tonal' color='error' onClick={close}>
+              Reject
             </Button>
           </DialogActions>
         </form>
