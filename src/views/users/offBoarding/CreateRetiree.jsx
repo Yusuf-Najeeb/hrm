@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography'
 
 // ** Components Imports
 import { yupResolver } from '@hookform/resolvers/yup'
-import { querySchema } from 'src/@core/FormSchema'
+import { retirementSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
@@ -50,7 +50,7 @@ const CreateRetiree = ({ open, close, updateFetch }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(querySchema)
+    resolver: yupResolver(retirementSchema)
   })
 
   return (

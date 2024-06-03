@@ -6,6 +6,9 @@ import { Router } from 'next/router'
 import { store } from 'src/store'
 import { Provider } from 'react-redux'
 
+// ** Auth Provider
+import { AuthProvider } from '../@core/context/AuthContext'
+
 // ** Loader Import
 import NProgress from 'nprogress'
 
@@ -15,8 +18,6 @@ import { CacheProvider } from '@emotion/react'
 // ** Config Imports
 import 'src/configs/i18n'
 import themeConfig from 'src/configs/themeConfig'
-
-// ** Fake-DB Import
 
 // ** Third Party Import
 import { Toaster } from 'react-hot-toast'
@@ -65,7 +66,6 @@ if (themeConfig.routingLoader) {
   })
 }
 
-
 // ** Configure JSS & ClassName
 const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
@@ -89,13 +89,13 @@ const App = props => {
           <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
-
+        <AuthProvider>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
-                        {getLayout(<Component {...pageProps} />)}
+                    {getLayout(<Component {...pageProps} />)}
                     <ReactHotToast>
                       <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
                     </ReactHotToast>
@@ -104,6 +104,7 @@ const App = props => {
               }}
             </SettingsConsumer>
           </SettingsProvider>
+        </AuthProvider>
       </CacheProvider>
     </Provider>
   )

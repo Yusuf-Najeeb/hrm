@@ -44,6 +44,7 @@ import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import { useAppDispatch } from '../../hooks'
 import { LoginUser } from '../../store/apps/auth/asyncthunk'
 import { useAuth } from '../../hooks/useAuth'
+import { useAuthContext } from '../../@core/hooks/useAuthContext'
 import { notifyError } from '../../@core/components/toasts/notifyError'
 
 // ** Styled Components
@@ -98,6 +99,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [loggedInUser] = useAuth()
+  const { setLoading, loading } = useAuthContext()
 
   // Next Js
   const router = useRouter()
@@ -131,10 +133,15 @@ const LoginPage = () => {
         if (resp?.payload?.data?.passwordChanged) {
           router.replace('/dashboards/analytics')
           localStorage.removeItem('forcePasswordChange')
+          localStorage.setItem('loginStatus', true)
           console.log(resp, 'login response')
+
+          // setLoading(!loading)
+          dispatch(toggleLoadingState(false))
         } else {
           window.localStorage.setItem('forcePasswordChange', 'true')
           router.replace('/update-password')
+          localStorage.setItem('loginStatus', false)
         }
       }
     } catch (error) {

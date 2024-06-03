@@ -103,20 +103,20 @@ const OffBoardingTab = ({ tab }) => {
                     aria-label='offboarding tabs'
                   >
                     <Tab
-                      value='retirement'
+                      value='termination'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.25rem' icon='fluent:laptop-dismiss-20-regular' />
-                          {!hideText && 'Retirement'}
+                          <Icon fontSize='1.5rem' icon='fluent:book-dismiss-16-regular' />
+                          {!hideText && 'Termination'}
                         </Box>
                       }
                     />
                     <Tab
-                      value='termination'
+                      value='retirement'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.125rem' icon='fluent:book-dismiss-16-regular' />
-                          {!hideText && 'Termination'}
+                          <Icon fontSize='1.5rem' icon='fluent:laptop-dismiss-20-regular' />
+                          {!hideText && 'Retirement'}
                         </Box>
                       }
                     />

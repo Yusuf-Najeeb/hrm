@@ -78,13 +78,12 @@
 //       })}
 //     >
 //       {children}
-      
+
 //     </Layout>
 //   )
 // }
 
 // export default UserLayout
-
 
 // ** React Imports
 import { ReactNode } from 'react'
@@ -102,6 +101,8 @@ import VerticalNavItems from 'src/navigation/vertical'
 import HorizontalNavItems from 'src/navigation/horizontal'
 
 // ** Component Import
+import FallbackSpinner from '../@core/components/spinner'
+
 // Uncomment the below line (according to the layout type) when using server-side menu
 // import ServerSideVerticalNavItems from './components/vertical/ServerSideNavItems'
 // import ServerSideHorizontalNavItems from './components/horizontal/ServerSideNavItems'
@@ -111,10 +112,21 @@ import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { useAuthContext } from '../@core/hooks/useAuthContext'
+import { useSelector } from 'react-redux'
+
+// ** GetLoginStatus
+import getLoginStatus from '../@core/utils/getLoginStatus'
 
 const UserLayout = ({ children, contentHeightFixed }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
+
+  // const { loading } = useAuthContext()
+  const session = getLoginStatus()
+  const loading = useSelector(state => state?.auth?.loading)
+
+  // console.log(loading, 'loading user layout')
 
   // ** Vars for server side navigation
   // const { menuItems: verticalMenuItems } = ServerSideVerticalNavItems()
@@ -128,13 +140,15 @@ const UserLayout = ({ children, contentHeightFixed }) => {
    *  to know more about what values can be passed to this hook.
    *  ! Do not change this value unless you know what you are doing. It can break the template.
    */
-  const hidden = useMediaQuery((theme) => theme.breakpoints.down('lg'))
+  const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
 
   if (hidden && settings.layout === 'horizontal') {
     settings.layout = 'vertical'
   }
 
-  return (
+  return loading ? (
+    <FallbackSpinner />
+  ) : (
     <Layout
       hidden={hidden}
       settings={settings}
@@ -173,10 +187,8 @@ const UserLayout = ({ children, contentHeightFixed }) => {
       })}
     >
       {children}
-      
     </Layout>
   )
 }
 
 export default UserLayout
-

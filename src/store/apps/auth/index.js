@@ -7,7 +7,7 @@ import { notifyError } from 'src/@core/components/toasts/notifyError'
 const initialState = {
   user: null,
   error: '',
-  loading: false
+  loading: true
 }
 
 export const authSlice = createSlice({
@@ -15,19 +15,23 @@ export const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     resetUserState: state => {
-      const userData = JSON.parse(localStorage.getItem('loggedInUser')) 
+      const userData = JSON.parse(localStorage.getItem('loggedInUser'))
 
       state.user = userData
+    },
+    toggleLoadingState: (state, action) => {
+      state.loading = action.payload
     }
   },
   extraReducers: builder => {
-    builder.addCase(LoginUser.pending, state => {
-      state.loading = true
-    })
+    // builder.addCase(LoginUser.pending, state => {
+    //   state.loading = true
+    // })
     builder.addCase(LoginUser.fulfilled, (state, action) => {
       const { token, ...restofData } = action.payload.data
       const userRoleObject = restofData?.role
-      state.loading = false
+
+      // state.loading = false
       state.user = restofData
 
       localStorage.setItem('loggedInUser', JSON.stringify(restofData))
@@ -36,12 +40,13 @@ export const authSlice = createSlice({
     })
     builder.addCase(LoginUser.rejected, (state, action) => {
       notifyError('Login Error')
-      state.loading = false
+
+      // state.loading = false
       state.error = action.error.message || 'Error Login'
     })
   }
 })
 
-export const { resetUserState } = authSlice.actions
+export const { resetUserState, toggleLoadingState } = authSlice.actions
 
 export default authSlice.reducer

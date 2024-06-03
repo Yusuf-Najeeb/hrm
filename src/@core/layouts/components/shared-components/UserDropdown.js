@@ -81,6 +81,7 @@ const UserDropdown = props => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('accessToken')
+    window.localStorage.setItem('loginStatus', false)
 
     handleDropdownClose('/login')
   }
