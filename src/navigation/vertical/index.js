@@ -68,6 +68,16 @@ const navigation = () => {
       icon: 'material-symbols-light:indeterminate-check-box-outline',
       path: '/apps/offboarding'
     },
+    {
+      title: 'Performance',
+      icon: 'mdi:performance',
+      path: '/apps/performance'
+    },
+    {
+      title: 'Internal Memo',
+      icon: 'emojione-monotone:memo',
+      path: '/apps/memo'
+    },
 
     // {
     //   title: 'Attendence',
