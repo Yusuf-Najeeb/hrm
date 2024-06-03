@@ -1,14 +1,30 @@
 import React, { Fragment } from 'react'
-import Drawer from '@mui/material/Drawer'
+
+//** Third-Party Imports
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { CustomInput } from '../duty-roster/UploadRosterDialog'
 
 import IconButton from '@mui/material/IconButton'
 
 import Grid from '@mui/material/Grid'
+import Drawer from '@mui/material/Drawer'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { styled, useTheme } from '@mui/material/styles'
+import Button from '@mui/material/Button'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import { Controller, useForm } from 'react-hook-form'
+import CustomTextField from 'src/@core/components/mui/text-field'
+import CircularProgress from '@mui/material/CircularProgress'
 
+import MenuItem from '@mui/material/MenuItem'
 import Icon from 'src/@core/components/icon'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { retirementSchema } from 'src/@core/FormSchema'
+
+import { useStaffs } from '../../../hooks/useStaffs'
 
 import { Alert } from '@mui/material'
 
@@ -19,8 +35,29 @@ const Header = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between'
 }))
 
+const defaultValues = {
+  title: '',
+  date: '',
+  issuerName: '',
+  recipient: '',
+  body: ''
+}
+
 const NewMemo = ({ open, closeCanvas }) => {
+  const [StaffsData] = useStaffs()
   const theme = useTheme()
+
+  const {
+    control,
+    reset,
+    setValue,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm({
+    defaultValues,
+    mode: 'onChange',
+    resolver: yupResolver(retirementSchema)
+  })
 
   return (
     <Drawer
@@ -31,6 +68,7 @@ const NewMemo = ({ open, closeCanvas }) => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 800, sm: 800 } } }}
     >
       <Header>
+        <Typography variant='h3'>Memo</Typography>
         <IconButton
           size='small'
           onClick={closeCanvas}
@@ -47,7 +85,146 @@ const NewMemo = ({ open, closeCanvas }) => {
         </IconButton>
       </Header>
       <Box sx={{ p: theme => theme.spacing(0, 3, 3) }}>
-        <Typography>Revolution</Typography>
+        <form
+
+        //  onSubmit={handleSubmit(handleDeductions)}
+        >
+          <DialogContent
+            sx={{
+              pb: theme => `${theme.spacing(8)}  !important`,
+              px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
+            }}
+          >
+            {/* <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Retirement</Typography> */}
+
+            <Grid container spacing={8}>
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='title'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      label='Title'
+                      placeholder='General Meeting'
+                      onChange={onChange}
+                      error={Boolean(errors?.title)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.title && { helperText: errors?.title.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='date'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <DatePicker
+                      selected={value}
+                      dateFormat='yyyy-MM-dd'
+                      popperPlacement='bottom-end'
+                      onChange={e => {
+                        onChange(e)
+                      }}
+                      placeholderText='YYYY-MM-DD'
+                      customInput={
+                        <CustomInput
+                          value={value}
+                          onChange={onChange}
+                          autoComplete='off'
+                          label='Date'
+                          error={Boolean(errors?.date)}
+                          {...(errors?.date && { helperText: errors?.date.message })}
+                        />
+                      }
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='issuerName'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      label='Issuer Name'
+                      placeholder='John Doe'
+                      onChange={onChange}
+                      error={Boolean(errors?.issuerName)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.issuerName && { helperText: errors?.issuerName.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='recipient'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      label='Recipient'
+                      placeholder='All Departments'
+                      onChange={onChange}
+                      error={Boolean(errors?.recipient)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.recipient && { helperText: errors?.recipient.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Controller
+                  name='body'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      multiline
+                      rows={8}
+                      label='Body'
+                      onChange={onChange}
+                      placeholder='Body of Memo'
+                      error={Boolean(errors.body)}
+                      {...(errors.body && { helperText: errors.body.message })}
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              justifyContent: 'end',
+              pl: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(15)} !important`],
+              pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+              mt: theme => [`${theme.spacing(4)} !important`]
+            }}
+          >
+            <Button type='button' variant='tonal' color='secondary' onClick={closeCanvas}>
+              Cancel
+            </Button>
+            <Button type='submit' variant='contained' sx={{ mr: 2 }}>
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Save'}
+            </Button>
+          </DialogActions>
+        </form>
       </Box>
     </Drawer>
   )

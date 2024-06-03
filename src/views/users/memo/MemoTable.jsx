@@ -157,7 +157,9 @@ const Promotions = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow></TableRow>
+              <TableRow>
+                <TableCell>View Memo, Print, Download</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>

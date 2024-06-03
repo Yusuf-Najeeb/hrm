@@ -191,7 +191,6 @@ const CreateTransfer = ({ open, close, updateFetch }) => {
                       selected={value}
                       dateFormat='yyyy-MM-dd'
                       popperPlacement='bottom-end'
-                      maxDate={new Date()}
                       onChange={e => {
                         onChange(e)
                       }}

@@ -2,7 +2,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
 //** Third-Party Imports
-import axios from 'axios'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -124,7 +123,6 @@ const CreateRetiree = ({ open, close, updateFetch }) => {
                       selected={value}
                       dateFormat='yyyy-MM-dd'
                       popperPlacement='bottom-end'
-                      maxDate={new Date()}
                       onChange={e => {
                         onChange(e)
                       }}
