@@ -42,8 +42,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
-
-// import CreateMemo from './CreateMemo'
+import CreateMeeting from './CreateMeeting'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -163,7 +162,7 @@ const Promotions = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <CreateMemo open={memoDrawer} closeCanvas={toggleDrawer} /> */}
+      <CreateMeeting open={memoDrawer} closeCanvas={toggleDrawer} />
     </Card>
   )
 }

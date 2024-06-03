@@ -45,7 +45,7 @@ const defaultValues = {
   body: ''
 }
 
-const NewMemo = ({ open, closeCanvas }) => {
+const NewMeeting = ({ open, closeCanvas }) => {
   const [StaffsData] = useStaffs()
   const theme = useTheme()
 
@@ -70,7 +70,7 @@ const NewMemo = ({ open, closeCanvas }) => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 800, sm: 800 } } }}
     >
       <Header>
-        <Typography variant='h3'>Memo</Typography>
+        <Typography variant='h3'>Schedule Meeting</Typography>
         <IconButton
           size='small'
           onClick={closeCanvas}
@@ -232,4 +232,4 @@ const NewMemo = ({ open, closeCanvas }) => {
   )
 }
 
-export default NewMemo
+export default NewMeeting
