@@ -78,6 +78,11 @@ const navigation = () => {
       icon: 'emojione-monotone:memo',
       path: '/apps/memo'
     },
+    {
+      title: 'Meeting',
+      icon: 'guidance:meeting-point-2',
+      path: '/apps/meeting'
+    },
 
     // {
     //   title: 'Attendence',
