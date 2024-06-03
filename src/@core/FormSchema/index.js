@@ -158,6 +158,14 @@ export const transferSchema = yup.object().shape({
 export const retirementSchema = yup.object().shape({
   staff: yup.number().required('Staff is required'),
   issuerName: yup.string(),
-  date: yup.string().required('Resumption date is required'),
+  date: yup.string().required('Date is required'),
+  comment: yup.string()
+})
+
+export const terminationSchema = yup.object().shape({
+  staff: yup.number().required('Staff is required'),
+  issuerName: yup.string(),
+  date: yup.string().required('Date is required'),
+  reason: yup.string().required('Reason is required'),
   comment: yup.string()
 })

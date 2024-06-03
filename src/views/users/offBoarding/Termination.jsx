@@ -42,6 +42,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
+import CreateTermination from './CreateTermination'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -81,7 +82,7 @@ const Query = () => {
   // ** State
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [queryModal, setQueryModal] = useState(false)
+  const [terminationModal, setTerminationModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -93,11 +94,11 @@ const Query = () => {
   const store = useSelector(state => state.invoice)
 
   const toggleModal = () => {
-    setQueryModal(!queryModal)
+    setTerminationModal(!terminationModal)
   }
 
-  const openQueryModal = () => {
-    setQueryModal(true)
+  const openModal = () => {
+    setTerminationModal(true)
   }
 
   const handleFilter = val => {
@@ -135,7 +136,7 @@ const Query = () => {
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
           <Button
             sx={{ width: '40%', mb: 0, display: 'flex', alignItems: 'center', gap: 1 }}
-            onClick={openQueryModal}
+            onClick={openModal}
             variant='contained'
           >
             Add New
@@ -162,7 +163,7 @@ const Query = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <CreateRetiree open={queryModal} close={toggleModal} updateFetch={updateFetch} /> */}
+      <CreateTermination open={terminationModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
   )
 }
