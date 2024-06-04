@@ -110,7 +110,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
                       fullWidth
                       value={value}
                       label='Title'
-                      placeholder='General Meeting'
+                      placeholder='Meeting Title'
                       onChange={onChange}
                       error={Boolean(errors?.title)}
                       aria-describedby='stepper-linear-account-userId'
@@ -120,66 +120,119 @@ const NewMeeting = ({ open, closeCanvas }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Controller
-                  name='date'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <DatePicker
-                      selected={value}
-                      dateFormat='yyyy-MM-dd'
-                      popperPlacement='bottom-end'
-                      onChange={e => {
-                        onChange(e)
-                      }}
-                      placeholderText='YYYY-MM-DD'
-                      customInput={
-                        <CustomInput
-                          value={value}
-                          onChange={onChange}
-                          autoComplete='off'
-                          label='Date'
-                          error={Boolean(errors?.date)}
-                          {...(errors?.date && { helperText: errors?.date.message })}
-                        />
-                      }
-                    />
-                  )}
-                />
+              <Grid container spacing={5} sx={{ ml: theme => theme.spacing(3), my: theme => theme.spacing(3) }}>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name='start'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange } }) => (
+                      <DatePicker
+                        selected={value}
+                        dateFormat='Pp'
+                        popperPlacement='bottom-end'
+                        showTimeSelect
+                        onChange={e => {
+                          onChange(e)
+                        }}
+                        placeholderText='MM-DD-YYYY 00:00'
+                        customInput={
+                          <CustomInput
+                            value={value}
+                            onChange={onChange}
+                            autoComplete='off'
+                            label='Start Date/Time'
+                            error={Boolean(errors?.date)}
+                            {...(errors?.date && { helperText: errors?.date.message })}
+                          />
+                        }
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name='end'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange } }) => (
+                      <DatePicker
+                        selected={value}
+                        dateFormat='Pp'
+                        popperPlacement='bottom-end'
+                        showTimeSelect
+                        onChange={e => {
+                          onChange(e)
+                        }}
+                        placeholderText='MM-DD-YYYY 00:00'
+                        customInput={
+                          <CustomInput
+                            value={value}
+                            onChange={onChange}
+                            autoComplete='off'
+                            label='Ends Date/Time'
+                            error={Boolean(errors?.date)}
+                            {...(errors?.date && { helperText: errors?.date.message })}
+                          />
+                        }
+                      />
+                    )}
+                  />
+                </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid container spacing={5} sx={{ ml: theme => theme.spacing(3), my: theme => theme.spacing(3) }}>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name='issuerName'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange } }) => (
+                      <CustomTextField
+                        fullWidth
+                        value={value}
+                        label='Issuer Name'
+                        placeholder='John Doe'
+                        onChange={onChange}
+                        error={Boolean(errors?.issuerName)}
+                        aria-describedby='stepper-linear-account-userId'
+                        {...(errors?.issuerName && { helperText: errors?.issuerName.message })}
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name='venue'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { value, onChange } }) => (
+                      <CustomTextField
+                        fullWidth
+                        value={value}
+                        label='Venue'
+                        placeholder='Virtual/In-Person'
+                        onChange={onChange}
+                        error={Boolean(errors?.recipient)}
+                        aria-describedby='stepper-linear-account-userId'
+                        {...(errors?.recipient && { helperText: errors?.recipient.message })}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <Controller
-                  name='issuerName'
+                  name='meeting_link'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
                       fullWidth
                       value={value}
-                      label='Issuer Name'
-                      placeholder='John Doe'
-                      onChange={onChange}
-                      error={Boolean(errors?.issuerName)}
-                      aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.issuerName && { helperText: errors?.issuerName.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Controller
-                  name='recipient'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Recipient'
-                      placeholder='All Departments'
+                      label='Meeting Link'
+                      placeholder='pim-zfbq-ptk'
                       onChange={onChange}
                       error={Boolean(errors?.recipient)}
                       aria-describedby='stepper-linear-account-userId'
@@ -191,7 +244,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
 
               <Grid item xs={12} sm={12}>
                 <Controller
-                  name='body'
+                  name='description'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -200,9 +253,9 @@ const NewMeeting = ({ open, closeCanvas }) => {
                       value={value}
                       multiline
                       rows={8}
-                      label='Body'
+                      label='Description'
                       onChange={onChange}
-                      placeholder='Body of Memo'
+                      placeholder='Meeting Description'
                       error={Boolean(errors.body)}
                       {...(errors.body && { helperText: errors.body.message })}
                     />
