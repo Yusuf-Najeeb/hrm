@@ -36,6 +36,14 @@ const navigation = () => {
       path: '/apps/dutyRoster'
     },
     {
+      sectionTitle: 'Accounting'
+    },
+    {
+      title: 'Customers',
+      icon: 'tabler:address-book',
+      path: '/apps/customer'
+    },
+    {
       sectionTitle: 'Human Resource'
     },
     {
