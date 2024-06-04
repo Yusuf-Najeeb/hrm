@@ -134,11 +134,7 @@ const Query = () => {
           </Grid>
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-          <Button
-            sx={{ width: '40%', mb: 0, display: 'flex', alignItems: 'center', gap: 1 }}
-            onClick={openModal}
-            variant='contained'
-          >
+          <Button onClick={openModal} variant='contained'>
             Add New
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>

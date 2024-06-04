@@ -82,7 +82,7 @@ const Promotions = () => {
   // ** State
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [memoDrawer, setMemoDrawer] = useState(false)
+  const [meetingDrawer, setMeetingDrawer] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -94,11 +94,11 @@ const Promotions = () => {
   const store = useSelector(state => state.invoice)
 
   const toggleDrawer = () => {
-    setMemoDrawer(!memoDrawer)
+    setMeetingDrawer(!meetingDrawer)
   }
 
-  const openMemoDrawer = () => {
-    setMemoDrawer(true)
+  const openMeetingDrawer = () => {
+    setMeetingDrawer(true)
   }
 
   const handleFilter = val => {
@@ -134,11 +134,7 @@ const Promotions = () => {
           </Grid>
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-          <Button
-            sx={{ width: '55%', mb: 0, display: 'flex', alignItems: 'center', gap: 1 }}
-            onClick={openMemoDrawer}
-            variant='contained'
-          >
+          <Button onClick={openMeetingDrawer} variant='contained'>
             New Meeting
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -162,7 +158,7 @@ const Promotions = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      <CreateMeeting open={memoDrawer} closeCanvas={toggleDrawer} />
+      <CreateMeeting open={meetingDrawer} closeCanvas={toggleDrawer} />
     </Card>
   )
 }

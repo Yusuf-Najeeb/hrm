@@ -134,11 +134,7 @@ const Promotions = () => {
           </Grid>
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-          <Button
-            sx={{ width: '45%', mb: 0, display: 'flex', alignItems: 'center', gap: 1 }}
-            onClick={openMemoDrawer}
-            variant='contained'
-          >
+          <Button onClick={openMemoDrawer} variant='contained'>
             New Memo
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
