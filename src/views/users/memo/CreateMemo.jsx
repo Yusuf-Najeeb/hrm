@@ -70,7 +70,7 @@ const NewMemo = ({ open, closeCanvas }) => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 800, sm: 800 } } }}
     >
       <Header>
-        <Typography variant='h3'>Memo</Typography>
+        <Typography variant='h4'>Memo</Typography>
         <IconButton
           size='small'
           onClick={closeCanvas}

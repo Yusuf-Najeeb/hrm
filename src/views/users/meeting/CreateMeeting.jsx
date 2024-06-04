@@ -14,7 +14,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memoSchema } from 'src/@core/FormSchema'
+import { meetingSchema } from 'src/@core/FormSchema'
 import { useStaffs } from '../../../hooks/useStaffs'
 
 //** MUI Imports
@@ -60,7 +60,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
   } = useForm({
     defaultValues,
     mode: 'onChange',
-    resolver: yupResolver(memoSchema)
+    resolver: yupResolver(meetingSchema)
   })
 
   return (
@@ -72,7 +72,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 800, sm: 800 } } }}
     >
       <Header>
-        <Typography variant='h3'>Schedule Meeting</Typography>
+        <Typography variant='h4'>Schedule Meeting</Typography>
         <IconButton
           size='small'
           onClick={closeCanvas}

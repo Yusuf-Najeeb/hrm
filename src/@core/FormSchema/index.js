@@ -171,9 +171,19 @@ export const terminationSchema = yup.object().shape({
 })
 
 export const memoSchema = yup.object().shape({
-  title: yup.string().required('Memo Title is required'),
+  title: yup.string().required('Title is required'),
   issuerName: yup.string(),
   date: yup.string().required('Date is required'),
   recipient: yup.string().required('Recipient is required'),
   body: yup.string().required('Memo body required')
+})
+
+export const meetingSchema = yup.object().shape({
+  title: yup.string().required('Title is required'),
+  issuerName: yup.string(),
+  starts: yup.string().required('Date/Time is required'),
+  ends: yup.string().required('Date/Time is required'),
+  venue: yup.string(),
+  link: yup.string(),
+  description: yup.string().required('Meeting description required')
 })
