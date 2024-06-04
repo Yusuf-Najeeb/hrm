@@ -39,10 +39,12 @@ const Header = styled(Box)(({ theme }) => ({
 
 const defaultValues = {
   title: '',
-  date: '',
+  starts: '',
+  ends: '',
   issuerName: '',
-  recipient: '',
-  body: ''
+  venue: '',
+  link: '',
+  description: ''
 }
 
 const NewMeeting = ({ open, closeCanvas }) => {
@@ -123,7 +125,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
               <Grid container spacing={5} sx={{ ml: theme => theme.spacing(3), my: theme => theme.spacing(3) }}>
                 <Grid item xs={12} sm={6}>
                   <Controller
-                    name='start'
+                    name='starts'
                     control={control}
                     rules={{ required: true }}
                     render={({ field: { value, onChange } }) => (
@@ -142,8 +144,8 @@ const NewMeeting = ({ open, closeCanvas }) => {
                             onChange={onChange}
                             autoComplete='off'
                             label='Start Date/Time'
-                            error={Boolean(errors?.date)}
-                            {...(errors?.date && { helperText: errors?.date.message })}
+                            error={Boolean(errors?.starts)}
+                            {...(errors?.starts && { helperText: errors?.starts.message })}
                           />
                         }
                       />
@@ -152,7 +154,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Controller
-                    name='end'
+                    name='ends'
                     control={control}
                     rules={{ required: true }}
                     render={({ field: { value, onChange } }) => (
@@ -170,9 +172,9 @@ const NewMeeting = ({ open, closeCanvas }) => {
                             value={value}
                             onChange={onChange}
                             autoComplete='off'
-                            label='Ends Date/Time'
-                            error={Boolean(errors?.date)}
-                            {...(errors?.date && { helperText: errors?.date.message })}
+                            label='End Date/Time'
+                            error={Boolean(errors?.ends)}
+                            {...(errors?.ends && { helperText: errors?.ends.message })}
                           />
                         }
                       />
@@ -201,7 +203,6 @@ const NewMeeting = ({ open, closeCanvas }) => {
                     )}
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={6}>
                   <Controller
                     name='venue'
@@ -224,7 +225,7 @@ const NewMeeting = ({ open, closeCanvas }) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Controller
-                  name='meeting_link'
+                  name='link'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -234,9 +235,9 @@ const NewMeeting = ({ open, closeCanvas }) => {
                       label='Meeting Link'
                       placeholder='pim-zfbq-ptk'
                       onChange={onChange}
-                      error={Boolean(errors?.recipient)}
+                      error={Boolean(errors?.link)}
                       aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.recipient && { helperText: errors?.recipient.message })}
+                      {...(errors?.link && { helperText: errors?.link.message })}
                     />
                   )}
                 />
@@ -256,8 +257,8 @@ const NewMeeting = ({ open, closeCanvas }) => {
                       label='Description'
                       onChange={onChange}
                       placeholder='Meeting Description'
-                      error={Boolean(errors.body)}
-                      {...(errors.body && { helperText: errors.body.message })}
+                      error={Boolean(errors.description)}
+                      {...(errors.description && { helperText: errors.description.message })}
                     />
                   )}
                 />
@@ -272,7 +273,15 @@ const NewMeeting = ({ open, closeCanvas }) => {
               mt: theme => [`${theme.spacing(4)} !important`]
             }}
           >
-            <Button type='button' variant='tonal' color='secondary' onClick={closeCanvas}>
+            <Button
+              type='button'
+              variant='tonal'
+              color='secondary'
+              onClick={() => {
+                closeCanvas()
+                reset()
+              }}
+            >
               Cancel
             </Button>
             <Button type='submit' variant='contained' sx={{ mr: 2 }}>
