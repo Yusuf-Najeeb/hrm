@@ -1,14 +1,15 @@
 import React from 'react'
 import OffBoarding from '../../../views/users/offBoarding/OffBoardingTab'
+import CashflowTabs from '../../../views/users/cashflow/CashflowTabs'
 
-const OffBoard = ({ tab }) => {
-  return <OffBoarding tab={tab} />
+const Cashflow = ({ tab }) => {
+  return <CashflowTabs tab={tab} />
 }
 
 export const getStaticPaths = () => {
   return {
-    paths: [{ params: { tab: 'retirement' } }, { params: { tab: 'termination' } }],
-    fallback: false
+    paths: [{ params: { tab: 'inflow' } }, { params: { tab: 'outflow' } }],
+    fallback: 'inflow'
   }
 }
 
@@ -20,4 +21,4 @@ export const getStaticProps = async ({ params }) => {
   }
 }
 
-export default OffBoard
+export default Cashflow

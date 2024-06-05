@@ -82,7 +82,7 @@ const AddCustomer = ({ open, close, updateFetch }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Create Leave Application </Typography>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 6 }}>New Customer</Typography>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={4}>
                 <Controller
