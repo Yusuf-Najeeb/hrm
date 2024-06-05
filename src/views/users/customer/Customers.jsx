@@ -42,6 +42,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
+import AddCustomer from './AddCustomer'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -77,11 +78,11 @@ const renderClient = row => {
   }
 }
 
-const Promotions = () => {
+const Customers = () => {
   // ** State
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [meetingDrawer, setMeetingDrawer] = useState(false)
+  const [drawer, setDrawer] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -93,11 +94,11 @@ const Promotions = () => {
   const store = useSelector(state => state.invoice)
 
   const toggleDrawer = () => {
-    setMeetingDrawer(!meetingDrawer)
+    setDrawer(!drawer)
   }
 
-  const openMeetingDrawer = () => {
-    setMeetingDrawer(true)
+  const openDrawer = () => {
+    setDrawer(true)
   }
 
   const handleFilter = val => {
@@ -126,18 +127,18 @@ const Promotions = () => {
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search customer name'}
+              placeholder={'Search Customer'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />
           </Grid>
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
-          <Button sx={{ color: 'white', mb: 0 }} onClick={openMeetingDrawer} variant='tonal'>
+          <Button sx={{ color: 'white', mb: 0 }} onClick={openDrawer} variant='tonal'>
             Import
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
-          <Button onClick={openMeetingDrawer} variant='contained'>
+          <Button onClick={openDrawer} variant='contained'>
             New Customer
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -161,9 +162,9 @@ const Promotions = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <CreateMeeting open={meetingDrawer} closeCanvas={toggleDrawer} /> */}
+      <AddCustomer open={drawer} close={toggleDrawer} />
     </Card>
   )
 }
 
-export default Promotions
+export default Customers
