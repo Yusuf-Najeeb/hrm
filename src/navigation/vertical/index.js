@@ -44,9 +44,14 @@ const navigation = () => {
       path: '/apps/customer'
     },
     {
-      title: 'Cash-Flow',
+      title: 'In-Flow',
       icon: 'streamline:subscription-cashflow',
-      path: '/apps/cashflow'
+      path: '/apps/inflow'
+    },
+    {
+      title: 'Out-Flow',
+      icon: 'streamline:subscription-cashflow',
+      path: '/apps/outflow'
     },
     {
       sectionTitle: 'Human Resource'

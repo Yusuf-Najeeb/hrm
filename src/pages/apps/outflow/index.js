@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import CashflowTabs from '../../../views/users/cashflow/CashflowTabs'
+import OutflowTabs from '../../../views/users/outflow/OutflowTabs'
 
-// import { useAppDispatch } from '../../../hooks'
+// import { useAppDispatch } fromoutflow/OutflowTabs./hooks'
 // import { fetchDeductionCategory } from '../../../store/apps/deductionCatergory/asyncthunk'
 // import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 // import { fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 
-const CashflowHome = () => {
+const OutflowHome = () => {
   // const dispatch = useAppDispatch()
   // useEffect(() => {
   //   dispatch(fetchDeductionCategory())
@@ -14,7 +14,7 @@ const CashflowHome = () => {
   //   dispatch(fetchDepartments({ page: 1, limit: 200 }))
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [])
-  return <CashflowTabs tab='inflow' />
+  return <OutflowTabs tab='operating' />
 }
 
-export default CashflowHome
+export default OutflowHome

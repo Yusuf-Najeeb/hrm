@@ -18,8 +18,8 @@ import MuiTabList from '@mui/lab/TabList'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-import Inflow from './Inflow'
-import Outflow from './Outflow'
+import Operating from './Operating'
+import Purchase from './Purchase'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -75,8 +75,8 @@ const Cashflow = ({ tab }) => {
   }, [tab])
 
   const tabContentList = {
-    inflow: <Inflow />,
-    outflow: <Outflow />
+    operating: <Operating />,
+    purchase: <Purchase />
   }
 
   return (
@@ -96,22 +96,22 @@ const Cashflow = ({ tab }) => {
                 }}
               >
                 <Grid item xs={12}>
-                  <TabList variant='scrollable' scrollButtons='auto' onChange={handleChange} aria-label='cashflow tabs'>
+                  <TabList variant='scrollable' scrollButtons='auto' onChange={handleChange} aria-label='outflow tabs'>
                     <Tab
-                      value='inflow'
+                      value='operating'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                           <Icon fontSize='1.5rem' icon='ph:hand-coins-thin' />
-                          {!hideText && 'Inflow'}
+                          {!hideText && 'Operating Expense'}
                         </Box>
                       }
                     />
                     <Tab
-                      value='outflow'
+                      value='purchase'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                           <Icon fontSize='1.5rem' icon='game-icons:pay-money' />
-                          {!hideText && 'Outflow'}
+                          {!hideText && 'Purchase Item'}
                         </Box>
                       }
                     />

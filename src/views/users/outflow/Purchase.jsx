@@ -79,7 +79,7 @@ const renderClient = row => {
   }
 }
 
-const Customers = () => {
+const Purchase = () => {
   // ** State
   const [value, setValue] = useState('')
   const [paymentType, setPaymentType] = useState('')
@@ -210,4 +210,4 @@ const Customers = () => {
   )
 }
 
-export default Customers
+export default Purchase
