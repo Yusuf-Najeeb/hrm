@@ -98,11 +98,11 @@ const Inflow = () => {
 
   const store = useSelector(state => state.invoice)
 
-  const toggleinflowModal = () => {
+  const toggleInflowModal = () => {
     setInflowModal(!inflowModal)
   }
 
-  const openinflowModal = () => {
+  const openInflowModal = () => {
     setInflowModal(true)
   }
 
@@ -177,12 +177,12 @@ const Inflow = () => {
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search Customer'}
+              placeholder={'Search Receipt'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />
           </Grid>
-          <Button onClick={openinflowModal} variant='contained' sx={{ width: '50%' }}>
+          <Button onClick={openInflowModal} variant='contained' sx={{ width: '50%' }}>
             Add Inflow
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -206,8 +206,7 @@ const Inflow = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <AddCustomer open={inflowModal} close={toggleinflowModal} /> */}
-      <AddInflow open={inflowModal} close={toggleinflowModal} />
+      <AddInflow open={inflowModal} close={toggleInflowModal} />
     </Card>
   )
 }

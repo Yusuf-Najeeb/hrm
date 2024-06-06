@@ -83,10 +83,8 @@ const Purchase = () => {
   // ** State
   const [value, setValue] = useState('')
   const [paymentType, setPaymentType] = useState('')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [drawer, setDrawer] = useState(false)
+  const [purchaseModal, setPurchaseModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -97,11 +95,11 @@ const Purchase = () => {
 
   const store = useSelector(state => state.invoice)
 
-  const toggleDrawer = () => {
+  const toggleModal = () => {
     setDrawer(!drawer)
   }
 
-  const openDrawer = () => {
+  const openModal = () => {
     setDrawer(true)
   }
 
@@ -130,59 +128,19 @@ const Purchase = () => {
     >
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={3}>
-            <DatePicker
-              selected={startDate}
-              dateFormat='yyyy-MM-dd'
-              popperPlacement='bottom-end'
-              onChange={e => {
-                setStartDate(e)
-              }}
-              placeholderText='YYYY-MM-DD'
-              customInput={
-                <CustomInput value={startDate} onChange={e => setStartDate(e)} autoComplete='off' label='From' />
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <DatePicker
-              selected={endDate}
-              dateFormat='yyyy-MM-dd'
-              popperPlacement='bottom-end'
-              onChange={e => {
-                setEndDate(e)
-              }}
-              placeholderText='YYYY-MM-DD'
-              customInput={<CustomInput value={endDate} onChange={e => setEndDate(e)} autoComplete='off' label='To' />}
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <CustomInput
-              select
-              fullWidth
-              value={paymentType}
-              label='Payment Type'
-              placeholder={'Payment Type'}
-              onChange={e => handlePayment(e)}
-            >
-              <MenuItem value=''>Payment option</MenuItem>
-              <MenuItem value='three'>Bank POS</MenuItem>
-              <MenuItem value='four'>Online payment</MenuItem>
-            </CustomInput>
-          </Grid>
-        </Grid>
-        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
           <Grid item xs={12} sm={6} spacing={4}>
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search Customer'}
+              placeholder={'Search Purchase'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />
           </Grid>
-          <Button onClick={openDrawer} variant='contained'>
-            Add Inflow
+        </Grid>
+        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
+          <Button onClick={openModal} variant='contained'>
+            New Purchase
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
         </Box>
@@ -192,10 +150,12 @@ const Purchase = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell align={'left'}>Customer Name</TableCell>
-                <TableCell align={'left'}>Email</TableCell>
-                <TableCell align={'left'}>Phone</TableCell>
-                <TableCell align={'left'}>Balance</TableCell>
+                <TableCell align={'left'}>Name</TableCell>
+                <TableCell align={'left'}>Category</TableCell>
+                <TableCell align={'left'}>Date</TableCell>
+                <TableCell align={'left'}>Amount</TableCell>
+                <TableCell align={'left'}>VAT</TableCell>
+                <TableCell align={'left'}>Witholding Tax</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
             </TableHead>
