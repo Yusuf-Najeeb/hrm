@@ -44,6 +44,7 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
+import AddInflow from './AddInflow'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -86,7 +87,7 @@ const Inflow = () => {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [drawer, setDrawer] = useState(false)
+  const [inflowModal, setInflowModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -97,12 +98,12 @@ const Inflow = () => {
 
   const store = useSelector(state => state.invoice)
 
-  const toggleDrawer = () => {
-    setDrawer(!drawer)
+  const toggleinflowModal = () => {
+    setInflowModal(!inflowModal)
   }
 
-  const openDrawer = () => {
-    setDrawer(true)
+  const openinflowModal = () => {
+    setInflowModal(true)
   }
 
   const handleFilter = val => {
@@ -181,7 +182,7 @@ const Inflow = () => {
               sx={{ mr: 4 }}
             />
           </Grid>
-          <Button onClick={openDrawer} variant='contained' sx={{ width: '50%' }}>
+          <Button onClick={openinflowModal} variant='contained' sx={{ width: '50%' }}>
             Add Inflow
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -205,7 +206,8 @@ const Inflow = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <AddCustomer open={drawer} close={toggleDrawer} /> */}
+      {/* <AddCustomer open={inflowModal} close={toggleinflowModal} /> */}
+      <AddInflow open={inflowModal} close={toggleinflowModal} />
     </Card>
   )
 }

@@ -45,12 +45,12 @@ const navigation = () => {
     },
     {
       title: 'In-Flow',
-      icon: 'streamline:subscription-cashflow',
+      icon: 'arcticons:ds-get',
       path: '/apps/inflow'
     },
     {
       title: 'Out-Flow',
-      icon: 'streamline:subscription-cashflow',
+      icon: 'ph:arrow-fat-up-thin',
       path: '/apps/outflow'
     },
     {
