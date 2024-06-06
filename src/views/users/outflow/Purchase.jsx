@@ -44,6 +44,7 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
+import NewPurchase from './NewPurchase'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -96,11 +97,11 @@ const Purchase = () => {
   const store = useSelector(state => state.invoice)
 
   const toggleModal = () => {
-    setDrawer(!drawer)
+    setPurchaseModal(!purchaseModal)
   }
 
   const openModal = () => {
-    setDrawer(true)
+    setPurchaseModal(true)
   }
 
   const handleFilter = val => {
@@ -165,7 +166,7 @@ const Purchase = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <AddCustomer open={drawer} close={toggleDrawer} /> */}
+      <NewPurchase open={purchaseModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
   )
 }
