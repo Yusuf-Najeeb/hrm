@@ -85,7 +85,7 @@ const Purchase = () => {
   const [value, setValue] = useState('')
   const [paymentType, setPaymentType] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [purchaseModal, setPurchaseModal] = useState(false)
+  const [operationModal, setOperationModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -97,11 +97,11 @@ const Purchase = () => {
   const store = useSelector(state => state.invoice)
 
   const toggleModal = () => {
-    setPurchaseModal(!purchaseModal)
+    setOperationModal(!operationModal)
   }
 
   const openModal = () => {
-    setPurchaseModal(true)
+    setOperationModal(true)
   }
 
   const handleFilter = val => {
@@ -133,7 +133,7 @@ const Purchase = () => {
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search Purchase'}
+              placeholder={'Search Expense'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />
@@ -141,7 +141,7 @@ const Purchase = () => {
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
           <Button onClick={openModal} variant='contained'>
-            New Purchase
+            New Expense
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
         </Box>
@@ -151,12 +151,12 @@ const Purchase = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell align={'left'}>Name</TableCell>
-                <TableCell align={'left'}>Category</TableCell>
-                <TableCell align={'left'}>Date</TableCell>
+                <TableCell align={'left'}>Expense Category</TableCell>
+                <TableCell align={'left'}>Description</TableCell>
                 <TableCell align={'left'}>Amount</TableCell>
                 <TableCell align={'left'}>VAT</TableCell>
                 <TableCell align={'left'}>Witholding Tax</TableCell>
+                <TableCell align={'left'}>Date</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -166,7 +166,7 @@ const Purchase = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      <NewPurchase open={purchaseModal} close={toggleModal} updateFetch={updateFetch} />
+      <NewPurchase open={operationModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
   )
 }

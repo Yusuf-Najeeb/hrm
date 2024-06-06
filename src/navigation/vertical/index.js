@@ -45,13 +45,18 @@ const navigation = () => {
     },
     {
       title: 'In-Flow',
-      icon: 'arcticons:ds-get',
+      icon: 'material-symbols-light:download',
       path: '/apps/inflow'
     },
     {
       title: 'Out-Flow',
-      icon: 'ph:arrow-fat-up-thin',
+      icon: 'material-symbols-light:upload',
       path: '/apps/outflow'
+    },
+    {
+      title: 'Transaction',
+      icon: 'bitcoin-icons:transactions-outline',
+      path: '/apps/transaction'
     },
     {
       sectionTitle: 'Human Resource'

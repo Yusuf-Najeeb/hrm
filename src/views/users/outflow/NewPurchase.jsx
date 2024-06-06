@@ -82,7 +82,7 @@ const NewPurchase = ({ open, close, updateFetch }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>New Inflow</Typography>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Purchase</Typography>
             <Grid container spacing={8}>
               <Grid item xs={12} sm={4}>
                 <Box
