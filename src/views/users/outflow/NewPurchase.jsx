@@ -30,19 +30,19 @@ import { useAppDispatch } from '../../../hooks'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useStaffs } from '../../../hooks/useStaffs'
 import { ButtonStyled } from '../../../@core/components/mui/button/ButtonStyledComponent'
-
-// import { handleInputImageChange } from '../../../@core/utils/uploadImage'
 import { handleInputImageChange } from '../../../@core/utils/upload'
 
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 
 const defaultValues = {
-  title: '',
+  item: '',
   vendor: '',
   referenceNumber: '',
   paymentAccount: '',
   paymentMethod: '',
+  price: '',
+  quantity: '',
   date: '',
   description: ''
 }
@@ -135,26 +135,26 @@ const NewPurchase = ({ open, close, updateFetch }) => {
                 </Box>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
-                  name='title'
+                  name='item'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
                       fullWidth
                       value={value}
-                      label='Title'
+                      label='Product'
                       onChange={onChange}
-                      error={Boolean(errors?.title)}
+                      error={Boolean(errors?.item)}
                       aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.title && { helperText: errors?.title.message })}
+                      {...(errors?.item && { helperText: errors?.item.message })}
                     />
                   )}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='vendor'
                   control={control}
@@ -173,7 +173,7 @@ const NewPurchase = ({ open, close, updateFetch }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='referenceNumber'
                   control={control}
@@ -191,7 +191,43 @@ const NewPurchase = ({ open, close, updateFetch }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
+                <Controller
+                  name='price'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomInput
+                      fullWidth
+                      value={value}
+                      onChange={onChange}
+                      label='Price'
+                      error={Boolean(errors?.price)}
+                      {...(errors?.price && { helperText: errors?.price.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
+                <Controller
+                  name='quantity'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomInput
+                      fullWidth
+                      value={value}
+                      onChange={onChange}
+                      label='Quantity'
+                      error={Boolean(errors?.quantity)}
+                      {...(errors?.quantity && { helperText: errors?.quantity.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
                 <Controller
                   name='date'
                   control={control}

@@ -151,12 +151,12 @@ const Purchase = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell align={'left'}>Name</TableCell>
-                <TableCell align={'left'}>Category</TableCell>
-                <TableCell align={'left'}>Date</TableCell>
-                <TableCell align={'left'}>Amount</TableCell>
+                <TableCell align={'left'}>Item</TableCell>
+                <TableCell align={'left'}>Description</TableCell>
+                <TableCell align={'left'}>Quantity</TableCell>
+                <TableCell align={'left'}>Price</TableCell>
                 <TableCell align={'left'}>VAT</TableCell>
-                <TableCell align={'left'}>Witholding Tax</TableCell>
+                <TableCell align={'left'}>Amount</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
             </TableHead>

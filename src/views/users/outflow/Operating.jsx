@@ -44,6 +44,7 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import TableHeader from 'src/views/apps/invoice/list/TableHeader'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
+import NewPurchase from './NewPurchase'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -79,14 +80,12 @@ const renderClient = row => {
   }
 }
 
-const Operating = () => {
+const Purchase = () => {
   // ** State
   const [value, setValue] = useState('')
   const [paymentType, setPaymentType] = useState('')
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
   const [statusValue, setStatusValue] = useState('')
-  const [drawer, setDrawer] = useState(false)
+  const [purchaseModal, setPurchaseModal] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -97,12 +96,12 @@ const Operating = () => {
 
   const store = useSelector(state => state.invoice)
 
-  const toggleDrawer = () => {
-    setDrawer(!drawer)
+  const toggleModal = () => {
+    setPurchaseModal(!purchaseModal)
   }
 
-  const openDrawer = () => {
-    setDrawer(true)
+  const openModal = () => {
+    setPurchaseModal(true)
   }
 
   const handleFilter = val => {
@@ -130,59 +129,19 @@ const Operating = () => {
     >
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={3}>
-            <DatePicker
-              selected={startDate}
-              dateFormat='yyyy-MM-dd'
-              popperPlacement='bottom-end'
-              onChange={e => {
-                setStartDate(e)
-              }}
-              placeholderText='YYYY-MM-DD'
-              customInput={
-                <CustomInput value={startDate} onChange={e => setStartDate(e)} autoComplete='off' label='From' />
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <DatePicker
-              selected={endDate}
-              dateFormat='yyyy-MM-dd'
-              popperPlacement='bottom-end'
-              onChange={e => {
-                setEndDate(e)
-              }}
-              placeholderText='YYYY-MM-DD'
-              customInput={<CustomInput value={endDate} onChange={e => setEndDate(e)} autoComplete='off' label='To' />}
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <CustomInput
-              select
-              fullWidth
-              value={paymentType}
-              label='Payment Type'
-              placeholder={'Payment Type'}
-              onChange={e => handlePayment(e)}
-            >
-              <MenuItem value=''>Payment option</MenuItem>
-              <MenuItem value='three'>Bank POS</MenuItem>
-              <MenuItem value='four'>Online payment</MenuItem>
-            </CustomInput>
-          </Grid>
-        </Grid>
-        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
           <Grid item xs={12} sm={6} spacing={4}>
             <CustomTextField
               fullWidth
               value={value}
-              placeholder={'Search Customer'}
+              placeholder={'Search Purchase'}
               onChange={e => handleFilter(e.target.value)}
               sx={{ mr: 4 }}
             />
           </Grid>
-          <Button onClick={openDrawer} variant='contained'>
-            Add Inflow
+        </Grid>
+        <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
+          <Button onClick={openModal} variant='contained'>
+            New Purchase
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
         </Box>
@@ -192,10 +151,12 @@ const Operating = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell align={'left'}>Customer Name</TableCell>
-                <TableCell align={'left'}>Email</TableCell>
-                <TableCell align={'left'}>Phone</TableCell>
-                <TableCell align={'left'}>Balance</TableCell>
+                <TableCell align={'left'}>Name</TableCell>
+                <TableCell align={'left'}>Category</TableCell>
+                <TableCell align={'left'}>Date</TableCell>
+                <TableCell align={'left'}>Amount</TableCell>
+                <TableCell align={'left'}>VAT</TableCell>
+                <TableCell align={'left'}>Witholding Tax</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -205,9 +166,9 @@ const Operating = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <AddCustomer open={drawer} close={toggleDrawer} /> */}
+      <NewPurchase open={purchaseModal} close={toggleModal} updateFetch={updateFetch} />
     </Card>
   )
 }
 
-export default Operating
+export default Purchase
