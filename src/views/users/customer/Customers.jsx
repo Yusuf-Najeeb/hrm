@@ -134,7 +134,7 @@ const Customers = () => {
           </Grid>
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
-          <Button sx={{ color: 'white', mb: 0 }} onClick={openDrawer} variant='tonal'>
+          <Button sx={{ color: 'white', mb: 0 }} variant='tonal'>
             Import
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>

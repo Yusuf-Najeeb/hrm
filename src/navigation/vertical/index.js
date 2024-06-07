@@ -3,7 +3,6 @@ const navigation = () => {
     {
       title: 'Dashboards',
       icon: 'tabler:smart-home',
-
       path: '/dashboards/analytics'
     },
     {
@@ -36,6 +35,11 @@ const navigation = () => {
       path: '/apps/dutyRoster'
     },
     {
+      title: 'Attendance',
+      icon: 'tabler:alarm-plus',
+      path: '/apps/attendance'
+    },
+    {
       sectionTitle: 'Accounting'
     },
     {
@@ -45,12 +49,12 @@ const navigation = () => {
     },
     {
       title: 'In-Flow',
-      icon: 'material-symbols-light:download',
+      icon: 'tabler:corner-left-down-double',
       path: '/apps/inflow'
     },
     {
       title: 'Out-Flow',
-      icon: 'material-symbols-light:upload',
+      icon: 'tabler:corner-right-up-double',
       path: '/apps/outflow'
     },
     {
@@ -106,13 +110,6 @@ const navigation = () => {
       icon: 'guidance:meeting-point-2',
       path: '/apps/meeting'
     },
-
-    // {
-    //   title: 'Attendence',
-    //   icon: 'tabler:alarm-plus',
-    //   path: '/apps/Attendence'
-    // },
-
     {
       sectionTitle: 'Settings'
     },

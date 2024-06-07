@@ -141,44 +141,6 @@ const AddCustomer = ({ open, close, updateFetch }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name='openingBalance'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomInput
-                      fullWidth
-                      value={value}
-                      onChange={onChange}
-                      autoComplete='on'
-                      label='Opening Balance'
-                      error={Boolean(errors?.openingBalance)}
-                      {...(errors?.openingBalance && { helperText: errors?.openingBalance.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name='discount'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Discount %'
-                      onChange={onChange}
-                      error={Boolean(errors?.discount)}
-                      aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.discount && { helperText: errors?.discount.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
               <Grid item xs={12} sm={4}>
                 <Controller
                   name='address'
@@ -236,49 +198,43 @@ const AddCustomer = ({ open, close, updateFetch }) => {
                 />
               </Grid>
 
-              {/* <Grid item xs={12} sm={12}>
-                <DatePicker
-                  isClearable
-                  selectsRange
-                  monthsShown={2}
-                  endDate={endDateRange}
-                  selected={startDateRange}
-                  startDate={startDateRange}
-                  shouldCloseOnSelect={false}
-                  id='date-range-picker-months'
-                  onChange={handleOnChangeRange}
-                  customInput={
-                    <CustomInput
-                      dates={dates}
-                      setDates={setDates}
-                      label='Starts - Ends'
-                      end={endDateRange}
-                      start={startDateRange}
-                    />
-                  }
-                />
-              </Grid> */}
-
-              {/* <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={6}>
                 <Controller
-                  name='reason'
+                  name='openingBalance'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomInput
+                      fullWidth
+                      value={value}
+                      onChange={onChange}
+                      autoComplete='on'
+                      label='Opening Balance'
+                      error={Boolean(errors?.openingBalance)}
+                      {...(errors?.openingBalance && { helperText: errors?.openingBalance.message })}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='discount'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
                       fullWidth
                       value={value}
-                      multiline
-                      rows={4}
-                      label='Reason for leave'
+                      label='Discount %'
                       onChange={onChange}
-                      placeholder='Reason for leave'
-                      error={Boolean(errors.reason)}
-                      {...(errors.reason && { helperText: errors.reason.message })}
+                      error={Boolean(errors?.discount)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.discount && { helperText: errors?.discount.message })}
                     />
                   )}
                 />
-              </Grid> */}
+              </Grid>
             </Grid>
           </DialogContent>
           <DialogActions
