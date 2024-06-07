@@ -81,7 +81,7 @@ const renderClient = row => {
   }
 }
 
-const Inflow = () => {
+const Transaction = () => {
   // ** State
   const [value, setValue] = useState('')
   const [transactionType, setTransactionType] = useState('')
@@ -215,9 +215,9 @@ const Inflow = () => {
           </Table>
         </TableContainer>
       </CardContent>
-      {/* <AddInflow open={transactionModal} close={toggleTransactionModal} /> */}
+      {/* <AddTra open={transactionModal} close={toggleTransactionModal} /> */}
     </Card>
   )
 }
 
-export default Inflow
+export default Transaction
