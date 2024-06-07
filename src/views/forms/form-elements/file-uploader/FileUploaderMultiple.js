@@ -14,6 +14,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
+import { border } from '@mui/system'
 
 const FileUploaderMultiple = () => {
   // ** State
@@ -71,6 +72,7 @@ const FileUploaderMultiple = () => {
           <Box
             sx={{
               mb: 8.75,
+              border: theme => `dashed 1px ${theme.palette.divider}`,
               width: 48,
               height: 48,
               display: 'flex',
@@ -85,20 +87,20 @@ const FileUploaderMultiple = () => {
           <Typography variant='h4' sx={{ mb: 2.5 }}>
             Drop files here or click to upload.
           </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
+          {/* <Typography sx={{ color: 'text.secondary' }}>
             (This is just a demo drop zone. Selected files are not actually uploaded.)
-          </Typography>
+          </Typography> */}
         </Box>
       </div>
       {files.length ? (
         <Fragment>
-          <List>{fileList}</List>
-          <div className='buttons'>
-            <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
+          <Box>{fileList}</Box>
+          <Box sx={{ mt: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Button color='warning' variant='outlined' onClick={handleRemoveAllFiles}>
               Remove All
             </Button>
             <Button variant='contained'>Upload Files</Button>
-          </div>
+          </Box>
         </Fragment>
       ) : null}
     </Fragment>
