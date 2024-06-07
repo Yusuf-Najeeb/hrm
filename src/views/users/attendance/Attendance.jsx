@@ -120,7 +120,7 @@ const Attendance = () => {
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={3}>
-            <CustomInput fullWidth value={value} placeholder={'Search '} onChange={e => handleFilter(e)} />
+            <CustomInput fullWidth value={value} placeholder={'Search Staff'} onChange={e => handleFilter(e)} />
           </Grid>
 
           {/* <Grid item xs={12} sm={3}>
@@ -162,7 +162,7 @@ const Attendance = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell align={'left'}>Name</TableCell>
+                <TableCell align={'left'}>Staff</TableCell>
                 <TableCell align={'left'}>Shift Type</TableCell>
                 <TableCell align={'left'}>Time-in</TableCell>
                 <TableCell align={'left'}>Time-out</TableCell>

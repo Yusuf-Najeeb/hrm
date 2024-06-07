@@ -40,6 +40,11 @@ const navigation = () => {
       path: '/apps/attendance'
     },
     {
+      title: 'Todo',
+      icon: 'tabler:subtask',
+      path: '/apps/taskManager'
+    },
+    {
       sectionTitle: 'Accounting'
     },
     {
