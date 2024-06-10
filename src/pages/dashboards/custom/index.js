@@ -1,12 +1,12 @@
 import React from 'react'
-import Cards from '../../../views/users/dashboard-overview/Cards'
+import Dashboard from '../../../views/users/dashboard-overview/Dashboard'
 
-const index = () => {
+const DashboardHome = () => {
   return (
     <div>
-      <Cards />
+      <Dashboard />
     </div>
   )
 }
 
-export default index
+export default DashboardHome
