@@ -15,19 +15,15 @@ import { formatFirstLetter, formatCurrency, formatDateToYYYY, formatMonthYear } 
 import { sendPayslip } from '../../../store/apps/payslip/asyncthunk'
 
 // ** MUI Imports
-import { DataGrid } from '@mui/x-data-grid'
-import {
-  CircularProgress,
-  Paper,
-  Typography,
-  Card,
-  CardHeader,
-  CardContent,
-  Grid,
-  MenuItem,
-  Checkbox,
-  Button
-} from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
+import CardContent from '@mui/material/CardContent'
+import Grid from '@mui/material/Grid'
+import MenuItem from '@mui/material/MenuItem'
+import Checkbox from '@mui/material/Checkbox'
+import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
