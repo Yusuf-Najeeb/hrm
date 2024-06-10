@@ -2,6 +2,13 @@
 import { useState, useEffect } from 'react'
 
 // ** MUI Components
+import TableContainer from '@mui/material/TableContainer'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import TableBody from '@mui/material/TableBody'
+import Checkbox from '@mui/material/Checkbox'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
@@ -25,141 +32,143 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 
 // ** renders name column
-const renderName = row => {
-  if (row.avatar) {
-    return <CustomAvatar src={row.avatar} sx={{ mr: 2.5, width: 38, height: 38 }} />
-  } else {
-    return (
-      <CustomAvatar
-        skin='light'
-        color={row.avatarColor || 'primary'}
-        sx={{ mr: 2.5, width: 38, height: 38, fontSize: theme => theme.typography.body1.fontSize }}
-      >
-        {getInitials(row.name || 'John Doe')}
-      </CustomAvatar>
-    )
-  }
-}
+// const renderName = row => {
+//   if (row.avatar) {
+//     return <CustomAvatar src={row.avatar} sx={{ mr: 2.5, width: 38, height: 38 }} />
+//   } else {
+//     return (
+//       <CustomAvatar
+//         skin='light'
+//         color={row.avatarColor || 'primary'}
+//         sx={{ mr: 2.5, width: 38, height: 38, fontSize: theme => theme.typography.body1.fontSize }}
+//       >
+//         {getInitials(row.name || 'John Doe')}
+//       </CustomAvatar>
+//     )
+//   }
+// }
 
-const columns = [
-  {
-    flex: 0.1,
-    field: 'name',
-    minWidth: 220,
-    headerName: 'Name',
-    renderCell: ({ row }) => {
-      const { name, date } = row
+// const columns = [
+//   {
+//     flex: 0.1,
+//     field: 'name',
+//     minWidth: 220,
+//     headerName: 'Name',
+//     renderCell: ({ row }) => {
+//       const { name, date } = row
 
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {renderName(row)}
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-              {name}
-            </Typography>
-            <Typography noWrap variant='body2' sx={{ color: 'text.disabled', textTransform: 'capitalize' }}>
-              {date}
-            </Typography>
-          </Box>
-        </Box>
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 105,
-    field: 'leader',
-    headerName: 'Leader',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.leader}</Typography>
-  },
-  {
-    flex: 0.1,
-    field: 'team',
-    minWidth: 120,
-    sortable: false,
-    headerName: 'Team',
-    renderCell: ({ row }) => (
-      <AvatarGroup className='pull-up'>
-        {row.avatarGroup.map((src, index) => (
-          <CustomAvatar key={index} src={src} sx={{ height: 26, width: 26 }} />
-        ))}
-      </AvatarGroup>
-    )
-  },
-  {
-    flex: 0.1,
-    minWidth: 150,
-    field: 'status',
-    headerName: 'Status',
-    renderCell: ({ row }) => (
-      <>
-        <LinearProgress
-          color='primary'
-          value={row.status}
-          variant='determinate'
-          sx={{
-            mr: 3,
-            height: 8,
-            width: '100%',
-            borderRadius: 8,
-            backgroundColor: 'background.default',
-            '& .MuiLinearProgress-bar': {
-              borderRadius: 8
-            }
-          }}
-        />
-        <Typography sx={{ color: 'text.secondary' }}>{`${row.status}%`}</Typography>
-      </>
-    )
-  },
-  {
-    flex: 0.1,
-    minWidth: 100,
-    sortable: false,
-    field: 'actions',
-    headerName: 'Actions',
-    renderCell: () => (
-      <OptionsMenu
-        iconButtonProps={{ size: 'small', sx: { color: 'text.secondary' } }}
-        options={[
-          'Details',
-          'Archive',
-          { divider: true, dividerProps: { sx: { my: theme => `${theme.spacing(2)} !important` } } },
-          {
-            text: 'Delete',
-            menuItemProps: {
-              sx: {
-                color: 'error.main',
-                '&:not(.Mui-focusVisible):hover': {
-                  color: 'error.main',
-                  backgroundColor: theme => hexToRGBA(theme.palette.error.main, 0.08)
-                }
-              }
-            }
-          }
-        ]}
-      />
-    )
-  }
-]
+//       return (
+//         <Box sx={{ display: 'flex', alignItems: 'center' }}>
+//           {renderName(row)}
+//           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+//             <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
+//               {name}
+//             </Typography>
+//             <Typography noWrap variant='body2' sx={{ color: 'text.disabled', textTransform: 'capitalize' }}>
+//               {date}
+//             </Typography>
+//           </Box>
+//         </Box>
+//       )
+//     }
+//   },
+//   {
+//     flex: 0.1,
+//     minWidth: 105,
+//     field: 'leader',
+//     headerName: 'Leader',
+//     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.leader}</Typography>
+//   },
+//   {
+//     flex: 0.1,
+//     field: 'team',
+//     minWidth: 120,
+//     sortable: false,
+//     headerName: 'Team',
+//     renderCell: ({ row }) => (
+//       <AvatarGroup className='pull-up'>
+//         {row.avatarGroup.map((src, index) => (
+//           <CustomAvatar key={index} src={src} sx={{ height: 26, width: 26 }} />
+//         ))}
+//       </AvatarGroup>
+//     )
+//   },
+//   {
+//     flex: 0.1,
+//     minWidth: 150,
+//     field: 'status',
+//     headerName: 'Status',
+//     renderCell: ({ row }) => (
+//       <>
+//         <LinearProgress
+//           color='primary'
+//           value={row.status}
+//           variant='determinate'
+//           sx={{
+//             mr: 3,
+//             height: 8,
+//             width: '100%',
+//             borderRadius: 8,
+//             backgroundColor: 'background.default',
+//             '& .MuiLinearProgress-bar': {
+//               borderRadius: 8
+//             }
+//           }}
+//         />
+//         <Typography sx={{ color: 'text.secondary' }}>{`${row.status}%`}</Typography>
+//       </>
+//     )
+//   },
+//   {
+//     flex: 0.1,
+//     minWidth: 100,
+//     sortable: false,
+//     field: 'actions',
+//     headerName: 'Actions',
+//     renderCell: () => (
+//       <OptionsMenu
+//         iconButtonProps={{ size: 'small', sx: { color: 'text.secondary' } }}
+//         options={[
+//           'Details',
+//           'Archive',
+//           { divider: true, dividerProps: { sx: { my: theme => `${theme.spacing(2)} !important` } } },
+//           {
+//             text: 'Delete',
+//             menuItemProps: {
+//               sx: {
+//                 color: 'error.main',
+//                 '&:not(.Mui-focusVisible):hover': {
+//                   color: 'error.main',
+//                   backgroundColor: theme => hexToRGBA(theme.palette.error.main, 0.08)
+//                 }
+//               }
+//             }
+//           }
+//         ]}
+//       />
+//     )
+//   }
+// ]
 
 const AnalyticsProject = () => {
   // ** State
   const [data, setData] = useState([])
   const [value, setValue] = useState('')
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
-  useEffect(() => {
-    axios.get('/pages/profile-table', { params: { q: value } }).then(response => {
-      setData(response.data)
-    })
-  }, [value])
 
-  const handleFilter = val => {
-    setValue(val)
-  }
+  // const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
 
-  return data ? (
-    <Card>
+  // useEffect(() => {
+  //   axios.get('/pages/profile-table', { params: { q: value } }).then(response => {
+  //     setData(response.data)
+  //   })
+  // }, [value])
+
+  // const handleFilter = val => {
+  //   setValue(val)
+  // }
+
+  return (
+    <Card sx={{ width: '100%' }}>
       <CardHeader
         title='Projects'
         titleTypographyProps={{ sx: { mb: [2, 0] } }}
@@ -171,7 +180,43 @@ const AnalyticsProject = () => {
           alignItems: ['flex-start', 'center']
         }}
       />
-      <DataGrid
+      <TableContainer>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Checkbox
+                  size='small'
+                  name={'all-checked'}
+
+                  // onChange={() => {
+                  //   if (allChecked) {
+                  //     setAllChecked(false)
+                  //     setChecked([])
+                  //   } else {
+                  //     setAllChecked(true)
+                  //     setChecked(PayrollData?.map(p => p?.id))
+                  //   }
+                  // }}
+                />
+              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Lead</TableCell>
+              <TableCell>Team</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <Typography>No Data...</Typography>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* <DataGrid
         autoHeight
         pagination
         rows={data}
@@ -182,9 +227,9 @@ const AnalyticsProject = () => {
         disableRowSelectionOnClick
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-      />
+      /> */}
     </Card>
-  ) : null
+  )
 }
 
 export default AnalyticsProject
