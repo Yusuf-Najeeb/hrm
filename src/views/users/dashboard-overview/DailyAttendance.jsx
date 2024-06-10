@@ -2,8 +2,9 @@ import React from 'react'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -13,10 +14,11 @@ import TableBody from '@mui/material/TableBody'
 
 const DailyAttendance = () => {
   return (
-    <Box sx={{ my: 8 }}>
+    <Card sx={{ my: 8 }}>
+      <CardHeader title="Today's Check-In" />
       <Grid container spacing={4}>
         <Grid item xs={12} sm={6}>
-          <Typography sx={{ fontSize: '1.2rem', my: 2 }}>Today's Attendance</Typography>
+          <Typography sx={{ fontSize: '1rem', my: 2, ml: 6 }}>Check-In Activity</Typography>
           <TableContainer>
             <Table stickyHeader>
               <TableHead>
@@ -37,7 +39,7 @@ const DailyAttendance = () => {
           </TableContainer>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography sx={{ fontSize: '1.2rem', my: 2 }}>Active Departments</Typography>
+          <Typography sx={{ fontSize: '1rem', my: 2, ml: 2 }}>Departments</Typography>
           <TableContainer>
             <Table stickyHeader>
               <TableHead>
@@ -57,7 +59,7 @@ const DailyAttendance = () => {
           </TableContainer>
         </Grid>
       </Grid>
-    </Box>
+    </Card>
   )
 }
 
