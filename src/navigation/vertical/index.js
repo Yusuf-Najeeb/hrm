@@ -9,11 +9,6 @@ const navigation = () => {
       sectionTitle: ' Staff MANAGER'
     },
     {
-      title: 'Departments',
-      icon: 'fluent-emoji-high-contrast:department-store',
-      path: '/apps/departments'
-    },
-    {
       title: 'Staffs',
       icon: 'tabler:user-hexagon',
       path: '/apps/staffs'
@@ -123,11 +118,21 @@ const navigation = () => {
       icon: 'tabler:arrow-fork',
       path: '/apps/roles'
     },
+    {
+      title: 'Offices',
+      icon: 'ph:office-chair-light',
+      path: '/apps/office'
+    },
+    {
+      title: 'Permissions',
+      icon: 'tabler:arrow-left-right',
+      path: '/apps/permissions'
+    },
 
     // {
-    //   title: 'Permissions',
-    //   icon: 'tabler:arrow-left-right',
-    //   path: '/apps/permissions'
+    //   title: 'Departments',
+    //   icon: 'fluent-emoji-high-contrast:department-store',
+    //   path: '/apps/departments'
     // },
 
     // {
