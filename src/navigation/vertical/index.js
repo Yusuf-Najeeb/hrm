@@ -114,6 +114,11 @@ const navigation = () => {
       sectionTitle: 'Settings'
     },
     {
+      title: 'Profile',
+      icon: 'iconamoon:profile-thin',
+      path: '/apps/profile'
+    },
+    {
       title: 'Roles',
       icon: 'tabler:arrow-fork',
       path: '/apps/roles'
