@@ -7,8 +7,14 @@ const Profile = ({ tab }) => {
 
 export const getStaticPaths = () => {
   return {
-    paths: [{ params: { tab: 'profile' } }, { params: { tab: 'password' } }],
-    fallback: 'profile'
+    paths: [
+      { params: { tab: 'account' } },
+      { params: { tab: 'security' } },
+      { params: { tab: 'billing' } },
+      { params: { tab: 'notification' } },
+      { params: { tab: 'connection' } }
+    ],
+    fallback: 'account'
   }
 }
 

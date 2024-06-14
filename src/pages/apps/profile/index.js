@@ -12,7 +12,7 @@ const ProfileHome = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [])
 
-  return <ProfileTabs tab='profile' />
+  return <ProfileTabs tab='account' />
 }
 
 export default ProfileHome

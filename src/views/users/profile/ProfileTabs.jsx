@@ -10,6 +10,9 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import TabPanel from '@mui/lab/TabPanel'
 import TabContext from '@mui/lab/TabContext'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
 
 import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -18,8 +21,9 @@ import MuiTabList from '@mui/lab/TabList'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-import Profile from './Profile'
-import Password from './Password'
+import Account from './Account'
+import Security from './Security'
+import ProfileCard from './ProfileCard'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -75,14 +79,17 @@ const Profiles = ({ tab }) => {
   }, [tab])
 
   const tabContentList = {
-    profile: <Profile />,
-    password: <Password />
+    account: <Account />,
+    security: <Security />
   }
 
   return (
-    <Grid container spacing={6}>
+    <Grid container spacing={4}>
+      <Grid item xs={4}>
+        <ProfileCard />
+      </Grid>
       {activeTab === undefined ? null : (
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <TabContext value={activeTab}>
             <Grid container spacing={6}>
               <Box
@@ -98,32 +105,50 @@ const Profiles = ({ tab }) => {
                 <Grid item xs={12}>
                   <TabList variant='scrollable' scrollButtons='auto' onChange={handleChange} aria-label='Profile tabs'>
                     <Tab
-                      value='profile'
+                      value='account'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                           <Icon fontSize='1.5rem' icon='oui:app-search-profiler' />
-                          {!hideText && 'Profile'}
+                          {!hideText && 'Account'}
                         </Box>
                       }
                     />
                     <Tab
-                      value='password'
+                      value='security'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                           <Icon fontSize='1.5rem' icon='ph:password-light' />
-                          {!hideText && 'Password'}
+                          {!hideText && 'Security'}
                         </Box>
                       }
                     />
-                    {/* <Tab
-                      value='config'
+                    <Tab
+                      value='billing'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                           <Icon fontSize='1.125rem' icon='solar:settings-linear' />
-                          {!hideText && 'Config'}
+                          {!hideText && 'Billing & Plan'}
                         </Box>
                       }
-                    /> */}
+                    />
+                    <Tab
+                      value='notification'
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
+                          <Icon fontSize='1.125rem' icon='solar:settings-linear' />
+                          {!hideText && 'Notification'}
+                        </Box>
+                      }
+                    />
+                    <Tab
+                      value='connection'
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
+                          <Icon fontSize='1.125rem' icon='solar:settings-linear' />
+                          {!hideText && 'Connection'}
+                        </Box>
+                      }
+                    />
                   </TabList>
                 </Grid>
               </Box>
