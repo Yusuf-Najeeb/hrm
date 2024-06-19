@@ -19,6 +19,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
+import PlanInfo from './PlanInfo'
 
 const ProfileCard = ({ staff }) => {
   const [profilePictureUrl, setProfilePictureUrl] = useState()
@@ -32,74 +33,78 @@ const ProfileCard = ({ staff }) => {
   }, [profilePictureUrl])
 
   return (
-    <Card>
-      <CardContent>
-        <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box>
-            {staff?.image ? (
-              <CustomAvatar
-                src={staff?.image ? profilePictureUrl : '/images/avatars/14.png'}
-                variant='rounded'
-                alt={`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)}`}
-                sx={{ width: 100, height: 100, mb: 4 }}
-              />
-            ) : (
-              <CustomAvatar
-                skin='light'
-                color={2 % 2 === 0 ? 'primary' : 'secondary'}
-                sx={{
-                  mr: 2.5,
-                  width: 100,
-                  height: 100,
-                  fontWeight: 500,
+    <Stack>
+      <Card>
+        <CardContent>
+          <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box>
+              {staff?.image ? (
+                <CustomAvatar
+                  src={staff?.image ? profilePictureUrl : '/images/avatars/14.png'}
+                  variant='rounded'
+                  alt={`${formatFirstLetter(staff?.firstname)} ${formatFirstLetter(staff?.lastname)}`}
+                  sx={{ width: 100, height: 100, mb: 4 }}
+                />
+              ) : (
+                <CustomAvatar
+                  skin='light'
+                  color={2 % 2 === 0 ? 'primary' : 'secondary'}
+                  sx={{
+                    mr: 2.5,
+                    width: 100,
+                    height: 100,
+                    fontWeight: 500,
 
-                  // fontSize: theme => theme.typography.body1.fontSize
-                  fontSize: '2rem'
-                }}
-              >
-                {getInitials(initials || 'John Doe')}
-              </CustomAvatar>
-            )}
-          </Box>
-          <Typography sx={{ my: 2 }}>{`${staff?.firstname} ${staff?.lastname}` || '--'}</Typography>
-          <CustomChip rounded size='small' skin='light' color='success' label={`${staff?.role}` || 'staff'} />
-        </Stack>
-        <Divider sx={{ mt: theme => theme.spacing(4), mb: theme => theme.spacing(2) }} />
-        <Stack>
-          <Typography sx={{ color: 'secondary', fontSize: '.85rem' }}>Details</Typography>
-          <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
-            <Typography>Username:</Typography>
-            <Typography>{staff?.username || '--'}</Typography>
+                    // fontSize: theme => theme.typography.body1.fontSize
+                    fontSize: '2rem'
+                  }}
+                >
+                  {getInitials(initials || 'John Doe')}
+                </CustomAvatar>
+              )}
+            </Box>
+            <Typography sx={{ my: 2 }}>{`${staff?.firstname} ${staff?.lastname}` || '--'}</Typography>
+            <CustomChip rounded size='small' skin='light' color='success' label={`${staff?.role}` || 'staff'} />
           </Stack>
-          <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
-            <Typography>Email:</Typography>
-            <Typography>{staff?.email || '--'}</Typography>
+          <Divider sx={{ mt: theme => theme.spacing(4), mb: theme => theme.spacing(2) }} />
+          <Stack>
+            <Typography sx={{ color: 'secondary', fontSize: '.85rem' }}>Details</Typography>
+            <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
+              <Typography>Username:</Typography>
+              <Typography>{staff?.username || '--'}</Typography>
+            </Stack>
+            <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
+              <Typography>Email:</Typography>
+              <Typography>{staff?.email || '--'}</Typography>
+            </Stack>
+            <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
+              <Typography>Role:</Typography>
+              <Typography>{staff?.role || '--'}</Typography>
+            </Stack>
+            <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
+              <Typography>Status:</Typography>
+              <Typography>{staff?.status || '--'}</Typography>
+            </Stack>
+            <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
+              <Typography>Phone:</Typography>
+              <Typography>{staff?.phone || '--'}</Typography>
+            </Stack>
+            <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
+              <Typography>Department:</Typography>
+              <Typography>{staff?.department || '--'}</Typography>
+            </Stack>
           </Stack>
-          <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
-            <Typography>Role:</Typography>
-            <Typography>{staff?.role || '--'}</Typography>
-          </Stack>
-          <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
-            <Typography>Status:</Typography>
-            <Typography>{staff?.status || '--'}</Typography>
-          </Stack>
-          <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
-            <Typography>Phone:</Typography>
-            <Typography>{staff?.phone || '--'}</Typography>
-          </Stack>
-          <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
-            <Typography>Department:</Typography>
-            <Typography>{staff?.department || '--'}</Typography>
-          </Stack>
-        </Stack>
-      </CardContent>
-      <CardActions sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: '70%', mx: 'auto' }}>
-        <Button variant='contained'>Edit</Button>
-        <Button variant='tonal' color='error'>
-          Suspend
-        </Button>
-      </CardActions>
-    </Card>
+        </CardContent>
+        <CardActions sx={{ display: 'flex', justifyContent: 'space-between', maxWidth: '70%', mx: 'auto' }}>
+          <Button variant='contained'>Edit</Button>
+          <Button variant='tonal' color='error'>
+            Suspend
+          </Button>
+        </CardActions>
+      </Card>
+
+      <PlanInfo />
+    </Stack>
   )
 }
 
