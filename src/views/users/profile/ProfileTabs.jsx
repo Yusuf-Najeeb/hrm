@@ -24,6 +24,7 @@ import Icon from 'src/@core/components/icon'
 import Account from './Account'
 import Security from './Security'
 import ProfileCard from './ProfileCard'
+import Notification from './Notification'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -80,7 +81,8 @@ const Profiles = ({ tab }) => {
 
   const tabContentList = {
     account: <Account />,
-    security: <Security />
+    security: <Security />,
+    notification: <Notification />
   }
 
   return (
@@ -126,7 +128,7 @@ const Profiles = ({ tab }) => {
                       value='billing'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.125rem' icon='solar:settings-linear' />
+                          <Icon fontSize='1.125rem' icon='medical-icon:i-billing' />
                           {!hideText && 'Billing & Plan'}
                         </Box>
                       }
@@ -135,7 +137,7 @@ const Profiles = ({ tab }) => {
                       value='notification'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.125rem' icon='solar:settings-linear' />
+                          <Icon fontSize='1.125rem' icon='tabler:notification' />
                           {!hideText && 'Notification'}
                         </Box>
                       }
@@ -144,7 +146,7 @@ const Profiles = ({ tab }) => {
                       value='connection'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                          <Icon fontSize='1.125rem' icon='solar:settings-linear' />
+                          <Icon fontSize='1.125rem' icon='ep:connection' />
                           {!hideText && 'Connection'}
                         </Box>
                       }
