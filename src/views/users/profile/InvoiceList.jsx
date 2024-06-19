@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Tooltip from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
+import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
@@ -87,16 +88,22 @@ const Projects = () => {
   const [dates, setDates] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  // ** Var
+  const open = Boolean(anchorEl)
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   // ** Hooks
   const dispatch = useDispatch()
-
   const store = useSelector(state => state.invoice)
-
-  const handleFilter = val => {
-    setValue(val)
-    console.log(val)
-  }
 
   const updateFetch = () => {
     setFetch(!refetch)
@@ -106,34 +113,45 @@ const Projects = () => {
     <Card
       sx={{
         borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0
+        borderBottomRightRadius: 0,
+        my: theme => theme.spacing(8)
       }}
     >
       <CardHeader
-        title='Project List'
+        title='Invoice List'
         sx={{ '& .MuiCardHeader-action': { m: 0 } }}
         action={
           <>
-            <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'space-end' }}>
-              <CustomTextField
-                value={value}
-                placeholder={'Search Project'}
-                onChange={e => handleFilter(e.target.value)}
-                sx={{ ml: 'auto' }}
-              />
-            </Grid>
+            <Button
+              variant='tonal'
+              color='secondary'
+              aria-haspopup='true'
+              onClick={handleClick}
+              aria-expanded={open ? 'true' : undefined}
+              endIcon={<Icon icon='tabler:chevron-down' />}
+              aria-controls={open ? 'user-view-overview-export' : undefined}
+            >
+              Export
+            </Button>
+            <Menu open={open} anchorEl={anchorEl} onClose={handleClose} id='user-view-overview-export'>
+              <MenuItem onClick={handleClose}>PDF</MenuItem>
+              <MenuItem onClick={handleClose}>XLSX</MenuItem>
+              <MenuItem onClick={handleClose}>CSV</MenuItem>
+            </Menu>
           </>
         }
       />
-
       <CardContent sx={{ p: theme => theme.spacing(0) }}>
         <TableContainer>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell align={'left'}>Project</TableCell>
-                <TableCell align={'left'}>Timeline</TableCell>
-                <TableCell align={'left'}>Status</TableCell>
+                <TableCell align={'left'}>ID</TableCell>
+                <TableCell align={'left'}>
+                  <Icon icon='tabler:chart-pie' />
+                </TableCell>
+                <TableCell align={'left'}>Total</TableCell>
+                <TableCell align={'left'}>Date Issued</TableCell>
                 <TableCell align={'left'}>Actions</TableCell>
               </TableRow>
             </TableHead>
