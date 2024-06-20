@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -16,6 +16,7 @@ import { formatCurrency } from '../../../@core/utils/format'
 import { fontSize } from '@mui/system'
 import { styled } from '@mui/material/styles'
 import LinearProgress from '@mui/material/LinearProgress'
+import UpgradeDialog from './UpgradeDialog'
 
 // ** Styled <sup> component
 const Sup = styled('sup')(({ theme }) => ({
@@ -33,6 +34,20 @@ const Sub = styled('sub')(({ theme }) => ({
 }))
 
 const PlanInfo = () => {
+  // ** States
+  const [openEdit, setOpenEdit] = useState(false)
+  const [openPlans, setOpenPlans] = useState(false)
+  const [suspendDialogOpen, setSuspendDialogOpen] = useState(false)
+  const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState(false)
+
+  // Handle Edit dialog
+  const handleEditClickOpen = () => setOpenEdit(true)
+  const handleEditClose = () => setOpenEdit(false)
+
+  // Handle Upgrade Plan dialog
+  const handlePlansClickOpen = () => setOpenPlans(true)
+  const handlePlansClose = () => setOpenPlans(false)
+
   return (
     <Card sx={{ my: theme => theme.spacing(8) }}>
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -45,9 +60,9 @@ const PlanInfo = () => {
           sx={{ p: theme => theme.spacing(4), fontSize: theme => theme.typography.body1.fontSize }}
         />
         <Box sx={{ mr: 3, display: 'flex', ml: 2.4, position: 'relative' }}>
-          <Sup>₦</Sup>
+          <Sup>$</Sup>
           <Typography variant='h1' sx={{ mb: -1.2, color: 'primary.main', fontSize: '2rem !important' }}>
-            1500.00
+            9.99
           </Typography>
           <Sub>/ month</Sub>
         </Box>
@@ -73,15 +88,11 @@ const PlanInfo = () => {
         </Box>
         <LinearProgress value={75} variant='determinate' sx={{ height: 10 }} />
         <Typography sx={{ mt: 1.5, mb: 6, color: 'text.secondary' }}>4 days remaining</Typography>
-        <Button
-          fullWidth
-          variant='contained'
-
-          // onClick={handlePlansClickOpen}
-        >
+        <Button fullWidth variant='contained' onClick={handlePlansClickOpen}>
           Upgrade Plan
         </Button>
       </CardContent>
+      <UpgradeDialog open={openPlans} close={handlePlansClose} />
     </Card>
   )
 }

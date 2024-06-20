@@ -25,6 +25,7 @@ import Account from './Account'
 import Security from './Security'
 import ProfileCard from './ProfileCard'
 import Notification from './Notification'
+import Billing from './Billing'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -82,7 +83,8 @@ const Profiles = ({ tab }) => {
   const tabContentList = {
     account: <Account />,
     security: <Security />,
-    notification: <Notification />
+    notification: <Notification />,
+    billing: <Billing />
   }
 
   return (

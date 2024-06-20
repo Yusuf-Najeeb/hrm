@@ -28,6 +28,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 
 // ** Component Import
 import PricingPlans from 'src/views/pages/pricing/PricingPlans'
+import UpgradeDialog from '../../../users/profile/UpgradeDialog'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -48,18 +49,11 @@ const CurrentPlanCard = ({ data }) => {
   // ** State
   const [open, setOpen] = useState(false)
   const [userInput, setUserInput] = useState('yes')
-  const [plan, setPlan] = useState('annually')
   const [secondDialogOpen, setSecondDialogOpen] = useState(false)
   const [openPricingDialog, setOpenPricingDialog] = useState(false)
 
-  const handleChange = e => {
-    if (e.target.checked) {
-      setPlan('annually')
-    } else {
-      setPlan('monthly')
-    }
-  }
   const handleClose = () => setOpen(false)
+  const handlePricePlan = () => setOpenPricingDialog(false)
   const handleSecondDialogClose = () => setSecondDialogOpen(false)
 
   const handleConfirmation = value => {
@@ -94,10 +88,10 @@ const CurrentPlanCard = ({ data }) => {
               </div>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Alert severity='warning' icon={false} sx={{ mb: 4 }}>
+              {/* <Alert severity='warning' icon={false} sx={{ mb: 4 }}>
                 <AlertTitle sx={{ fontWeight: 500 }}>We need your attention!</AlertTitle>
                 Your plan requires update
-              </Alert>
+              </Alert> */}
 
               <div>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -201,61 +195,7 @@ const CurrentPlanCard = ({ data }) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        fullWidth
-        scroll='body'
-        maxWidth='lg'
-        open={openPricingDialog}
-        onClose={() => setOpenPricingDialog(false)}
-        onBackdropClick={() => setOpenPricingDialog(false)}
-        sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
-      >
-        <DialogContent
-          sx={{
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            py: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <CustomCloseButton onClick={() => setOpenPricingDialog(false)}>
-            <Icon icon='tabler:x' fontSize='1.25rem' />
-          </CustomCloseButton>
-          <Box sx={{ mb: 4, textAlign: 'center' }}>
-            <Typography variant='h5' sx={{ mb: 3 }}>
-              Find the right plan for your site
-            </Typography>
-            <Typography variant='body2'>
-              Get started with us - it's perfect for individuals and teams. Choose a subscription plan that meets your
-              needs.
-            </Typography>
-          </Box>
-          <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <InputLabel
-              htmlFor='modal-pricing-switch'
-              sx={{
-                fontWeight: 600,
-                cursor: 'pointer',
-                color: 'text.secondary',
-                fontSize: theme => theme.typography.body2.fontSize
-              }}
-            >
-              Monthly
-            </InputLabel>
-            <Switch onChange={handleChange} id='modal-pricing-switch' checked={plan === 'annually'} />
-            <InputLabel
-              htmlFor='modal-pricing-switch'
-              sx={{
-                fontWeight: 600,
-                cursor: 'pointer',
-                color: 'text.secondary',
-                fontSize: theme => theme.typography.body2.fontSize
-              }}
-            >
-              Annually
-            </InputLabel>
-          </Box>
-          <PricingPlans data={data} plan={plan} />
-        </DialogContent>
-      </Dialog>
+      <UpgradeDialog open={openPricingDialog} close={handlePricePlan} />
     </>
   )
 }
