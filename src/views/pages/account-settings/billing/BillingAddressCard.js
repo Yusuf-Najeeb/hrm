@@ -34,7 +34,7 @@ const BillingAddressCard = () => {
   }
 
   return (
-    <Card>
+    <Card sx={{ my: theme => theme.spacing(4) }}>
       <CardHeader title='Billing Address' />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
