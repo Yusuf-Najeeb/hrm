@@ -68,7 +68,9 @@ const ProfileCard = ({ staff }) => {
           </Stack>
           <Divider sx={{ mt: theme => theme.spacing(4), mb: theme => theme.spacing(2) }} />
           <Stack>
-            <Typography sx={{ color: 'secondary', fontSize: '.85rem' }}>Details</Typography>
+            <Typography sx={{ color: 'text.secondary', fontSize: theme => theme.typography.body1.fontSize, mb: 3 }}>
+              Details
+            </Typography>
             <Stack direction={'row'} spacing={4} sx={{ mb: 2 }}>
               <Typography>Username:</Typography>
               <Typography>{staff?.username || '--'}</Typography>

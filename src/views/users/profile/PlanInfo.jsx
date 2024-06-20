@@ -36,11 +36,18 @@ const PlanInfo = () => {
   return (
     <Card sx={{ my: theme => theme.spacing(8) }}>
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <CustomChip rounded size='small' skin='light' color='primary' label='Plan name' />
+        <CustomChip
+          rounded
+          size='small'
+          skin='light'
+          color='primary'
+          label='Basic'
+          sx={{ p: theme => theme.spacing(4), fontSize: theme => theme.typography.body1.fontSize }}
+        />
         <Box sx={{ mr: 3, display: 'flex', ml: 2.4, position: 'relative' }}>
-          <Sup>$</Sup>
-          <Typography variant='h1' sx={{ mb: -1.2, color: 'primary.main', fontSize: '3rem !important' }}>
-            9.99
+          <Sup>₦</Sup>
+          <Typography variant='h1' sx={{ mb: -1.2, color: 'primary.main', fontSize: '2rem !important' }}>
+            1500.00
           </Typography>
           <Sub>/ month</Sub>
         </Box>
