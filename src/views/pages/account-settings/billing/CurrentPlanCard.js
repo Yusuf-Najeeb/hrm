@@ -29,6 +29,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 // ** Component Import
 import PricingPlans from 'src/views/pages/pricing/PricingPlans'
 import UpgradeDialog from '../../../users/profile/UpgradeDialog'
+import CancelSubscription from '../../../users/profile/CancelSubscription'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -48,9 +49,9 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 const CurrentPlanCard = ({ data }) => {
   // ** State
   const [open, setOpen] = useState(false)
-  const [userInput, setUserInput] = useState('yes')
   const [secondDialogOpen, setSecondDialogOpen] = useState(false)
   const [openPricingDialog, setOpenPricingDialog] = useState(false)
+  const [cancelSubscription, setCancelSubscription] = useState(false)
 
   const handleClose = () => setOpen(false)
   const handlePricePlan = () => setOpenPricingDialog(false)
@@ -118,83 +119,7 @@ const CurrentPlanCard = ({ data }) => {
         </CardContent>
       </Card>
 
-      <Dialog fullWidth maxWidth='xs' open={open} onClose={handleClose}>
-        <DialogContent
-          sx={{
-            pb: theme => `${theme.spacing(6)} !important`,
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              textAlign: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              '& svg': { mb: 6, color: 'warning.main' }
-            }}
-          >
-            <Icon icon='tabler:alert-circle' fontSize='5.5rem' />
-            <Typography>Are you sure you would like to cancel your subscription?</Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Button variant='contained' sx={{ mr: 2 }} onClick={() => handleConfirmation('yes')}>
-            Yes
-          </Button>
-          <Button variant='tonal' color='secondary' onClick={() => handleConfirmation('cancel')}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog fullWidth maxWidth='xs' open={secondDialogOpen} onClose={handleSecondDialogClose}>
-        <DialogContent
-          sx={{
-            pb: theme => `${theme.spacing(6)} !important`,
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-              '& svg': {
-                mb: 8,
-                color: userInput === 'yes' ? 'success.main' : 'error.main'
-              }
-            }}
-          >
-            <Icon fontSize='5.5rem' icon={userInput === 'yes' ? 'tabler:circle-check' : 'tabler:circle-x'} />
-            <Typography variant='h4' sx={{ mb: 5 }}>
-              {userInput === 'yes' ? 'Unsubscribed!' : 'Cancelled'}
-            </Typography>
-            <Typography>
-              {userInput === 'yes' ? 'Your subscription cancelled successfully.' : 'Unsubscription Cancelled!!'}
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
-          }}
-        >
-          <Button variant='contained' color='success' onClick={handleSecondDialogClose}>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CancelSubscription open={open} close={handleClose} />
       <UpgradeDialog open={openPricingDialog} close={handlePricePlan} />
     </>
   )

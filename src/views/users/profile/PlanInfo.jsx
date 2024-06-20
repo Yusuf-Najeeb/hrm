@@ -17,6 +17,7 @@ import { fontSize } from '@mui/system'
 import { styled } from '@mui/material/styles'
 import LinearProgress from '@mui/material/LinearProgress'
 import UpgradeDialog from './UpgradeDialog'
+import CancelSubscription from './CancelSubscription'
 
 // ** Styled <sup> component
 const Sup = styled('sup')(({ theme }) => ({
@@ -40,13 +41,10 @@ const PlanInfo = () => {
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false)
   const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState(false)
 
-  // Handle Edit dialog
-  const handleEditClickOpen = () => setOpenEdit(true)
-  const handleEditClose = () => setOpenEdit(false)
-
   // Handle Upgrade Plan dialog
   const handlePlansClickOpen = () => setOpenPlans(true)
   const handlePlansClose = () => setOpenPlans(false)
+  const handleSubscriptionClose = () => setSubscriptionDialogOpen(false)
 
   return (
     <Card sx={{ my: theme => theme.spacing(8) }}>
@@ -93,6 +91,7 @@ const PlanInfo = () => {
         </Button>
       </CardContent>
       <UpgradeDialog open={openPlans} close={handlePlansClose} />
+      <CancelSubscription open={subscriptionDialogOpen} close={handleSubscriptionClose} />
     </Card>
   )
 }

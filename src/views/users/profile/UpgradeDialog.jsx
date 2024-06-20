@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 
 // ** MUI Imports
-import Card from '@mui/material/Card'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
@@ -24,6 +23,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 import UserSuspendDialog from 'src/views/apps/user/view/UserSuspendDialog'
 import UserSubscriptionDialog from 'src/views/apps/user/view/UserSubscriptionDialog'
 import { styled } from '@mui/material/styles'
+import { fontSize } from '@mui/system'
 
 // ** Styled <sup> component
 const Sup = styled('sup')(({ theme }) => ({
@@ -84,11 +84,27 @@ const UpgradeDialog = ({ open, close }) => {
           Upgrade Plan
         </DialogTitle>
 
-        <DialogContent>
-          <DialogContentText sx={{ textAlign: 'center' }} id='user-view-plans-description'>
-            Choose the best plan for the user.
-          </DialogContentText>
+        <DialogContent
+          sx={{ display: 'flex', flexFlow: 'column', gap: 3, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Box sx={{ mr: 3, display: 'flex', ml: 2.4, position: 'relative' }}>
+            <Sup>$</Sup>
+            <Typography variant='h1' sx={{ mb: -1.2, color: 'primary.main', fontSize: '3rem !important' }}>
+              99
+            </Typography>
+            <Sub>/ month</Sub>
+          </Box>
+          <CustomChip
+            sx={{ fontSize: '1rem', py: theme => theme.spacing(4), px: theme => theme.spacing(6) }}
+            rounded
+            label='Popular'
+            size='small'
+            color='primary'
+            skin='light'
+          />
         </DialogContent>
+
+        <Divider sx={{ m: '0 !important' }} />
 
         <DialogContent
           sx={{
@@ -108,9 +124,7 @@ const UpgradeDialog = ({ open, close }) => {
           </Button>
         </DialogContent>
 
-        <Divider sx={{ m: '0 !important' }} />
-
-        <DialogContent>
+        {/* <DialogContent>
           <Typography variant='h6' sx={{ mb: 2, color: theme => theme.palette.text.secondary }}>
             User current plan is standard plan
           </Typography>
@@ -133,7 +147,7 @@ const UpgradeDialog = ({ open, close }) => {
               Cancel Subscription
             </Button>
           </Box>
-        </DialogContent>
+        </DialogContent> */}
       </DialogContent>
     </Dialog>
   )
