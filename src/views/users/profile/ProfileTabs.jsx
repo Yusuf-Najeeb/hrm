@@ -26,6 +26,7 @@ import Security from './Security'
 import ProfileCard from './ProfileCard'
 import Notification from './Notification'
 import Billing from './Billing'
+import Connections from './Connections'
 
 const TabList = styled(MuiTabList)(({ theme }) => ({
   borderBottom: '0 !important',
@@ -84,7 +85,8 @@ const Profiles = ({ tab }) => {
     account: <Account />,
     security: <Security />,
     notification: <Notification />,
-    billing: <Billing />
+    billing: <Billing />,
+    connection: <Connections />
   }
 
   return (
@@ -149,7 +151,7 @@ const Profiles = ({ tab }) => {
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
                           <Icon fontSize='1.125rem' icon='ep:connection' />
-                          {!hideText && 'Connection'}
+                          {!hideText && 'Connections'}
                         </Box>
                       }
                     />
