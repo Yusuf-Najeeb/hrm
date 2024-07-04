@@ -324,16 +324,11 @@ const StaffsTable = () => {
                             </IconButton>
                           </Tooltip>
                           <Tooltip title='Deactivate Staff'>
-                            {/* <FormGroup row sx={{ transform: 'translateX(-30%)' }}> */}
                             <FormControlLabel
-                              value='start'
-                              label=''
-                              labelPlacement='start'
                               control={
                                 <Switch checked={staff.deletedAt === null} onChange={() => handleToggle(staff)} />
                               }
                             />
-                            {/* </FormGroup> */}
                           </Tooltip>
                         </Box>
                       </TableCell>
