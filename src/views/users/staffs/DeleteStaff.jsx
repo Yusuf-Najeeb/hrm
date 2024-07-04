@@ -82,9 +82,8 @@ const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
 
   return (
     <Dialog
-      fullWidth
       open={open}
-      maxWidth='sm'
+      maxWidth='md'
       scroll='body'
       onClose={handleClose}
       onBackdropClick={handleClose}
@@ -93,9 +92,10 @@ const DeleteStaff = ({ open, handleClose, selectedStaff, refetchStaffs }) => {
     >
       <DialogContent
         sx={{
-          pb: theme => `${theme.spacing(8)} !important`,
-          px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-          pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+          // py: theme => `${theme.spacing(8)} !important`,
+          minWidth: 550,
+          px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(4)} !important`],
+          py: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(4)} !important`]
         }}
       >
         <CustomCloseButton onClick={handleClose}>
