@@ -220,17 +220,17 @@ const StaffsTable = () => {
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   DEPARTMENT
                 </TableCell>
+                <TableCell align='left' sx={{ maxWidth: 50 }}>
+                  ROLE
+                </TableCell>
+                <TableCell align='left' sx={{ minWidth: 150 }}>
+                  GROSS SALARY
+                </TableCell>
                 <TableCell align='left' sx={{ maxWidth: 80 }}>
                   PHONE
                 </TableCell>
-                <TableCell align='center' sx={{ maxWidth: 80 }}>
-                  ROLE
-                </TableCell>
-                <TableCell align='center' sx={{ maxWidth: 80 }}>
+                <TableCell align='left' sx={{ maxWidth: 80 }}>
                   STATUS
-                </TableCell>
-                <TableCell align='left' sx={{ minWidth: 100 }}>
-                  GROSS SALARY
                 </TableCell>
                 <TableCell align='left' sx={{ minWidth: 100 }}>
                   ACTIONS
@@ -262,9 +262,8 @@ const StaffsTable = () => {
                         </Box>
                       </TableCell>
                       <TableCell align='left'>{staff?.department?.name.toUpperCase()}</TableCell>
-                      <TableCell align='left'>{staff?.phone ? staff?.phone : 'N/A'}</TableCell>
-                      <TableCell align='center'>
-                        <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+                      <TableCell align='left' sx={{ minWidth: 150 }}>
+                        <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'flex-start', alignItems: 'center' }}>
                           <IconButton component={IconButtonStyled} sx={{ pb: 3 }}>
                             <Icon
                               icon={
@@ -278,12 +277,17 @@ const StaffsTable = () => {
                               }
                             />
                           </IconButton>
-                          <Typography sx={{ fontSize: '14px', color: 'text.secondary' }}>
+                          <Typography sx={{ color: 'text.secondary' }}>
                             {staff?.role?.name == 'Admin' || staff?.role?.name == 'admin' ? 'Admin' : 'Staff'}
                           </Typography>
                         </Box>
                       </TableCell>
-                      <TableCell align='center'>
+
+                      <TableCell align='left'>{formatCurrency(staff?.grossSalary, true)}</TableCell>
+
+                      <TableCell align='left'>{staff?.phone ? staff?.phone : 'N/A'}</TableCell>
+
+                      <TableCell align='left'>
                         {staff?.deletedAt === null ? (
                           <CustomChip
                             rounded
@@ -304,7 +308,6 @@ const StaffsTable = () => {
                           />
                         )}
                       </TableCell>
-                      <TableCell align='left'>{formatCurrency(staff?.grossSalary, true)}</TableCell>
 
                       <TableCell align='left'>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}>

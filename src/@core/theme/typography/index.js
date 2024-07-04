@@ -1,5 +1,6 @@
 const typography = {
   fontFamily: [
+    'Raleway',
     'Public Sans',
     'sans-serif',
     '-apple-system',

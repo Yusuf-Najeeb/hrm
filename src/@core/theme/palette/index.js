@@ -1,6 +1,6 @@
 const DefaultPalette = (mode, skin) => {
   // ** Vars
-  const whiteColor = '#FFF'
+  const whiteColor = '#fff'
   const lightColor = '47, 43, 61'
   const darkColor = '208, 212, 241'
   const darkPaperBgColor = '#2F3349'
