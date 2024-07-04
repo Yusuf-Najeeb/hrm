@@ -128,11 +128,12 @@ const navigation = () => {
       icon: 'ph:office-chair-light',
       path: '/apps/office'
     },
-    {
-      title: 'Permissions',
-      icon: 'tabler:arrow-left-right',
-      path: '/apps/permissions'
-    },
+
+    // {
+    //   title: 'Permissions',
+    //   icon: 'tabler:arrow-left-right',
+    //   path: '/apps/permissions'
+    // },
 
     // {
     //   title: 'Departments',

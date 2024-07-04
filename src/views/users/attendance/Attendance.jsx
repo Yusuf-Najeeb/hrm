@@ -119,36 +119,9 @@ const Attendance = () => {
     >
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={6}>
             <CustomInput fullWidth value={value} placeholder={'Search Staff'} onChange={e => handleFilter(e)} />
           </Grid>
-
-          {/* <Grid item xs={12} sm={3}>
-            <DatePicker
-              selected={startDate}
-              dateFormat='yyyy-MM-dd'
-              popperPlacement='bottom-end'
-              onChange={e => {
-                setStartDate(e)
-              }}
-              placeholderText='YYYY-MM-DD'
-              customInput={
-                <CustomInput value={startDate} onChange={e => setStartDate(e)} autoComplete='off' label='From' />
-              }
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <DatePicker
-              selected={endDate}
-              dateFormat='yyyy-MM-dd'
-              popperPlacement='bottom-end'
-              onChange={e => {
-                setEndDate(e)
-              }}
-              placeholderText='YYYY-MM-DD'
-              customInput={<CustomInput value={endDate} onChange={e => setEndDate(e)} autoComplete='off' label='To' />}
-            />
-          </Grid> */}
         </Grid>
         <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
           <Button onClick={openModal} variant='contained'>

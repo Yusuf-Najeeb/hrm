@@ -147,10 +147,10 @@ const RolesTable = () => {
                 DEPARTMENT
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                STATUS
+                DATE CREATED
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
-                DATE CREATED
+                STATUS
               </TableCell>
               <TableCell align='left' sx={{ minWidth: 100 }}>
                 ACTION
@@ -187,6 +187,7 @@ const RolesTable = () => {
                       </Box>
                     </TableCell>
                     <TableCell>{formatFirstLetter(staff?.department.name) || '--'}</TableCell>
+                    <TableCell align='left'>{formatDate(staff?.createdAt)}</TableCell>
                     <TableCell>
                       {staff?.deletedAt ? (
                         <CustomChip rounded size='small' skin='light' color='error' label='Inactive' />
@@ -194,7 +195,6 @@ const RolesTable = () => {
                         <CustomChip rounded size='small' skin='light' color='success' label='Active' />
                       )}
                     </TableCell>
-                    <TableCell align='left'>{formatDate(staff?.createdAt)}</TableCell>
                     <TableCell align='left'>
                       <IconButton size='small' onClick={() => handleViewStaff(staff)}>
                         <Icon icon='tabler:eye' />

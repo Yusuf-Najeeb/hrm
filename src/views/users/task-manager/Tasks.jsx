@@ -120,7 +120,7 @@ const TasksTable = () => {
     >
       <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={6}>
             <CustomInput
               fullWidth
               value={value}
