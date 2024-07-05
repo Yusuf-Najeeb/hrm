@@ -55,9 +55,6 @@ const EditSalaryItem = ({ open, closeModal, selectedSalaryItem, refetch }) => {
   })
 
   const onUpdate = async val => {
-    console.log(val)
-    console.log(selectedSalaryItem.id)
-
     try {
       const reqURL = `salary-items/?id=${selectedSalaryItem.id}`
 

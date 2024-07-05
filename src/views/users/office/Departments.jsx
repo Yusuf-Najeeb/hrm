@@ -32,12 +32,14 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import HeaderCards from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
+import AddDepartment from './NewDepartment'
 import EditDepartment from './AddEditDepartment'
 
 const DepartmentsTable = () => {
   //** States
   const [page, setPage] = useState(0)
   const [value, setValue] = useState('')
+  const [departmentModal, setDepartmentModal] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
   const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
@@ -56,6 +58,13 @@ const DepartmentsTable = () => {
   //   setDepartment(value)
   //   setOpenCanvas(true)
   // }
+  const openModal = () => {
+    setDepartmentModal(true)
+  }
+
+  const toggleModal = () => {
+    setDepartmentModal(false)
+  }
 
   const closeCanvas = () => {
     setOpenCanvas(false)
@@ -131,10 +140,7 @@ const DepartmentsTable = () => {
             </Grid>
           </Grid>
           <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
-            <Button
-              //  onClick={openModal}
-              variant='contained'
-            >
+            <Button onClick={openModal} variant='contained'>
               New Department
               <Icon icon='mdi:plus' fontSize={20} />
             </Button>
@@ -218,16 +224,8 @@ const DepartmentsTable = () => {
             </Table>
           </TableContainer>
 
-          {/* <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
-          <EditDepartment
-            refetchDepartments={updateFetch}
-            selectedDepartment={DepartmentToView}
-            editMode={editMode}
-            closeEdit={cancelEditMode}
-          />
-        </Item> */}
-
           <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+          <AddDepartment open={departmentModal} close={toggleModal} updateFetch={updateFetch} />
         </CardContent>
       </Card>
       <TablePagination
