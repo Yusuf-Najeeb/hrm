@@ -1,6 +1,11 @@
+// ** React Imports
 import React, { useEffect, useState, Fragment } from 'react'
 
+// ** MUI Imports
 import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
+import Button from '@mui/material/Button'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableHead from '@mui/material/TableHead'
@@ -8,27 +13,31 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import IconButton from '@mui/material/IconButton'
-import Stack from '@mui/material/Stack'
-import Item from '@mui/material/ListItem'
-
-import Icon from 'src/@core/components/icon'
 import TablePagination from '@mui/material/TablePagination'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import CustomTextField from 'src/@core/components/mui/text-field'
 import CustomChip from 'src/@core/components/mui/chip'
+
+//** Icon Import */
+import Icon from 'src/@core/components/icon'
+
+// ** Custom Components Imports
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
-import DepartmentInfo from './HeaderCards'
+import HeaderCards from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 import EditDepartment from './AddEditDepartment'
-import { display } from '@mui/system'
 
 const DepartmentsTable = () => {
-  const dispatch = useAppDispatch()
-  const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
+  //** States
   const [page, setPage] = useState(0)
+  const [value, setValue] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [department, setDepartment] = useState(null)
   const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
@@ -38,6 +47,10 @@ const DepartmentsTable = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
   const [DepartmentToView, setDepartmentToView] = useState(null)
+
+  // ** Hooks
+  const dispatch = useAppDispatch()
+  const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
 
   // const setActiveDepartment = value => {
   //   setDepartment(value)
@@ -102,9 +115,32 @@ const DepartmentsTable = () => {
 
   return (
     <div>
-      <DepartmentInfo />
-      <Stack spacing={1} direction={'row'} sx={{ mt: 10 }}>
-        <Item sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'end', xs: '100%', md: '60%', px: 0 }}>
+      <HeaderCards />
+      <Card sx={{ mt: theme => `${theme.spacing(8)} !important` }}>
+        {/* <CardHeader title='Departments' /> */}
+        <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={6} spacing={4}>
+              <CustomTextField
+                fullWidth
+                value={value}
+                placeholder={'Search Department'}
+                onChange={e => handleFilter(e.target.value)}
+                sx={{ mr: 4 }}
+              />
+            </Grid>
+          </Grid>
+          <Box sx={{ minWidth: 350, display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 4 }}>
+            <Button
+              //  onClick={openModal}
+              variant='contained'
+            >
+              New Department
+              <Icon icon='mdi:plus' fontSize={20} />
+            </Button>
+          </Box>
+        </CardContent>
+        <CardContent sx={{ px: theme => `${theme.spacing(0)} !important` }}>
           <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
             <Table stickyHeader aria-label='sticky table'>
               <TableHead>
@@ -182,28 +218,28 @@ const DepartmentsTable = () => {
             </Table>
           </TableContainer>
 
-          <TablePagination
-            page={page}
-            component='div'
-            count={paging?.totalItems}
-            rowsPerPage={rowsPerPage}
-            onPageChange={handleChangePage}
-            rowsPerPageOptions={[5, 10, 20]}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{ ml: 'auto' }}
-          />
-        </Item>
-        <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
+          {/* <Item sx={{ width: '40%', display: { xs: 'none', sm: 'block' } }}>
           <EditDepartment
             refetchDepartments={updateFetch}
             selectedDepartment={DepartmentToView}
             editMode={editMode}
             closeEdit={cancelEditMode}
           />
-        </Item>
-      </Stack>
+        </Item> */}
 
-      <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+          <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
+        </CardContent>
+      </Card>
+      <TablePagination
+        page={page}
+        component='div'
+        count={paging?.totalItems}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handleChangePage}
+        rowsPerPageOptions={[5, 10, 20]}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{ ml: 'auto' }}
+      />
     </div>
   )
 }
