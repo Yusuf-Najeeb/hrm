@@ -2,18 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react'
 import axios from 'axios'
 
 // ** MUI Imports
-import {
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  Grid,
-  Box,
-  MenuItem,
-  Typography,
-  IconButton
-} from '@mui/material'
+import { Button, CircularProgress, Dialog, DialogContent, Grid, Box, IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Icon from 'src/@core/components/icon'
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -98,8 +87,8 @@ const EditSalaryItem = ({ open, closeModal, selectedSalaryItem, refetch }) => {
         <CustomCloseButton onClick={closeModal}>
           <Icon icon='tabler:x' fontSize='1.25rem' />
         </CustomCloseButton>
+
         <form
-          //eslint-disable-next-line
           onSubmit={handleSubmit(onUpdate)}
           sx={{
             pb: theme => `${theme.spacing(8)} !important`,

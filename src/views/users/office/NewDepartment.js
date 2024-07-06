@@ -17,8 +17,8 @@ import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 
 // ** Components Imports
+import { requireName } from 'src/@core/FormSchema'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { requireName } from '../../../@core/FormSchema/index'
 import { Controller, useForm } from 'react-hook-form'
 import { styled } from '@mui/material/styles'
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -66,10 +66,6 @@ const NewDepartment = ({ open, close, updateFetch }) => {
     console.log('Submit')
   }
 
-  const testFunc = () => {
-    console.log('Revamp')
-  }
-
   return (
     <Fragment>
       <Dialog
@@ -88,8 +84,7 @@ const NewDepartment = ({ open, close, updateFetch }) => {
           <CustomCloseButton onClick={close}>
             <Icon icon='tabler:x' fontSize='1.25rem' />
           </CustomCloseButton>
-
-          <form handleSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={6}>
               <Grid item xs={12} sm={12}>
                 <Controller
