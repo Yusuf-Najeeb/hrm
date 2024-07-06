@@ -225,8 +225,8 @@ const DepartmentsTable = () => {
             </Table>
           </TableContainer>
 
+          <NewDepartment open={departmentModal} close={toggleModal} refetchDepartments={updateFetch} />
           <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
-          <NewDepartment open={departmentModal} close={toggleModal} updateFetch={updateFetch} />
         </CardContent>
       </Card>
       <TablePagination

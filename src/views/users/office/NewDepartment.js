@@ -24,6 +24,8 @@ import { styled } from '@mui/material/styles'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { useAppDispatch } from '../../../hooks'
 import { useStaffs } from '../../../hooks/useStaffs'
+import { createDepartment } from '../../../store/apps/departments/asyncthunk'
+
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 
@@ -46,7 +48,7 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   }
 }))
 
-const NewDepartment = ({ open, close, updateFetch }) => {
+const NewDepartment = ({ open, close, refetchDepartments }) => {
   const dispatch = useAppDispatch()
   const [StaffsData] = useStaffs()
 
@@ -61,8 +63,11 @@ const NewDepartment = ({ open, close, updateFetch }) => {
     resolver: yupResolver(requireName)
   })
 
-  const onSubmit = () => {
-    console.log('What is happening?')
+  const onSubmit = data => {
+    dispatch(createDepartment(data))
+    refetchDepartments()
+    reset()
+    close()
   }
 
   return (
@@ -74,7 +79,7 @@ const NewDepartment = ({ open, close, updateFetch }) => {
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(data => onSubmit(data))}>
           <DialogContent
             sx={{
               pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12)} !important`],
