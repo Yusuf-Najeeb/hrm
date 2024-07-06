@@ -45,8 +45,7 @@ const DepartmentsTable = () => {
   const [department, setDepartment] = useState(null)
   const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
-  const [editMode, setEditMode] = useState(false)
-  const [openEditDrawer, setEditDrawer] = useState(false)
+  const [openEditModal, setEditModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
   const [DepartmentToView, setDepartmentToView] = useState(null)
@@ -55,10 +54,11 @@ const DepartmentsTable = () => {
   const dispatch = useAppDispatch()
   const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
 
-  // const setActiveDepartment = value => {
-  //   setDepartment(value)
-  //   setOpenCanvas(true)
-  // }
+  const setActiveDepartment = value => {
+    setDepartment(value)
+    setEditModal(true)
+  }
+
   const openModal = () => {
     setDepartmentModal(true)
   }
@@ -67,11 +67,11 @@ const DepartmentsTable = () => {
     setDepartmentModal(false)
   }
 
-  const closeCanvas = () => {
-    setOpenCanvas(false)
-    setOpenPayModal(false)
-    setDepartment(null)
-  }
+  // const closeCanvas = () => {
+  //   setOpenCanvas(false)
+  //   setOpenPayModal(false)
+  //   setDepartment(null)
+  // }
 
   const doDelete = value => {
     setDeleteModal(true)
@@ -93,17 +93,11 @@ const DepartmentsTable = () => {
     setFetch(!refetch)
   }
 
-  const setDepartmentToEdit = dept => {
-    setEditDrawer(true)
-    setDepartmentToView(dept)
-    setEditMode(true)
-  }
-
-  const cancelEditMode = () => {
-    setEditDrawer(false)
-    setDepartmentToEdit(null)
-    setEditMode(false)
-  }
+  // const setDepartmentToEdit = dept => {
+  //   setEditDrawer(true)
+  //   setDepartmentToView(dept)
+  //   setEditMode(true)
+  // }
 
   const handleChangePage = newPage => {
     setPage(newPage)
@@ -114,8 +108,7 @@ const DepartmentsTable = () => {
     setPage(0)
   }
 
-  // const toggleDepartmentDrawer = () => setAdddepartmentOpen(!addDepartmentOpen)
-  // const toggleEditDrawer = () => setEditDrawer(!openEditDrawer)
+  const toggleEditModal = () => setEditModal(!openEditModal)
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: page + 1, limit: 200 }))
@@ -202,7 +195,7 @@ const DepartmentsTable = () => {
                           }`}
                         </TableCell>
                         <TableCell align='right' sx={{ display: 'flex' }}>
-                          <IconButton size='small' onClick={() => setDepartmentToEdit(department)}>
+                          <IconButton size='small' onClick={() => setActiveDepartment(department)}>
                             <Icon icon='tabler:edit' />
                           </IconButton>
                           <IconButton size='small' onClick={() => doDelete(department)}>
@@ -226,7 +219,7 @@ const DepartmentsTable = () => {
           </TableContainer>
 
           <NewDepartment open={departmentModal} close={toggleModal} refetchDepartments={updateFetch} />
-          <EditDepartment selectedDepartment={selectedDepartment} />
+          <EditDepartment open={openEditModal} close={toggleEditModal} selectedDepartment={selectedDepartment} />
           <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
         </CardContent>
       </Card>

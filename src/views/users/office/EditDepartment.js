@@ -57,7 +57,7 @@ const defaultValues = {
   hodId: 0
 }
 
-const EditDepartment = ({ selectedDepartment }) => {
+const EditDepartment = ({ open, close, selectedDepartment }) => {
   const [StaffsData] = useStaffs()
   const [staffsInSelectedDepartment, setStaffs] = useState([])
   const dispatch = useAppDispatch()
@@ -192,12 +192,7 @@ const EditDepartment = ({ selectedDepartment }) => {
             <Button type='submit' variant='contained'>
               {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Update'}
             </Button>
-            <Button
-
-            //  onClick={closeEdit}
-            >
-              Cancel
-            </Button>
+            <Button onClick={close}>Cancel</Button>
           </DialogActions>
         </form>
       </Dialog>
