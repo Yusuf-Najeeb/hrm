@@ -53,7 +53,6 @@ const NewDepartment = ({ open, close, updateFetch }) => {
   const {
     control,
     reset,
-    setValue,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm({
@@ -63,7 +62,7 @@ const NewDepartment = ({ open, close, updateFetch }) => {
   })
 
   const onSubmit = () => {
-    console.log('Submit')
+    console.log('What is happening?')
   }
 
   return (
@@ -71,20 +70,20 @@ const NewDepartment = ({ open, close, updateFetch }) => {
       <Dialog
         fullWidth
         open={open}
-        maxWidth='md'
+        maxWidth='sm'
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 450 } }}
       >
-        <DialogContent
-          sx={{
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12)} !important`],
-            pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12)} !important`]
-          }}
-        >
-          <CustomCloseButton onClick={close}>
-            <Icon icon='tabler:x' fontSize='1.25rem' />
-          </CustomCloseButton>
-          <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent
+            sx={{
+              pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12)} !important`],
+              pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12)} !important`]
+            }}
+          >
+            <CustomCloseButton onClick={close}>
+              <Icon icon='tabler:x' fontSize='1.25rem' />
+            </CustomCloseButton>
             <Grid container spacing={6}>
               <Grid item xs={12} sm={12}>
                 <Controller
@@ -104,18 +103,18 @@ const NewDepartment = ({ open, close, updateFetch }) => {
                 />
               </Grid>
             </Grid>
-          </form>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'center',
-            px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(15)} !important`]
-          }}
-        >
-          <Button type='submit' variant='contained' sx={{ mr: 2 }}>
-            {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Create'}
-          </Button>
-        </DialogActions>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              justifyContent: 'center',
+              px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(15)} !important`]
+            }}
+          >
+            <Button type='submit' variant='contained' sx={{ mr: 2 }}>
+              {isSubmitting ? <CircularProgress size={20} color='secondary' sx={{ ml: 3 }} /> : 'Create'}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </Fragment>
   )

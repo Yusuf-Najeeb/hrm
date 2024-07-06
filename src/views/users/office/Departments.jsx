@@ -32,7 +32,8 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import HeaderCards from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-import AddDepartment from './NewDepartment'
+
+import NewDepartment from './NewDepartment'
 import EditDepartment from './AddEditDepartment'
 
 const DepartmentsTable = () => {
@@ -225,7 +226,7 @@ const DepartmentsTable = () => {
           </TableContainer>
 
           <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
-          <AddDepartment open={departmentModal} close={toggleModal} updateFetch={updateFetch} />
+          <NewDepartment open={departmentModal} close={toggleModal} updateFetch={updateFetch} />
         </CardContent>
       </Card>
       <TablePagination

@@ -80,6 +80,10 @@ export const requireName = yup.object().shape({
   name: yup.string().required('Department Name is required')
 })
 
+export const newDepartmentSchema = yup.object().shape({
+  name: yup.string().required('Enter Department Name')
+})
+
 export const editDepartmentSchema = yup.object().shape({
   name: yup.string().required('Department Name is required'),
   hodId: yup.number()
