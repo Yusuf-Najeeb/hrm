@@ -131,7 +131,7 @@ const LoginPage = () => {
       const resp = await dispatch(LoginUser({ username, password }))
       if (resp.payload?.success) {
         if (resp?.payload?.data?.passwordChanged) {
-          router.replace('/dashboards/analytics')
+          router.replace('/')
           localStorage.removeItem('forcePasswordChange')
           localStorage.setItem('loginStatus', true)
           console.log(resp, 'login response')

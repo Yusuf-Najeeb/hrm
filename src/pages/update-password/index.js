@@ -141,7 +141,7 @@ const UpdatePassword = () => {
       notifySuccess('Password updated successfully')
 
       if (response?.data?.success) {
-        router.replace('/dashboards/analytics')
+        router.replace('/')
         window.localStorage.removeItem('forcePasswordChange')
         console.log(response, 'login response')
       }
