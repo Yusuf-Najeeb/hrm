@@ -34,7 +34,7 @@ import HeaderCards from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
 
 import NewDepartment from './NewDepartment'
-import EditDepartment from './AddEditDepartment'
+import EditDepartment from './EditDepartment'
 
 const DepartmentsTable = () => {
   //** States
@@ -226,6 +226,7 @@ const DepartmentsTable = () => {
           </TableContainer>
 
           <NewDepartment open={departmentModal} close={toggleModal} refetchDepartments={updateFetch} />
+          <EditDepartment selectedDepartment={selectedDepartment} />
           <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
         </CardContent>
       </Card>
