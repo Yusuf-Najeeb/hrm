@@ -27,12 +27,12 @@ import Icon from 'src/@core/components/icon'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import NoData from '../../../@core/components/emptyData/NoData'
 import { deleteDepartment, fetchDepartments } from '../../../store/apps/departments/asyncthunk'
+import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
 import CustomSpinner from '../../../@core/components/custom-spinner'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { useDepartments } from '../../../hooks/useDepartments'
 import HeaderCards from './HeaderCards'
 import DeleteDialog from '../../../@core/components/delete-dialog'
-
 import NewDepartment from './NewDepartment'
 import EditDepartment from './EditDepartment'
 
@@ -46,7 +46,6 @@ const DepartmentsTable = () => {
   const [openEditModal, setEditModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedDepartment, setSelectedDepartment] = useState(null)
-  const [DepartmentToView, setDepartmentToView] = useState(null)
 
   // ** Hooks
   const dispatch = useAppDispatch()
@@ -64,12 +63,6 @@ const DepartmentsTable = () => {
   const toggleModal = () => {
     setDepartmentModal(false)
   }
-
-  // const closeCanvas = () => {
-  //   setOpenCanvas(false)
-  //   setOpenPayModal(false)
-  //   setDepartment(null)
-  // }
 
   const doDelete = value => {
     setDeleteModal(true)
@@ -90,12 +83,6 @@ const DepartmentsTable = () => {
     doCancelDelete()
     setFetch(!refetch)
   }
-
-  // const setDepartmentToEdit = dept => {
-  //   setEditDrawer(true)
-  //   setDepartmentToView(dept)
-  //   setEditMode(true)
-  // }
 
   const handleChangePage = newPage => {
     setPage(newPage)
@@ -118,7 +105,6 @@ const DepartmentsTable = () => {
     <div>
       <HeaderCards />
       <Card sx={{ mt: theme => `${theme.spacing(8)} !important` }}>
-        {/* <CardHeader title='Departments' /> */}
         <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6} spacing={4}>

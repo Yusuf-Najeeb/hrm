@@ -25,8 +25,6 @@ export const getAllStaffsInOneDepartment = async id => {
   try {
     const { data } = await axios.get(`users?departmentId=${id}`)
 
-    // notifySuccess('Department updated successfully')
-
     return data
   } catch (error) {
     notifyError('Error fetching staffs in department')

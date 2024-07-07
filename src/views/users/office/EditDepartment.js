@@ -33,8 +33,6 @@ import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 
-import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
-
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
   right: 0,
