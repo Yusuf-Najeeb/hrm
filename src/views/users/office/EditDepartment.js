@@ -25,17 +25,15 @@ import { styled } from '@mui/material/styles'
 //** Custom component Imports
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { theme } from 'antd'
 import { editDepartmentSchema } from 'src/@core/FormSchema'
 import { useAppDispatch } from '../../../hooks'
 import { fetchStaffs } from '../../../store/apps/staffs/asyncthunk'
 import { useStaffs } from '../../../hooks/useStaffs'
-import { createDepartment } from '../../../store/apps/departments/asyncthunk'
 import { formatFirstLetter } from '../../../@core/utils/format'
 import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
 import { notifyError } from '../../../@core/components/toasts/notifyError'
 
-// import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
+import { getAllStaffsInOneDepartment } from '../../../store/apps/staffs/asyncthunk'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -57,7 +55,7 @@ const defaultValues = {
   hodId: 0
 }
 
-const EditDepartment = ({ open, close, selectedDepartment }) => {
+const EditDepartment = ({ open, close, selectedDepartment, refetchDepartments }) => {
   const [StaffsData] = useStaffs()
   const [staffsInSelectedDepartment, setStaffs] = useState([])
   const dispatch = useAppDispatch()
@@ -77,19 +75,16 @@ const EditDepartment = ({ open, close, selectedDepartment }) => {
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(editDepartmentSchema) })
 
   const updateDepartment = async values => {
-    console.log(values)
+    const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
 
-    // try {
-    //   const { data } = await axios.patch(`department?id=${selectedDepartment.id}`, values)
-
-    //   if (data.success) {
-    //     notifySuccess('Department updated successfully')
-    //     refetchDepartments()
-    //     reset()
-    //   }
-    // } catch (error) {
-    //   notifyError('Error updating department')
-    // }
+    if (data.success) {
+      notifySuccess('Department updated successfully')
+      refetchDepartments()
+      reset()
+      close()
+    } else {
+      notifyError('Error updating department')
+    }
   }
 
   // Editing Department
@@ -143,8 +138,7 @@ const EditDepartment = ({ open, close, selectedDepartment }) => {
                       value={value}
                       onChange={onChange}
                       error={Boolean(errors.name)}
-
-                      // {...(errors.name && { helperText: errors.name.message })}
+                      {...(errors.name && { helperText: errors.name.message })}
                     />
                   )}
                 />

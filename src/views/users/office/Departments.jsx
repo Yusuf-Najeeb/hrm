@@ -42,8 +42,6 @@ const DepartmentsTable = () => {
   const [value, setValue] = useState('')
   const [departmentModal, setDepartmentModal] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [department, setDepartment] = useState(null)
-  const [addDepartmentOpen, setAdddepartmentOpen] = useState(false)
   const [refetch, setFetch] = useState(false)
   const [openEditModal, setEditModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
@@ -55,7 +53,7 @@ const DepartmentsTable = () => {
   const [DepartmentsData, loadingDepartments, paging, aggregations] = useDepartments()
 
   const setActiveDepartment = value => {
-    setDepartment(value)
+    setSelectedDepartment(value)
     setEditModal(true)
   }
 
@@ -219,7 +217,12 @@ const DepartmentsTable = () => {
           </TableContainer>
 
           <NewDepartment open={departmentModal} close={toggleModal} refetchDepartments={updateFetch} />
-          <EditDepartment open={openEditModal} close={toggleEditModal} selectedDepartment={selectedDepartment} />
+          <EditDepartment
+            open={openEditModal}
+            close={toggleEditModal}
+            selectedDepartment={selectedDepartment}
+            refetchDepartments={updateFetch}
+          />
           <DeleteDialog open={deleteModal} handleClose={doCancelDelete} handleDelete={ondeleteClick} />
         </CardContent>
       </Card>
