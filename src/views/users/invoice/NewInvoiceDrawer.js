@@ -28,7 +28,9 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import CircularProgress from '@mui/material/CircularProgress'
 import MenuItem from '@mui/material/MenuItem'
-import { Alert } from '@mui/material'
+import Divider from '@mui/material/Divider'
+
+// import { Alert, Divider } from '@mui/material'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -38,11 +40,11 @@ const Header = styled(Box)(({ theme }) => ({
 }))
 
 const defaultValues = {
-  title: '',
-  date: '',
-  issuerName: '',
-  recipient: '',
-  body: ''
+  customer: '',
+  invoiceNumber: '',
+  issueDate: '',
+  dueDate: '',
+  reference: ''
 }
 
 const NewInvoice = ({ open, closeCanvas }) => {
@@ -67,10 +69,10 @@ const NewInvoice = ({ open, closeCanvas }) => {
       anchor='right'
       variant='temporary'
       ModalProps={{ keepMounted: true }}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 800, sm: 800 } } }}
+      sx={{ '& .MuiDrawer-paper': { width: { xs: 600, sm: 1000 } } }}
     >
       <Header>
-        <Typography variant='h4'>Memo</Typography>
+        <Typography variant='h4'>Create New Invoice</Typography>
         <IconButton
           size='small'
           onClick={closeCanvas}
@@ -97,32 +99,53 @@ const NewInvoice = ({ open, closeCanvas }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            {/* <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Retirement</Typography> */}
-
-            <Grid container spacing={8}>
-              <Grid item xs={12} sm={12}>
+            <Grid container spacing={6}>
+              <Grid item xs={12} sm={6}>
                 <Controller
-                  name='title'
+                  name='customer'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange } }) => (
+                    <CustomTextField
+                      fullWidth
+                      select
+                      value={value}
+                      label='Customer'
+                      placeholder='Select Customer'
+                      onChange={onChange}
+                      error={Boolean(errors?.customer)}
+                      aria-describedby='stepper-linear-account-userId'
+                      {...(errors?.customer && { helperText: errors?.customer.message })}
+                    >
+                      <MenuItem>Select Customer</MenuItem>
+                    </CustomTextField>
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name='invoiceNumber'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
                       fullWidth
                       value={value}
-                      label='Title'
-                      placeholder='General Meeting'
+                      label='Invoice Number'
+                      placeholder='1234567890'
                       onChange={onChange}
-                      error={Boolean(errors?.title)}
+                      error={Boolean(errors?.invoiceNumber)}
                       aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.title && { helperText: errors?.title.message })}
+                      {...(errors?.invoiceNumber && { helperText: errors?.invoiceNumber.message })}
                     />
                   )}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={4}>
                 <Controller
-                  name='date'
+                  name='issueDate'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
@@ -139,9 +162,9 @@ const NewInvoice = ({ open, closeCanvas }) => {
                           value={value}
                           onChange={onChange}
                           autoComplete='off'
-                          label='Date'
-                          error={Boolean(errors?.date)}
-                          {...(errors?.date && { helperText: errors?.date.message })}
+                          label='Date Issued'
+                          error={Boolean(errors?.issueDate)}
+                          {...(errors?.issueDate && { helperText: errors?.issueDate.message })}
                         />
                       }
                     />
@@ -149,68 +172,57 @@ const NewInvoice = ({ open, closeCanvas }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={4}>
                 <Controller
-                  name='issuerName'
+                  name='Due Date'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Issuer Name'
-                      placeholder='John Doe'
-                      onChange={onChange}
-                      error={Boolean(errors?.issuerName)}
-                      aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.issuerName && { helperText: errors?.issuerName.message })}
+                    <DatePicker
+                      selected={value}
+                      dateFormat='yyyy-MM-dd'
+                      popperPlacement='bottom-end'
+                      onChange={e => {
+                        onChange(e)
+                      }}
+                      placeholderText='YYYY-MM-DD'
+                      customInput={
+                        <CustomInput
+                          value={value}
+                          onChange={onChange}
+                          autoComplete='off'
+                          label='Due Date'
+                          error={Boolean(errors?.dueDate)}
+                          {...(errors?.dueDate && { helperText: errors?.dueDate.message })}
+                        />
+                      }
                     />
                   )}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={4}>
                 <Controller
-                  name='recipient'
+                  name='reference'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange } }) => (
                     <CustomTextField
                       fullWidth
                       value={value}
-                      label='Recipient'
-                      placeholder='All Departments'
+                      label='Reference'
+                      placeholder='Reference'
                       onChange={onChange}
-                      error={Boolean(errors?.recipient)}
+                      error={Boolean(errors?.reference)}
                       aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.recipient && { helperText: errors?.recipient.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Controller
-                  name='body'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      multiline
-                      rows={8}
-                      label='Body'
-                      onChange={onChange}
-                      placeholder='Body of Memo'
-                      error={Boolean(errors.body)}
-                      {...(errors.body && { helperText: errors.body.message })}
+                      {...(errors?.reference && { helperText: errors?.reference.message })}
                     />
                   )}
                 />
               </Grid>
             </Grid>
           </DialogContent>
+          <Divider />
           <DialogActions
             sx={{
               justifyContent: 'end',
