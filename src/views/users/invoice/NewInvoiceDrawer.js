@@ -1,5 +1,5 @@
 //** React Imports
-import React, { Fragment } from 'react'
+import React, { useState } from 'react'
 
 //** Third-Party Imports
 import DatePicker from 'react-datepicker'
@@ -36,6 +36,8 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 
+import SelectItemProduct from './ItemProductModal'
+
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -52,6 +54,7 @@ const defaultValues = {
 }
 
 const NewInvoice = ({ open, closeCanvas }) => {
+  const [itemProductModal, setItemProductModal] = useState(false)
   const [StaffsData] = useStaffs()
   const theme = useTheme()
 
@@ -66,6 +69,9 @@ const NewInvoice = ({ open, closeCanvas }) => {
     mode: 'onChange',
     resolver: yupResolver(memoSchema)
   })
+
+  const openItemProductModal = () => setItemProductModal(true)
+  const toggleModal = () => setItemProductModal(!itemProductModal)
 
   return (
     <Drawer
@@ -252,7 +258,7 @@ const NewInvoice = ({ open, closeCanvas }) => {
                 </TableContainer>
               </Grid>
               <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}>
-                <Button variant='tonal' color='error'>
+                <Button variant='tonal' color='error' onClick={openItemProductModal}>
                   Add Item
                   <Icon icon='mdi:plus' fontSize={20} />
                 </Button>
@@ -278,6 +284,7 @@ const NewInvoice = ({ open, closeCanvas }) => {
           </DialogActions>
         </form>
       </Box>
+      <SelectItemProduct open={itemProductModal} close={toggleModal} />
     </Drawer>
   )
 }

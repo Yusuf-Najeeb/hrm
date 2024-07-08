@@ -220,13 +220,9 @@ const InvoiceList = () => {
     setValue(val)
   }
 
-  const openDrawer = () => {
-    setInvoiceDrawer(true)
-  }
+  const openDrawer = () => setInvoiceDrawer(true)
 
-  const toggleDrawer = () => {
-    setInvoiceDrawer(!invoiceDrawer)
-  }
+  const toggleDrawer = () => setInvoiceDrawer(!invoiceDrawer)
 
   const handleStatusValue = e => {
     setStatusValue(e.target.value)
