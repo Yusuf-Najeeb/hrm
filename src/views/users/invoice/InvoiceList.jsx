@@ -368,10 +368,11 @@ const InvoiceList = () => {
                 <Table stickyHeader>
                   <TableHead>
                     <TableRow>
-                      <TableCell align={'left'}>Customer Name</TableCell>
-                      <TableCell align={'left'}>Email</TableCell>
-                      <TableCell align={'left'}>Phone</TableCell>
-                      <TableCell align={'left'}>Balance</TableCell>
+                      <TableCell align={'left'}>Invoice</TableCell>
+                      <TableCell align={'left'}>Date</TableCell>
+                      <TableCell align={'left'}>Total</TableCell>
+                      <TableCell align={'left'}>Amount Due</TableCell>
+                      <TableCell align={'left'}>Status</TableCell>
                       <TableCell align={'left'}>Actions</TableCell>
                     </TableRow>
                   </TableHead>
