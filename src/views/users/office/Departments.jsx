@@ -74,6 +74,10 @@ const DepartmentsTable = () => {
     setSelectedDepartment(null)
   }
 
+  const handleFilter = val => {
+    setValue(val)
+  }
+
   const updateFetch = () => {
     setFetch(!refetch)
   }
@@ -97,9 +101,10 @@ const DepartmentsTable = () => {
 
   useEffect(() => {
     dispatch(fetchDepartments({ page: page + 1, limit: 200 }))
+    getAllStaffsInOneDepartment(1)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, page, refetch])
+  }, [dispatch, page, refetch, value])
 
   return (
     <div>
