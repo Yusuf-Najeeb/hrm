@@ -6,7 +6,7 @@ const navigation = () => {
       path: '/'
     },
     {
-      sectionTitle: ' Staff MANAGER'
+      sectionTitle: ' Staff Manager'
     },
     {
       title: 'Staffs',
@@ -61,6 +61,11 @@ const navigation = () => {
       title: 'Transaction',
       icon: 'bitcoin-icons:transactions-outline',
       path: '/apps/transaction'
+    },
+    {
+      title: 'Invoice',
+      icon: 'arcticons:zoho-invoice',
+      path: '/apps/invoice'
     },
     {
       sectionTitle: 'Human Resource'
