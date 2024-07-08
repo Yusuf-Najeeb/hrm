@@ -49,6 +49,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 // ** Styled Components
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import { display } from '@mui/system'
+import NewInvoice from './NewInvoiceDrawer'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -199,9 +200,8 @@ const InvoiceList = () => {
   const [value, setValue] = useState('')
   const [statusValue, setStatusValue] = useState('')
   const [endDateRange, setEndDateRange] = useState(null)
-  const [selectedRows, setSelectedRows] = useState([])
   const [startDateRange, setStartDateRange] = useState(null)
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+  const [invoiceDrawer, setInvoiceDrawer] = useState(false)
 
   // ** Hooks
   const dispatch = useDispatch()
@@ -218,6 +218,14 @@ const InvoiceList = () => {
 
   const handleFilter = val => {
     setValue(val)
+  }
+
+  const openDrawer = () => {
+    setInvoiceDrawer(true)
+  }
+
+  const toggleDrawer = () => {
+    setInvoiceDrawer(!invoiceDrawer)
   }
 
   const handleStatusValue = e => {
@@ -299,7 +307,7 @@ const InvoiceList = () => {
             <Icon icon='tabler:receipt-refund' fontSize={20} sx={{ mr: 4, display: 'flex', alignItems: 'center' }} />
             Issue Credit Note
           </Button>
-          <Button variant='contained'>
+          <Button variant='contained' onClick={openDrawer}>
             New Invoice
             <Icon icon='mdi:plus' fontSize={20} />
           </Button>
@@ -385,6 +393,7 @@ const InvoiceList = () => {
           </Card>
         </Grid>
       </Grid>
+      <NewInvoice open={invoiceDrawer} closeCanvas={toggleDrawer} />
     </DatePickerWrapper>
   )
 }
