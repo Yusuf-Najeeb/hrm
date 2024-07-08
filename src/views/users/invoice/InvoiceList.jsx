@@ -15,6 +15,14 @@ import CardHeader from '@mui/material/CardHeader'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+import Button from '@mui/material/Button'
+import TableContainer from '@mui/material/TableContainer'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import TableBody from '@mui/material/TableBody'
+
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** Icon Imports
@@ -40,6 +48,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Styled Components
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import { display } from '@mui/system'
 
 // ** Styled component for the link in the dataTable
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -276,12 +285,44 @@ const InvoiceList = () => {
   return (
     <DatePickerWrapper>
       <Grid container spacing={6}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: 4
+          }}
+        >
+          <Button variant='tonal' color='secondary'>
+            <Icon icon='tabler:receipt-refund' fontSize={20} sx={{ mr: 4, display: 'flex', alignItems: 'center' }} />
+            Issue Credit Note
+          </Button>
+          <Button variant='contained'>
+            New Invoice
+            <Icon icon='mdi:plus' fontSize={20} />
+          </Button>
+        </Grid>
         <Grid item xs={12}>
-          <Card>
-            <CardHeader title='Filters' />
-            <CardContent>
+          <Card
+            sx={{
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0
+            }}
+          >
+            <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
               <Grid container spacing={6}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
+                  <CustomTextField
+                    fullWidth
+                    value={value}
+                    placeholder={'Search Invoice'}
+                    onChange={e => handleFilter(e.target.value)}
+                    sx={{ mt: 4.7 }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
                   <CustomTextField
                     select
                     fullWidth
@@ -297,7 +338,7 @@ const InvoiceList = () => {
                     <MenuItem value='sent'>Sent</MenuItem>
                   </CustomTextField>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
                   <DatePicker
                     isClearable
                     selectsRange
@@ -321,24 +362,25 @@ const InvoiceList = () => {
                 </Grid>
               </Grid>
             </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <TableHeader value={value} selectedRows={selectedRows} handleFilter={handleFilter} />
-            <DataGrid
-              autoHeight
-              pagination
-              rowHeight={62}
-              rows={store.data}
-              columns={columns}
-              checkboxSelection
-              disableRowSelectionOnClick
-              pageSizeOptions={[10, 25, 50]}
-              paginationModel={paginationModel}
-              onPaginationModelChange={setPaginationModel}
-              onRowSelectionModelChange={rows => setSelectedRows(rows)}
-            />
+
+            <CardContent sx={{ p: theme => theme.spacing(0) }}>
+              <TableContainer>
+                <Table stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align={'left'}>Customer Name</TableCell>
+                      <TableCell align={'left'}>Email</TableCell>
+                      <TableCell align={'left'}>Phone</TableCell>
+                      <TableCell align={'left'}>Balance</TableCell>
+                      <TableCell align={'left'}>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>{/* <TableCell>View Memo, Print, Download</TableCell> */}</TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
           </Card>
         </Grid>
       </Grid>
