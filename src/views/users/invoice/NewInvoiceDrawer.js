@@ -29,8 +29,12 @@ import DialogActions from '@mui/material/DialogActions'
 import CircularProgress from '@mui/material/CircularProgress'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
-
-// import { Alert, Divider } from '@mui/material'
+import TableContainer from '@mui/material/TableContainer'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import TableBody from '@mui/material/TableBody'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -223,6 +227,40 @@ const NewInvoice = ({ open, closeCanvas }) => {
             </Grid>
           </DialogContent>
           <Divider />
+
+          <DialogContent sx={{ my: theme => theme.spacing(4) }}>
+            <Grid container spacing={8}>
+              <Grid item xs={12} sm={12}>
+                <TableContainer>
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align={'left'}>Item</TableCell>
+                        <TableCell align={'left'}>Quantity</TableCell>
+                        <TableCell align={'left'}>Price</TableCell>
+                        <TableCell align={'left'}>VAT</TableCell>
+                        <TableCell align={'left'}>Amount</TableCell>
+                        <TableCell align={'left'}>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Content</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+              <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}>
+                <Button variant='tonal' color='error'>
+                  Add Item
+                  <Icon icon='mdi:plus' fontSize={20} />
+                </Button>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <Divider />
+
           <DialogActions
             sx={{
               justifyContent: 'end',
