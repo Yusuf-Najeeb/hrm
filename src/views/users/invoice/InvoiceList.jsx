@@ -24,8 +24,6 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 
-import { DataGrid } from '@mui/x-data-grid'
-
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
@@ -52,23 +50,6 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import { display } from '@mui/system'
 import NewInvoice from './NewInvoiceDrawer'
 
-// ** Styled component for the link in the dataTable
-const LinkStyled = styled(Link)(({ theme }) => ({
-  textDecoration: 'none',
-  fontSize: theme.typography.body1.fontSize,
-  color: `${theme.palette.primary.main} !important`
-}))
-
-// ** Vars
-const invoiceStatusObj = {
-  Sent: { color: 'secondary', icon: 'tabler:circle-check' },
-  Paid: { color: 'success', icon: 'tabler:circle-half-2' },
-  Draft: { color: 'primary', icon: 'tabler:device-floppy' },
-  'Partial Payment': { color: 'warning', icon: 'tabler:chart-pie' },
-  'Past Due': { color: 'error', icon: 'tabler:alert-circle' },
-  Downloaded: { color: 'info', icon: 'tabler:arrow-down-circle' }
-}
-
 // ** renders client column
 const renderClient = row => {
   if (row.avatar.length) {
@@ -86,103 +67,6 @@ const renderClient = row => {
   }
 }
 
-const defaultColumns = [
-  {
-    flex: 0.1,
-    field: 'id',
-    minWidth: 100,
-    headerName: 'ID',
-    renderCell: ({ row }) => (
-      <Typography component={LinkStyled} href={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Typography>
-    )
-  },
-  {
-    flex: 0.1,
-    minWidth: 80,
-    field: 'invoiceStatus',
-    renderHeader: () => <Icon icon='tabler:trending-up' />,
-    renderCell: ({ row }) => {
-      const { dueDate, balance, invoiceStatus } = row
-      const color = invoiceStatusObj[invoiceStatus] ? invoiceStatusObj[invoiceStatus].color : 'primary'
-
-      return (
-        <Tooltip
-          title={
-            <div>
-              <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-                {invoiceStatus}
-              </Typography>
-              <br />
-              <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-                Balance:
-              </Typography>{' '}
-              {balance}
-              <br />
-              <Typography variant='caption' sx={{ color: 'common.white', fontWeight: 600 }}>
-                Due Date:
-              </Typography>{' '}
-              {dueDate}
-            </div>
-          }
-        >
-          <CustomAvatar skin='light' color={color} sx={{ width: '1.875rem', height: '1.875rem' }}>
-            <Icon icon={invoiceStatusObj[invoiceStatus].icon} />
-          </CustomAvatar>
-        </Tooltip>
-      )
-    }
-  },
-  {
-    flex: 0.25,
-    field: 'name',
-    minWidth: 320,
-    headerName: 'Client',
-    renderCell: ({ row }) => {
-      const { name, companyEmail } = row
-
-      return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {renderClient(row)}
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-              {name}
-            </Typography>
-            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
-              {companyEmail}
-            </Typography>
-          </Box>
-        </Box>
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 100,
-    field: 'total',
-    headerName: 'Total',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{`$${row.total || 0}`}</Typography>
-  },
-  {
-    flex: 0.15,
-    minWidth: 140,
-    field: 'issuedDate',
-    headerName: 'Issued Date',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.issuedDate}</Typography>
-  },
-  {
-    flex: 0.1,
-    minWidth: 100,
-    field: 'balance',
-    headerName: 'Balance',
-    renderCell: ({ row }) => {
-      return row.balance !== 0 ? (
-        <Typography sx={{ color: 'text.secondary' }}>{row.balance}</Typography>
-      ) : (
-        <CustomChip rounded size='small' skin='light' color='success' label='Paid' />
-      )
-    }
-  }
-]
 /* eslint-disable */
 const CustomInput = forwardRef((props, ref) => {
   const startDate = props.start !== null ? format(props.start, 'MM/dd/yyyy') : ''

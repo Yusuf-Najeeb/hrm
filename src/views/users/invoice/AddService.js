@@ -49,10 +49,7 @@ const AddService = () => {
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 550 } }}
       >
-        <form
-
-        //  onSubmit={handleSubmit(handleDeductions)}
-        >
+        <form>
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`,

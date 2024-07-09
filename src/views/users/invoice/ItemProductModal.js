@@ -9,9 +9,7 @@ import Icon from 'src/@core/components/icon'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
-import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -63,10 +61,7 @@ const ItemProduct = () => {
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 550 } }}
       >
-        <form
-
-        //  onSubmit={handleSubmit(handleDeductions)}
-        >
+        <form>
           <DialogContent
             sx={{
               pb: theme => `${theme.spacing(8)} !important`,

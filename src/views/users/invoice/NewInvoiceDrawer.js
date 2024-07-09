@@ -38,8 +38,6 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 
-// import SelectItemProduct from './ItemProductModal'
-
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -58,6 +56,10 @@ const defaultValues = {
 const NewInvoice = () => {
   const { invoiceDrawerOpen, setInvoiceDrawerOpen, setItemProductModalOpen } = useContext(ModalContext)
 
+  // ** Hooks
+  const [StaffsData] = useStaffs()
+  const theme = useTheme()
+
   const closeDrawer = () => {
     setInvoiceDrawerOpen(false)
   }
@@ -65,9 +67,6 @@ const NewInvoice = () => {
   const openItemProductModal = () => {
     setItemProductModalOpen(true)
   }
-
-  // const [StaffsData] = useStaffs()
-  // const theme = useTheme()
 
   const {
     control,
@@ -108,10 +107,7 @@ const NewInvoice = () => {
           </IconButton>
         </Header>
         <Box sx={{ p: theme => theme.spacing(0, 3, 3) }}>
-          <form
-
-          //  onSubmit={handleSubmit(handleDeductions)}
-          >
+          <form>
             <DialogContent
               sx={{
                 pb: theme => `${theme.spacing(8)}  !important`,
