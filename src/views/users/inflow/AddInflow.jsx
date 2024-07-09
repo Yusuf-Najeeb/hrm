@@ -33,11 +33,9 @@ const defaultValues = {
   customer: '',
   amountReceived: '',
   date: '',
-  discount: '',
   paymentType: '',
   creditAccount: '',
-  debitAccount: '',
-  description: '',
+  description: ''
 }
 
 const NewInflow = ({ open, close, updateFetch }) => {
@@ -168,25 +166,6 @@ const NewInflow = ({ open, close, updateFetch }) => {
 
               <Grid item xs={12} sm={6}>
                 <Controller
-                  name='discount'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Discount'
-                      onChange={onChange}
-                      error={Boolean(errors?.discount)}
-                      aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.discount && { helperText: errors?.discount.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
                   name='paymentType'
                   control={control}
                   rules={{ required: true }}
@@ -230,35 +209,6 @@ const NewInflow = ({ open, close, updateFetch }) => {
                       {...(errors?.creditAccount && { helperText: errors?.creditAccount.message })}
                     >
                       <MenuItem value=''>Select Credit Account</MenuItem>
-
-                      {/* {periods.map(period => {
-                        return (
-                          <MenuItem key={period} value={period}>
-                            {period}
-                          </MenuItem>
-                        )
-                      })} */}
-                    </CustomInput>
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name='debitAccount'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomInput
-                      select
-                      fullWidth
-                      value={value}
-                      onChange={onChange}
-                      label='Debit Account'
-                      error={Boolean(errors?.debitAccount)}
-                      {...(errors?.debitAccount && { helperText: errors?.debitAccount.message })}
-                    >
-                      <MenuItem value=''>Select Debit Account</MenuItem>
 
                       {/* {periods.map(period => {
                         return (

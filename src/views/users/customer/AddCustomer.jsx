@@ -34,9 +34,7 @@ const defaultValues = {
   phone: '',
   address: '',
   state: '',
-  city: '',
-  openingBalance: '',
-  discount: ''
+  city: ''
 }
 
 const AddCustomer = ({ open, close, updateFetch }) => {
@@ -193,44 +191,6 @@ const AddCustomer = ({ open, close, updateFetch }) => {
                       error={Boolean(errors?.city)}
                       aria-describedby='stepper-linear-account-userId'
                       {...(errors?.city && { helperText: errors?.city.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name='openingBalance'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomInput
-                      fullWidth
-                      value={value}
-                      onChange={onChange}
-                      autoComplete='on'
-                      label='Opening Balance'
-                      error={Boolean(errors?.openingBalance)}
-                      {...(errors?.openingBalance && { helperText: errors?.openingBalance.message })}
-                    />
-                  )}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name='discount'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange } }) => (
-                    <CustomTextField
-                      fullWidth
-                      value={value}
-                      label='Discount %'
-                      onChange={onChange}
-                      error={Boolean(errors?.discount)}
-                      aria-describedby='stepper-linear-account-userId'
-                      {...(errors?.discount && { helperText: errors?.discount.message })}
                     />
                   )}
                 />
