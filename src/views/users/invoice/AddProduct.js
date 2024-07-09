@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles'
 
 // ** Utils & Components Imports
 import CustomTextField from 'src/@core/components/mui/text-field'
+import CreateProduct from './CreateProduct'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -34,7 +35,11 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 
 const AddProduct = () => {
   const [value, setValue] = useState('')
-  const { addProductModalOpen, setAddProductModalOpen } = useContext(ModalContext)
+  const { addProductModalOpen, setAddProductModalOpen, setCreateProductModalOpen } = useContext(ModalContext)
+
+  const openCreateProductModal = () => {
+    setCreateProductModalOpen(true)
+  }
 
   const closeProductModal = () => {
     setAddProductModalOpen(false)
@@ -80,7 +85,7 @@ const AddProduct = () => {
               </Typography>
 
               <Grid item xs={12} sm={12}>
-                <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
+                <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }} onClick={openCreateProductModal}>
                   <Icon icon='tabler:plus' fontSize={20} />
                   Add New Product
                 </Button>
@@ -89,6 +94,7 @@ const AddProduct = () => {
           </DialogContent>
         </form>
       </Dialog>
+      <CreateProduct />
     </Fragment>
   )
 }
