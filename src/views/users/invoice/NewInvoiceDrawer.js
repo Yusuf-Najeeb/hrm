@@ -267,6 +267,9 @@ const NewInvoice = ({ open, closeCanvas }) => {
           </DialogContent>
           <Divider />
 
+          <DialogContent>Preview Stays here</DialogContent>
+          <Divider />
+
           <DialogActions
             sx={{
               justifyContent: 'end',
