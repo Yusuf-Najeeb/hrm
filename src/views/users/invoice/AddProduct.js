@@ -1,5 +1,6 @@
 // ** React Imports
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
+import ModalContext from './ModalContext'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -31,12 +32,18 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   }
 }))
 
-const ProductPicker = ({ open, close }) => {
+const AddProduct = () => {
+  const { addProductModalOpen, setAddProductModalOpen } = useContext(ModalContext)
+
+  const closeProductModal = () => {
+    setAddProductModalOpen(false)
+  }
+
   return (
     <Fragment>
       <Dialog
         fullWidth
-        open={open}
+        open={addProductModalOpen}
         maxWidth='sm'
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 550 } }}
@@ -51,12 +58,12 @@ const ProductPicker = ({ open, close }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <CustomCloseButton onClick={close}>
+            <CustomCloseButton onClick={closeProductModal}>
               <Icon icon='tabler:x' fontSize='1.25rem' />
             </CustomCloseButton>
 
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select</Typography>
-            <Grid container spacing={4}>
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select Product</Typography>
+            {/* <Grid container spacing={4}>
               <Grid item xs={6} sm={6}>
                 <Stack direction='column' alignItems='center' justifyContent='center'>
                   <Icon icon='fluent-mdl2:product-variant' fontSize={100} />
@@ -74,7 +81,7 @@ const ProductPicker = ({ open, close }) => {
                   </Button>
                 </Stack>
               </Grid>
-            </Grid>
+            </Grid> */}
           </DialogContent>
         </form>
       </Dialog>
@@ -82,4 +89,4 @@ const ProductPicker = ({ open, close }) => {
   )
 }
 
-export default ProductPicker
+export default AddProduct

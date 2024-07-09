@@ -1,11 +1,11 @@
-//** React Imports
-import React, { Fragment, useContext, useState, useEffect } from 'react'
+// ** React Imports
+import React, { Fragment, useContext, useState } from 'react'
 import ModalContext from './ModalContext'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-//** MUI Imports
+// ** MUI Imports
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
@@ -16,10 +16,6 @@ import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-
-//** Component Imports
-import AddProduct from './AddProduct'
-import AddService from './AddService'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -36,33 +32,18 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   }
 }))
 
-const ItemProduct = () => {
-  const {
-    itemProductModalOpen,
-    setItemProductModalOpen,
-    addProductModalOpen,
-    setAddProductModalOpen,
-    addServiceModalOpen,
-    setAddServiceModalOpen
-  } = useContext(ModalContext)
+const AddService = () => {
+  const { addServiceModalOpen, setAddServiceModalOpen } = useContext(ModalContext)
 
-  const closeModal = () => {
-    setItemProductModalOpen(false)
-  }
-
-  const openProductModal = () => {
-    setAddProductModalOpen(true)
-  }
-
-  const openServiceModal = () => {
-    setAddServiceModalOpen(true)
+  const closeServiceModal = () => {
+    setAddServiceModalOpen(false)
   }
 
   return (
     <Fragment>
       <Dialog
-        open={itemProductModalOpen}
         fullWidth
+        open={addServiceModalOpen}
         maxWidth='sm'
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 550 } }}
@@ -77,15 +58,16 @@ const ItemProduct = () => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <CustomCloseButton onClick={closeModal}>
+            <CustomCloseButton onClick={closeServiceModal}>
               <Icon icon='tabler:x' fontSize='1.25rem' />
             </CustomCloseButton>
-            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select</Typography>
-            <Grid container spacing={4}>
+
+            <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select Service</Typography>
+            {/* <Grid container spacing={4}>
               <Grid item xs={6} sm={6}>
                 <Stack direction='column' alignItems='center' justifyContent='center'>
                   <Icon icon='fluent-mdl2:product-variant' fontSize={100} />
-                  <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }} onClick={openProductModal}>
+                  <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
                     Product
                   </Button>
                 </Stack>
@@ -94,19 +76,17 @@ const ItemProduct = () => {
               <Grid item xs={6} sm={6}>
                 <Stack direction='column' alignItems='center' justifyContent='center'>
                   <Icon icon='ep:service' fontSize={100} />
-                  <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }} onClick={openServiceModal}>
+                  <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
                     Service
                   </Button>
                 </Stack>
               </Grid>
-            </Grid>
+            </Grid> */}
           </DialogContent>
         </form>
       </Dialog>
-      <AddProduct />
-      <AddService />
     </Fragment>
   )
 }
 
-export default ItemProduct
+export default AddService
