@@ -9,13 +9,13 @@ import Icon from 'src/@core/components/icon'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import IconButton from '@mui/material/IconButton'
-import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
+
+// ** Utils & Components Imports
+import CustomTextField from 'src/@core/components/mui/text-field'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -33,10 +33,15 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 }))
 
 const AddProduct = () => {
+  const [value, setValue] = useState('')
   const { addProductModalOpen, setAddProductModalOpen } = useContext(ModalContext)
 
   const closeProductModal = () => {
     setAddProductModalOpen(false)
+  }
+
+  const handleFilter = val => {
+    setValue(val)
   }
 
   return (
@@ -64,22 +69,24 @@ const AddProduct = () => {
 
             <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select Product</Typography>
             <Grid container spacing={4}>
-              <Grid item xs={6} sm={6}>
-                <Stack direction='column' alignItems='center' justifyContent='center'>
-                  <Icon icon='fluent-mdl2:product-variant' fontSize={100} />
-                  <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
-                    Product
-                  </Button>
-                </Stack>
+              <Grid item xs={12} sm={12}>
+                <CustomTextField
+                  fullWidth
+                  value={value}
+                  placeholder='Search Product'
+                  onChange={e => handleFilter(e.target.value)}
+                />
               </Grid>
 
-              <Grid item xs={6} sm={6}>
-                <Stack direction='column' alignItems='center' justifyContent='center'>
-                  <Icon icon='ep:service' fontSize={100} />
-                  <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
-                    Service
-                  </Button>
-                </Stack>
+              <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4, ml: 4 }}>
+                Preview Selected Item
+              </Typography>
+
+              <Grid item xs={12} sm={12}>
+                <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
+                  <Icon icon='tabler:plus' fontSize={20} />
+                  Add New Product
+                </Button>
               </Grid>
             </Grid>
           </DialogContent>
