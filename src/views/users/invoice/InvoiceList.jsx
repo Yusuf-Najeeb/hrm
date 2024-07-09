@@ -1,5 +1,6 @@
 // ** React Imports
-import { useState, useEffect, forwardRef } from 'react'
+import { useState, useEffect, forwardRef, useContext } from 'react'
+import ModalContext, { ModalProvider } from './ModalContext'
 
 // ** Next Import
 import Link from 'next/link'
@@ -201,7 +202,14 @@ const InvoiceList = () => {
   const [statusValue, setStatusValue] = useState('')
   const [endDateRange, setEndDateRange] = useState(null)
   const [startDateRange, setStartDateRange] = useState(null)
-  const [invoiceDrawer, setInvoiceDrawer] = useState(false)
+
+  const { invoiceDrawerOpen, setInvoiceDrawerOpen } = useContext(ModalContext)
+  console.log(invoiceDrawerOpen)
+
+  const openDrawer = () => {
+    setInvoiceDrawerOpen(!invoiceDrawerOpen)
+    console.log(invoiceDrawerOpen, 'Inside...')
+  }
 
   // ** Hooks
   const dispatch = useDispatch()
@@ -220,9 +228,7 @@ const InvoiceList = () => {
     setValue(val)
   }
 
-  const openDrawer = () => setInvoiceDrawer(true)
-
-  const toggleDrawer = () => setInvoiceDrawer(!invoiceDrawer)
+  // const toggleDrawer = () => setInvoiceDrawer(!invoiceDrawer)
 
   const handleStatusValue = e => {
     setStatusValue(e.target.value)
@@ -236,55 +242,6 @@ const InvoiceList = () => {
     setStartDateRange(start)
     setEndDateRange(end)
   }
-
-  const columns = [
-    ...defaultColumns,
-    {
-      flex: 0.1,
-      minWidth: 140,
-      sortable: false,
-      field: 'actions',
-      headerName: 'Actions',
-      renderCell: ({ row }) => (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Tooltip title='Delete Invoice'>
-            <IconButton size='small' sx={{ color: 'text.secondary' }} onClick={() => dispatch(deleteInvoice(row.id))}>
-              <Icon icon='tabler:trash' />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title='View'>
-            <IconButton
-              size='small'
-              component={Link}
-              sx={{ color: 'text.secondary' }}
-              href={`/apps/invoice/preview/${row.id}`}
-            >
-              <Icon icon='tabler:eye' />
-            </IconButton>
-          </Tooltip>
-          <OptionsMenu
-            menuProps={{ sx: { '& .MuiMenuItem-root svg': { mr: 2 } } }}
-            iconButtonProps={{ size: 'small', sx: { color: 'text.secondary' } }}
-            options={[
-              {
-                text: 'Download',
-                icon: <Icon icon='tabler:download' fontSize={20} />
-              },
-              {
-                text: 'Edit',
-                href: `/apps/invoice/edit/${row.id}`,
-                icon: <Icon icon='tabler:edit' fontSize={20} />
-              },
-              {
-                text: 'Duplicate',
-                icon: <Icon icon='tabler:copy' fontSize={20} />
-              }
-            ]}
-          />
-        </Box>
-      )
-    }
-  ]
 
   return (
     <DatePickerWrapper>
@@ -389,9 +346,17 @@ const InvoiceList = () => {
           </Card>
         </Grid>
       </Grid>
-      <NewInvoice open={invoiceDrawer} closeCanvas={toggleDrawer} />
+      <NewInvoice />
     </DatePickerWrapper>
   )
 }
 
-export default InvoiceList
+const InvoiceListWithProvider = () => {
+  return (
+    <ModalProvider>
+      <InvoiceList />
+    </ModalProvider>
+  )
+}
+
+export default InvoiceListWithProvider

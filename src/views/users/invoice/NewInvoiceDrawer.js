@@ -1,5 +1,7 @@
 //** React Imports
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import ModalContext from './ModalContext'
+import ItemProductModal from './ItemProductModal'
 
 //** Third-Party Imports
 import DatePicker from 'react-datepicker'
@@ -36,7 +38,7 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 
-import SelectItemProduct from './ItemProductModal'
+// import SelectItemProduct from './ItemProductModal'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -54,9 +56,14 @@ const defaultValues = {
 }
 
 const NewInvoice = ({ open, closeCanvas }) => {
-  const [itemProductModal, setItemProductModal] = useState(false)
-  const [StaffsData] = useStaffs()
-  const theme = useTheme()
+  const { invoiceDrawerOpen, setInvoiceDrawerOpen } = useContext(ModalContext)
+
+  const closeDrawer = () => {
+    setInvoiceDrawerOpen(false)
+  }
+
+  // const [StaffsData] = useStaffs()
+  // const theme = useTheme()
 
   const {
     control,
@@ -70,12 +77,12 @@ const NewInvoice = ({ open, closeCanvas }) => {
     resolver: yupResolver(memoSchema)
   })
 
-  const openItemProductModal = () => setItemProductModal(true)
-  const toggleModal = () => setItemProductModal(!itemProductModal)
+  // const openItemProductModal = () => setItemProductModal(true)
+  // const toggleModal = () => setItemProductModal(!itemProductModal)
 
   return (
     <Drawer
-      open={open}
+      open={invoiceDrawerOpen}
       anchor='right'
       variant='temporary'
       ModalProps={{ keepMounted: true }}
@@ -85,7 +92,7 @@ const NewInvoice = ({ open, closeCanvas }) => {
         <Typography variant='h4'>Create New Invoice</Typography>
         <IconButton
           size='small'
-          onClick={closeCanvas}
+          onClick={closeDrawer}
           sx={{
             borderRadius: 1,
             color: 'text.primary',
@@ -258,7 +265,14 @@ const NewInvoice = ({ open, closeCanvas }) => {
                 </TableContainer>
               </Grid>
               <Grid item xs={12} sm={12} sx={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}>
-                <Button variant='tonal' color='error' onClick={openItemProductModal}>
+                <Button
+                  variant='tonal'
+                  color='error'
+
+                  // onClick={handleOpenItemProductModal}
+
+                  //  onClick={openItemProductModal}
+                >
                   Add Item
                   <Icon icon='mdi:plus' fontSize={20} />
                 </Button>
@@ -278,7 +292,7 @@ const NewInvoice = ({ open, closeCanvas }) => {
               mt: theme => [`${theme.spacing(4)} !important`]
             }}
           >
-            <Button type='button' variant='tonal' color='secondary' onClick={closeCanvas}>
+            <Button type='button' variant='tonal' color='secondary' onClick={closeDrawer}>
               Cancel
             </Button>
             <Button type='submit' variant='contained' sx={{ mr: 2 }}>
@@ -287,7 +301,8 @@ const NewInvoice = ({ open, closeCanvas }) => {
           </DialogActions>
         </form>
       </Box>
-      <SelectItemProduct open={itemProductModal} close={toggleModal} />
+      {/* {activeModal === 'itemProduct' && <ItemProductModal />} */}
+      {/* <SelectItemProduct open={itemProductModal} close={toggleModal} /> */}
     </Drawer>
   )
 }
