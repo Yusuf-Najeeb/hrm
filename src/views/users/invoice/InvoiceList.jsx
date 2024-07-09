@@ -204,11 +204,9 @@ const InvoiceList = () => {
   const [startDateRange, setStartDateRange] = useState(null)
 
   const { invoiceDrawerOpen, setInvoiceDrawerOpen } = useContext(ModalContext)
-  console.log(invoiceDrawerOpen)
 
   const openDrawer = () => {
     setInvoiceDrawerOpen(!invoiceDrawerOpen)
-    console.log(invoiceDrawerOpen, 'Inside...')
   }
 
   // ** Hooks

@@ -1,5 +1,6 @@
 //** React Imports
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useContext, useState, useEffect } from 'react'
+import ModalContext from './ModalContext'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -31,12 +32,18 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   }
 }))
 
-const SelectItemProduct = ({ open, close }) => {
+const ItemProduct = () => {
+  const { itemProductModalOpen, setItemProductModalOpen } = useContext(ModalContext)
+
+  const closeModal = () => {
+    setItemProductModalOpen(false)
+  }
+
   return (
     <Fragment>
       <Dialog
+        open={itemProductModalOpen}
         fullWidth
-        open={open}
         maxWidth='sm'
         scroll='body'
         sx={{ '& .MuiDialog-paper': { overflow: 'visible', width: '100%', maxWidth: 550 } }}
@@ -51,7 +58,7 @@ const SelectItemProduct = ({ open, close }) => {
               px: theme => [`${theme.spacing(4)} !important`, `${theme.spacing(8)} !important`]
             }}
           >
-            <CustomCloseButton onClick={close}>
+            <CustomCloseButton onClick={closeModal}>
               <Icon icon='tabler:x' fontSize='1.25rem' />
             </CustomCloseButton>
             <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select</Typography>
@@ -81,4 +88,4 @@ const SelectItemProduct = ({ open, close }) => {
   )
 }
 
-export default SelectItemProduct
+export default ItemProduct
