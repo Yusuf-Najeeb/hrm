@@ -37,14 +37,8 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 }))
 
 const ItemProduct = () => {
-  const {
-    itemProductModalOpen,
-    setItemProductModalOpen,
-    addProductModalOpen,
-    setAddProductModalOpen,
-    addServiceModalOpen,
-    setAddServiceModalOpen
-  } = useContext(ModalContext)
+  const { itemProductModalOpen, setItemProductModalOpen, setAddProductModalOpen, setAddServiceModalOpen } =
+    useContext(ModalContext)
 
   const closeModal = () => {
     setItemProductModalOpen(false)
@@ -52,10 +46,12 @@ const ItemProduct = () => {
 
   const openProductModal = () => {
     setAddProductModalOpen(true)
+    closeModal()
   }
 
   const openServiceModal = () => {
     setAddServiceModalOpen(true)
+    closeModal()
   }
 
   return (

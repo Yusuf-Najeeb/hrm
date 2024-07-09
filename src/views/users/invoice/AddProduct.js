@@ -63,7 +63,7 @@ const AddProduct = () => {
             </CustomCloseButton>
 
             <Typography sx={{ textAlign: 'left', fontSize: '1.25rem', my: 4 }}>Select Product</Typography>
-            {/* <Grid container spacing={4}>
+            <Grid container spacing={4}>
               <Grid item xs={6} sm={6}>
                 <Stack direction='column' alignItems='center' justifyContent='center'>
                   <Icon icon='fluent-mdl2:product-variant' fontSize={100} />
@@ -81,7 +81,7 @@ const AddProduct = () => {
                   </Button>
                 </Stack>
               </Grid>
-            </Grid> */}
+            </Grid>
           </DialogContent>
         </form>
       </Dialog>
