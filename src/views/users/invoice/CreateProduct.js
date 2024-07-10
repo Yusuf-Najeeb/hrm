@@ -1,11 +1,8 @@
 //** React Imports
-import React, { Fragment, useState, useContext, useEffect } from 'react'
+import React, { Fragment, useContext } from 'react'
 import ModalContext from './ModalContext'
 
 //** Third-Party Imports
-import axios from 'axios'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 
 //** MUI Imports
 import Button from '@mui/material/Button'
@@ -14,7 +11,6 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import Grid from '@mui/material/Grid'
-import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 
 // ** Components Imports
@@ -23,11 +19,6 @@ import { leaveApplicationSchema } from 'src/@core/FormSchema'
 import { Controller, useForm } from 'react-hook-form'
 import CustomTextField from 'src/@core/components/mui/text-field'
 import { CustomInput } from '../duty-roster/UploadRosterDialog'
-import { useAppDispatch } from '../../../hooks'
-import { formatFirstLetter } from '../../../@core/utils/format'
-import { useStaffs } from '../../../hooks/useStaffs'
-import { notifySuccess } from '../../../@core/components/toasts/notifySuccess'
-import { notifyError } from '../../../@core/components/toasts/notifyError'
 
 const defaultValues = {
   name: '',

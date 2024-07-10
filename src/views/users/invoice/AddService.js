@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles'
 
 // ** Utils & Components Imports
 import CustomTextField from 'src/@core/components/mui/text-field'
+import CreateService from './CreateService'
 
 const CustomCloseButton = styled(IconButton)(({ theme }) => ({
   top: 0,
@@ -34,10 +35,18 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 
 const AddService = () => {
   const [value, setValue] = useState('')
-  const { addServiceModalOpen, setAddServiceModalOpen } = useContext(ModalContext)
+  const { addServiceModalOpen, setAddServiceModalOpen, setCreateServiceModalOpen } = useContext(ModalContext)
+
+  const openCreateServiceModal = () => {
+    setCreateServiceModalOpen(true)
+  }
 
   const closeServiceModal = () => {
     setAddServiceModalOpen(false)
+  }
+
+  const handleFilter = val => {
+    setValue(val)
   }
 
   return (
@@ -76,7 +85,7 @@ const AddService = () => {
               </Typography>
 
               <Grid item xs={12} sm={12}>
-                <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }}>
+                <Button variant='tonal' sx={{ my: theme => theme.spacing(4) }} onClick={openCreateServiceModal}>
                   <Icon icon='tabler:plus' fontSize={20} />
                   Add New Service
                 </Button>
@@ -85,6 +94,7 @@ const AddService = () => {
           </DialogContent>
         </form>
       </Dialog>
+      <CreateService />
     </Fragment>
   )
 }
